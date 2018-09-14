@@ -1,0 +1,38 @@
+<!-- My account -->
+<li class="title" id="base-admin-customers-myaccount-title">
+    <span class="glyphicon glyphicon-folder-open text-size130 m-leftminus20"></span>
+     &nbsp; Account
+</li>
+<div id="base-admin-customers-myaccount-section">
+    <li class="subtitle btm-margin" id="base-admin-customers-myaccount-show">
+        <a href="/admin/customers/main/get-account?id={{ session.user_id }}">
+            My account
+        </a>
+    </li>
+</div>
+
+<!-- Orders -->
+<li class="title" id="base-admin-customer-orders-title">
+    <span class="glyphicon glyphicon-list-alt text-size130 m-leftminus20"></span>
+     &nbsp; Orders
+</li>
+<div id="base-admin-customer-orders-section">
+    <li class="subtitle btm-margin"  id="base-admin-customer-orders">
+        <a href="/admin/customers/main/get-orders?id={{ session.user_id }}">
+            My orders
+        </a>
+    </li>
+</div>
+
+<!-- Warranty -->
+<li class="title" id="base-admin-customer-warranty-title">
+    <span class="glyphicon glyphicon-ok text-size130 m-leftminus20"></span>
+     &nbsp; Warranty
+</li>
+<div id="base-admin-customer-warranty-section">
+    <li class="subtitle btm-margin"  id="base-admin-register-for-warranty">
+        <a href="/admin/customers/main/registration">
+            Register
+        </a>
+    </li>
+</div>

@@ -1,0 +1,276 @@
+{% extends 'base.html' %}
+
+{% block title %}
+  Register | ArmaLaser
+{% endblock %}
+
+
+{% block css %}
+<style>
+#first_name-error,
+#last_name-error,
+#verify_email-error,
+#verify_password-error,
+#agree-error {
+    color: #ff0000;
+}
+.glyphicon-remove {
+    color: #ff0000;
+}
+.glyphicon-ok {
+    color: #228b22;
+}
+</style>
+{% endblock %}
+
+
+{% block outsidecontainer %}
+{% endblock %}
+
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-8">
+          <h2>{{ pagetitle }}</h2>
+            <div class="panel panel-default">
+                <div class="panel-body" style="padding:20px 32px;">
+
+                    <h4 style="color: #838383;">
+                        Please provide the following information to create
+                        your account.
+                    </h4>
+                    {% if session.registererror %}
+                      {% include 'Error/errormessage.html' %}
+                    {% endif %}
+
+                    <!--  Display results from ajax_processing/  -->
+                    <div id="message"></div>
+
+                    {% if success %}
+                    <div class="alert alert-success alert-padding">{{ success }}</div>
+                    {% endif %}
+
+                    <form name="customerregistrationform" id="customerregistrationform"
+                        action="/register/register-new-customer" method="post">
+
+                       <!-- honeypot -->
+                       <input type="hidden" name="honeypot_register" id="honeypot_register">
+
+                        <div class="form-group has-feedback">
+                            <label for="customer_email" class="control-label">
+                              Email
+                            </label>
+                            <input type="email" class="form-control email" name="customer_email"
+                            id="customer_email" placeholder="user@example.com"  value="{{ customer_email }}" autofocus>
+                            <span class="glyphicon form-control-feedback" id="customer_email1"></span>
+                        </div>
+
+
+                        <div class="form-group has-feedback">
+                            <label for="confirm_customer_email" class="control-label">
+                              Confirm email
+                            </label>
+                            <input type="email" class="form-control" name="confirm_customer_email"
+                            id="confirm_customer_email" placeholder="user@example.com" value="{{ confirm_customer_email }}">
+                            <span class="glyphicon form-control-feedback" id="confirm_customer_email1"></span>
+                        </div>
+
+                        <div class="form-group has-feedback">
+                            <label for="customer_first_name" class="control-label">
+                              First name
+                            </label>
+                            <input type="text" class="form-control" name="customer_first_name"
+                            id="customer_first_name" placeholder="First name" value="{{ customer_first_name }}">
+                            <span class="glyphicon form-control-feedback" id="customer_first_name1"></span>
+                        </div>
+
+                        <div class="form-group has-feedback">
+                            <label for="customer_last_name" class="control-label">
+                              Last name
+                            </label>
+                            <input type="text" class="form-control" name="customer_last_name"
+                            id="customer_last_name" placeholder="Last name" value="{{ customer_last_name }}">
+                            <span class="glyphicon form-control-feedback" id="customer_last_name1"></span>
+                        </div>
+
+                        <div class="form-group has-feedback">
+                            <label for="customer_password" class="control-label">
+                              Password (<small>Minimum 6 characters</small>)
+                            </label>
+                            <input type="password" class="form-control" name="customer_password"
+                            id="customer_password" placeholder="Password - minimum 6 characters">
+                            <span class="glyphicon form-control-feedback" id="customer_password1"></span>
+                        </div>
+
+                          <div class="form-group has-feedback">
+                              <label for="confirm_customer_password" class="control-label">
+                                Confirm password
+                              </label>
+                              <input type="password" class="form-control" name="confirm_customer_password"
+                              id="confirm_customer_password" placeholder="Verify password">
+                              <span class="glyphicon form-control-feedback" id="confirm_customer_password1"></span>
+                          </div>
+
+                          <div class="form-group has-feedback has-feedback">
+                                <div class=" col-sm-8">
+                                    <div class="checkbox">
+                                      <label for="customer_agree">
+                                          <input type="checkbox" name="customer_agree" id="customer_agree">
+                                          I agree to the Terms.
+                                          <a href="/terms/terms-of-use">
+                                              Read terms
+                                          </a>
+                                      </label>
+                                    </div>
+                                </div>
+                          </div>
+
+                          <hr>
+
+                          <div class="form-group has-feedback">
+                              <button id="registerBtn" type="submit" class="btn btn-lg btn-buy btn-block">
+                                  Register
+                              </button>
+                          </div>
+
+                    </form>
+
+                </div><!--  // .panel-body  -->
+            </div><!--  // .panel  -->
+        </div><!-- // .col-md-8  -->
+
+        <div class="col-md-4">
+
+        </div><!-- // .col-md-4  -->
+
+    </div>
+</div>
+{% endblock %}
+
+
+{% block bottomjs %}
+
+<script>
+$(document).ready(function(){
+
+    $("#customerregistrationform").validate({
+        rules: {
+            customer_email: {
+                required: true,
+                email: true
+            },
+            confirm_customer_email: {
+                equalTo: "#customer_email"
+            },
+            customer_first_name: {
+                minlength: 2,
+                maxlength: 20,
+                required: true
+            },
+            customer_last_name: {
+                minlength: 2,
+                maxlength: 30,
+                required: true
+            },
+            customer_password: {
+                minlength: 6,
+                maxlength: 10,
+                required: true
+            },
+            confirm_customer_password: {
+                equalTo: "#customer_password"
+            },
+            customer_agree: "required"
+        },
+        messages: {
+            customer_email: {
+                required: "Please enter your email address",
+                email: "Please enter a valid email address"
+            },
+            confirm_customer_email: {
+                equalTo: "Please enter the same email address"
+            },
+            customer_first_name: {
+                minlength: "Please enter at least 2 characters",
+                maxlength: "Please enter less than 20 characters",
+                required: "Please enter your first name"
+            },
+            customer_last_name: {
+              minlength: "Please enter at least 2 characters",
+              maxlength: "Please enter less than 30 characters",
+              required: "Please enter your last name"
+            },
+            customer_password: {
+                minlength: "Please enter at least 6 characters",
+                maxlength: "Please enter up to 10 characters",
+                required: "Please enter a password",
+            },
+            confirm_customer_password: {
+                equalTo: "Please enter the same password"
+            },
+            customer_agree: "Please accept our terms and conditions"
+        },
+        highlight: function(element) {
+            var id_attr = "#" + $( element ).attr("id") + "1";
+            $(element).closest('.form-group has-feedback').removeClass('has-success').addClass('has-error');
+            $(id_attr).removeClass('glyphicon-ok').addClass('glyphicon-remove');
+        },
+        unhighlight: function(element) {
+            var id_attr = "#" + $( element ).attr("id") + "1";
+            $(element).closest('.form-group has-feedback').removeClass('has-error').addClass('has-success');
+            $(id_attr).removeClass('glyphicon-remove').addClass('glyphicon-ok');
+        },
+        errorElement: 'span',
+            errorClass: 'help-block',
+            errorPlacement: function(error, element) {
+                if(element.length) {
+                    error.insertAfter(element);
+                } else {
+                error.insertAfter(element);
+                }
+            }
+     });
+
+
+  /* - - - - Check if email in `customers`  - - - -  */
+
+    $("#customer_email").blur(function(){
+        var email = $( this ).val();
+        console.log(`email =  ${email}`);
+
+        if (email !== '') {
+            $.ajax({
+                url: "/register/checkIfEmailAvailable",
+                type: 'POST',
+                data: {
+                  email: email,
+                  type: 'customer'
+                },
+                cache: false,
+                success: function(data){
+                    var available = '<div class="alert alert-success alert-padding">';
+                    available += 'Email address is available! Welcome!';
+                    available += '</div>';
+
+                    var not_available = '<div class="alert alert-danger alert-padding">';
+                    not_available += 'Sorry, the email address you entered is not available. If you are already registered, please <a href="/admin/customer/login">log in</a>.';
+                    not_available += '</div>';
+
+                    if( data === 'available' ){
+                        $("#message").html(available);
+                    }
+                    else {
+                        $("#message").html(not_available);
+                    }
+                },
+                error: function(){
+                    alert("An error occurred.");
+                }
+            });
+        }
+    });
+
+});
+</script>
+{% endblock %}

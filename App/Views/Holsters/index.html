@@ -1,0 +1,555 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Holsters for ArmaLaser equipped pistols
+{% endblock %}
+
+{% block metadescription %}
+Purchase from a variety of concealed carry holsters that are custom-designed to fit an ArmaLaser laser-equipped pistol for concealed carry.
+{% endblock %}
+
+{% block css %}
+{% endblock %}
+
+{% block outsidecontainer %}
+{% endblock %}
+
+
+{% block content %}
+<div id="modal-holster"></div>
+<div style="background-color: #303030;">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <picture>
+                    <source srcset="/assets/images/page/holsters/mainImg.jpg"
+                        alt="ArmaLaser laser-fit holsters" media="(min-width:1200px)">
+
+                    <source srcset="/assets/images/page/holsters/mainImg_med.jpg"
+                        alt="ArmaLaser laser-fit holsters" media="(min-width:760px)">
+
+                    <source srcset="/assets/images/page/holsters/mainImg_small.jpg"
+                        alt="ArmaLaser laser-fit holsters" media="(min-width:200px)">
+
+                    <img class="img-responsive center-block"
+                        src="/assets/images/page/holsters/mainImg_thumb.jpg"
+                        alt="ArmaLaser laser-fit holsters">
+                </picture>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="container-fluid">
+    <div class="row">
+
+        <div class="col-md-12">
+
+            <div class="holsters-table-container">
+
+                 <div class="table-responsive">
+
+                    <table class="table table-bordered holsters-holster-table">
+
+                    <thead>
+                        <tr>
+                            <th colspan="3" style="border-top:1px solid #fff;border-left:1px solid #fff;"></th>
+                            {% for item in tableHeader %}
+                                <th style="vertical-align:top">
+                                    <span style="font-size: 14px;">{{ item.holsterMfr}}®<br><span style="font-size:12px">{{ item.holster_model }}®</span></span>
+                                    <p style="font-size:12px;">{{ item.waist|upper }}</p>
+                                    <div class="holsters-table-thead-image-container">
+                                        <img {% if item.holsterMfr == 'Sticky Holsters' %}style="padding:10px;" {% endif %} src="/assets/images/page/holsters/{{ item.thumb }}">
+                                    </div>
+                                    <p class="holsters-table-thead-learn-more">
+                                        <a class="holsters-page-learn-more" data-mfr="{{ item.holsterMfr }}" data-model="{{ item.holster_model }}" href="{{ item.mfr_href }}"  title="Learn more about &#10;{{ item.holsterMfr }}'s&#10;{{ item.holster_model }} holster">
+                                            Learn more
+                                        </a>
+                                    </p>
+                                </th>
+                            {% endfor %}
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        {% for holster in holsters %}
+                            <tr>
+                                <!-- Pistol manufacturer column -->
+                                <td id="holsters-table-col-1">
+                                  <a href="/{{ holster.pistolMfr }}" title="See all {% if holster.pistol_mfr == 'Smith-Wesson' %}S&amp;W{% else %}{{ holster.pistol_mfr }}{% endif %} products">
+                                     {% if holster.pistolMfr == 'smith-wesson' %}
+                                         S&amp;W®
+                                     {% elseif holster.pistolMfr == 'sccy' %}
+                                         SCCY®
+                                     {% elseif holster.pistolMfr == 'hk' %}
+                                         HK®
+                                     {% else %}
+                                         {{ holster.pistolMfr|title }}®
+                                     {% endif %}
+                                  </a>
+                                </td>
+
+                                <!-- pistol model column -->
+                                <td id="holsters-table-col-2">
+                                    {% if holster.pistolMfr == 'bersa' %}
+                                        {{ holster.pistol_models }}
+                                    {% elseif holster.pistolMfr == 'colt' %}
+                                        {{ holster.pistol_models }}
+                                    {% elseif holster.pistolMfr == 'glock'%}
+                                        {{ holster.pistol_models }}
+                                    {% elseif holster.pistolMfr == 'hk' %}
+                                        {{ holster.pistol_models }}
+                                    {% elseif holster.pistolMfr == 'kahr' %}
+                                        {{ holster.pistol_models }}
+                                    {% elseif holster.pistolMfr == 'kel-tec' %}
+                                        {{ holster.pistol_models }}
+                                    {% elseif holster.pistolMfr == 'ruger' %}
+                                        {{ holster.pistol_models }}
+                                    {% elseif holster.pistolMfr == 'sccy' %}
+                                        {{ holster.pistol_models }}
+                                    {% elseif holster.pistolMfr == 'sig sauer' %}
+                                        {{ holster.pistol_models }}
+                                    {% elseif holster.pistolMfr == 'smith-wesson' %}
+                                        {{ holster.pistol_models }}
+                                    {% elseif holster.pistolMfr == 'taurus' %}
+                                        {{ holster.pistol_models }}
+                                    {% else %}
+                                        {{ holster.pistol_models }}
+                                    {% endif %}
+                                </td>
+
+                                <!-- TR Series model column -->
+                                <td id="holsters-table-col-3">
+                                    <a href="/{{ holster.pistolMfr }}/{{ holster.slug }}/tr-series/{{holster.trseries_id }}/{{ holster.trseries_model }}"
+                                        title="See {{ holster.trseries_model }}">
+                                        {{ holster.trseries_model|upper }}
+                                    </a>
+                                </td>
+
+                                <!-- MiniTuck column -->
+                                <td id="holsters-table-col-4" {% set foo = holster.holster_models %}
+                                    {% if "MiniTuck" in foo %}
+                                        style="background-color:#000;">
+                                        <a href="/search/holsters/MiniTuck/{{ holster.trseries_id }}/{{ holster.trseries_model }}">
+                                            CLICK TO SEE
+                                        </a>
+                                    {% endif %}
+                                </td>
+
+
+                                <!-- SuperTuck column -->
+                                <td id="holsters-table-col-7" {% set foo = holster.holster_models %}
+                                    {% if "SuperTuck" in foo %}
+                                        style="background-color:#000;">
+                                        <a href="/search/holsters/SuperTuck/{{ holster.trseries_id }}/{{ holster.trseries_model }}">
+                                            CLICK TO SEE
+                                        </a>
+                                    {% endif %}
+                                </td>
+
+
+                                <!-- SnapSlide column -->
+                                <td id="holsters-table-col-6" {% set foo = holster.holster_models%}
+                                    {% if "SnapSlide" in foo %}
+                                        style="background-color:#000;">
+                                        <a href="/search/holsters/SnapSlide/{{ holster.trseries_id }}/{{ holster.trseries_model }}">
+                                            CLICK TO SEE
+                                        </a>
+                                    {% endif %}
+                                </td>
+
+
+                                <!-- MiniSlide column -->
+                                <td id="holsters-table-col-5" {% set foo = holster.holster_models %}
+                                    {% if "MiniSlide" in foo %}
+                                        style="background-color:#000;">
+                                        <a href="/search/holsters/MiniSlide/{{ holster.trseries_id }}/{{ holster.trseries_model }}">
+                                            CLICK TO SEE
+                                        </a>
+                                    {% endif %}
+                                </td>
+
+
+                                <!-- Insider column -->
+                                <td id="holsters-table-col-9" {% set foo = holster.holster_models %}
+                                    {% if "Insider-42" in foo %}
+                                        style="background-color:#000;">
+                                        <a href="/search/holsters/Insider-42/{{ holster.trseries_id }}/{{ holster.trseries_model }}">
+                                            CLICK TO SEE
+                                        </a>
+                                    {% elseif "Insider-43" in foo %}
+                                        style="background-color:#000;">
+                                        <a href="/search/holsters/Insider-43/{{ holster.trseries_id }}/{{ holster.trseries_model }}">
+                                            CLICK TO SEE
+                                        </a>
+                                    {% elseif "Insider" in foo %}
+                                        style="background-color:#000;">
+                                        <a href="/search/holsters/Insider/{{ holster.trseries_id }}/{{ holster.trseries_model }}">
+                                            CLICK TO SEE
+                                        </a>
+                                    {% endif %}
+                                </td>
+
+
+                                <!-- Mini Scabbard column -->
+                                <td id="holsters-table-col-8" {% set foo = holster.holster_models %}
+                                    {% if "Mini Scabbard-42" in foo %}
+                                        style="background-color:#000;">
+                                        <a href="/search/holsters/Mini%20Scabbard-42/{{ holster.trseries_id }}/{{ holster.trseries_model }}">
+                                            CLICK TO SEE
+                                        </a>
+                                    {% elseif "Mini Scabbard-43" in foo %}
+                                        style="background-color:#000;">
+                                        <a href="/search/holsters/Mini%20Scabbard-43/{{ holster.trseries_id }}/{{ holster.trseries_model }}">
+                                            CLICK TO SEE
+                                        </a>
+                                    {% elseif "Mini Scabbard" in foo %}
+                                        style="background-color:#000;">
+                                        <a href="/search/holsters/Mini%20Scabbard/{{ holster.trseries_id }}/{{ holster.trseries_model }}">
+                                            CLICK TO SEE
+                                        </a>
+                                    {% endif %}
+                                </td>
+
+
+                                <!-- Nemesis column -->
+                                <td id="holsters-table-col-10" {% set foo = holster.holster_models %}
+                                    {% if "Nemesis" in foo %}
+                                        style="background-color:#000;">
+                                        <a href="/search/holsters/Nemesis/{{ holster.trseries_id }}/{{ holster.trseries_model }}">
+                                            CLICK TO SEE
+                                        </a>
+                                    {% endif %}
+                                </td>
+
+
+                                <!-- LG-6-S column -->
+                                <td {% set foo = holster.holster_models %}
+                                    {% if "LG-6-S" in foo %}
+                                        style="background-color:#000;">
+                                        <a href="/search/holsters/LG-6-Short/{{ holster.trseries_id }}/{{ holster.trseries_model }}">
+                                            CLICK TO SEE
+                                        </a>
+                                    {% endif %}
+                                </td>
+
+
+                                <!-- MD-4 Modified column -->
+                                <td id="holsters-table-col-11" {% set foo = holster.holster_models %}
+                                  {% if "MD-4-Modified" in foo %}
+                                      style="background-color:#000;">
+                                      <a href="/search/holsters/MD-4-Modified/{{ holster.trseries_id }}/{{ holster.trseries_model }}">
+                                          CLICK TO SEE
+                                      </a>
+                                  {% endif %}
+                                </td>
+
+
+                                <!-- SM-3-Small column -->
+                                <td {% set foo = holster.holster_models %}
+                                    {% if "SM-3-Small" in foo %}
+                                        style="background-color:#000;">
+                                        <a href="/search/holsters/SM-3-Small/{{ holster.trseries_id }}/{{ holster.trseries_model }}">
+                                            CLICK TO SEE
+                                        </a>
+                                    {% endif %}
+                                </td>
+
+                                <!-- LG-6-Long column -->
+                                <td {% set foo = holster.holster_models %}
+                                    {% if "LG-6-Long" in foo %}
+                                        style="background-color:#000;">
+                                        <a href="/search/holsters/LG-6-Long/{{ holster.trseries_id }}/{{ holster.trseries_model }}">
+                                            CLICK TO SEE
+                                        </a>
+                                    {% endif %}
+                                </td>
+
+                                <!-- MD-4-GEN-1-Medium column -->
+                                <td {% set foo = holster.holster_models %}
+                                    {% if "MD-4-Gen-1-Medium" in foo %}
+                                        style="background-color:#000;">
+                                        <a href="/search/holsters/MD-4-Gen-1-Medium/{{ holster.trseries_id }}/{{ holster.trseries_model }}">
+                                            CLICK TO SEE
+                                        </a>
+                                    {% endif %}
+                                </td>
+
+                                <!-- SM-2-Small column -->
+                                <td {% set foo = holster.holster_models %}
+                                    {% if "SM-2" in foo %}
+                                        style="background-color:#000;">
+                                        <a href="/search/holsters/SM-2/{{ holster.trseries_id }}/{{ holster.trseries_model }}">
+                                            CLICK TO SEE
+                                        </a>
+                                    {% endif %}
+                                </td>
+
+                                <!-- SM-5-Modified column -->
+                                <td {% set foo = holster.holster_models %}
+                                    {% if "SM-5-Modified" in foo %}
+                                        style="background-color:#000;">
+                                        <a href="/search/holsters/SM-5-Modified/{{ holster.trseries_id }}/{{ holster.trseries_model }}">
+                                            CLICK TO SEE
+                                        </a>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+
+               </table>
+            </div>
+         </div>
+
+      </div><!-- //col-md-12 -->
+   </div><!-- // row -->
+</div><!-- //container -->
+
+
+
+<!-- <div class="bg-f2f2f2 p2"> -->
+<div style="margin-top: 30px;">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <h2 style="font-size:52px; margin:0px; padding: 0px 0px;" class="text-uppercase text-center bold">
+                    Holster  Partners
+                </h2>
+            </div>
+        </div><!-- // .row  -->
+    </div><!-- // .container  -->
+</div><!-- // .bg-f2f2f2 -->
+
+
+
+<div class="container">
+    <div class="row p2">
+        <div class="col-md-12 col-center-block">
+
+                <h2 class="text-center" style="padding: 0px 0px;">
+                    Shop these sites for custom holsters for ArmaLaser equipped pistols
+                </h2>
+                <div style="font-size:20px;">
+
+                   <div class="col-md-4 col-sm-6 col-xs-12">
+                      <a href="http://www.hiddenhybridholsters.com/" target="_blank" title="Visit Hidden Hybrid Holsters">
+                        <div class="holsters-partners-container">
+                           <!-- <h3>Hidden Hybrid Holsters</h3> -->
+                           <div class="holsters-partners-img-container">
+                              <img src="/assets/images/page/holsters/partners/hiddenhybridholsters.png" alt="Hidden Hybrid Holsters">
+                           </div>
+                        </div>
+                     </a>
+                   </div>
+
+                   <div class="col-md-4 col-sm-6 col-xs-12">
+                      <a href="http://www.tennesseeholstercompany.com/" target="_blank" title="Visit Tennessee Holster Company">
+                        <div class="holsters-partners-container">
+                           <!-- <h3>Tennessee Holster Company</h3> -->
+                           <div class="holsters-partners-img-container">
+                              <img src="/assets/images/page/holsters/partners/tennesseeholstercompany.jpg" alt="Tennessee Holster Company">
+                           </div>
+                        </div>
+                     </a>
+                   </div>
+
+                    <div class="col-md-4 col-sm-6 col-xs-12">
+                       <a href="http://www.multiholsters.com/" target="_blank" title="Visit Multi Holsters">
+                          <div class="holsters-partners-container">
+                             <!-- <h3>Multi Holsters</h3> -->
+                             <div class="holsters-partners-img-container">
+                                <img src="/assets/images/page/holsters/partners/multiholsters.png" alt="Multi Holsters">
+                             </div>
+                          </div>
+                       </a>
+                    </div>
+
+                    <div class="col-md-4 col-sm-6 col-xs-12">
+                       <a href="http://www.readyholster.com/" target="_blank" title="Visit Ready Holster">
+                          <div class="holsters-partners-container">
+                             <!-- <h3>Ready Holster</h3> -->
+                             <div class="holsters-partners-img-container">
+                                <img src="/assets/images/page/holsters/partners/readyholster.png" alt="Ready Holster">
+                             </div>
+                          </div>
+                       </a>
+                    </div>
+
+                    <div class="col-md-4 col-sm-6 col-xs-12">
+                       <a href="http://www.shtfgear.com/" target="_blank" title="Visit Black Arch Holsters">
+                          <div class="holsters-partners-container">
+                             <!-- <h3>Black Arch Holsters</h3> -->
+                             <div class="holsters-partners-img-container">
+                                <img src="/assets/images/page/holsters/partners/blackarchholsters2.png" alt="Black Arch Holsters">
+                             </div>
+                          </div>
+                       </a>
+                    </div>
+
+                    <div class="col-md-4 col-sm-6 col-xs-12">
+                       <a href="http://www.recluseholster.com/" target="_blank" title="Visit Recluse Holsters">
+                          <div class="holsters-partners-container">
+                             <!-- <h3>Recluse Holsters</h3> -->
+                             <div class="holsters-partners-img-container">
+                                <img src="/assets/images/page/holsters/partners/recluseholsters.png" alt="Recluse Holsters">
+                             </div>
+                          </div>
+                       </a>
+                    </div>
+
+                     <div class="col-md-4 col-sm-6 col-xs-12">
+                        <a href="http://www.theisholsters.com/" target="_blank" title="Visit Theis Holsters">
+                           <div class="holsters-partners-container">
+                              <!-- <h3>Theis Holsters</h3> -->
+                              <div class="holsters-partners-img-container">
+                                 <img src="/assets/images/page/holsters/partners/theisholsters.png" alt="Theis Holsters">
+                              </div>
+                           </div>
+                        </a>
+                     </div>
+
+                     <div class="col-md-4 col-sm-6 col-xs-12">
+                        <a href="http://www.goldstarholsters.net/" target="_blank" title="Visit Gold Star Holsters">
+                           <div class="holsters-partners-container">
+                              <!-- <h3>Gold Star Holsters</h3> -->
+                              <div class="holsters-partners-img-container">
+                                 <img src="/assets/images/page/holsters/partners/goldstarholsters.png" alt="Gold Star Holsters">
+                              </div>
+                           </div>
+                        </a>
+                     </div>
+
+                     <div class="col-md-4 col-sm-6 col-xs-12">
+                        <a href="https://www.bullseyeholsters.com/" target="_blank" title="Visit Bullseye Holsters">
+                           <div class="holsters-partners-container">
+                              <!-- <h3>Bullseye Holsters</h3> -->
+                              <div class="holsters-partners-img-container">
+                                 <img src="/assets/images/page/holsters/partners/bullseyeholsters.png" alt="Bullseye Holsters">
+                              </div>
+                           </div>
+                        </a>
+                     </div>
+
+                     <div class="col-md-4 col-sm-6 col-xs-12">
+                        <a href="http://noriegaholsters.com/" target="_blank" title="Visit Noriega Holsters">
+                           <div class="holsters-partners-container">
+                              <!-- <h3>Noriega Holsters</h3> -->
+                              <div class="holsters-partners-img-container">
+                                 <img src="/assets/images/page/holsters/partners/noriegaholsters.gif" alt="Noriega Holsters">
+                              </div>
+                           </div>
+                        </a>
+                     </div>
+
+                     <div class="col-md-4 col-sm-6 col-xs-12">
+                        <a href="http://www.greystoneleather.com/" target="_blank" title="Visit Greystone Leather">
+                           <div class="holsters-partners-container">
+                              <!-- <h3>Greystone Leather</h3> -->
+                              <div class="holsters-partners-img-container">
+                                 <img src="/assets/images/page/holsters/partners/greystone_leather.png" alt="Greystone Leather Holsters">
+                              </div>
+                           </div>
+                        </a>
+                     </div>
+
+                     <div class="col-md-4 col-sm-6 col-xs-12">
+                        <a href="http://www.viperholsters.com/" target="_blank" title="Visit Viper Holsters">
+                           <div class="holsters-partners-container">
+                              <!-- <h3>Viper Holsters</h3> -->
+                              <div class="holsters-partners-img-container">
+                                 <img src="/assets/images/page/holsters/partners/viper_holsters_300.jpg" alt="Viper Holsters">
+                              </div>
+                           </div>
+                        </a>
+                     </div>
+
+                     <div class="col-md-4 col-sm-6 col-xs-12">
+                        <a href="https://www.exarchyholsters.com/" target="_blank" title="Visit Exarchy Holsters">
+                           <div class="holsters-partners-container">
+                              <!-- <h3>Exarchy Holsters</h3> -->
+                              <div class="holsters-partners-img-container">
+                                 <img src="/assets/images/page/holsters/partners/exarchy.jpg" alt="Exarchy Holsters">
+                              </div>
+                           </div>
+                        </a>
+                     </div>
+
+                </div>
+
+        </div><!-- // .col-md-10  -->
+    </div><!-- // .row  -->
+
+
+
+   </div>
+</div>
+{% endblock %}
+
+{% block bottomjs %}
+<script>
+$.noConflict();
+$(document).ready(function(){
+
+   // Resource: http://jsfiddle.net/H7uar/604/
+   $(function() {
+      var iframe = $('<iframe frameborder="0" width="100%" height="100%" allowfullscreen></iframe> <a target="_blank">Click here if web page does not appear</a> ');
+      var windowWidth = $(window).width();
+      var dialogWidth = windowWidth * .8;
+      var windowHeight = $(window).height();
+      var dialogHeight = windowHeight * .7;
+      var dialog = $("#modal-holster").append(iframe).appendTo("body").dialog({
+         autoOpen: false,
+         modal: true,
+         resizable: true,
+         draggable: true,
+         width: dialogWidth,
+         height: dialogHeight,
+         show: {
+            effect: 'blind',
+            times: 3,
+            delay: 0,
+            duration: 1000
+         },
+         buttons: {
+            Close: function() {
+               iframe.attr('src', '');
+               iframe.attr('href', '');
+               $("#modal-holster").dialog({
+                  hide: {
+                     effect: 'explode',
+                     pieces: 9,
+                     duration: 1500
+                  }
+               })
+               .dialog('close');
+            }
+         }
+      });
+
+      $(".holsters-page-learn-more").on("click", function(e) {
+         e.preventDefault();
+         console.log("holsters-page-learn-more just clicked.");
+         var src = $(this).attr('href');
+         var mfr = $(this).attr('data-mfr');
+         var model = $(this).attr('data-model');
+         console.log(src);
+         console.log(mfr);
+         console.log(model);
+         iframe.attr({
+            mfr: mfr,
+            model: model,
+            src: src,
+            href: src    // pass for a href value
+         });
+         dialog.dialog({ title: 'Learn more about ' + mfr + ' ' + model + ' holster' }).dialog('open');
+         return false;
+      });
+
+   });
+
+
+});
+</script>
+{% endblock %}

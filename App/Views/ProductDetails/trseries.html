@@ -1,0 +1,365 @@
+{% extends 'base.html' %}
+
+{% block title %}
+ArmaLaser {{ model.series|upper }} {{ model.model|upper }} laser with {{ model.beam }} beam for {% if model.pistolMfr == 'smith-wesson' %}SMITH & WESSON®{% elseif model.pistolMfr == 'sig-sauer' %}SIG SAUER®{% else %}{{ model.pistolMfr|upper }}®{% endif %} {{ model.pistol_models }}
+{% endblock %}
+
+
+{% block metadescription %}
+ArmaLaser's {{ model.model|upper }} laser with a {{ model.beam }} beam is from ArmaLaser's {{ model.series|upper }} collection of custom designed lasers. The {{ model.model|upper }} is manufactured specifically for the {% if model.pistolMfr == 'smith-wesson' %}SMITH & WESSON®{% elseif model.pistolMfr == 'sig-sauer' %}SIG SAUER®{% else %}{{ model.pistolMfr|upper }}®{% endif %} {{ model.pistol_models }} pistol(s). ArmaLaser is the leader in advanced laser sights and pistol laser technology.{% endblock %}
+
+
+{% block css %}
+<style>
+   .ui-dialog .ui-dialog-titlebar {
+      display: block;
+   }
+   .ui-dialog.ui-dialog-content {
+      padding: 0;
+   }
+   #sale-banner {
+       background-color: #800020;
+       color: #fff;
+       padding: 0px 0px;
+       margin-top: 20px;
+       font-size: 30px;
+       font-weight: bold;
+       font-style: italic;
+       text-align: center;
+       border-radius: 6px;
+   }
+</style>
+{% endblock %}
+
+
+{% block outsidecontainer %}
+{% endblock %}
+
+
+{% block content %}
+<div id="modal-holster"></div>
+<div id="modal-holster-video"></div>
+
+<div id="overlay"></div>
+
+<div class="col-md-9 col-xs-12" id="frame">
+    <!-- value of src attribute comes from jQuery code below -->
+    <img class="img-responsive"
+    id="main"
+    src=""
+    alt="ArmaLaser {{ model.model|upper }} {{ model.beam }} laser for {{ model.pistolMfr|upper }}® {{ model.pistol_models }}">
+</div>
+
+<div id="overlay2"></div>
+
+<div class="col-md-9 col-xs-12" id="frame2">
+    <img class="img-responsive"
+    id="main2"
+    src=""
+    alt="ArmaLaser {{ model.model|upper }} {{ model.beam }} laser for {{ model.pistolMfr|upper }}® {{ model.pistol_models }}">
+</div>
+
+
+<div class="container">
+    <div id="content"> <!-- to hide content when full size image displays -->
+        <div class="row">
+
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="product-block-title bold ptop20">
+                    <h3>
+                        <span class="text-uppercase" style="color:#ababab">
+                            <span>{{ model.series }}</span>
+                        </span>
+
+                        <span class="product-details-what-is">
+                            <span class='text-uppercase' style='font-size:12px;'>
+                                <a href='/lasers/tr-series'>
+                                    What is TR Series?
+                                </a>
+                            </span>
+                        </span>
+
+                        <span class="pull-right text-size60"
+                            style="display:inline-block; font-style:normal;margin-bottom:0px;">
+
+                            <span class="text-size120">
+                                <a href="#trseries-install-modal" data-toggle="modal">
+                                    Video Guide
+                                </a>
+                            </span>
+
+                            <span class="text-size120">
+                                <a href="/tr-series-laser-owners-manual">
+                                    Owners Manual
+                                </a>
+                            </span>
+
+                            <span class="text-size120">
+                              <a href="/warranty">
+                                Warranty Support
+                              </a>
+                            </span>
+
+                        </span>
+                    </h3>
+                </div><!-- // .product-block-title  -->
+
+                <p class="text-right text-uppercase bold" style="font-size:12px; margin-right:40px;">
+                    <span style="padding-right:10px;">
+                        <a href="/laser-accessories/{{ model.battery_id }}/tr-series-battery">
+                           Battery
+                        </a>
+                    </span>
+                    <span style="padding-right:10px;">
+                        <a href="/laser-accessories/{{ model.toolkit_id }}/tr-series-toolkit">
+                           TR Series Toolkit
+                        </a>
+                    </span>
+                </p>
+
+            </div><!-- // .col-md-12  -->
+        </div><!-- //.row  -->
+
+
+        <!-- - - - - - - - -  IMAGE - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+        <div class="row">
+            <div id="laser-features-image">
+                <img src="/assets/images/page/productDetails/{{ model.img_lg }}"
+                    alt="ArmaLaser {{ model.model|upper }} {{ model.beam }} laser for {{ model.pistolMfr|upper }}® {{ model.pistol_models }}">
+            </div>
+
+            <div class="col-md-6 col-sm-6 col-xs-6">
+                <div class="product-image">
+
+                   <!-- store values of full-size images -->
+                    <div id="full-size-image">
+                        <img src="/assets/images/laser-pistol/{{ model.model|trim('g') }}/{{ model.fullsize }}"
+                            alt="ArmaLaser {{ model.model|upper }} {{ model.beam }} laser for {{ model.pistolMfr|upper }}® {{ model.pistol_models }}">
+                    </div>
+
+                     <!-- assign id (displayed-image) for jQuery code below that is necessary to display large image -->
+                    <div id="displayed-image">
+                        <picture>
+                            <source srcset="/assets/images/laser-pistol/{{ model.model|trim('g') }}/{{ model.med }}"
+                                alt="ArmaLaser {{ model.model|upper }} {{ model.beam }} laser for {{ model.pistolMfr|upper }}® {{ model.pistol_models }}"
+                                media="(min-width:1200px)">
+
+                            <source srcset="/assets/images/laser-pistol/{{ model.model|trim('g') }}/{{ model.small }}"
+                                alt="ArmaLaser {{ model.model|upper }} {{ model.beam }} laser for {{ model.pistolMfr|upper }}® {{ model.pistol_models }}"
+                                media="(min-width:760px)">
+
+                            <source srcset="/assets/images/laser-pistol/{{ model.model|trim('g') }}/{{ model.thumb }}"
+                                alt="ArmaLaser {{ model.model|upper }} {{ model.beam }} laser for {{ model.pistolMfr|upper }}® {{ model.pistol_models }}"
+                                media="(min-width:200px)">
+
+                            <img class="img-responsive" style="width: 100%; padding-top: 50px;"
+                                src="/assets/images/laser-pistol/{{ model.model|trim('g') }}/{{ model.thumb }}"
+                                alt="ArmaLaser {{ model.model|upper }} {{ model.beam }} laser for {{ model.pistolMfr|upper }}® {{ model.pistol_models }}">
+                        </picture>
+
+                        <p class="text-center" style="color:#0000ff;" id="click-to-enlarge">
+                           Click to enlarge
+                        </p>
+                        <p style="font-size: 12px; color: #bebebe;">*FIREARM NOT INCLUDED</p>
+                    </div><!-- // #displayed-image -->
+
+                </div><!-- // .product-image -->
+
+            </div><!-- / col  -->
+
+
+            <!-- - - - - - PRODUCT DESCRIPTION - TEXT - - - - - - - - - - - - - - -->
+
+            <div class="col-md-6 col-sm-6 col-xs-6" id="productDetailsHeading">
+                <h1 style="color:#727272;">
+                      {{ model.model|upper }} for {% if pistolMfr == 'smith-wesson' %} SMITH & WESSON®{% else %}{{ pistolMfr|upper }}® {% endif %}
+
+                    <span class="text-uppercase pull-right" id="other-laser-color"
+                        style="font-size:10px;display:inline-block;padding-top:10px;">
+                        {% if model.beam == 'red' %}
+                            {% set red_id = model.id %}
+                            <!-- <a href="/products/lasers/tr-series/{{ pistolMfr }}/{{ red_id + 1 }}/{{ model.model }}g"> -->
+                            <a href="/{{ pistolMfr }}/{{ model.slug }}/tr-series/{{ red_id + 1 }}/{{ model.model }}g">
+                                Show green beam version
+                            </a>
+                        {% endif %}
+
+                        {% if model.beam == 'green' %}
+                            {% set green_id = model.id %}
+                            <a href="/{{ pistolMfr }}/{{ model.slug }}/tr-series/{{ green_id - 1 }}/{{ model.model|trim('g') }}">
+                                Show red beam version
+                            </a>
+                        {% endif %}
+                    </span>
+
+                    <div style="margin-top:-20px;">&nbsp;</div>
+
+                    <span style="padding-left:3px;font-style:normal; color:#848484;"
+                      class="text-size70">
+                        {{ model.model|upper }}
+                        fits
+                        {% if pistolMfr == 'smith-wesson' %}
+                            SMITH & WESSON®
+                        {% else %}
+                            {{ pistolMfr|upper }}®
+                        {% endif %}
+                        {{ model.pistol_models }}
+
+                        {% if model.special_note %}
+                            <p style="color:#FF0000;font-size:90%;padding-left:10px;margin-top: 10px; margin-bottom: -25px;">
+                                *{{ model.special_note }}
+                            </p>
+                        {% endif %}
+
+                        <!-- warning -->
+                        {% if model.id == 1021 or model.id == 1022 %}
+                            <p style="color:#FF0000;font-size:90%;padding-left:10px;margin-top: 10px; margin-bottom: -25px;">
+                                *Must say MILLENNIUM PRO on the firearm.
+                            </p>
+                        {% elseif model.id == 1045 or model.id == 1046 %}
+                            <p style="color:#FF0000;font-size:90%;padding-left:10px;margin-top: 10px; margin-bottom: -25px;">
+                                *Must say MILLENNIUM G2 or G2c on the firearm.
+                            </p>
+                        {% elseif model.id == 1033 or model.id == 1034 %}
+                            <p style="color:#FF0000;font-size:90%;padding-left:10px;margin-top: 10px; margin-bottom: -25px;">
+                                *Only fits XSP/Lite Polymer frame (not Pocketlite model).
+                            </p>
+                        {% elseif model.id == 1031 or model.id == 1032 %}
+                            <p style="color:#FF0000;font-size:90%;padding-left:10px;margin-top: 10px; margin-bottom: -25px;">
+                                *Does NOT fit the Thunder Plus series models.
+                            </p>
+                        {% elseif model.id == 1029 or model.id == 1030 %}
+                            <p style="color:#FF0000;font-size:90%;padding-left:10px;margin-top: 10px; margin-bottom: -25px;">
+                                *Does NOT fit the SD9VE or SD40VE.
+                            </p>
+                        {% elseif model.id == 1017 or model.id == 1018 %}
+                            <p style="color:#FF0000;font-size:90%;padding-left:10px;margin-top: 10px; margin-bottom: -25px;">
+                                *Does NOT fit the Ruger 9E. <a href="http://gunlaser.store/ruger/sr9/gto-flx/2091/gto-flx46">
+                                    Click here for Ruger 9E laser sight.
+                                </a>
+                            </p>
+                        {% endif %}
+                    </span>
+                </h1>
+
+                <div class="text-justify">
+                    <p style="font-size:14px; color:#ababab; border:none;">
+                        {% if model.ad_blurb %}
+                            {{ model.ad_blurb|raw }}
+                        {% endif %}
+                    </p>
+
+                    <p class="text-uppercase text-left" style="border:none;">
+                      Features
+                    </p>
+                    <div id="feature-list">
+                        <div class="col-sm-6 col-xs-6" style="margin-bottom: 0px;">
+                            <div style="margin-left: -14px;">
+                                <p>{{ model.feature01 }}</p>
+                                <p>{{ model.feature02 }}</p>
+                                <p>{{ model.feature03 }}</p>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-xs-6" style="margin-bottom: 0px;">
+                            <div style="margin-right: -14px;" class="text-right">
+                                  <p>UPC: {{ model.upc }} </p>
+                                  <p>{{ model.patent_pend|raw }}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                    {% include 'ProductDetails/trseries-sale-section.html' %}
+
+
+                    <div class="col-md-12">
+                        <div class="row">
+                            {% include 'ProductDetails/add-to-cart-button.html' %}
+                        </div>
+                    </div>
+
+
+
+                    <!-- Strategic Partner links -->
+
+                    {% if model.optics_planet or model.amazon or model.midwayusa %}
+                        <div class="col-md-12" style="border: 1px solid #eee; border-radius: 3px; padding: 5px 10px 15px 5px; margin-bottom:15px; box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);">
+                            <div class="col-md-12" >
+                                <h3 class="text-center italic" style="margin-top:0px; color:#727272;">
+                                    Or Click to Buy this Laser at:
+                                </h3>
+                            </div>
+
+
+                        {% if model.opticsplanet %}
+                            <div class="col-md-3 text-center">
+                                <a class="newWindow"href="{{ model.optics_planet }}" rel="0">
+                                    <img src="/assets/images/page/productDetails/opticsplanet_thumb.png"
+                                        height="50px" title="Buy at Optics Planet" alt="OpticsPlanet">
+                                </a>
+                            </div>
+                        {% endif %}
+                        {% if model.amazon %}
+                            <div class="col-md-3 text-center">
+                                <a class="newWindow" href="{{ model.amazon }}" rel="0">
+                                    <img src="/assets/images/page/productDetails/amazon_thumb.png"
+                                        height="50px" title="Buy at Amazon" alt="Amazon">
+                                </a>
+                            </div>
+                        {% endif %}
+                        {% if model.midwayusa %}
+                            <div class="col-md-3 text-center">
+                                <a  class="newWindow" href="{{ model.midwayusa }}" rel="0">
+                                    <img src="/assets/images/page/productDetails/midwayusa_thumb.jpg"
+                                        height="50px" title="Buy at Midway USA" alt="MidwayUSA">
+                                </a>
+                            </div>
+                        {% endif %}
+                        {% if model.buds %}
+                            <div class="col-md-3 text-center">
+                                <a  class="newWindow" href="{{ model.buds }}" rel="0">
+                                    <img src="/assets/images/page/productDetails/buds_thumb.jpg"
+                                        height="55px" title="Buy at Bud&apos;s Gun Shop" alt="Bud&apos; Gun Shop">
+                                </a>
+                            </div>
+                        {% endif %}
+                    </div>
+                {% endif %}
+                <!-- end dealer links  -->
+
+                {% if model.special_message %}
+                    <p class="text-center" style="color: #ff0000;">
+                        *{{ model.special_message|raw }}
+                    </p>
+                {% endif %}
+
+                <div class="col-md-12">
+                    <div id="social-media-links">
+                        <div class="sharethis-inline-share-buttons" style="margin-bottom: 15px;"></div>
+                    </div>
+                </div>
+
+            </div><!-- // .col-md-6  -->
+       </div><!-- /row -->
+
+
+        {% if links %}
+            {% include 'ProductDetails/product_links_trseries.html' %}
+        {% endif %}
+
+        {% if specs %}
+            {% include 'ProductDetails/inc.details.specifications.html' %}
+        {% endif %}
+
+
+    </div><!-- // #content -->
+</div><!-- // .container  -->
+
+    {% include 'ProductDetails/inc.details.modals.html' %}
+{% endblock %}
+
+
+{% block bottomjs %}
+    {% include 'ProductDetails/inc.details.javascript.html' %}
+{% endblock %}

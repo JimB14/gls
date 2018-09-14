@@ -1,0 +1,474 @@
+{% extends 'base.html' %}
+
+{% block title %}
+   Live chat
+{% endblock %}
+
+{% block metadescription %}
+   Chat live with ArmaLaser
+{% endblock %}
+
+{% block css %}
+<style>
+   #wrapper {
+      min-height: 400px;
+      background-color: #fff;
+      margin: 40px 0px;
+      /*border: 1px solid #ff0000;
+      border-radius: 3px;*/
+   }
+   #wrapper h1 {
+      margin: 0;
+      margin-bottom: 10px;
+   }
+   #messages {
+      padding: 15px;
+      width: 90%;
+      margin: 0 auto;
+      border: 1px solid #ddd;
+      border-radius: 3px;
+      min-height: 300px;
+      overflow: auto;
+   }
+   #message-input-container {
+      width: 90%;
+      margin: 0 auto;
+      margin-top: 10px;
+   }
+
+   #deleteThisChat {
+      margin-top: 15px;
+   }
+   #deleteThisChat:hover,
+   #deleteAllChats:hover {
+      cursor: pointer;
+      text-decoration: underline;
+   }
+   #deleteChatDiv,
+   #deleteAllChatsDiv {
+      display: none;
+   }
+   #welcome-please-wait {
+      color: #000;
+      -webkit-animation-name: example; /* Safari 4.0 - 8.0 */
+      -webkit-animation-duration: 4s; /* Safari 4.0 - 8.0 */
+      -webkit-animation-iteration-count: infinite; /* Safari 4.0 - 8.0 */
+      animation-name: welcome;
+      animation-duration: 30s;
+      animation-iteration-count: 1;
+   }
+   /* Safari 4.0 - 8.0 */
+   @-webkit-keyframes welcome {
+       0%   {color:red;}
+       75%  {color:#449D44;}
+       100% {color:black;}
+   }
+
+   /* Standard syntax */
+   @keyframes welcome {
+      0%   {color:red;}
+      75%  {color:#449D44;}
+      100% {color:black;}
+   }
+
+   #clock {
+      width: 131px;
+      text-align: center;
+      margin: 0 auto;
+      background-color: #4b4b4b;
+      color: #fff;
+      padding: 7px 10px;
+      border-radius: 4px;
+   }
+</style>
+
+{% endblock %}
+
+{% block outsidecontainer %}
+{% endblock %}
+
+
+{% block content %}
+<div class="container">
+   <div class="row">
+      <div class="col-md-12">
+
+            <div class="col-md-10 col-center-block">
+               {% if chatDelete == 'true' %}
+                  <div style="margin-top: 40px;" class="alert alert-success">
+                     <p class="text-center">{{ message|raw }}</p>
+                  </div>
+               {% endif %}
+               <div id="wrapper">
+
+                  <div class="text-center">
+                     <h1 class="text-center">Welcome to Live Chat {% if session.chatuserLoggedIn == true %} {{ session.chatuser_first_name }}! {% endif %}</h1>
+                     <h4 id="clock"></h4>
+                     <h4>{{ session.thisDay }} {{ session.thisMonth }} {{ session.thisDate }}, {{ session.thisYear }}</h4>
+                     {% if session.user_id %}
+                        <h3 style="margin: 0px; margin: -5px 0px 10px 0px;">ArmaLaser rep: {{ session.first_name }}</h3>
+                     {% endif %}
+                  </div>
+
+                  {% if session.thisDay == 'Sat' or session.thisDay == 'Sun' or session.thisHour > '17' or session < '9' %}
+                     <div class="text-center">
+                        <h3>Live Chat is currently closed</h3>
+                        <p><a class="btn btn-info" href="/logout/chat">Log Out</a></p>
+                        <h3 style="color:#0000ff; margin-bottom:10px;">Live Chat is available 9:00 AM - 5:00 PM Mon - Fri</h3>
+                     </div>
+                  {% endif %}
+
+                  {% if newChat == 'true' and messageCount == 1 %}
+                     <div id="welcome-please-wait">
+                        <h3 style="margin:0px; margin-bottom: 10px;font-style:italic;" class="text-center">An ArmaLaser representative will be with you momentarily. Please wait.</h3>
+                     </div>
+                  {% endif %}
+
+                  <!-- Chat messages -->
+                  <div id="messages"></div>
+                  <!-- // Chat messages -->
+
+                  <div id="message-input-container" class="input-group">
+
+                     {% if (session.thisDay != 'Sat' or session.thisDay != 'Sun') and (session.thisHour < '17' and session.thisHour >= '9') %}
+
+                        <input class="form-control" id="enterchat" type="text" placeholder="Enter your message" autofocus>
+
+                        <span class="input-group-btn">
+                           <button type="button" onclick="sendajax()" class="btn btn-success">Send Message</button>
+                           <button type="button" onclick="deleteAllChatData()" class="btn btn-danger">End Chat</button>
+                        </span>
+
+                     {% else %}
+                        <div class="text-center">
+                           <h4><a href="/contact">You can send a message by using our contact form</a>.</h4>
+                        </div>
+                     {% endif %}
+                  </div>
+
+                  {% if session.chatuserLoggedIn == true %}
+                     <div>
+                        <h4 class="text-center"><span style="color:red;font-size: 150%;">*</span>When you are finished chatting, please click "End Chat."</h4>
+                     </div>
+                  {% endif %}
+
+                  {% if session.user_id %}
+                     <h4 class="text-center"><span style="color:red;font-size: 150%;">*</span>
+                        Reminder: you must click &quot;End Chat&quot; at the conclusion of this chat.
+                        <br>
+                        If user ends chat, please click "End Chat" to refresh Chat for new user.
+                     </h4>
+                  {% endif %}
+
+                  <!-- {% if session.user == true and session.access_level >= 2 %}
+                     <div>
+                        <p id="deleteThisChat" class="text-center">Delete this chat</p>
+                        <div id="deleteChatDiv" style="margin-top: 15px;">
+                           <p class="text-center"><button type="button" onclick="deleteChatData()" class="btn btn-danger">Delete this Chat</button></p>
+                        </div>
+                     </div>
+                  {% endif %} -->
+                  <!-- {% if session.user == true and session.access_level >= 3 %}
+                     <p id="deleteAllChats" class="text-center">Delete all chats</p>
+                     <div id="deleteAllChatsDiv" style="margin-top: 15px;">
+                        <p class="text-center"><button type="button" onclick="deleteAllChatData()" class="btn btn-danger">Delete all Chats</button></p>
+                     </div>
+                  {% endif %}
+               </div>-->
+
+               <!-- <h3>SESSION data for Chat User</h3>
+               <ul>
+                  <li>Is chat user logged in? (chatuserLoggedIn):  {{ session.chatuserLoggedIn }}</li>
+                  <li>This chat ID (chatId):  {{ session.chatId }}</li>
+                  <li>chatuser_id:  {{ session.chatuser_id }}</li>
+                  <li>User access level:  {{ session.chatuser_access_level }}</li>
+                  <li>First name:  {{ session.chatuser_first_name }}</li>
+                  <li>Email:  {{ session.chatuser_email }}</li>
+               </ul>
+
+               <h3>SESSION data for ArmaLaser User</h3>
+               <ul>
+                  <li>Is user logged in? (LoggedIn):  {{ session.loggedIn }}</li>
+                  <li>user_id:  {{ session.user_id }}</li>
+                  <li>User access level:  {{ session.access_level }}</li>
+                  <li>First name:  {{ session.first_name }}</li>
+                  <li>Full name:  {{ session.full_name }}</li>
+               </ul> -->
+
+            </div>
+
+         </div>
+      </div>
+   </div>
+</div>
+{% endblock %}
+
+{% block bottomjs %}
+<script>
+
+   function playAudioTone() {
+
+      // create audio obj
+      let tone = new Audio();
+
+      // store sound in src property of tone obj
+      tone.src = "/assets/sound/chin-up.mp3";
+
+      // call play method of tone object
+      tone.play();
+   };
+
+   // run function every 1000 miliseconds
+   setInterval(function() {
+      updateChat();
+   }, 1000);
+
+   // retrieve messages per setInterval() time
+   function updateChat() {
+
+      var chatId = '{{ session.chatId }}';
+      console.log(`From updateChat() chatId: ${chatId}`);
+
+      $.ajax({
+         url: '/chats/update-chat',
+         type: 'post',
+         data: { chatId: chatId },
+         dataType: 'html',
+         success: function(messages){
+            // console.log(messages);
+            $("#messages").html(messages);
+         }
+      });
+   }
+
+
+
+   // trigger function is user presses enter key
+   $("#enterchat").on("keypress", function(event) {
+      if(event.which === 13 ) {
+         sendajax();
+      }
+   });
+
+
+   function sendajax() {
+      console.log('sendajax button clicked!');
+      let newChatId = '';
+
+      $.ajax({
+         url: '/chats/check-for-chat',
+         type: 'POST',
+         data: { newChatId: newChatId },
+         dataType: 'JSON',
+         success: function(count){
+            console.log(`Count: ${count}`);
+
+            // if (count > 1) {
+            //    return alert('Chat in use. Please try again in a few minutes.');
+            // }
+
+            // store message from input in variable
+            var chatText = $("#enterchat").val();
+
+            // chat user data
+            var chatuserId = '{{ session.chatuser_id }}';  // must be string to pass from Twig, but number for MySQL auto increment
+            var chatId     = '{{ session.chatId }}';       // must be string to pass from Twig
+            var userId = '';
+            var theChatId ='';
+
+            // ArmaLaser user data
+            var ArmaLaserUserId = '{{ session.user_id }}';   // must be string to pass from Twig
+
+            // store chatId passed to chat?id=string by Chats controller in chat() method
+            {% if chatId != 'undefined' %}
+               var theChatId = '{{ chatId }}';
+            {% endif %}
+
+            // validate
+            if(chatText === '') {
+               console.log("No data entered.");
+               alert("No data entered. Please enter data.");
+               return;
+            }
+
+            // chat text
+            console.log(`chat text: ${chatText}`);
+            // console.log('Type of: ' + typeof(chatText));
+            // chat user ID
+            console.log(`chatuser_id: ${chatuserId}`);
+            // console.log('Type of: ' + typeof(chatuserId));
+            // chat ID
+            console.log(`chatId: ${chatId}`);
+            // console.log('Type of: ' + typeof(chatId));
+            // ArmaLaser user data
+            console.log(`UserId: ${userId}`);
+            // chatId passed to page
+            console.log(`The chat ID: ${theChatId}`);
+
+            // clear value from input
+            $("#enterchat").val("");
+
+            // process message & store in chats table of db
+            $.ajax({
+               url: '/chats/process-chat-message',
+               type: 'POST',
+               data: {
+                  chatText: chatText,
+                  chatId: chatId,
+                  chatuserId: chatuserId,
+                  theChatId: theChatId,
+                  ArmaLaserUserId: ArmaLaserUserId
+               },
+               dataType: 'JSON',
+               success: function(response) {
+                  console.log(`Ajax response: ${response}`);
+                  if(response === true){
+                     console.log("Message processed successfully!");
+                     console.log("/chat?id="+chatId);
+
+                     console.log('Before tone');
+                     if (count > 1) {
+                        playAudioTone();
+                        return;
+                        console.log('After tone');
+                     }
+
+                     // redirect to this chat's URL
+                     window.location.href="/chat?id="+chatId;
+                  }
+               },
+               error: function(response){
+                  console.log("An error occurred. Request not processed.");
+               }
+            });
+         },
+         error: function(){
+            console.log('Error in Ajax request.');
+         }
+      });
+
+
+
+
+
+   //    // store message from input in variable
+   //    var chatText = $("#enterchat").val();
+   //
+   //    // chat user data
+   //    var chatuserId = '{{ session.chatuser_id }}';  // must be string to pass from Twig, but number for MySQL auto increment
+   //    var chatId     = '{{ session.chatId }}';       // must be string to pass from Twig
+   //    var userId = '';
+   //    var theChatId ='';
+   //
+   //    // ArmaLaser user data
+   //    var ArmaLaserUserId = '{{ session.user_id }}';   // must be string to pass from Twig
+   //
+   //    // store chatId passed to chat?id=string by Chats controller in chat() method
+   //    {% if chatId != 'undefined' %}
+   //       var theChatId = '{{ chatId }}';
+   //    {% endif %}
+   //
+   //    // validate
+   //    if(chatText === '') {
+   //       console.log("No data entered.");
+   //       alert("No data entered. Please enter data.");
+   //       return;
+   //    }
+   //
+   //    // chat text
+   //    console.log(`chat text: ${chatText}`);
+   //    // console.log('Type of: ' + typeof(chatText));
+   //    // chat user ID
+   //    console.log(`chatuser_id: ${chatuserId}`);
+   //    // console.log('Type of: ' + typeof(chatuserId));
+   //    // chat ID
+   //    console.log(`chatId: ${chatId}`);
+   //    // console.log('Type of: ' + typeof(chatId));
+   //    // ArmaLaser user data
+   //    console.log(`UserId: ${userId}`);
+   //    // chatId passed to page
+   //    console.log(`The chat ID: ${theChatId}`);
+   //
+   //    // clear value from input
+   //    $("#enterchat").val("");
+   //
+   //    // process message & store in chats table of db
+   //    $.ajax({
+   //       url: '/chats/process-chat-message',
+   //       type: 'POST',
+   //       data: {
+   //          chatText: chatText,
+   //          chatId: chatId,
+   //          chatuserId: chatuserId,
+   //          theChatId: theChatId,
+   //          ArmaLaserUserId: ArmaLaserUserId
+   //       },
+   //       dataType: 'JSON',
+   //       success: function(response) {
+   //          console.log(`Ajax response: ${response}`);
+   //          if(response === true){
+   //             console.log("Message processed successfully!");
+   //             console.log("/chat?id="+chatId);
+   //
+   //
+   //
+   //             // redirect to this chat's URL
+   //             window.location.href="/chat?id="+chatId;
+   //          }
+   //       },
+   //       error: function(response){
+   //          console.log("An error occurred. Request not processed.");
+   //       }
+   //    });
+   }
+
+
+   /**
+    * deletes all stored data (truncate) in chats table & resets auto increment to 1
+    *
+    * @return  Boolean
+    */
+   function deleteAllChatData() {
+      console.log("Delete all chats button clicked!");
+
+      $.ajax({
+         url: '/chats/delete-all-chat-data',
+         type: 'post',
+         data: { chatData: 'chatData' },
+         success: function(response){
+            if(response === 'Success') {
+               // alert('All chat data successfully deleted. You must log back in.');
+               window.location.href="/";
+            }
+         }
+      });
+   }
+
+
+//  ======= CLOCK ==============================
+   // https://codepen.io/Tcip/pen/BNKjeN
+   var myVar = setInterval(function() {
+     myTimer();
+   }, 1000);
+
+   function myTimer() {
+     var d = new Date();
+     document.getElementById("clock").innerHTML = d.toLocaleTimeString();
+   }
+// =============================================
+
+
+// $(document).ready(function() {
+
+   // assign day and time variables
+   var date = new Date();
+   var today = date.getDay();
+   console.log(`Today: ${today}`);
+
+   var now = date.toLocaleTimeString();
+   console.log(`Now: ${now}`);
+
+// });
+</script>
+
+{% endblock %}

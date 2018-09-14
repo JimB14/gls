@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+
+{% block title %}
+  Glove Contacts | ArmaLaser
+{% endblock %}
+
+{% block metadescription %}
+Purchase glove contacts online. Our glove contacts are perfect for using our laser system while wearing gloves.
+{% endblock %}
+
+{% block css %}
+{% endblock %}
+
+{% block outsidecontainer %}
+{% endblock %}
+
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <h1 class="pagetitle">{{ pagetitle }}</h1>
+        </div>
+
+        <div class="col-md-8 col-sm-8 col-xs-12">
+
+            <div class="well well-default">
+                <p class="text-size130">
+                    Our Glove Contacts are PERFECT for using your system while
+                    wearing gloves.They&#39;re also great for your smart phone or
+                    tablet.
+                </p>
+            </div>
+
+
+            <div class="box-glove-contacts">
+                <div class="p2">
+                    <h3 class="details" style="margin-top:0px;">PRODUCT DETAILS</h3>
+                    <p>
+                        A pack of 4 Glove Contacts can be purchased for less than $10.00.
+                        A contact should be placed on either the fingertips (when using GTO in Finger Touch Mode)
+                        or at the top part of your middle finger for all TR-Series lasers and
+                        if using GTO with a FLX in Grip Touch Mode.
+                    </p>
+
+                    <img id="warranty-image" class="img-responsive"
+                        src="/assets/images/page/touchActivation/glove_with_contact_patch_300x200.jpg" alt="ArmaLaser">
+                </div>
+
+                <p class="p2">
+                    Glove Contacts stick aggressively and stay put even in harsh
+                    conditions. Made from a metalized fabric with 3M adhesive backing,
+                    Glove Contacts will fully cure 72 hours after sticking onto your gloves.
+                </p>
+
+                <a href="{{ buy_link }}" class="btn btn-buy btn-lg btn-block" role="button">
+                    Buy
+                </a>
+                <br>
+            </div>
+        </div><!-- // .col-md-8 -->
+
+        <!-- <div class="col-md-4 col-sm-4 col-xs-12">
+            <h3 class="details" style="margin-top:0px;">PRODUCT DETAILS</h3>
+            <p>
+                A pack of 4 Glove Contacts can be purchased for less than $10.00.
+                A contact should be placed on either the fingertips (when using GTO in Finger Touch Mode)
+                or at the top part of your middle finger for all TR-Series lasers and
+                if using GTO with a FLX in Grip Touch Mode.
+            </p>
+        </div> -->
+
+    </div>
+</div>
+{% endblock %}
+
+{% block bottomjs %}
+
+{% endblock %}

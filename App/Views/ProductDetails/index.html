@@ -1,0 +1,1620 @@
+{% extends 'base.html' %}
+
+{% block title %}
+{% if accessory %}
+Accessories - {{ accessory.name }} | ArmaLaser
+
+{% elseif holster %}
+{{ holster.mfr }} {{ holster.model }} {{ holster.hand }} Holster for {{ holster.laser_series }} {{ holster.laser_model_match }}-equipped {{ holster.pistol_mfr }}® pistols
+
+{% elseif flx %}
+FLX Model {{ flx.laser_model }} | ArmaLaser
+
+{% elseif stingray_model %}
+Stingray Laser fits {{ stingray_model.mfr_name }} {{ stingray_model.mfr_model_match }}
+
+{% elseif model.laser_series == 'GTO FLX' %}
+ArmaLaser {{ model.laser_model }} {{ model.laser_color }} laser | {{ model.mfr_name|raw }}®
+
+{% else %}
+ArmaLaser {{ model.laser_series }} {{ model.laser_model }} {{ model.laser_color }} laser | {{ model.mfr_name|raw }}®
+{% endif %}
+{% endblock %}
+
+
+{% block metadescription %}
+{% if accessory %}
+{% if accessory.id == 10 or accessory.id == 11 %}3-pack, {% if accessory.id == 10 %}12" circular bullseye target
+{% elseif accessory.id == 11 %}
+18" x 12" silhouette target
+{% endif %}
+{% else %}
+{{ accessory.name }} {{ accessory.description }} {{ accessory.ad_blurb }}
+{% endif %}
+
+{% elseif holster %}
+{{ holster.mfr }} {{ holster.model }} {{ holster.hand }} holster fits ArmaLaser {{ holster.laser_series }} {{ holster.laser_model_match }}-equipped {{ holster.pistol_mfr }}® {{ holster.pistol_model_match }}
+
+{% elseif flx %}
+The {{ flx.laser_model }} fits {{ brand }} {{ model }} equipped with ArmaLaser's {{ flx.laser_series }} laser. {{ flx.feature01 }}.
+
+{% elseif stingray_model %}
+ArmaLaser's Stingray Classic {{ stingray_model.laser_model }} {{ stingray_model.laser_color }} Laser fits {{ stingray_model.mfr_name }}® {{ stingray_model.mfr_model_match }}
+{% else %}
+ArmaLaser {{ model.laser_series }} {{ model.laser_model }} {{ model.laser_color }} laser is perfect for the {{ model.mfr_name|raw }}® {{ model.mfr_model_match }} pistol. ArmaLaser is the leader in advanced laser sights and pistol laser technology.
+{% endif %}
+{% endblock %}
+
+
+{% block css %}
+<style>
+   .ui-dialog .ui-dialog-titlebar {
+      display: block;
+   }
+   .ui-dialog.ui-dialog-content {
+      padding: 0;
+   }
+</style>
+{% endblock %}
+
+
+{% block outsidecontainer %}
+{% endblock %}
+
+
+{% block content %}
+<div id="modal-holster"></div>
+<div id="modal-holster-video"></div>
+
+<div id="overlay"></div>
+<div class="col-md-9 col-xs-12" id="frame">
+   <!-- value of src attribute comes from jQuery code below -->
+    <img class="img-responsive"
+    id="main"
+    src=""
+    alt="
+    {% if accessory %}
+    {{ accessory.name }}
+
+    {% elseif holster %}
+    {{ holster.laser_model }} holster fits {{ holster.pistol_brand_name }} {{ holster.pistol_model_name }} with {{ holster.model }} laser
+
+    {% elseif flx %}
+    FLX Model {{ flx.laser_model }}
+
+    {% elseif stingray_model %}
+    Stingray Laser fits {{ stingray_model.mfr_name }} {{ stingray_model.mfr_model_match }}
+
+    {% elseif model.laser_series == 'GTO FLX' %}
+    ArmaLaser {{ model.laser_model }} {{ model.laser_color }} laser
+
+    {% else %}
+    ArmaLaser {{ model.laser_series }} {{ model.laser_model }} {{ model.laser_color }} laser
+    {% endif %}
+    ">
+</div>
+
+<div id="overlay2"></div>
+<div class="col-md-9" id="frame2">
+    <img class="img-responsive"
+    id="main2"
+    src=""
+    alt="
+    {% if accessory %}
+    {{ accessory.name }}
+
+    {% elseif holster %}
+    {{ holster.laser_model }} holster fits {{ holster.pistol_brand_name }} {{ holster.pistol_model_name }} with {{ holster.model }} laser
+
+    {% elseif flx %}
+    FLX Model {{ flx.laser_model }}
+
+    {% elseif stingray_model %}
+    Stingray Laser fits {{ stingray_model.mfr_name }} {{ stingray_model.mfr_model_match }}
+
+    {% elseif model.laser_series == 'GTO FLX' %}
+    ArmaLaser {{ model.laser_model }} {{ model.laser_color }} laser
+
+    {% else %}
+    ArmaLaser {{ model.laser_series }} {{ model.laser_model }} {{ model.laser_color }} laser
+    {% endif %}
+    ">
+</div>
+
+
+<div class="container">
+  <div id="content"> <!-- to hide content when full size image displays -->
+    <div class="row">
+        <div class="col-md-12 col-sm-12 col-xs-12">
+            <div class="product-block-title bold ptop20">
+
+                <h3>
+                    <span class="text-uppercase" style="color:#ababab">
+                      {% if laserglow %}
+                        {{ laserglow }}
+                      {% elseif holster %}
+                        LASER-FIT™ HOLSTERS
+                        <span style="font-size:14px;padding-left:7px;">
+                          <a href="/holsters" title="Learn more">
+                            <span class="italic blue">
+                              What is Laser-Fit?
+                            </span>
+                          </a>
+                        </span>
+                      {% endif %}
+                      {% if model.laser_series == 'GTO FLX'%}
+                         <span>
+                            {{ first_word }}/
+                         </span>
+                         <span style="color:#b7b7b7; margin-left:-11px;">
+                           {{second_word }}
+                         </span>
+                      {% else %}
+                      <span style="color:#b7b7b7; margin-left:0px;">
+                        {{ second_word }}
+                      </span>
+                      {% endif %}
+                    </span>
+
+                    <span class="product-details-what-is">
+                        {% if model.laser_series == 'TR Series' %}
+                        <span class='text-uppercase' style='font-size:12px;'>
+                          <a href='/tr-series-lasers'>
+                            What is TR Series?
+                          </a>
+                        </span>
+                        {% elseif model.laser_series == 'GTO FLX' %}
+                        <span class='text-uppercase' style='font-size:12px;'>
+                          <a href='/gto-flx-series-lasers'>
+                            What is GTO Series?
+                          </a>
+                        </span>
+                        {% elseif stingray_model.laser_series == 'Stingray Classic' %}
+                        <span class='text-uppercase' style='font-size:12px;'>
+                          <a href='/stingray-classic-laser'>
+                            What is Stingray?
+                          </a>
+                        </span>
+                        {% elseif accessory.id == 10 or accessory.id == 11 %}
+                        <span class='text-uppercase' style='font-size:12px;'>
+                          <a href='/targets'>
+                            What is LaserGlow?
+                          </a>
+                        </span>
+                        {% endif %}
+                    </span>
+
+                    <span class="pull-right text-size60"
+                      style="display:inline-block; font-style:normal;margin-bottom:0px;">
+
+                      {% if not (accessory or holster or flx) %}
+                        {% if model.laser_series == 'TR Series' %}
+                          <span class="text-size120">
+                            <a href="#trseries-install-modal" data-toggle="modal">
+                              Video Guide
+                            </a>
+                          </span>
+                        {% endif %}
+
+                        <span class="text-size120">
+                            <a href="
+                              {% if model.laser_series == 'TR Series' %}
+                                /lasers/tr-series-laser-owners-manual
+                              {% elseif model.laser_series == 'GTO FLX' %}
+                                /lasers/gto-flx-series-laser-owners-manual
+                              {% elseif stingray_model.laser_series == 'Stingray Classic' %}
+                                /lasers/stingray-classic-laser-owners-manual
+                              {% endif %}
+                            ">
+                                Owners Manual
+                            </a>
+                        </span>
+                      {% endif %}
+
+                        <span class="text-size120">
+                          <a href="/warranty">
+                            Warranty Support
+                          </a>
+                        </span>
+
+                    </span>
+                </h3>
+            </div><!-- // .product-block-title  -->
+
+          {% if not (accessory or holster or flx) %}
+            <p class="text-right text-uppercase bold" style="font-size:12px; margin-right:40px;">
+                <span style="padding-right:10px;">
+                    <a href="
+                        {% if model.laser_series == 'TR Series' %}
+                          /accessories/accessory/1
+                        {% elseif model.laser_series == 'GTO FLX' %}
+                          /accessories/accessory/1
+                        {% elseif stingray_model.laser_series == 'Stingray Classic' %}
+                          /accessories/accessory/2
+                        {% endif %}">
+                      Batteries
+                    </a>
+                </span>
+                <!-- <span> -->
+                    <!-- <a href="index.php?holsters&amp;pistol_brand=<?php htmlout($laser['pistol_brand']); ?>"> -->
+                    <!-- <a href="/holsters/get-holsters-by-pistol?pistol_brand={{ model.mfr_id  }}&amp;pistol_id={{ pistol_model.id }}"> -->
+                    <!-- 2/17/17 -->
+                    <!-- {% if stingray_model %}
+                      <a href="/holsters/search-holsters-by-brand?name={{ stingray_model.mfr_name}}#searchtop">
+                        Holsters for {{ stingray_model.mfr_name }}
+                      </a>
+                    {% else %} -->
+                      <!-- <a href="/holsters/search-holsters-by-brand?name={{ model.mfr_name}}#searchtop"> -->
+                      <!-- <a href="/holsters/get-holsters-by-laser-model?model={{ model.laser_model|trim('G') }}">
+                        Holsters for {{ model.mfr_name }}
+                      </a>
+                    {% endif%}
+                </span> -->
+            </p>
+          {% endif %}
+        </div><!-- // .col-md-12  -->
+    </div><!-- //.row  -->
+
+    <!-- - - - - - - - -  IMAGE - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+    <div class="row">
+      <div id="laser-features-image">
+          <img
+          src="/assets/images/page/productDetails/{{ model.img_lg }}"
+          alt="
+          {% if accessory %}
+          Accessories - {{ accessory.name }}
+
+          {% elseif holster %}
+          {{ holster.laser_model|raw }} holster fits {{ holster.pistol_brand_name }} {{ holster.pistol_model_name }} with {{ holster.model }} laser
+
+          {% elseif flx %}
+          FLX Model {{ flx.laser_model }}
+
+          {% elseif stingray_model %}
+          Stingray Laser fits {{ stingray_model.mfr_name }} {{ stingray_model.mfr_model_match }}
+
+          {% elseif model.laser_series == 'GTO FLX' %}
+          ArmaLaser {{ model.laser_model }} {{ model.laser_color }} laser
+
+          {% else %}
+          ArmaLaser {{ model.laser_series }} {{ model.laser_model }} {{ model.laser_color }} laser
+          {% endif %}
+          ">
+      </div>
+        <!-- <div class="{% if accessory.id == 10 %}col-md-offset-1 col-md-5 col-sm-6{% elseif accessory.id == 11 %}col-md-offset-2 col-md-4{% else %}col-md-6 col-sm-6{% endif %}" style="padding:10px;"> -->
+        <div class="col-md-7 col-sm-6 col-xs-5">
+            <div class="product-image">
+
+               <!-- store values of full-size images -->
+                <div id="full-size-image">
+                    {% if accessory %}
+                      <img src="/assets/images/page/accessories/{{ accessory.image_full_size }}" alt="Accessories - {{ accessory.name }}">
+                    {% elseif holster %}
+                      <img src="/assets/images/page/holsters/{{ holster.image_full_size }}" alt="{{ holster.ad_title }} holster fits {{ holster.pistol_mfr }} {{ holster.pistol_model_match }} with {{ holster.laser_model_match }} laser">
+                    {% elseif flx %}
+                      <img src="/assets/images/laser-pistol/{{ flx.image_full_size }}" alt="FLX Model {{ flx.laser_model }}">
+                    {% elseif stingray_model %}
+                      <img src="/assets/images/laser-pistol/{{ stingray_model.image_full_size }}" alt="Stingray Laser fits {{ stingray_model.mfr_name }} {{ stingray_model.mfr_model_match }}">
+                    {% else %}
+                      <img src="/assets/images/laser-pistol/{{ model.image_full_size }}" alt="ArmaLaser {{ model.laser_model }} {{ model.laser_color }} laser">
+                    {% endif %}
+                </div>
+
+                {% if accessory or flx %}
+                <!-- div w/o id (displayed-image) b/c Accessories & FLX do not have large images -->
+                <div>
+                {% else %}
+                  <!-- assign id (displayed-image) for jQuery code below that is necessary to display large image -->
+                  <div id="displayed-image">
+                {% endif %}
+
+                    {% if accessory %}
+                       <div class="col-md-12">
+                          <div class="col-md-6 col-center-block" style="margin-top: 30px;">
+                              <img class="img-responsive" style="max-height: 320px"
+                                  src="/assets/images/page/accessories/{{ accessory.image_thumb }}"
+                                  alt="{{ holster.ad_title }} holster fits {{ holster.pistol_mfr }} {{ holster.pistol_model_match }} with {{ holster.laser_model_match }} laser">
+                           </div>
+                        </div>
+                    {% elseif holster %}
+                       <picture id="product-details-holster-image">
+                           <source srcset="/assets/images/page/holsters/{{ holster.image_small }}"
+                              alt="{{ holster.ad_title }} holster fits {{ holster.pistol_mfr }} {{ holster.pistol_model_match }} with {{ holster.laser_model_match }} laser"
+                              media="(min-width:1200px)">
+
+                           <source srcset="/assets/images/page/holsters/{{ holster.image_small }}"
+                              alt="{{ holster.ad_title }} holster fits {{ holster.pistol_mfr }} {{ holster.pistol_model_match }} with {{ holster.laser_model_match }} laser"
+                              media="(min-width:760px)">
+
+                           <source srcset="/assets/images/page/holsters/{{ holster.image_thumb }}"
+                              alt="{{ holster.ad_title }} holster fits {{ holster.pistol_mfr }} {{ holster.pistol_model_match }} with {{ holster.laser_model_match }} laser"
+                              media="(min-width:200px)">
+
+                           <img class="img-responsive" style="padding: 30px;"
+                              src="/assets/images/page/holsters/{{ holster.image_thumb }}"
+                              alt="{{ holster.ad_title }} holster fits {{ holster.pistol_mfr }} {{ holster.pistol_model_match }} with {{ holster.laser_model_match }} laser">
+
+                           <p id="{{ holster.id }}" class="product-details-holster-show-reverse-image text-center">{% if holster.hand == 'OWB LEFT HAND' or holster.hand == 'IWB LEFT HAND' %}<small><a>*Image shown is right-hand version. Click to flip image.</a></small>{% endif %}</p>
+
+                           <p class="text-center" style="color:#0000ff;" id="click-to-enlarge">
+                              Click to enlarge
+                           </p>
+
+                       </picture>
+                    {% elseif flx %}
+                        <picture>
+                            <source srcset="/assets/images/laser-pistol/{{ flx.image_med }}"
+                                alt="FLX Model {{ flx.laser_model }}"
+                                media="(min-width:1200px)">
+
+                            <source srcset="/assets/images/laser-pistol/{{ flx.image_small }}"
+                                alt="FLX Model {{ flx.laser_model }}"
+                                media="(min-width:760px)">
+
+                            <source srcset="/assets/images/laser-pistol/{{ flx.image_thumb }}"
+                                alt="FLX Model {{ flx.laser_model }}"
+                                media="(min-width:200px)">
+
+                            <img class="img-responsive" style="width: 100%;"
+                                src="/assets/images/laser-pistol/{{ flx.image_thumb }}"
+                                alt="FLX Model {{ flx.laser_model }}">
+                        </picture>
+
+                        <!-- <img class="img-responsive" src="/assets/images/laser-pistol/{{ flx.image }}"
+                            alt="FLX Model {{ flx.laser_model }}"> -->
+
+                    {% elseif stingray_model %}
+                        <img class="img-responsive" src="/assets/images/laser-pistol/{{ stingray_model.image }}"
+                            alt="Stingray Laser fits {{ stingray_model.mfr_name }} {{ stingray_model.mfr_model_match }}">
+                    {% else %}
+                        <picture>
+                            <source srcset="/assets/images/laser-pistol/{{ model.image_med }}"
+                                alt="ArmaLaser {{ model.laser_model }} {{ model.laser_color }} laser"
+                                media="(min-width:1200px)">
+
+                            <source srcset="/assets/images/laser-pistol/{{ model.image_small }}"
+                                alt="ArmaLaser {{ model.laser_model }} {{ model.laser_color }} laser"
+                                media="(min-width:760px)">
+
+                            <source srcset="/assets/images/laser-pistol/{{ model.image_thumb }}"
+                                alt="ArmaLaser {{ model.laser_model }} {{ model.laser_color }} laser"
+                                media="(min-width:200px)">
+
+                            <img class="img-responsive" style="width: 100%;"
+                                src="/assets/images/laser-pistol/{{ model.image_thumb }}"
+                                alt="ArmaLaser {{ model.laser_model }} {{ model.laser_color }} laser">
+                        </picture>
+
+                        <p class="text-center" style="color:#0000ff;" id="click-to-enlarge">
+                           Click to enlarge
+                        </p>
+                    {% endif %}
+
+              {% if accessory or flx %}
+                </div><!-- // nameless div -->
+              {% else %}
+                </div><!-- // #displayed-image -->
+              {% endif %}
+
+            </div><!-- // .product-image -->
+
+        </div><!-- / col  -->
+
+
+
+       <!-- - - - - - PRODUCT DESCRIPTION - TEXT - - - - - - - - - - - - - - -->
+
+        <div class="col-md-5 col-sm-6 col-xs-7" id="productDetailsHeading">
+            <h1 style="color:#727272;">
+                {% if accessory.description %}
+                  {{ accessory.description }}
+                {% elseif holster.ad_title %}
+                  {{ holster.ad_title|raw }}
+                {% elseif flx.laser_model %}
+                  {{ flx.laser_model }}
+                {% elseif stingray_model.laser_model %}
+                  {{ stingray_model.laser_model }}
+                {% else %}
+                  {{ model.laser_model }}
+                {% endif %}
+
+
+                <span class="text-uppercase pull-right" id="other-laser-color"
+                    style="font-size:10px;display:inline-block;padding-top:10px;">
+                    {% if model.laser_color == 'red' and stingray != 'true' %}
+                    {% set red_id = model.laser_id %}
+                      <a href="/lasers/get-laser-model/{{ red_id + 1 }}">
+                          Show me the green beam version of this laser
+                      </a>
+                    {% endif %}
+
+                    {% if model.laser_color == 'green' %}
+                    {% set green_id = model.laser_id %}
+                      <a href="/lasers/get-laser-model/{{ green_id - 1 }}">
+                          Show me the red beam version of this laser
+                      </a>
+                    {% endif %}
+                </span>
+
+                <br>
+
+                <span style="padding-left:3px;font-style:normal; color:#848484;"
+                  class="text-size70">
+                    {% if accessory %}
+                      {% if accessory.id == 10 or accessory.id == 11 %}
+                        3-pack,
+                        {% if accessory.id == 10 %}
+                             12" circular bullseye
+                        {% elseif accessory.id == 11 %}
+                             18" x 12" silhouette
+                        {% endif %}
+                      {% else %}
+                        {{ accessory.name }}
+                      {% endif %}
+                    {% elseif holster %}
+                      Fits
+                      {{ holster.pistol_mfr|raw }}®
+                      {{ holster.pistol_model_match|raw }}
+                      with
+                      <a href="/lasers/get-laser-model/{{ holster.laser_id }}">
+                         {{ holster.laser_model_match }}
+                      </a>
+                      /
+                      <a href="/lasers/get-laser-model/{{ holster.laser_id + 1 }}">
+                         {{ holster.laser_model_match }}G.
+                      </a>
+                      {% if holster.model != 'Nemesis' %}
+                         <a href="/holsters/holster?id={{ holster.opp_hand_id }}&laser_id={{ holster.laser_id }}">
+                           <span style="display:inline-block; padding-left:25px;font-style: italic; font-size :98%;">
+                              {% if holster.hand == 'OWB RIGHT HAND' or holster.hand == 'IWB RIGHT HAND' %}*See Left-Hand Version of this Holster{% else %}*See Right-Hand Version of this Holster{% endif %}
+                           </span>
+                         </a>
+                      {% endif %}
+                    {% elseif flx %}
+                      Fits
+                      {{ brand }} {{ model }}
+                    {% elseif stingray_model %}
+                      Fits
+                      {{ stingray_model.mfr_name }} {{ stingray_model.mfr_model_match|raw }}
+                    {% elseif model %}
+                      Fits
+                      {{ model.mfr_name }}®
+                      {{ model.mfr_model_match|raw }}®
+                    {% endif %}
+                </span>
+            </h1>
+
+            <div class="text-justify">
+                <p style="font-size:14px; color:#ababab; border:none;">
+                  {% if accessory %}
+                    {{ accessory.ad_blurb|raw }}
+                  {% elseif holster.ad_blurb %}
+                    {{ holster.ad_blurb|raw }}
+                  {% elseif flx.ad_blurb %}
+                    {{ flx.ad_blurb|raw }}
+                  {% elseif stingray_model.ad_blurb %}
+                    {{ stingray_model.ad_blurb }} Custom designed to fit perfectly.
+                    The {{ stingray_model.laser_model }}
+                    is the most technologically-advanced laser sight
+                    available for the {{ stingray_model.mfr_name }} {{ stingray_model.mfr_model_match|raw }}.
+                  {% elseif model.ad_blurb %}
+                    Custom designed to fit perfectly. The {{ model.laser_model }}
+                    is the most technologically-advanced laser sight
+                    available for the {{ model.mfr_name }} {{ model.mfr_model_match|raw }}.
+                  {% endif %}
+                </p>
+
+                <p class="text-uppercase text-left" style="border:none;">
+                  Features
+                </p>
+                <div id="feature-list">
+                    <div class="col-sm-6 col-xs-6" style="margin-bottom: 0px;">
+                        <div style="margin-left: -14px;">
+                          {% if accessory %}
+                            <p>
+                               {{ accessory.feature01 }}
+                               {{ accessory.feature02 }}
+                               {{ accessory.feature03 }}
+                            </p>
+                          {% elseif holster %}
+                             <p>{{ holster.feature01 }}</p>
+                             <p>{{ holster.feature02 }}</p>
+                             <p>{{ holster.feature03 }}</p>
+                             <p>{{ holster.size }}</p>
+                             <p>{{ holster.weight }}</p>
+                          {% elseif flx %}
+                             <p>{{ flx.feature01 }}</p>
+                             <p>{{ flx.feature02 }}</p>
+                             <p>{{ flx.feature03 }}</p>
+                          {% elseif stingray_model %}
+                             <p>{{ stingray_model.feature01 }}</p>
+                             <p>{{ stingray_model.feature02 }}</p>
+                             <p>{{ stingray_model.feature03 }}</p>
+                          {% else %}
+                            <p>{{ model.feature01 }}</p>
+                            <p>{{ model.feature02 }}</p>
+                            <p>{{ model.feature03 }}</p>
+                          {% endif %}
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-xs-6" style="margin-bottom: 0px;">
+                        <div style="margin-right: -14px;" class="text-right">
+                            {% if accessory.upc %}
+                              <p>UPC: {{ accessory.upc }} </p>
+                            {% elseif holster.upc %}
+                              <p>UPC: {{ holster.upc|raw }} </p>
+                            {% elseif flx.upc %}
+                              <p>UPC: {{ flx.upc }} </p>
+                            {% elseif stingray_model.upc %}
+                              <p>UPC: {{ stingray_model.upc }} </p>
+                            {% elseif model.upc %}
+                              <p>UPC: {{ model.upc }} </p>
+                            {% endif %}
+                            {% if accessory.patent_pend %}
+                              <p>{{ accessory.patent_pend|raw }}</p>
+                            {% elseif holster.patent_pend %}
+                              <p>{{ holster.patent_pend|raw }}</p>
+                            {% elseif holster.hand %}
+                              <p>{{ holster.hand }}</p>
+                            {% elseif flx.patent_pend %}
+                              <p>{{ flx.patent_pend|raw }}</p>
+                            {% elseif stingray_model.patent_pend %}
+                              <p>{{ stingray_model.patent_pend|raw }}</p>
+                            {% elseif model.upc %}
+                              <p>{{ model.patent_pend|raw }}</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <h3 class="product-details-price">
+               {% if accessory.price %}
+                  ${{ accessory.price }}
+               {% elseif holster.price %}
+                  ${{ holster.price }}
+               {% elseif flx.price %}
+                  ${{ flx.price }}
+
+
+               {% elseif model.price %}
+
+                   <!-- ====  PRESIDENT'S DAY THU Midnight 2/15/18 - MON Midnight 2/19/18  ===== -->
+                   {% if now > '2018-02-15 23:59:59' and now < '2018-02-19 23:59:59' %}
+
+                      <span style="text-decoration:line-through">${{ model.price }}</span>
+                      {% if model.laser_color == 'red' %}
+                         $98.75
+                      {% elseif model.laser_color == 'green' %}
+                         $148.75
+                      {% endif %}
+
+                   {% else %}
+                       <span>${{ model.price }}</span>
+                   {% endif %}
+
+               {% elseif stingray_model.price %}
+
+                   <!-- ====  PRESIDENT'S DAY THU Midnight 2/15/18 - MON Midnight 2/19/18  ===== -->
+                   {% if now > '2018-02-15 23:59:59' and now < '2018-02-19 23:59:59' %}
+                      <span style="text-decoration:line-through">${{ stingray_model.price }}</span>
+                      {% if stingray_model.laser_color == 'red' %}
+                         $98.75
+                      {% endif %}
+
+                    {% else %}
+                        <span>${{ stingray_model.price }}</span>
+                    {% endif %}
+
+               {% endif %}
+            </h3>
+
+            <p class="text-center">
+              <a class="btn btn-buy btn-block btn-lg" href="
+                {% if accessory.buy_link %}
+                  {{ accessory.buy_link }}
+                {% elseif holster.buy_link %}
+                  {{ holster.buy_link }}
+                {% elseif flx.buy_link %}
+                  {{ flx.buy_link }}
+                {% elseif stingray_model.buy_link %}
+                  {{ stingray_model.buy_link }}
+                {% else %}
+                  {{ model.buy_link }}
+                {% endif %}
+                " role="button">
+                  Add to Cart <i class="fa fa-shopping-cart fa-lg"></i>
+              </a>
+            </p>
+            {% if model.special_message %}
+                <p class="text-center" style="color: #ff0000;">
+                    *{{ model.special_message|raw }}
+                </p>
+            {% elseif stingray_model.special_message %}
+                <p class="text-center">
+                    {{ stingray_model.special_message }}
+                </p>
+             </p>
+            {% elseif holster.special_message %}
+                <p class="text-center">
+                 *{{ holster.special_message }}
+                </p>
+            {% endif %}
+
+            <div id="social-media-links">
+
+              <div class="sharethis-inline-share-buttons" style="margin-bottom: 15px;"></div>
+
+                <!--<a class="newWindow" href="<?php htmlout($laser['review_url']); ?>" data-popup="width=700,height=700,scrollbars=yes">-->
+                {% if model.review_count > 0 %}
+                <a class="newWindow" href="{{ model.review_url }}" rel="0">
+                    <img  style="margin-top: -5px; margin-right:10px;"
+                      src="/assets/images/page/productDetails/amazon_reviews_btn2.png"
+                      height="30" title="Read Amazon reviews" alt="read Amazon reviews">
+                    {% if model.review_count > 0 %}
+                        <span class="badge">{{ model.review_count }}</span>
+                    {% endif %}
+                </a>
+                {% endif %}
+                {% if stingray_model.review_count > 0 %}
+                <a class="newWindow" href="{{ stingray_model.review_url }}" rel="0">
+                    <img  style="margin-top: -5px; margin-right:10px;"
+                      src="/assets/images/page/productDetails/amazon_reviews_btn2.png"
+                      height="30" title="Read Amazon reviews" alt="read Amazon reviews">
+                    {% if stingray_model.review_count > 0 %}
+                        <span class="badge">{{ stingray_model.review_count }}</span>
+                    {% endif %}
+                </a>
+                {% endif %}
+
+            </div><!-- //#social-media-links -->
+        </div><!-- // .col-md-5  -->
+
+   </div><!-- /row -->
+
+    <!-- - - - - - - - - - - -  PRODUCT LINKS  - - - - - - - - - - - - - - -->
+   <div class="row">
+      {% if specs or holster %}
+        <div class="col-md-12 col-sm-12">
+            <div style="border: 2px solid #efefef; margin-bottom: 20px;"></div>
+        </div>
+
+        <!-- - - - - - - -TR Series & GTO-FLX section  - - - - - - - - - - - -->
+
+        <!-- - - - - - - -  holster link - - - - - - - - - - - -->
+
+        {% if holster %}
+
+           {% if holster.mfr_href_video %}
+              <div class="col-lg-2 col-md-3 col-sm-4 col-xs-6">
+                   <div class="product-links-img-box">
+                       <h3>VIDEO:</h3>
+
+                       <a id="holster-video" data-mfr="{{ holster.mfr }}" data-model="{{ holster.model }}" href="{{ holster.mfr_href_video }}"  title="Watch {{ holster.mfr }} &#10;IWB holster video">
+                          <img src="/assets/images/page/holsters/{{ holster.image_thumb }}" alt="custom laster-fit holsters for ArmaLaser equipped concealed carry pistols">
+                          <span style="display:block">
+                              {{ holster.mfr|raw }} {% if holster.hand == 'IWB RIGHT HAND' or holster.hand == 'IWB LEFT HAND' %} IWB {% else %} OWB {% endif %}
+                          </span>
+                     </a>
+                   </div>
+              </div>
+           {% endif %}
+
+
+           <div class="col-lg-2 col-md-3 col-sm-4 col-xs-6">
+                <div class="product-links-img-box">
+                    <h3>LEARN MORE:</h3>
+
+                  <!--
+                  <a class="newWindow" href="{{ model.review_url }}" rel="0" title="Read Real Reviews for &#10;{{ model.laser_series }} {{ model.laser_model }}">
+                     <img src="/assets/images/page/productDetails/{{ model.cust_reviews_poster }}" alt="Read reviews">
+                     <span style="display:inline-block">
+                     {{ model.cust_reviews_title }}
+                     </span>
+                     <span class="badge" style="margin-top:-15px; font-size:95%;">{{ model.review_count }}</span>
+                  </a>
+                  -->
+
+                  <!-- <a class="{% if holster.mfr_href %}newWindow{% endif %}" href="{% if holster.mfr_href %}{{ holster.mfr_href }}{% else %}/holsters{% endif %}" title="{% if holster.mfr_href %}Learn more about &#10;{% if holster.model %}{{ holster.model }}{% else %}this holster {% endif %} &#10;at {{ holster.mfr }}'s &#10;Website{% else %}Learn more about&#10;Laser-Fit™ Holsters{% endif %}"> -->
+                  <a id="holster-learn-more" data-mfr="{{ holster.mfr }}" data-model="{{ holster.model }}" href="{% if holster.mfr_href %}{{ holster.mfr_href }}{% else %}/holsters{% endif %}"  title="{% if holster.mfr_href %}Learn more about &#10;{% if holster.model %}{{ holster.model }}{% else %}this holster {% endif %} &#10;at {{ holster.mfr }}'s &#10;Website{% else %}Learn more about&#10;Laser-Fit™ Holsters{% endif %}">
+                     <img src="/assets/images/page/holsters/{{ holster.image_thumb }}" alt="custom laster-fit holsters for ArmaLaser equipped concealed carry pistols">
+                     <span style="display:block">
+                        {{ holster.mfr|raw }} {{ holster.model|raw }}
+                     </span>
+                  </a>
+                </div>
+            </div>
+
+         {% endif %}
+
+         {% if holster %}
+            <div class="col-lg-2 col-md-3 col-sm-4 col-xs-6">
+               <div class="product-links-img-box">
+                  <h3>LINK:</h3>
+                  <a href="/lasers/get-laser-model/{{ holster.laser_id }}"
+                     title="See {{ holster.laser_series }} {{ holster.laser_model_match }}">
+                     <img src="/assets/images/laser-pistol/{{ holster.laser_red_image_thumb }}" alt="ArmaLaser {{ holster.laser_series }} {{ holster.laser_model_match }} laser for {{ holster.pistol_mfr }} {{ holster.pistol_model_match }}">
+                     <span style="display:block">
+                         Red Beam Version
+                     </span>
+                  </a>
+               </div>
+            </div>
+         {% endif %}
+
+         {% if holster %}
+            <div class="col-lg-2 col-md-3 col-sm-4 col-xs-6">
+               <div class="product-links-img-box">
+                  <h3>LINK:</h3>
+                  <a href="/lasers/get-laser-model/{{ holster.laser_id + 1 }}"
+                     title="See {{ holster.laser_series }} {{ holster.laser_model_match }}G">
+                     <img src="/assets/images/laser-pistol/{{ holster.laser_green_image_thumb }}" alt="ArmaLaser {{ holster.laser_series }} {{ holster.laser_model_match }} laser for {{ holster.pistol_mfr }} {{ holster.pistol_model_match }}">
+                     <span style="display:block">
+                         Green Beam Version
+                     </span>
+                  </a>
+               </div>
+            </div>
+         {% endif %}
+      <!-- - - - - - - -  // HOLSTERS  - - - - - - - - - - - - - - - - - - - -->
+
+
+
+      {% if model.holster_poster %}
+        <div class="col-lg-2 col-md-3 col-sm-4 col-xs-6">
+            <div class="product-links-img-box">
+               <h3>HOLSTERS:</h3>
+               <a href="/holsters/get-holsters-by-laser-model?model={{ model.laser_model|trim('G') }}"
+                  title="Laser-Fit™ Holsters &#10;for {{ model.laser_model }}">
+                  <img src="/assets/images/page/holsters/tr02-owb-rh-minislide_thumb.png" alt="custom laster-fit holsters for ArmaLaser equipped concealed carry pistols">
+                  <span style="display:block">
+                     {{ model.laser_model }} {{ model.holster_title }}
+                  </span>
+               </a>
+            </div>
+         </div>
+      {% endif %}
+
+     {% if model.comm_video_poster %}
+       <div class="col-lg-2 col-md-3 col-sm-4 col-xs-6">
+           <div class="product-links-img-box">
+             <h3>VIDEO:</h3>
+             <a href="/#{{ model.laser_id }}" data-toggle="modal" title="Watch {{ model.laser_series }} &#10;{{ model.laser_model }} video">
+               <img src="/assets/images/youtube/{{ model.comm_video_poster }}" alt="ArmaLaser YouTube">
+               <span style="display:block">
+                 {{ model.laser_model }} YouTube Ad
+               </span>
+             </a>
+           </div>
+       </div>
+     {% endif %}
+
+     {% if model.img01 != '' %}
+       <div class="col-lg-2 col-md-3 col-sm-4 col-xs-6">
+           <div class="product-links-img-box">
+             <h3>GRAPHIC:</h3>
+             <div id="laser-features">
+                 <a>
+                   <img src="/assets/images/page/productDetails/{{ model.img01 }}" alt="{{ model.laser_model }} Features">
+                   <span style="display:block">
+                     All {{ model.laser_model }} Features
+                   </span>
+                 </a>
+             </div>
+           </div>
+       </div>
+     {% endif %}
+
+      {% if model.pro_video_review_poster %}
+         <div class="col-lg-2 col-md-3 col-sm-4 col-xs-6">
+            <div class="product-links-img-box">
+               <h3>VIDEO:</h3>
+               <a href="/#{{ model.id }}" data-toggle="modal" title="Watch {{ model.laser_series }} &#10;{{ model.laser_model }} video review">
+                  <img src="/assets/images/youtube/{{ model.pro_video_review_poster }}" alt="{{ model.laser_model }} video review">
+                  <span style="display:block">
+                     {{ model.pro_video_review_title }}
+                  </span>
+               </a>
+            </div>
+         </div>
+      {% endif %}
+
+      {% if model.install_video_poster %}
+         <div class="col-lg-2 col-md-3 col-sm-4 col-xs-6">
+            <div class="product-links-img-box">
+               <h3>VIDEO:</h3>
+               <a href="/#install-video" data-toggle="modal" title="Watch {{ model.laser_series }} &#10;installation video">
+                  <img src="/assets/images/youtube/{{ model.install_video_poster }}" alt="{{ model.laser_series }} installation video">
+                  <span style="display:block">
+                     {{ model.laser_series }} {{ model.install_video_title }}
+                  </span>
+               </a>
+            </div>
+         </div>
+      {% endif %}
+
+      {% if model.laser_series_poster %}
+         <div class="col-lg-2 col-md-3 col-sm-4 col-xs-6">
+            <div class="product-links-img-box">
+               <h3>LINK:</h3>
+               <a href="/{{ model.laser_series_href }}" title="Learn more about &#10;{{ model.laser_series }} Lasers">
+                  <img src="/assets/images/page/productDetails/{{ model.laser_series_poster }}" alt="{{ model.laser_series }} Lasers">
+                  <span style="display:block">
+                     {{ model.laser_series_title }}
+                  </span>
+               </a>
+            </div>
+         </div>
+      {% endif %}
+
+
+
+        <div class="col-lg-2 col-md-3 col-sm-4 col-xs-6">
+            {% if model.review_count > 0 %}
+                {% if model.cust_reviews_poster %}
+                  <div class="product-links-img-box">
+                    <h3>LINK:</h3>
+                      <a class="newWindow" href="{{ model.review_url }}" rel="0" title="Read Real Reviews for &#10;{{ model.laser_series }} {{ model.laser_model }}">
+                        <img src="/assets/images/page/productDetails/{{ model.cust_reviews_poster }}" alt="Read reviews">
+                        <span style="display:inline-block">
+                          {{ model.cust_reviews_title }}
+                        </span>
+                        <span class="badge" style="margin-top:-15px; font-size:95%;">{{ model.review_count }}</span>
+                      </a>
+                  </div>
+                {% endif %}
+            {% else %}
+              {% if model.cust_reviews_poster %}
+                <div class="product-links-img-box">
+                    <h3>LINK:</h3>
+                    <img src="/assets/images/page/productDetails/{{ model.cust_reviews_poster }}" alt="Read reviews">
+                    <span style="display:block">
+                      {{ model.cust_reviews_title }}
+                    </span>
+                </div>
+              {% endif %}
+            {% endif %}
+        </div>
+      {% endif %}
+
+
+      <div class="col-lg-2 col-md-3 col-sm-4 col-xs-6">
+          {% if model.laser_color == 'red' %}
+            {% set red_id = model.laser_id %}
+              {% if model.image %}
+                <div class="product-links-img-box">
+                  <h3>LINK:</h3>
+                  <a href="/lasers/get-laser-model/{{ red_id + 1 }}"
+                    title="See {% if model.laser_color == 'red' %}Green Beam Version{% else %}Red Beam Version{% endif %}">
+                    <img src="/assets/images/laser-pistol/{{ model.alter_image }}" alt="ArmaLaser laser">
+                    <span style="display:block">
+                      {% if model.laser_color == 'red' %} {{ model.laser_model }} Green Beam Version {% else %} {{ model.laser_model }} Red Beam Version {% endif %}
+                    </span>
+                  </a>
+                </div>
+              {% endif %}
+          {% elseif model.laser_color == 'green' %}
+            {% set green_id = model.laser_id %}
+              {% if model.image %}
+                <div class="product-links-img-box">
+                    <h3>LINK:</h3>
+                    <a href="/lasers/get-laser-model/{{ green_id - 1 }}"
+                      title="See {% if model.laser_color == 'red' %}Green Beam Version{% else %}Red Beam Version{% endif %}">
+                      <img src="/assets/images/laser-pistol/{{ model.alter_image }}" alt="ArmaLaser laser">
+                      <span style="display:block">
+                        {% if model.laser_color == 'red' %} {{ model.laser_model }} Green Beam Version {% else %} {{ model.laser_model }} Red Beam Version {% endif %}
+                      </span>
+                    </a>
+                </div>
+              {% endif %}
+          {% endif %}
+      </div>
+
+      <div class="col-lg-2 col-md-3 col-sm-4 col-xs-6">
+          {% if model.accessories_poster %}
+            <div class="product-links-img-box">
+                <h3>LINK:</h3>
+                <a href="/home/brand-products/{{ model.mfr_name }}#bg-stingray"
+                  title="See {{ model.laser_series }} Accessories">
+                  <img src="/assets/images/page/productDetails/{{ model.accessories_poster }}" alt="{{ model.accessories_title }}">
+                  <span style="display:block">
+                    {{ model.accessories_title }}
+                  </span>
+                </a>
+            </div>
+          {% endif %}
+      </div>
+
+      <div class="col-lg-2 col-md-3 col-sm-4 col-xs-6">
+          {% if model.warranty_poster %}
+            <div class="product-links-img-box">
+                <h3>LINK:</h3>
+                <a href="/#modal-warranty" data-toggle="modal" title="Learn more about &#10;our Five-Year Warranty &#10;on the {{ model.laser_series }}">
+                  <img src="/assets/images/page/productDetails/{{ model.warranty_poster }}" alt="Five-Year Warranty on the {{ model.laser_series }}">
+                  <span style="display:block">
+                    {{ model.warranty_title }}
+                  </span>
+              </a>
+            </div>
+          {% endif %}
+      </div>
+
+
+      {% if model.owner_manual_poster %}
+        <div class="col-lg-2 col-md-3 col-sm-4 col-xs-6">
+            <div class="product-links-img-box">
+                <h3>PDF:</h3>
+                <a href="/#owner-manual" data-toggle="modal" title="See {{ model.laser_series }} &#10;Owner&apos;s Manual">
+                  <img src="/assets/images/page/productDetails/{{ model.owner_manual_poster }}" alt="{{ model.laser_series }} Owner&apos;s Manual">
+                  <span style="display:block">
+                    {{ model.owner_manual_title }}
+                  </span>
+              </a>
+            </div>
+        </div>
+      {% endif %}
+
+
+      {% if model %}
+        <div class="col-lg-2 col-md-3 col-sm-4 col-xs-6">
+            <div class="product-links-img-box">
+                <h3 class="text-uppercase">Your Review:</h3>
+                <a href="/contact/submit-video-review?laser_series={{ model.laser_series }}&amp;laser_model={{ model.laser_model }}" title="Submit your own &#10;YouTube Review">
+                  <img src="/assets/images/page/productDetails/tv-thumb.png" alt="Submit your own YouTube Review">
+                  <span style="display:block">
+                    Submit your own YouTube Review
+                  </span>
+                </a>
+            </div>
+        </div>
+      {% endif%}
+
+   </div><!-- // .row -->
+
+
+    <!-- - - - - - - - -  SPECIFICATIONS  -  - - - - - - - - - - - - - - - -->
+    {% if specs %}
+ <div class="row">
+    <div id="product-details-specifications-div"> <!-- for @media only -->
+        <div class="col-md-12 col-sm-12 col-xs-12">
+            <div style="border-top: 3px solid #efefef;margin-top:10px;padding-top:5px;">
+                <h4 class="text-uppercase text-left" style="margin-bottom:10px;">
+                  {% if stingray_model %}
+                    Specifications - {{ stingray_model.laser_series }} {{ stingray_model.laser_model }}
+                  {% else %}
+                    Specifications - {{ model.laser_series }} {{ model.laser_model }}
+                  {% endif %}
+                </h4>
+            </div>
+        </div>
+
+        <div class="col-md-4 col-sm-4 col-xs-12">
+            <p class="text-left" style="font-size:12px; border:none;">
+                {{ specs.attachment_style }}<br>
+                {{ specs.dot_visibility }}<br>
+                {{ specs.battery_life }}<br>
+                {{ specs.sensor_location }}
+            </p>
+
+        </div>
+
+         <div class="col-md-3 col-sm-3 col-xs-12">
+            <p class="text-left" style="font-size:12px;border:none;">
+                {{ specs.material }} <br>
+                {{ specs.platform }} <br>
+                {{ specs.battery_type }} <br>
+                {{ specs.laser_adjustment }}
+            </p>
+        </div>
+
+         <div class="col-md-3 col-sm-3 col-xs-12" style="margin-bottom: 20px;">
+             <p class="text-left" style="font-size:12px;border:none;">
+                {{ specs.output }}<br>
+                {{ specs.master_on_off_switch }}<br>
+                {{ specs.warranty }}<br>
+                {{ specs.beam_modes }}
+            </p>
+        </div>
+
+        <div class="col-md-2 col-sm-2 col-xs-5">
+            <p class="text-center" style="font-size:12px;border:none;">
+                <a href="#fda-label-install" data-toggle="modal" title="Click for Label &#10;Installation Instructions">
+                    <img style="margin-top:-5px;" id="fda_warning_img" class="img-responsive"
+                      src="/assets/images/fda/{{ specs.fda_warning }}" alt="warning statement">
+                      Read Warning Statement
+                </a>
+           </p>
+      </div>
+      {% endif %}
+    </div><!-- // #product-details-specifications-div -->
+ </div><!-- // .row  -->
+
+  </div><!-- // #content -->
+</div><!-- // .container  -->
+
+
+<!--=======================  Modal1 - Commercial  ============================-->
+
+<!-- http://www.tutorialrepublic.com/faq/how-to-embed-youtube-video-inside-bootstrap-modal.php -->
+<div class="bs-example">
+    <!-- Modal HTML -->
+    <div id="{{ model.laser_id }}" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h3 class="modal-title">
+                        ArmaLaser {{ model.laser_model  }} for {{ model.mfr_name }} {{ model.mfr_model_match }}
+                    </h3>
+                </div>
+                <div class="modal-body videoModal">
+                     <iframe width="560" height="315" src="{% if model.comm_video_href %}{{ model.comm_video_href }}{% endif %}" frameborder="0" allowfullscreen></iframe>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--======================  // Modal1  ===========================-->
+
+
+
+<!--=======================  Modal2 - Pro review ============================-->
+
+<!-- http://www.tutorialrepublic.com/faq/how-to-embed-youtube-video-inside-bootstrap-modal.php -->
+<div class="bs-example">
+    <!-- Modal HTML -->
+    <div id="{{ model.id }}" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h3 class="modal-title">
+                        {{ model.laser_series }} {{ model.laser_model  }} for {{ model.mfr_name }} {{ model.mfr_model_match }}
+                    </h3>
+                </div>
+                <div class="modal-body">
+                     <iframe width="560" height="315" src="{% if model.pro_video_review_href %}{{ model.pro_video_review_href }}{% endif %}" frameborder="0" allowfullscreen></iframe>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--======================  // Modal2  ===========================-->
+
+
+<!--=======================  Modal3 - install  ============================-->
+
+<!-- http://www.tutorialrepublic.com/faq/how-to-embed-youtube-video-inside-bootstrap-modal.php -->
+<div class="bs-example">
+    <!-- Modal HTML -->
+    <div id="install-video" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h3 class="modal-title">
+                        {{ model.laser_series }} Installation Video
+                    </h3>
+                </div>
+                <div class="modal-body">
+                     <iframe width="560" height="315" src="{% if model.install_video_href %}{{ model.install_video_href }}{% endif %}" frameborder="0" allowfullscreen></iframe>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--======================  // Modal3  ===========================-->
+
+
+<!--=======================  Modal4 - install  ============================-->
+
+<!-- http://www.tutorialrepublic.com/faq/how-to-embed-youtube-video-inside-bootstrap-modal.php -->
+<div class="bs-example">
+    <!-- Modal HTML -->
+    <div id="trseries-install-modal" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h3 class="modal-title">
+                        {{ model.laser_series }} Installation Video
+                    </h3>
+                </div>
+                <div class="modal-body">
+                     <iframe width="560" height="315" src="https://www.youtube.com/embed/eLBQmA_RgY8" frameborder="0" allowfullscreen></iframe>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--======================  // Modal4  ===========================-->
+
+
+<!--=======================  Modal5 - pdf  ============================-->
+
+<!-- http://www.tutorialrepublic.com/faq/how-to-embed-youtube-video-inside-bootstrap-modal.php -->
+<div class="bs-example">
+    <!-- Modal HTML -->
+    <div id="owner-manual" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h3 class="modal-title">
+                        {{ model.laser_series }} Owner manual
+                    </h3>
+                </div>
+                <div class="modal-body">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-md-12">
+                              <h2>{{ pagetitle }}</h2>
+                                  <div class="product-details-pdf-owners-manual">
+                                     <embed src="/assets/manuals/{{ model.owner_manual_href }}">
+                                  </div>
+                                 <!-- <div class="manual">
+                                    <iframe id="owner-manual-iframe" src="{{ model.owner_manual_href }}"
+                                      frameborder="0">
+                                    </iframe>
+                                 </div> -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--======================  // Modal5  ===========================-->
+
+
+<!--=======================  Modal6 - warranty  ============================-->
+
+<!-- http://www.tutorialrepublic.com/faq/how-to-embed-youtube-video-inside-bootstrap-modal.php -->
+<div class="bs-example">
+    <!-- Modal HTML -->
+    <div id="modal-warranty" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h3 class="modal-title">
+                        ArmaLaser 5-Year Warranty
+                    </h3>
+                </div>
+                <div class="modal-body">
+
+                    <div class="well well-default">
+                        <p class="bold text-size130">Return Policy</p>
+                        <p>
+                          If for any reason you are not satisfied with any product you purchase
+                          from ArmaLaser Inc., you may return it to us within 30 days of receipt
+                          for a full refund of the item(s) cost.
+                        </p>
+                        <p>
+                          We want you to be satisfied with your purchase and hope to earn your
+                          business in the future as well.
+                        </p>
+                    </div>
+
+                    <h3>ARMALASER LIMITED WARRANTY</h3>
+                    <p>
+                      For a period of sixty months (5 years) from the date of purchase,
+                      ArmaLaser Inc will, at no charge, repair this Product if determined by
+                      ArmaLaser Inc. to be defective in either parts or labor.
+                    </p>
+                    <p>
+                      This warranty is transferable to subsequent owners as long as the original
+                      receipt is presented.
+                    </p>
+                    <p>
+                      Warranty coverage does not apply to Products that have been abused,
+                      improperly installed, altered or modified, or when batteries have been
+                      improperly installed and caused damage beyond repair.
+                    </p>
+                    <p>
+                      <a href="/contact/get-rma-number">
+                        Click here to contact us for an RMA number for warranty service.
+                      </a>
+                    </p>
+                    <p>
+                      <small>This warranty applies to ArmaLaser manufactured products only,
+                        not to batteries or holsters. Please check with the holster
+                        manufacturers for warranty information.
+                      </small>
+                    </p>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--======================  // Modal6  ===========================-->
+
+
+<!--===============  Modal7 - install FDA label  ============================-->
+
+<!-- http://www.tutorialrepublic.com/faq/how-to-embed-youtube-video-inside-bootstrap-modal.php -->
+<div class="bs-example">
+    <!-- Modal HTML -->
+    <div id="fda-label-install" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h3 class="modal-title">
+                        Instructions:  FDA Warning Label Installation
+                    </h3>
+                </div>
+                <div class="modal-body">
+                    <h2 class="text-center text-uppercase" style="margin:0px; margin-bottom: 10px;">
+                        {% if stingray_model %}
+                           {{ stingray_model.laser_series }}
+                        {% else %}
+                            {{ model.laser_series }}
+                        {% endif %}
+                    </h2>
+                    <img src="/assets/images/fda/{{ specs.label_install }}" alt="">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--======================  // Modal7  ===========================-->
+
+{% endblock %}
+
+
+{% block bottomjs %}
+<script>
+// stops video when modal is hidden
+// resource:  https://stackoverflow.com/questions/13799377/twitter-bootstrap-modal-stop-youtube-video
+// modal
+$("#{{ model.laser_id }}").on('hidden.bs.modal', function (e) {
+   $("#{{ model.laser_id }} iframe").attr("src", $("#{{ model.laser_id }} iframe").attr("src"));
+});
+
+// modal 2
+$("#{{ model.id }}").on('hidden.bs.modal', function (e) {
+   $("#{{ model.id }} iframe").attr("src", $("#{{ model.id }} iframe").attr("src"));
+});
+
+// modal 3
+$("#install-video").on('hidden.bs.modal', function (e) {
+   $("#install-video iframe").attr("src", $("#install-video iframe").attr("src"));
+});
+
+// modal 4
+$("#trseries-install-modal").on('hidden.bs.modal', function (e) {
+    $("#trseries-install-modal iframe").attr("src", $("#trseries-install-modal iframe").attr("src"));
+});
+</script>
+
+<script>
+$.noConflict();
+$(document).ready(function(){
+
+    // $("#fda_warning").hover(function(){
+    //     var hover = 'hovering';
+    //     console.log(hover);
+    //
+    //     $(this).css("cursor", "pointer");
+    //
+    //     $("#fda_warning_img").addClass('transition');
+    //
+    //  }, function(){
+    //       $("#fda_warning_img").removeClass('transition');
+    // });
+
+    /**
+     * changes value of src property in specificed selector (here #main)
+     * @param {String}     src     The new img path
+     */
+    function setImg(src){
+        $("#main").attr("src", src);
+    }
+
+    // change cursor to pointer when hovering div holding image
+    $("#click-to-enlarge").hover(function(){
+        $(this).css("cursor", "pointer");
+        $(this).attr("title", "Click to enlarge");
+    });
+
+
+
+    $("#click-to-enlarge").click(function(){
+
+        // Get value of src attribute of img element
+        var src = $("#full-size-image img").attr("src");
+
+        console.log(src);
+
+        // Function assigns value of src variable (path to full-size image)
+        // to src attribute in #main, replacing current value
+        setImg(src);
+
+        $("#content,#footer-style,#bottom").hide();
+        $("#frame, #overlay").fadeIn();
+    });
+
+
+    $("#overlay, #main").hover(function(){
+        $(this).css("cursor", "pointer");
+        $(this).attr("title", "Click to return\nto previous page");
+    });
+
+
+    $("#overlay, #main").click(function(){
+
+       /*  Hide #frame and #overlay  when #overlay is clicked  */
+       $("#frame,#overlay").fadeOut();
+       $("#content,#footer-style,#bottom").fadeIn();
+    });
+
+
+
+    function setImg2(src){
+        $("#main2").attr("src", src);
+    }
+
+    $("#laser-features").hover(function(){
+        $(this).css("cursor", "pointer");
+        $(this).attr("title", "Click to See Features");
+    });
+
+    $("#laser-features").click(function(){
+
+        // Get image path of full-size image
+        var src = $("#laser-features img").attr("src");
+
+        // Function assigns value of src variable (path to full-size image)
+        // to src attribute in #main, replacing current value
+        setImg2(src);
+
+        $("#content,#footer-style,#bottom").hide();
+        $("#frame2, #overlay2").show();
+    });
+
+    $("#overlay2, #main2").hover(function(){
+        $(this).css("cursor", "pointer");
+        $(this).attr("title", "Click to return to previous page");
+    });
+
+
+    $("#overlay2, #main2").click(function(){
+
+       /*  Hide #frame and #overlay  when #overlay is clicked  */
+       $("#frame2,#overlay2").fadeOut();
+       $("#content,#footer-style,#bottom").fadeIn();
+    });
+
+
+    // resource:  http://www.codebelt.com/jquery/open-new-browser-window-with-jquery-custom-size/
+    //https://www.codeofaninja.com/2011/04/how-to-center-screen-pop-up-window-with.html
+    $(".newWindow").click(function(event){
+        event.preventDefault();
+
+        var url = $(this).attr("href");
+        var windowName = "popUp";
+        var windowWidth = 700;
+        var windowHeight = 700;
+        var windowLeft = parseInt((screen.availWidth/2) - (windowWidth/2));
+        var windowTop = parseInt((screen.availHeight/2) - (windowHeight/2));
+        var windowSize = "menubar=no,resizable=yes,width=700,height=700,scrollbars=yes,left=" + windowLeft + ",top=" + windowTop + ",screenX=" + windowLeft + ",screenY=" + windowTop;
+
+        window.open(url, windowName, windowSize);
+    });
+
+
+   // show reverse of image
+   $(".product-details-holster-show-reverse-image a").on("click", function(){
+      // get holster id
+      var id = $(".product-details-holster-show-reverse-image").attr('id');
+      var text = $(this).text();
+
+      // check data
+      console.log(id);
+      console.log(text);
+
+      if(text === '*Image shown is right-hand version. Click to flip image.'){
+
+         $.ajax({
+            url: `/holsters/get-reverse-image-med/${id}`,
+            type: 'GET',
+            data: { id: id },
+            dataType: 'JSON',
+            success: function(data){
+
+               // console.log(data.image_med_reverse);
+               // console.log(data.image_med);
+
+               var reverseImage = data.image_med_reverse;
+               var origImage = data.image_med;
+
+               console.log("User wants to see reverse image.");
+               console.log('=============================');
+               console.log(`Reverse image: ${reverseImage}`);
+               console.log(`Original image: ${origImage}`);
+
+
+               // delete image sources
+               $('picture source').remove();
+
+               // replace image with reverse image
+               $("#product-details-holster-image img").attr("src", "/assets/images/page/holsters/"+reverseImage);
+
+               // change text
+               $(".product-details-holster-show-reverse-image a").text("*Image flipped to represent left-hand version. Click to restore original image.");
+
+            },
+            error: function(request, error){
+               alert("Sorry, an error occurred during the Ajax request.");
+               return false;
+            }
+         });
+      }
+      if(text === '*Image flipped to represent left-hand version. Click to restore original image.') {
+
+         $.ajax({
+            url: `/holsters/get-reverse-image-med/${id}`,
+            type: 'GET',
+            data: { id: id },
+            dataType: 'JSON',
+            success: function(data){
+
+               // console.log(data.image_med_reverse);
+               // console.log(data.image_med);
+
+               var reverseImage = data.image_med_reverse;
+               var origImage = data.image_med;
+
+               console.log("User wants to restore original image.");
+               console.log('=============================');
+               console.log(`Reverse image: ${reverseImage}`);
+               console.log(`Original image: ${origImage}`);
+               // console.log(text);
+
+               // check value
+               // console.log(text);
+               // console.log(`Original image: ${origImage}`);
+
+               // delete image sources
+               $('picture source').remove();
+
+               // restore old image
+               $("#product-details-holster-image img").attr("src", "/assets/images/page/holsters/"+origImage);
+
+               // change text
+               $(".product-details-holster-show-reverse-image a").text("*Image shown is right-hand version. Click to flip image.");
+
+            },
+            error: function(request, error){
+               alert("Sorry, an error occurred during the Ajax request.");
+               return false;
+            }
+         });
+      }
+   });
+
+
+   // Resource: http://jsfiddle.net/H7uar/604/
+   $(function() {
+      var iframe = $('<iframe frameborder="0" width="100%" height="100%" allowfullscreen></iframe> <a target="_blank">Click here if web page does not appear</a> ');
+      var windowWidth = $(window).width();
+      var dialogWidth = windowWidth * .8;
+      var windowHeight = $(window).height();
+      var dialogHeight = windowHeight * .7;
+      var dialog = $("#modal-holster").append(iframe).appendTo("body").dialog({
+         autoOpen: false,
+         modal: true,
+         resizable: true,
+         draggable: true,
+         width: dialogWidth,
+         height: dialogHeight,
+         show: {
+            effect: 'blind',
+            times: 3,
+            delay: 0,
+            duration: 1000
+         },
+         buttons: {
+            Close: function() {
+               iframe.attr('src', '');
+               iframe.attr('href', '');
+               $("#modal-holster").dialog({
+                  hide: {
+                     effect: 'explode',
+                     pieces: 9,
+                     duration: 1500
+                  }
+               })
+               .dialog('close');
+            }
+         }
+      });
+
+      $("#holster-learn-more").on("click", function(e) {
+         e.preventDefault();
+         console.log("holster-learn-more just clicked.");
+         var src = $(this).attr('href');
+         var mfr = $(this).attr('data-mfr');
+         var model = $(this).attr('data-model');
+         console.log(src);
+         console.log(mfr);
+         console.log(model);
+         iframe.attr({
+            mfr: mfr,
+            model: model,
+            src: src,
+            href: src    // pass for a href value
+         });
+         dialog.dialog({ title: 'Learn more about ' + mfr + ' ' + model + ' holster' }).dialog('open');
+         return false;
+      });
+
+   });
+
+
+
+   $(function() {
+      var iframe = $('<iframe frameborder="0" width="100%" height="100%" allowfullscreen></iframe> <p><a target="_blank">Click here if web page does not appear</a></p> ');
+      var windowWidth = $(window).width();
+      var dialogWidth = windowWidth * .8;
+      var windowHeight = $(window).height();
+      var dialogHeight = windowHeight * .7;
+      var dialog = $("#modal-holster-video").append(iframe).appendTo("body").dialog({
+         autoOpen: false,
+         modal: true,
+         resizable: true,
+         draggable: true,
+         width: dialogWidth,
+         height: dialogHeight,
+         show: {
+            effect: 'blind',
+            times: 3,
+            delay: 0,
+            duration: 1000
+         },
+         buttons: {
+            Close: function() {
+               iframe.attr('src', '');
+               iframe.attr('href', '');
+               $("#modal-holster-video").dialog({
+                  hide: {
+                     effect: 'explode',
+                     pieces: 9,
+                     duration: 1500
+                  }
+               })
+               .dialog('close');
+            }
+         }
+      });
+
+      $("#holster-video").on("click", function(e) {
+         e.preventDefault();
+         console.log("holster-video just clicked.");
+         var src = $(this).attr('href');
+         var mfr = $(this).attr('data-mfr');
+         var model = $(this).attr('data-model');
+         console.log(src);
+         console.log(mfr);
+         console.log(model);
+         iframe.attr({
+            mfr: mfr,
+            model: model,
+            src: src,
+            href: src    // pass for a href value
+         });
+         dialog.dialog({ title: mfr + ' holster video' }).dialog('open');
+         return false;
+      });
+
+   });
+
+
+
+});
+</script>
+{% endblock %}

@@ -1,0 +1,154 @@
+{% extends 'base-admin.html' %}
+
+{% block title %}
+  Update User | ArmaLaser
+{% endblock %}
+
+{% block css %}
+{% endblock %}
+
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div id="dashboard-toggle" class="col-md-8" style="margin-top:-20px;margin-left:254px;">
+
+            <h2>
+                Update user - &quot;{{ user.first_name }} {{ user.last_name }}&quot;
+            </h2>
+
+            <hr>
+
+            <form method="post" action="/admin/users/update-user?id={{ user.id }}"
+                class="form-horizontal" name="update-user-form" id="update-user-form"
+                enctype="multipart/form-data">
+
+                <div class="form-group">
+                    <label for="first_name" class="control-label col-sm-3">
+                      First name
+                    </label>
+                    <div class="col-sm-9">
+                        <input type="text" class="form-control" name="first_name"
+                        id="first_name" placeholder="First name"
+                        value="{{ user.first_name }}">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="last_name" class="control-label col-sm-3">
+                      Last name
+                    </label>
+                    <div class="col-sm-9">
+                        <input type="text" class="form-control" name="last_name"
+                        id="last_name" placeholder="Last name"
+                        value="{{ user.last_name }}">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="email" class="control-label col-sm-3">
+                      Login email
+                    </label>
+                    <div class="col-sm-9">
+                        <input type="email" class="form-control" name="email"
+                          id="email" placeholder="Email" value="{{ user.email }}">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="password" class="control-label col-sm-3">
+                      Password
+                    </label>
+                    <div class="col-sm-9">
+                        <input type="text" class="form-control" name="password"
+                          id="password" placeholder="Hashed password" value="{{ user.pass }}" disabled>
+                          <small>*hashed</small>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="access_level" class="control-label col-sm-3">
+                      Access level
+                    </label>
+                    <div class="col-sm-9">
+                        <select class="form-control  required" name="access_level" id="access_level">
+                                <option value="{{ user.access_level }}">
+                                    {% if user.access_level == 3 %}Admin{% elseif user.access_level == 4 %}Telephone order entry{% elseif user.access_level == 5 %}Supervisor{% endif %}
+                                </option>
+                                <option value="2">Admin</option>
+                                <option value="4">Telephone order entry</option>
+                                <option value="5">Supervisor</option>
+                        </select>
+                    </div>
+                </div>
+
+                <hr>
+
+                <div class="form-group">
+                    <div class="col-sm-offset-3 col-sm-8">
+                        <button  id="update-user-btn" type="submit"
+                        class="btn btn-primary btn-lg">
+                        Update {{ user.first_name }} {{ user.last_name }}
+                      </button>
+                    </div>
+                </div>
+
+            </form>
+
+
+            <h2 class="col-md-8 col-md-offset-3" style="margin-top:40px;">
+                Change password
+            </h2>
+
+            <form method="post" action="/admin/users/update-user-password?id={{ user.id }}"
+              class="form-horizontal" name="change-password-form" id="change-password-form" enctype="multipart/form-data">
+
+
+                <div class="form-group">
+                    <label for="new_password" class="control-label col-sm-3">
+                      New password
+                    </label>
+                    <div class="col-sm-9">
+                        <input type="text" class="form-control" name="new_password"
+                          id="new_password" placeholder="Minimum 6 characters">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="confirm_password" class="control-label col-sm-3">
+                      Confirm password
+                    </label>
+                    <div class="col-sm-9">
+                        <input type="text" class="form-control" name="confirm_password"
+                          id="confirm_password" placeholder="Minimum 6 characters">
+                    </div>
+                </div>
+
+                <hr>
+
+                <div class="form-group">
+                    <div class="col-sm-offset-3 col-sm-8">
+                        <button  id="update-user-password-btn" type="submit"
+                        class="btn btn-primary btn-lg">
+                        Change {{ user.first_name }} {{ user.last_name }}&#39; password
+                      </button>
+                      <br><br>
+                      <help>
+                        *If you are changing your own password, you will be
+                        automatically logged out. You can log in again with your
+                        new password.
+                      </help>
+                    </div>
+                </div>
+
+            </form>
+
+
+          </div><!--  // .col-md-8  -->
+      </div><!--  // .row  -->
+</div><!--  // .container  -->
+{% endblock %}
+
+
+{% block bottomjs %}
+{% endblock %}

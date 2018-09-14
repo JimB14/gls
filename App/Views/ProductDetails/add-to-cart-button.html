@@ -1,0 +1,70 @@
+<!-- Dispaly buy btn only for non-logged in users or logged in users other than dealer or partner -->
+{% if session.userType == 'customer' or session.access_level == 4 or not session.user %}
+    {% if (model.mvc_model == 'trseries') or (model.mvc_model == 'gtoflx') or (model.mvc_model == 'stingray') %}
+        <p class="text-center">
+            <a  class="btn btn-buy btn-block btn-lg add_to_cart" role="button"
+                href="/add-to-cart/{{ model.mvc_model }}/{{ model.id }}/{{ model.pistolMfr }}/{{ model.model }}" >
+                Buy Direct from ArmaLaser
+            </a>
+        </p>
+    {% endif %}
+{% endif %}
+
+
+<!-- Dispaly buy btn only for non-logged in users or logged in users other than dealer or partner -->
+{% if session.userType == 'customer' or session.access_level == 4 or not session.user %}
+    {% if holster%}
+        <p class="text-center">
+            <a class="btn btn-buy btn-block btn-lg add_to_cart" role="button"
+                href="/add-to-cart/{{ holster.mvc_model }}/{{ holster.id }}/{{ holster.holsterMfr|lower }}/{{ holster.trseries_model }}">
+                Buy Direct from ArmaLaser
+            </a>
+        </p>
+    {% endif %}
+{% endif %}
+
+<!-- Dispaly buy btn only for non-logged in users or logged in users other than dealer or partner -->
+{% if session.userType == 'customer' or session.access_level == 4 or not session.user %}
+    {% if battery %}
+        <p class="text-center">
+            <a class="btn btn-buy btn-block btn-lg add_to_cart" role="button"
+                href="/add-to-cart/{{ battery.mvc_model }}/{{ battery.id }}/{{ battery.slug }}/{{ battery.laser_series }}">
+                Buy Direct from ArmaLaser
+            </a>
+        </p>
+    {% endif %}
+{% endif %}
+
+<!-- Dispaly buy btn only for non-logged in users or logged in users other than dealer or partner -->
+{% if session.userType == 'customer' or session.access_level == 4 or not session.user %}
+    {% if toolkit %}
+        <p class="text-center">
+            <a class="btn btn-buy btn-block btn-lg add_to_cart" role="button"
+                href="/add-to-cart/{{ toolkit.mvc_model }}/{{ toolkit.id }}/{{ toolkit.slug }}/{{ toolkit.laser_series }}">
+                Buy Direct from ArmaLaser
+            </a>
+        </p>
+    {% endif %}
+{% endif %}
+
+<!-- Dispaly buy btn only for non-logged in users or logged in users other than dealer or partner -->
+{% if session.userType == 'customer' or session.access_level == 4 or not session.user %}
+    {% if item %}
+        <p class="text-center">
+            <a class="btn btn-buy btn-block btn-lg add_to_cart" href="/add-to-cart/{{ item.mvc_model }}/{{ item.id }}/{{ item.slug }}/{{ item.slug }}" role="button">
+                Buy Direct from ArmaLaser
+            </a>
+        </p>
+    {% endif %}
+{% endif %}
+
+<!-- Dispaly buy btn only for non-logged in users or logged in users other than dealer or partner -->
+{% if session.userType == 'customer' or session.access_level == 4 or not session.user %}
+    {% if flx %}
+        <p class="text-center">
+            <a class="btn btn-buy btn-block btn-lg add_to_cart" href="/add-to-cart/{{ flx.mvc_model }}/{{ flx.id }}/{{ flx.flx_model }}/{{ flx.flx_model }}" role="button">
+                Buy Direct from ArmaLaser
+            </a>
+        </p>
+    {% endif %}
+{% endif %}

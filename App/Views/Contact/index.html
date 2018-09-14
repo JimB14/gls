@@ -1,0 +1,310 @@
+{% extends 'base.html' %}
+
+{% block title %}
+{% if need == 'Please send me an RMA number. Here are my product purchase details.' %}
+Contact to request an RMA
+{% elseif need == 'Please send me your latest catalog.' %}
+Contact to request free ArmaLaser Catalog
+{% elseif need == 'I need Warranty help. Please contact me.'%}
+Contact ArmaLaser for Warranty Help
+{% else %}
+Contact ArmaLaser
+{% endif %}
+{% endblock %}
+
+{% block metadescription %}
+{% if need == 'Please send me an RMA number. Here are my product purchase details.' %}
+If you need to return any products, please contact us to request an RMA.
+{% elseif need == 'Please send me your latest catalog.' %}
+Contact ArmaLaser to request our latest Catalog and we will send it to you
+{% elseif need == 'I need Warranty help. Please contact me.'%}
+Contact ArmaLaser for assistance with Warranty issues by filling out our convenient contact form and submitting it.
+{% else %}
+Contact ArmaLaser directly by filling out our convenient contact form and submitting it.
+{% endif %}
+{% endblock %}
+
+{% block css %}
+<style>
+   #serialInfo {
+      cursor:pointer;
+   }
+</style>
+{% endblock %}
+
+{% block outsidecontainer %}
+{% endblock %}
+
+
+{% block content %}
+<div class="container">
+    <div class="row">
+
+            <div class="col-md-8 col-sm-8">
+              <h1 class="pagetitle">{{ pagetitle }}</h1>
+              <div class="alert alert-warning" id="delivery-alert">
+                 <p id="delivery-alert-close" style="display:inline-block;float:right;cursor:pointer;margin-top:-10px;"><a >close &times;</a></p>
+                 <h3 style="margin: 0px;">Delivery question?</h3>
+                 <p>
+                    Due to the high volume of purchases, shipping is slower than normal.
+                    We are getting to your order as quickly as possible.
+                    <em>Thank you for your patience!</em>
+                 </p>
+              </div>
+
+              {%
+                 if not session.nowMMDD == '12-25'
+                 or not session.nowMMDD == '01-01'
+                 or not session.nowMMDD == '07-04'
+                 or not session.thisDay == 'Sat'
+                 or not session.thisDay == 'Sun'
+                 and (not session.thisHour > '17'
+                 or not session.thisHour < '9')
+              %}
+                 <div id="contact-live-chat-alert" class="alert alert-info text-center" style="color: #78000;">
+                    <p id="contact-live-chat-alert-close" style="display:inline-block;float:right;cursor:pointer;margin-top:-10px;"><a >&times;</a></p>
+                    <h2 style="margin:0; margin-bottom: 10px;">
+                       Live Chat <i class="fa fa-comment-o" aria-hidden="true"></i> is available!
+                    </h2>
+                    <!-- <h3 style="margin:0;" style="margin:0;">
+                        Dialog With Us Directly!
+                    </h3> -->
+                    <h3 style="margin:10px 0px;">
+                       <a class="btn btn-success btn-lg" data-toggle="modal" data-target="#chatRegister" title="Click to chat">Let&apos;s Chat</a>
+                    </h3>
+                    <h4 style="margin:0;" style="margin:0;">
+                       Chat hours:  9AM - 5PM ET  Mon - Fri
+                    </h4>
+                  </div>
+              {% endif %}
+                <div class="panel panel-default">
+                    <div class="panel-body" style="padding:20px 32px;">
+                        <h3 style="margin:0;margin-bottom:15px;font-size:20px;">
+                            <a href="/products/laser-parts" title="See Laser Parts">
+                                Need laser parts?
+                            </a>
+                            <span style="margin: 0;" class="pull-right">
+                                <a href="/products/laser-batteries" title="See Laser Batteries">
+                                    Need laser batteries?
+                                </a>
+                            </span>
+                        </h3>
+                        <h4 style="color: #838383;">
+                          Please provide the following information.
+                        </h4>
+                        <form action="/contact/submit-contact-form" name="contact-form"
+                          id="contact-form" method="post">
+
+                            <div class="form-group has-feedback">
+                                <label class="control-label">
+                                  Name
+                                </label>
+                                <sup>
+                                  <span class="glyphicon glyphicon-asterisk"></span>
+                                </sup>
+                                <input type="text" name="name" class="form-control" id="name"
+                                placeholder="Name" value="" autofocus>
+                                <i class="glyphicon glyphicon-user form-control-feedback"></i>
+                            </div>
+
+                            <div class="form-group has-feedback">
+                                <label class="control-label">
+                                  Email address
+                                </label>
+                                <sup>
+                                  <span class="glyphicon glyphicon-asterisk"></span>
+                                </sup>
+                                <input type="email" name="email" class="form-control" id="email"
+                                placeholder="Email" value="">
+                                <i class="glyphicon glyphicon-envelope form-control-feedback"></i>
+                            </div>
+
+                            <div class="form-group has-feedback">
+
+                                <label class="control-label">
+                                  Telephone
+                                </label>
+                                <sup>
+                                  <span class="glyphicon glyphicon-asterisk"></span>
+                                </sup>
+                                <input type="text" name="telephone" class="form-control" id="telephone"
+                                placeholder="Telephone" value="">
+                                <i class="glyphicon glyphicon-earphone form-control-feedback"></i>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="message">
+                                  Message
+                                </label>
+                                <a
+                                   id="serialInfo"
+                                   title="Where is my serial number?"
+                                   data-toggle="serialInfo"
+                                   data-placement="top"
+                                   data-content="The Serial Number is located in two locations.
+                                   It is a 6-7 digit number on the ArmaLaser packaging on
+                                   a white sticker next to the UPC sticker. Also on a
+                                   square black and gold sticker on the laser sight itself,
+                                   only seen when the laser sight is off the firearm.">
+                                   <span style="padding-left:10px;" class="glyphicon glyphicon-info-sign"></span>
+                                   <span>Where is my Serial number?</span>
+                                </a>
+                                <textarea id="message" class="form-control" name="message" rows="2" placeholder="For laser questions and/or issues, please include your laser's serial number.">{% if need %} {{ need }} {% endif %}</textarea>
+                            </div>
+
+                            <!-- <div class="checkbox">
+                                <label>
+                                    <input type="checkbox" name="catalog_yes" id="catalog_yes"
+                                    {% if catalog == 'send' %} checked {% endif %}>
+                                    Catalog by mail. Yes, please send me an ArmaLaser Catalog,
+                                    and sign me up to receive emails to stay informed with
+                                    the latest news about products, programs and events. I
+                                    understand that I can unsubscribe at any time.
+                                </label>
+                            </div> -->
+
+                            <div id="mailing-information">
+                                <div class="form-group">
+                                    <label for="address">
+                                      Address
+                                    </label>
+                                    <sup>
+                                      <span class="glyphicon glyphicon-asterisk"></span>
+                                    </sup>
+                                    <input type="text" id="address" class="form-control"
+                                    name="address" placeholder="Address"
+                                    value="">
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="city">
+                                      City
+                                    </label>
+                                    <sup>
+                                      <span class="glyphicon glyphicon-asterisk"></span>
+                                    </sup>
+                                    <input type="text" id="city" class="form-control" name="city"
+                                    placeholder="City" value="">
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="state">
+                                      State
+                                    </label>
+                                    <sup><span class="glyphicon glyphicon-asterisk"></span>
+                                    </sup>
+                                    <select class="form-control" name="state" id="state">
+                                        <option value="">Select state</option>
+                                        {% for state in states %}
+                                            <option value="{{ state.abbrev }}">{{ state.name }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="zip">
+                                      Zip
+                                    </label>
+                                    <sup><span class="glyphicon glyphicon-asterisk"></span>
+                                    </sup>
+                                    <input type="text" id="zip" class="form-control"
+                                    name="zip" placeholder="Zip"
+                                    value="">
+                                </div>
+
+                            </div><!-- // #mailing-information -->
+
+                            <button type="submit" class="btn btn-buy btn-lg btn-block"
+                              name="action" id="submit-contact-form-btn">
+                              Submit
+                            </button>
+                        </form>
+
+                    </div><!-- // .panel-body -->
+                </div><!-- // .panel -->
+            </div><!-- // .col-md-8 -->
+
+            <div class="col-md-4 col-sm-4">
+                <h2>&nbsp;</h2>
+                    <div class="list-group">
+                        <h4 class="list-group-item-heading">Corporate Headquarters</h4>
+                        <p class="list-group-item" id="corp-info">
+                            ArmaLaser Inc.<br>
+                            5200 NW 43rd Street<br>
+                            Gainesville, FL 32606<br>
+                            USA
+                        </p>
+                    </div>
+
+                    <div class="list-group">
+                        <h4 class="list-group-item-heading">Contact Information</h4>
+                        <p class="list-group-item">
+                            <span class="glyphicon glyphicon-earphone"></span>Telephone: <a href="telephone:8006805020" title="Press to dial"> 800-680-5020</a><br>
+                            <span class="glyphicon glyphicon-globe"></span> International: 352-353-0418<br>
+                            <span class="glyphicon glyphicon-print"></span> Fax: 352-515-9245<br>
+                            <span class="glyphicon glyphicon-envelope"></span><a href="mailto:customercare@armalaser.com?Subject=From%20Website" target="_top"> Email Customer Care</a><br>
+                        </p>
+                    </div>
+
+                    <div class="list-group">
+                        <h4 class="list-group-item-heading">Warranty Registration</h4>
+                        <p class="list-group-item">
+                            <a href="/warranty/registration" class="btn btn-buy btn-block">Product Registration</a>
+                        </p>
+                    </div>
+
+            </div><!-- // .col-md-4 -->
+
+    </div><!--  // .row  -->
+</div><!--  // .container  -->
+{% endblock %}
+
+
+{% block bottomjs %}
+<script>
+ $(document).ready(function() {
+
+   // fade out delivery message
+   setTimeout(function(){
+      $("#delivery-alert").fadeOut(2000);
+   }, 11000);
+
+
+   // if user selects catalog checkbox
+   if( $('#catalog_yes').is(":checked") ) {
+      $('#mailing-information').slideDown(1000);
+      $('#mailing-information').css({'display': 'block'});
+   } else {
+      $('#mailing-information').slideUp('slow');
+   }
+
+   $('#catalog_yes').click(function() {
+     if (this.checked) {
+         $('#mailing-information').slideDown(1000);
+         $('#mailing-information').css({'display': 'block'});
+     } else {
+         $('#mailing-information').slideUp('slow');
+     }
+   });
+
+    $("#contact-form").submit(function(){
+        $("#submit-contact-form-btn").text("Sending data.... Please wait.");
+    });
+
+
+   $("#contact-live-chat-alert-close").on("click", function(){
+         console.log("X clicked");
+         $("#contact-live-chat-alert").fadeOut("slow");
+   });
+
+   $("#delivery-alert-close").on("click", function(){
+         console.log("X clicked");
+         $("#delivery-alert").fadeOut("slow");
+   });
+
+    $('[data-toggle="serialInfo"]').popover();
+
+
+ });
+</script>
+{% endblock %}

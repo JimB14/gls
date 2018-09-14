@@ -1,0 +1,23 @@
+<!-- see front controller index.php for list of SESSION variables -->
+<!-- Holiday dates & Sat & Sun -->
+{%
+   if session.nowMMDD == '12-25'
+   or session.nowMMDD == '01-01'
+   or session.nowMMDD == '07-04'
+   or session.thisDay == 'Sat'
+   or session.thisDay == 'Sun'
+%}
+   <h3><a href="#" title="Chat live with ArmaLaser &#10;9AM - 5PM ET  Mon - Fri">CHAT <span class="red"><em>CLOSED</em></span></a></<h3>
+
+<!-- during chat hours -->
+{% elseif (session.thisHour < '17' and session.thisHour >= '9') %}
+    {% if session.chatuser_id %}
+        <h3 style="margin-bottom:0px;"><a href="/livechat" title="Chat live with ArmaLaser &#10; 9AM - 5PM ET  Mon - Fri">CHAT <i style="margin-right:15px;" class="fa fa-comment-o" aria-hidden="true"></i> <span style="text-transform:none"> <i style="margin-right:4px;" class="fa fa-user" aria-hidden="true"></i> {{ session.chatuser_first_name}} </span></a></<h3>
+    {% elseif session.user_id %}
+        <h3 style="margin-bottom:0px;"><a href="/livechat" title="Chat live with ArmaLaser &#10;9AM - 5PM ET  Mon - Fri">CHAT <i class="fa fa-comment-o" aria-hidden="true"></i> - (logged in)</a></<h3>
+    {% else %}
+        <h3><a href="#" title="Chat live with ArmaLaser &#10;9AM - 5PM ET  Mon - Fri" data-toggle="modal" data-target="#chatRegister">CHAT <i class="fa fa-comment-o" aria-hidden="true"></i><span class="red"> <em>OPEN</em></span></a></<h3>
+    {% endif %}
+{% else %}
+    <h3><a href="/" title="Chat live with ArmaLaser &#10;9AM - 5PM ET  Mon - Fri">CHAT <span class="red"><em>CLOSED</em></span></a></h3>
+{% endif %}

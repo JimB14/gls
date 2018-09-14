@@ -1,0 +1,128 @@
+{% extends 'base-admin.html' %}
+
+{% block title %}
+  Customers | ArmaLaser
+{% endblock %}
+
+{% block css %}
+{% endblock %}
+
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div id="dashboard-toggle" class="col-md-10" style="margin-top:-20px;margin-left:254px;">
+
+          <div class="col-md-4">
+                <h2 style="margin-left:-15px;">
+                    Manage Customers
+                    {% if not searched %}
+                        {% if customers|length > 0 %}
+                            <span class="badge" style="margin: -18px 0px 0px 7px;">
+                                {{ count|number_format(0, ',') }}
+                            </span>
+                        {% endif %}
+                    {% endif %}
+                </h2>
+                {% if searched %}
+                    <p><a href="/admin/customers/get-customers"><span class="glyphicon glyphicon-chevron-left"></span> Back to all customers</a></p>
+                {% else %}
+                    <h3 style="margin-top: 0px;">{{ customers|length }} most recent customers</h3>
+                {% endif %}
+          </div>
+          <div  class="col-md-5 col-sm-7 col-xs-12" style="margin:15px 0px 15px -15px;">
+            <form method="get" action="/admin/customers/search-by-last-name">
+                <div class="input-group">
+                    <input style="width:175px;" type="text" class="form-control"
+                        name="last_name" id="last_name" placeholder="Enter last name">
+                    <span style="display:inline-block;margin-left:0px;" class="input-group-btn">
+                        <button class="btn btn-secondary btn-default" type="submit">Go</button>
+                    </span>
+                </div>
+            </form>
+            {% if searched %}
+                <div>
+                     <h3>{{ customers|length }} results: "{{ searched }}"</h3>
+                </div>
+            {% endif %}
+          </div>
+
+          {% if customers %}
+            <table class="table table-bordered table-striped bg-fff display-broker-agents">
+
+              <thead>
+                  <tr>
+                      <th>Edit</th>
+                      <!-- <th>Delete</th> -->
+                      <th>ID</th>
+                      <th>First</th>
+                      <th>Last</th>
+                      <th>Address</th>
+                      <th>City</th>
+                      <th>State</th>
+                      <th>Zip</th>
+                      <th>Email</th>
+                      <th>Phone</th>
+                      <th>Created</th>
+                      <th>Updated</th>
+                  </tr>
+              </thead>
+
+              <tbody>
+                  {% for customer in customers %}
+                  <tr>
+                      <td class="text-center">
+                        <a class="text-center" id="edit-customer" href="/admin/customers/edit-customer?id={{ customer.id }}">
+                          <span class="glyphicon glyphicon-pencil edit-green"></span>
+                        </a>
+                      </td>
+                      <!-- <td class="text-center" >
+                          <a id="delete-customer" href="/admin/customers/delete-customer?id={# customer.id #}"
+                            onclick="return confirm('TO PERMANENTLY DELETE THIS CUSTOMER, click OK. \n\n\WARNING! DELETED DATA CANNOT BE RECOVERED.\n\n\WARNING! ALL ORDERS FOR THIS CUTOMER WILL BE DELETED.');">
+                            <span class="glyphicon glyphicon-trash red"></span>
+                          </a>
+                      </td> -->
+                      <td><a href="/admin/customers/get-orders?id={{ customer.id }}" title="See Orders">{{ customer.id }}</a></td>
+                      <td>{{ customer.billing_firstname }}</td>
+                      <td>{{ customer.billing_lastname }}</td>
+                      <td>{{ customer.billing_address }}</td>
+                      <td>{{ customer.billing_city }}</td>
+                      <td>{{ customer.billing_state }}</td>
+                      <td>{{ customer.billing_zip }}</td>
+                      <td>{{ customer.email }}</td>
+                      <td>{{ customer.billing_phone }}</td>
+                      <td>{{ customer.created_at }}</td>
+                      <td>{{ customer.updated_at }}</td>
+                    </tr>
+                    {% endfor %}
+              </tbody>
+            </table>
+
+            <p style="margin-top: -3px;" class="pull-left"><a href="#top" title="Go to top of page"><i style="margin-top: -15px; color:#ccc;" class="fa fa-arrow-circle-o-up fa-3x" aria-hidden="true"></i></a></p>
+            <p style="margin-top: -3px;" class="pull-right"><a href="#top" title="Go to top of page"><i style="margin-top: -15px; color:#ccc;" class="fa fa-arrow-circle-o-up fa-3x" aria-hidden="true"></i></a></p>
+
+
+            {% else %}
+            <div class="col-md-8" style="margin-left:-15px;">
+                <div class="alert alert-warning" style="margin-top:30px;">
+                    <h4 style="margin-bottom:0px;">
+                      No customers to display
+                    </h4>
+                </div>
+            </div>
+            {% endif %}
+
+      </div><!--  // col-md-12  -->
+    </div><!--  // .row  -->
+</div><!-- // .container-fluid  -->
+{% endblock %}
+
+
+{% block bottomjs %}
+<script>
+$(document).ready(function() {
+
+
+});
+</script>
+{% endblock %}

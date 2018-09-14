@@ -1,0 +1,307 @@
+{% extends 'base.html' %}
+
+{% block title %}
+  Official ArmaLaser | Laser Sights for Guns
+{% endblock %}
+
+{% block metadescription %}
+  ArmaLaser offers the most technologically advanced red and green lasers for the world&#39;s most popular pistols.
+{% endblock %}
+
+
+{% block css %}
+<link rel="stylesheet" href="/assets/css/jquery-ui.min.css">
+<style>
+  .ui-dialog-titlebar { display: none; }
+</style>
+{% endblock %}
+
+
+{% block outsidecontainer %}
+{% endblock %}
+
+
+{% block content %}
+<!-- <div id="black-friday">
+    <img class="img-responsive" src="/assets/images/page/home/black-friday3.png">
+</div> -->
+
+<div class="bg-111" id="movie-bg" style="background-color: #fff;">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+
+                <!-- ==============  MEMORIAL DAY 2018 ====================== -->
+                <!-- Thu 5/24 11:59:50PM thru Mon 5/28 midnight -->
+                {% if now > '2018-05-24 23:59:59' and now < '2018-05-28 23:59:59' %}
+                <h1 style="color:#000;" class="text-center text-italic" id="timer"></h1>
+
+                <picture>
+                   <source srcset="/assets/images/page/home/memorial_day_2018.jpg"
+                      alt="Memorial Day Savings at ArmaLaser.com"
+                      media="(min-width:1200px)">
+
+                   <source srcset="/assets/images/page/home/memorial_day_2018_med.jpg"
+                      alt="Memorials Day Savings at ArmaLaser.com"
+                      media="(min-width:760px)">
+
+                   <source srcset="/assets/images/page/home/memorial_day_2018_small.jpg"
+                      alt="Memorial Day Savings at ArmaLaser.com"
+                      media="(min-width:200px)">
+
+                   <img class="img-responsive center-block" src="/assets/images/page/home/memorial_day_2018_thumb.jpg"
+                      alt="Memorial Day Savings at ArmaLaser.com">
+                </picture>
+
+                <!-- ====  PRESIDENT'S DAY THU Midnight 2/15/18 - MON Midnight 2/19/18  ===== -->
+                {% elseif now > '2018-02-15 23:59:59' and now < '2018-02-19 23:59:59' %}
+
+                 <h1 style="color:#000;" class="text-center text-italic" id="timer"></h1>
+
+                 <picture>
+                    <source srcset="/assets/images/page/home/pres_day_sale.png"
+                       alt="President's Day Savings at ArmaLaser.com"
+                       media="(min-width:1200px)">
+
+                    <source srcset="/assets/images/page/home/pres_day_sale_med.png"
+                       alt="President's Day Savings at ArmaLaser.com"
+                       media="(min-width:760px)">
+
+                    <source srcset="/assets/images/page/home/pres_day_sale_small.png"
+                       alt="President's Day Savings at ArmaLaser.com"
+                       media="(min-width:200px)">
+
+                    <img class="img-responsive center-block" src="/assets/images/page/home/pres_day_sale_thumb.png"
+                       alt="President's Day Savings at ArmaLaser.com">
+                 </picture>
+
+
+               <!-- ========  BLACK FRIDAY - CYBER MONDAY 2017 ============= -->
+               {% elseif now > '2017-11-23 09:00:00' and now < '2017-11-27 23:59:59' %}
+                  <h1 style="color:#fff;" class="text-center text-italic" id="timer"></h1>
+                  <img class="img-responsive" src="/assets/images/page/home/black-friday3.png" alt="Black Friday Savings at ArmaLaser.com">
+
+               <!-- ==============  JULY 4 2017 ============================ -->
+               {% elseif now > '2017-07-01 02:00:00' and now < '2017-07-04 23:59:59' %}
+
+                  <h1 style="color:#fff;" class="text-center text-italic" id="timer"></h1>
+
+                  <picture>
+                     <source srcset="/assets/images/page/home/july4sale.png"
+                        alt="July 4 Independence Day Savings at ArmaLaser.com"
+                        media="(min-width:1200px)">
+
+                     <source srcset="/assets/images/page/home/july4sale_med.png"
+                        alt="July 4 Independence Day Savings at ArmaLaser.com"
+                        media="(min-width:760px)">
+
+                     <source srcset="/assets/images/page/home/july4sale_small.png"
+                        alt="July 4 Independence Day Savings at ArmaLaser.com"
+                        media="(min-width:200px)">
+
+                     <img class="img-responsive center-block"
+                        src="/assets/images/page/home/july4sale_thumb.png"
+                        alt="July 4 Independence Day Savings at ArmaLaser.com">
+                  </picture>
+
+               <!-- ==========  CHRISTMAS 2017  ============================ -->
+               {% elseif now > '2017-11-29 02:00:00' and now < '2017-12-24 23:59:59' %}
+
+                  <h1 style="color:#03922C;" class="text-center text-italic" id="timer"></h1>
+
+                  <picture>
+                     <source srcset="/assets/images/page/home/christmas_special.png"
+                        alt="Holiday Savings on Lasers from ArmaLaser.com"
+                        media="(min-width:1200px)">
+
+                     <source srcset="/assets/images/page/home/christmas_special_med.png"
+                        alt="Holiday Savings on Lasers from ArmaLaser.com"
+                        media="(min-width:760px)">
+
+                     <source srcset="/assets/images/page/home/christmas_special_small.png"
+                        alt="Holiday Savings on Lasers from ArmaLaser.com"
+                        media="(min-width:200px)">
+
+                     <img class="img-responsive center-block"
+                        src="/assets/images/page/home/christmas_special_thumb.png"
+                        alt="Holiday Savings on Lasers from ArmaLaser.com">
+                  </picture>
+
+                  <!-- ====  YEAR-END SALE  2017:  12-25-2017 23:59:59 - 01-01-2018 23:59:59 ========= -->
+                  {% elseif now > '2017-12-25 23:59:59' and now < '2018-01-01 23:59:59' %}
+                     <h1 style="color:#03922C;" class="text-center text-italic" id="timer"></h1>
+                     <picture>
+                        <source srcset="/assets/images/page/home/christmas_year_end_sale.png"
+                           alt="Year-end Savings on Lasers from ArmaLaser.com"
+                           media="(min-width:1200px)">
+
+                        <source srcset="/assets/images/page/home/christmas_year_end_sale_med.png"
+                           alt="Year-end Savings on Lasers from ArmaLaser.com"
+                           media="(min-width:760px)">
+
+                        <source srcset="/assets/images/page/home/christmas_year_end_sale_small.png"
+                           alt="Year-end Savings on Lasers from ArmaLaser.com"
+                           media="(min-width:200px)">
+
+                        <img class="img-responsive center-block" src="/assets/images/page/home/christmas_year_end_sale_thumb.png"
+                           alt="Year-end Savings on Lasers from ArmaLaser.com">
+                     </picture>
+              {% else %}
+                 <!-- ===============  UNIQUE MESSAGE ===================================== -->
+                 <!-- {% if now > '2017-12-25 00:00:01' and now < '2017-12-25 23:59:58' %}
+                     <h1 style="color:#03922C;" class="text-center text-italic">
+                        MERRY CHRISTMAS AND HAPPY HOLIDAYS!
+                     </h1>
+                 {% endif %} -->
+                <a href="/dealers/find-dealer" data-toggle="tooltip" title="Click to find an Authorized Dealer">
+                  <div class="brightness">
+                      <!-- control = true removed per Rick 6/2/2016 -->
+                      <video id="movie" autoplay loop>
+                          <source src="/assets/videos/movie06.mp4" type="video/mp4">
+                          <source src="/assets/videos/movie06.webmhd.webm" type="video/webm">
+                          <source src="/assets/videos/movie06.oggtheora.ogv" type="video/ogg">
+                          Your browser does not support the video tag.
+
+                          <object type="application/x-shockwave-flash" width="1920" height="1080">
+                              <param name="movie" value="/assets/videos/movie06.swf">
+                              <param name="wmode" value="transparent">
+                              <param name="quality" value="high">
+                              <!-- [if !IE]>-->
+                              <object type="application/x-shockwave-flash"
+                                data="/assets/videos/movie06.swf" width="1920" height="1080">
+                                  <param name="wmode" value="transparent">
+                                  <param name="quality" value="high">
+                              </object>
+                              <!--<![endif]-->
+                          </object>
+                      </video>
+                  </div><!-- // .brightness  -->
+                </a>
+              {% endif %}
+
+            </div>
+        </div>
+    </div>
+</div>
+<!--<p><a id="change-bg">Change background to black</a></p>-->
+
+
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<div id="top"></div>
+<h1 class="home-title text-center">
+    Explore Lasers &amp; Laser-Fit
+    <sup style="top:12px; right:10px; font-size:9px; font-weight:bold;">
+      TM
+    </sup>
+      Holsters by Pistol Brand
+</h1>
+
+
+<div class="container p2">
+    <div class="row text-center">
+        <div class="col-md-10 col-md-offset-1">
+            <div id="brand-icons-wrapper">
+
+                {% for brand in logos %}
+                  <a href="/{{ ( brand.name|trim('®') )|lower }}">
+                  <!-- <a href="/home/brand-products?brand={{ brand.pistol_brand_name }}"> -->
+                    <div class="brand-icon-box">
+                      <span class="helper"></span>
+                      <!-- <p>{{brand.pistol_brand_name }}</p> -->
+                      <picture>
+                          <source srcset="/assets/images/pistol-logos/{{ brand.pistol_brand_logo }}"
+                              alt="ArmaLaser products for {{ brand.pistol_brand_name }}" media="(min-width:1200px)">
+                          <source srcset="/assets/images/pistol-logos/{{ brand.pistol_brand_logo_med }}"
+                              alt="ArmaLaser products for {{ brand.pistol_brand_name }}" media="(min-width:760px)">
+                          <img src="/assets/images/pistol-logos/{{ brand.pistol_brand_logo_small }}"
+                              alt="ArmaLaser products for {{ brand.pistol_brand_name }}">
+                      </picture>
+                    </div>
+                  </a>
+                {% endfor %}
+
+            </div>
+
+        </div><!-- // .col-md-12  -->
+    </div><!-- // .row -->
+
+    <div class="row">
+        <div class="col-md-10 col-md-offset-1">
+            <div>
+                <p style="color:#b2b2b2; padding-left:15px;">
+                  *ArmaLaser, Inc is not affiliated with the above firearms
+                  manufacturers, firearms manufacturer subsidiaries, or firearms
+                  manufacturer parent companies.
+                </p>
+            </div>
+        </div>
+    </div>
+</div><!-- // .container -->
+{% endblock %}
+
+
+{% block bottomjs %}
+<script src="/assets/js/jquery-ui.min.js"></script>
+
+<!-- Memorial Day 2018 -->
+{% if now > '2018-05-24 23:59:59' and now < '2018-05-28 23:59:59' %}
+<script src=/assets/js/countdowntimer.js></script>
+{% endif %}
+
+<!-- Presidents Day 2018 -->
+{% if now > '2018-02-15 23:59:59' and now < '2018-02-19 23:59:59' %}
+<script src=/assets/js/countdowntimer.js></script>
+{% endif %}
+
+<!-- Christmas 2017 -->
+{% if now > '2017-12-25 23:59:59' and now < '2018-01-01 23:59:59' %}
+<script src=/assets/js/countdowntimer.js></script>
+{% endif %}
+
+<!-- Thanksgiving 2017 -->
+{% if now > '2017-11-30 23:59:59' and now < '2017-12-24 23:59:59' %}
+<script src=/assets/js/countdowntimer.js></script>
+{% endif %}
+
+<script>
+$(document).ready(function () {
+
+   {% if now > '2017-11-23 09:00:00' and now < '2017-11-27 23:59:59' %}
+
+      // create new Date object
+      var date = new Date();
+
+      console.log(`date.getDate(): ${date.getDate()}`);
+
+      if(date.getDate() >= 22 && date.getDate() <= 27) {
+         $("#black-friday").dialog({
+            modal: true,
+            resizable: false,
+            draggable: false,
+            minWidth: 960,
+            show: 100,
+            hide: {
+               effect: 'explode',
+               delay: 4000,
+               duration: 1000,
+               easing: 'easeInQuad'
+            },
+            position: {
+               at: 'center, top'
+            }
+         });
+
+         // close div
+           $("#black-friday").dialog('close');
+         }
+
+         if(date.getDate() > 28) {
+         $("#black-friday").hide();
+      }
+
+   {% endif %}
+
+});
+</script>
+{% endblock %}

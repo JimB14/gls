@@ -1,0 +1,182 @@
+{% extends 'base.html' %}
+
+{% block title %}
+  Success | ArmaLaser
+{% endblock %}
+
+{% block css %}
+
+{% endblock %}
+
+{% block outsidecontainer %}
+
+{% endblock %}
+
+
+{% block content %}
+<div class="container">
+    <div class="row">
+
+      <div class="col-md-12">
+          <h1>Success </h1>
+          <hr>
+      </div>
+
+      <div class="col-md-8">
+
+          {% if logout == 'true' %}
+            <h3 style="margin-top: 0px; margin-bottom: 375px;">
+              {{ message }}
+            </h3>
+          {% endif %}
+
+
+          {% if submitcontactform == 'true' %}
+            <h3 style="margin-top: 0px">
+              Thanks {{ name }}! {{ message }}
+            </h3>
+            <br><br><br><br>
+          {% endif %}
+
+
+          {% if warrantysuccess == 'true' %}
+            <h3 style="margin-top: 0px">
+              Thanks {{ name }}! {{ message }}
+            </h3>
+            <br><br><br><br>
+          {% endif %}
+
+
+          {% if dealersuccess %}
+            <h3 style="margin-top: 0px">
+              Thanks {{ results.name }}!
+            </h3>
+            <h4 style="margin-top: 0px">
+              Your information was successfully submitted.
+            </h4>
+            <p>
+              Someone from ArmaLaser Dealer Services will contact you.
+            </p>
+            <h3>
+              Thank you for your interest in ArmaLaser.
+            </h3>
+            <br><br><br><br>
+          {% endif %}
+
+
+          {% if videoreview == 'true' %}
+            <h3 style="margin-top: 0px">
+              Thanks {{ name }}!
+            </h3>
+            <h4 style="margin-top: 0px">
+              Your video review information was successfully submitted.
+            </h4>
+            <p>
+              Your video will be reviewed. If approved for publication, we
+              will contact you.
+            </p>
+            <h3>
+              Thank you for your interest in ArmaLaser.
+            </h3>
+            <br><br><br><br>
+          {% endif %}
+
+
+          {% if instructorsuccess == 'true' %}
+            <h3 style="margin-top: 0px">
+                Thanks {{ first_name }}! Your message has been sent.
+            </h3>
+            <h3>
+                Someone will contact you as soon as possible.
+            </h3>
+            <h3>
+                Thank you for your interest in ArmaLaser.
+            </h3>
+            <br><br><br><br>
+          {% endif %}
+
+
+          {% if acct_activated == 'true' %}
+            <h3 style="margin-top: 0px">
+                 {{ acct_activated1|raw }}
+            </h3>
+            <h3>
+                {{ acct_activated3|raw }}
+            </h3>
+            <h3>
+                Thank you for your interest in ArmaLaser.
+            </h3>
+            <br><br><br><br>
+          {% endif %}
+
+
+          {% if success_registration == 'true' %}
+            <h3 style="margin-top: 0px">
+                 {{ success_registration1|raw }}
+            </h3>
+            <h3>
+                {{ success_registration2|raw }}
+            </h3>
+            <h3>
+                Thank you for your interest in ArmaLaser.
+            </h3>
+            <br><br><br><br>
+          {% endif %}
+
+
+          {% if partner_register_success == 'true' %}
+            <h3 style="margin-top: 0px">
+                 {{ register_success1|raw }}
+            </h3>
+            <h3>
+                {{ register_success3|raw }}
+            </h3>
+            <br>
+            <h4>
+                {{ register_success2|raw }}
+            </h4>
+            <br><br><br><br>
+          {% endif %}
+
+
+          {% if temp_pass_sent == 'true' %}
+            <h3 style="margin-top: 0px">
+                 {{ message|raw }}
+            </h3>
+            <h3>
+                Thank you!
+            </h3>
+            <br><br><br><br>
+          {% endif %}
+
+
+          {% if purchase == 'true' %}
+            <h3 style="margin-top: 0px">
+                Thank you {{ first_name }} {{ last_name }}!
+            </h3>
+            <h3>
+                Your purchase was successful.
+            </h3>
+            <h3>
+                Please check your email for your order summary.
+            </h3>
+            <h3>
+                Thank you!
+            </h3>
+            <br><br><br><br>
+          {% endif %}
+
+      </div>
+
+      <div class="col-md-4">
+
+      </div><!-- // .col-md-4  -->
+
+
+    </div>
+</div>
+{% endblock %}
+
+{% block bottomjs %}
+
+{% endblock %}

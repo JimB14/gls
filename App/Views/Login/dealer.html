@@ -1,0 +1,89 @@
+{% extends 'base.html' %}
+
+{% block title %}
+  Dealer Login | ArmaLaser
+{% endblock %}
+
+
+{% block css %}
+{% endblock %}
+
+
+{% block outsidecontainer %}
+{% endblock %}
+
+
+{% block content %}
+<div class="container" style="margin-bottom: 180px;">
+    <div class="row">
+        <div class="col-md-8 col-center-block">
+
+            {% if timeout and timeout == 'timeout' %}
+               <div style="margin-top: 15px;" class="alert alert-danger text-center">
+                  <p style="padding-top: 10px;">{{ timeout_msg|raw }}</p>
+               </div>
+            {% elseif question and question == 'notloggedin' %}
+               <div style="margin-top: 15px;" class="alert alert-danger text-center">
+                  <p style="padding-top: 10px;">{{ q_msg|raw }}</p>
+               </div>
+            {% endif %}
+
+            {% if pagetitle %}
+                <h2>
+                    {{ pagetitle }}
+                    {% if action and action == 'newpassword' %}
+                        <span>with new password</span>
+                    {% endif %}
+                </h2>
+            {% endif %}
+
+            <div class="panel panel-default">
+                <div class="panel-body" style="padding:20px 40px;">
+                    {% if session.loginerror %}
+                      {% include 'Error/errormessage.html' %}
+                    {% endif %}
+                    <form name="loginpartnerform" id="loginpartnerform" action="/admin/dealer/process-login"
+                        method="post" class="form-horizontal">
+
+                        <div class="form-group">
+                            <label for="email" class="control-label">
+                                Email
+                            </label>
+                            <input type="email" class="form-control email required" name="email"
+                                id="email" placeholder="user@example.com" autofocus>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="password" class="control-label">
+                                Password
+                            </label>
+                            <input type="password" class="form-control required" name="password"
+                                id="password" placeholder="Password">
+                        </div>
+
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-buy btn-lg btn-block">Sign in</button>
+                        </div>
+
+                     </form>
+
+                    <div style="margin-top:-10px;font-size:90%;margin-bottom: 20px;">
+                        <a class="pull-left" href="/admin/dealer/get-new-password">Forgot password</a>
+                    </div>
+
+                </div><!--  // .panel-body  -->
+            </div><!--  // .panel  -->
+        </div><!--  // .col-md-8  -->
+
+    </div>
+</div>
+{% endblock %}
+
+
+{% block bottomjs %}
+<script>
+$(document).ready(function(){
+    $("#loginpartnerform").validate();
+});
+</script>
+{% endblock %}

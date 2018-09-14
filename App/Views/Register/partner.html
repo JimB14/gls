@@ -1,0 +1,397 @@
+{% extends 'base.html' %}
+
+{% block title %}
+  Partner Registration | ArmaLaser
+{% endblock %}
+
+
+{% block css %}
+<style>
+.glyphicon-remove {
+    color: #ff0000;
+}
+.glyphicon-ok {
+    color: #228b22;
+}
+.help-block {
+    color: #ff0000 !important;
+}
+</style>
+{% endblock %}
+
+
+{% block outsidecontainer %}
+{% endblock %}
+
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-8">
+          <h2>{{ pagetitle }}</h2>
+            <div class="panel panel-default">
+                <div class="panel-body" style="padding:20px 32px;">
+
+                    <h4 style="color: #838383;">
+                        *Please provide the following information to create
+                        your account. Make sure you have the correct Authorization
+                        Code.
+                    </h4>
+                    <p><i>*All fields are required.</i></p>
+                    <!--  Display results from ajax_processing/  -->
+                    <div id="message"></div>
+
+                    {% if success %}
+                    <div class="alert alert-success alert-padding">{{ success }}</div>
+                    {% endif %}
+
+                    <form name="partnerregistrationform" id="partnerregistrationform"
+                        action="/register/register-new-partner" method="post">
+
+                       <!-- honeypot -->
+                       <input type="hidden" name="honeypot_register" id="honeypot_register">
+                       <input type="hidden" name="type" value="partner">
+
+                        <div class="form-group has-feedback">
+                            <label for="partner_email" class="control-label">
+                              Email
+                            </label>
+                            <input type="email" class="form-control email" name="partner_email"
+                                id="partner_email" placeholder="user@example.com"
+                                value="{{ partner_email }}" autofocus>
+                                <span class="glyphicon form-control-feedback" id="partner_email1"></span>
+                                <help><i>*Important! All correspondence from ArmaLaser will be directed to this email address</i></help>
+                        </div>
+
+                        <div class="form-group has-feedback">
+                            <label for="partner_confirm_email" class="control-label">
+                                Confirm email
+                            </label>
+                            <input type="email" class="form-control" name="partner_confirm_email"
+                                id="partner_confirm_email" placeholder="user@example.com" value="{{ partner_confirm_email2 }}">
+                                <span class="glyphicon form-control-feedback" id="partner_confirm_email1"></span>
+                        </div>
+
+                        <div class="form-group has-feedback">
+                            <label for="partner_first_name" class="control-label">
+                                First name
+                            </label>
+                            <input type="text" class="form-control" name="partner_first_name"
+                                id="partner_first_name" placeholder="First name" value="{{ partner_first_name }}">
+                                <span class="glyphicon form-control-feedback" id="partner_first_name1"></span>
+                        </div>
+
+                        <div class="form-group has-feedback">
+                            <label for="partner_last_name" class="control-label">
+                              Last name
+                            </label>
+                            <input type="text" class="form-control" name="partner_last_name"
+                                id="partner_last_name" placeholder="Last name" value="{{ partner_last_name }}">
+                                <span class="glyphicon form-control-feedback" id="partner_last_name1"></span>
+                        </div>
+
+                        <div class="form-group has-feedback">
+                            <label for="partner_company" class="control-label">
+                              Company
+                            </label>
+                            <input type="text" class="form-control" name="partner_company"
+                                id="partner_company" placeholder="Company name" value="{{ partner_company }}">
+                                <span class="glyphicon form-control-feedback" id="partner_company1"></span>
+                        </div>
+
+                        <div class="form-group has-feedback">
+                            <label for="partner_phone" class="control-label">
+                              Telephone
+                            </label>
+                            <input type="text" class="form-control" name="partner_phone"
+                                id="partner_phone" placeholder="Telephone" value="{{ partner_phone }}">
+                                <span class="glyphicon form-control-feedback" id="partner_phone1"></span>
+                        </div>
+
+                        <div class="form-group has-feedback">
+                            <label for="partner_address" class="control-label">
+                              Address
+                            </label>
+                            <input type="text" class="form-control" name="partner_address"
+                                id="partner_address" placeholder="Address" value="{{ partner_address }}">
+                                <span class="glyphicon form-control-feedback" id="partner_address1"></span>
+                        </div>
+
+                        <div class="form-group has-feedback">
+                            <label for="partner_city" class="control-label">
+                              City
+                            </label>
+                            <input type="text" class="form-control" name="partner_city"
+                                id="partner_city" placeholder="City" value="{{ partner_city }}">
+                                <span class="glyphicon form-control-feedback" id="partner_city1"></span>
+                        </div>
+
+                        <div class="form-group has-feedback">
+                            <label for="partner_state">State</label>
+                            <select class="form-control required" id="partner_state" name="partner_state">
+                                <option value="">Select state</option>
+                                {% for state in states %}
+                                    <option value="{{ state.name}}">{{ state.name }}</option>
+                                {% endfor %}
+                            </select>
+                            <span class="glyphicon form-control-feedback" id="partner_state1"></span>
+                        </div>
+
+                        <div class="form-group has-feedback">
+                            <label for="partner_zip" class="control-label">
+                              Zip code
+                            </label>
+                            <input type="text" class="form-control" name="partner_zip"
+                                id="partner_zip" placeholder="Zip code" value="{{ partner_zip }}">
+                                <span class="glyphicon form-control-feedback" id="partner_zip1"></span>
+                        </div>
+
+                        <!-- <div class="form-group has-feedback">
+                            <label for="partner_website" class="control-label">
+                              Website
+                            </label>
+                            <input type="text" class="form-control" name="partner_website"
+                                id="partner_website" placeholder="e.g. www.mywebsite.com or mywebsite.com"
+                                    value="{# partner_website #}">
+                                <span class="glyphicon form-control-feedback" id="partner_website1"></span>
+                                <help><i>*Check carefully for spelling errors</i></help>
+                        </div> -->
+
+                        <div class="form-group has-feedback">
+                            <label for="partner_password" class="control-label">
+                              Password (<small>Minimum 6 characters</small>)
+                            </label>
+                            <input type="password" class="form-control" name="partner_password"
+                                id="partner_password" placeholder="Password - minimum 6 characters">
+                                <span class="glyphicon form-control-feedback" id="partner_password1"></span>
+                        </div>
+
+                        <div class="form-group has-feedback">
+                            <label for="partner_confirm_password" class="control-label">
+                                Confirm password
+                            </label>
+                            <input type="password" class="form-control" name="partner_confirm_password"
+                                id="partner_confirm_password" placeholder="Verify password">
+                                <span class="glyphicon form-control-feedback" id="partner_confirm_password1"></span>
+                        </div>
+
+                        <div class="form-group has-feedback">
+                            <label for="partner_auth_code" class="control-label">
+                              Authorization code
+                            </label>
+                            <input type="text" class="form-control" name="partner_auth_code"
+                                id="partner_auth_code" placeholder="Authorization code"
+                                    value="{{ partner_auth_code }}">
+                                <span class="glyphicon form-control-feedback" id="partner_auth_code1"></span>
+                        </div>
+
+                        <div class="form-group has-feedback">
+                            <div class="checkbox">
+                                <label for="agree">
+                                    <input type="checkbox" name="agree" id="agree">
+                                        I agree to the Terms.
+                                    <a href="/terms/terms-of-use">
+                                        Read terms
+                                    </a>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="form-group has-feedback">
+                            <button id="registerBtn" type="submit" class="btn btn-lg btn-buy btn-block">
+                                Register
+                            </button>
+                        </div>
+                    </form>
+
+                </div><!--  // .panel-body  -->
+            </div><!--  // .panel  -->
+        </div><!-- // .col-md-8  -->
+
+        <div class="col-md-4">
+
+        </div><!-- // .col-md-4  -->
+
+    </div>
+</div>
+{% endblock %}
+
+
+{% block bottomjs %}
+
+<script>
+$(document).ready(function(){
+
+    $("#partnerregistrationform").validate({
+        rules: {
+            partner_email: {
+                required: true,
+                email: true
+            },
+            partner_confirm_email: {
+                equalTo: "#partner_email"
+            },
+            partner_first_name: {
+                minlength: 2,
+                maxlength: 20,
+                required: true
+            },
+            partner_last_name: {
+                minlength: 2,
+                maxlength: 30,
+                required: true
+            },
+            partner_company: {
+                minlength: 5,
+                maxlength: 50,
+                required: true
+            },
+            partner_phone: {
+                required: true
+            },
+            partner_address: {
+                required: true
+            },
+            partner_city: {
+                required: true
+            },
+            partner_state: {
+                required: true
+            },
+            partner_zip: {
+                required: true
+            },
+            partner_passsword: {
+                minlength: 6,
+                maxlength: 10,
+                required: true
+            },
+            partner_confirm_password: {
+                equalTo: "#partner_password"
+            },
+            partner_auth_code: {
+                required: true
+            },
+            agree: "required"
+        },
+        messages: {
+            partner_email: {
+                required: "*Please enter your email address",
+                email: "*Please enter a valid email address"
+            },
+            partner_confirm_email: {
+                equalTo: "*Please enter the same email address"
+            },
+            partner_first_name: {
+                minlength: "*Please enter at least 2 characters",
+                maxlength: "*Please enter less than 20 characters",
+                required: "*Please enter your first name"
+            },
+            partner_last_name: {
+              minlength: "*Please enter at least 2 characters",
+              maxlength: "*Please enter less than 30 characters",
+              required: "*Please enter your last name"
+            },
+            partner_company: {
+              minlength: "*Please enter at least 5 characters",
+              maxlength: "*Please enter less than 50 characters",
+              required: "*Please enter your company name"
+            },
+            partner_phone: {
+                required: "*Please enter your telephone number"
+            },
+            partner_address: {
+                required: "*Please enter your address"
+            },
+            partner_city: {
+                required: "*Please enter your city"
+            },
+            partner_state: {
+                required: "*Please enter your state"
+            },
+            partner_zip: {
+                required: "*Please enter your zip code"
+            },
+            partner_password: {
+                minlength: "*Please enter at least 6 characters",
+                maxlength: "*Please enter up to 10 characters",
+                required: "*Please enter a password",
+            },
+            partner_confirm_password: {
+                equalTo: "*Please enter the same password"
+            },
+            partner_auth_code: {
+                required: "*Please enter your authorization code"
+            },
+            agree: "*Please accept our terms and conditions"
+        },
+        highlight: function(element) {
+            var id_attr = "#" + $( element ).attr("id") + "1";
+            $(element).closest('.form-group has-feedback').removeClass('has-success').addClass('has-error');
+            $(id_attr).removeClass('glyphicon-ok').addClass('glyphicon-remove');
+        },
+        unhighlight: function(element) {
+            var id_attr = "#" + $( element ).attr("id") + "1";
+            $(element).closest('.form-group has-feedback').removeClass('has-error').addClass('has-success');
+            $(id_attr).removeClass('glyphicon-remove').addClass('glyphicon-ok');
+        },
+        errorElement: 'span',
+            errorClass: 'help-block',
+            errorPlacement: function(error, element) {
+                if(element.length) {
+                    error.insertAfter(element);
+                } else {
+                error.insertAfter(element);
+                }
+            }
+     });
+
+
+  /* - - - - Check if email in db  - - - -  */
+
+    $("#partner_email").blur(function(){
+        var email = $( this ).val();
+        console.log(`email =  ${email}`);
+        console.log('index of @: ' + email.indexOf('@'));
+
+        // check for content and @
+        if (email !== '' || email.indexOf('@') > 0) {
+            $.ajax({
+                url: "/register/checkIfEmailAvailable",
+                type: 'POST',
+                data: {
+                  email: email,
+                  type: 'dealer'
+                },
+                cache: false,
+                success: function(data){
+                    var available = '<div class="alert alert-success alert-padding">';
+                    available += 'Email address is available!';
+                    available += '</div>';
+
+                    var not_available = '<div class="alert alert-danger alert-padding">';
+                    not_available += 'Sorry, the email address you entered is not available. If you are already registered, *Please <a href="/admin/dealer/login">log in</a>.';
+                    not_available += '</div>';
+
+                    if( data === 'available' ){
+                        $("#message").html(available);
+                    }
+                    else {
+                        $("#message").html(not_available);
+                    }
+                },
+                error: function(){
+                    alert("Ajax error occurred.");
+                }
+            });
+        }
+        // error with email address
+        // else {
+        //     alert("There is a problem with the email address you entered.");
+        //     return false;
+        // }
+    });
+
+});
+</script>
+{% endblock %}

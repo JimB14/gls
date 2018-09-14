@@ -1,0 +1,348 @@
+<script>
+// stops video when modal is hidden
+// resource:  https://stackoverflow.com/questions/13799377/twitter-bootstrap-modal-stop-youtube-video
+// modal
+$("#{{ model.id }}").on('hidden.bs.modal', function (e) {
+   $("#{{ model.id }} iframe").attr("src", $("#{{ model.id }} iframe").attr("src"));
+});
+
+// modal 2
+$("#{{ model.id }}").on('hidden.bs.modal', function (e) {
+   $("#{{ model.id }} iframe").attr("src", $("#{{ model.id }} iframe").attr("src"));
+});
+
+// modal 3
+$("#install-video").on('hidden.bs.modal', function (e) {
+   $("#install-video iframe").attr("src", $("#install-video iframe").attr("src"));
+});
+
+// modal 4
+$("#trseries-install-modal").on('hidden.bs.modal', function (e) {
+    $("#trseries-install-modal iframe").attr("src", $("#trseries-install-modal iframe").attr("src"));
+});
+</script>
+
+<script>
+$.noConflict();
+$(document).ready(function(){
+
+    // $("#fda_warning").hover(function(){
+    //     var hover = 'hovering';
+    //     console.log(hover);
+    //
+    //     $(this).css("cursor", "pointer");
+    //
+    //     $("#fda_warning_img").addClass('transition');
+    //
+    //  }, function(){
+    //       $("#fda_warning_img").removeClass('transition');
+    // });
+
+    /**
+     * changes value of src property in specificed selector (here #main)
+     * @param {String}     src     The new img path
+     */
+    function setImg(src) {
+        $("#main").attr("src", src);
+    }
+
+    // change cursor to pointer when hovering div holding image
+    $("#click-to-enlarge").hover(function(){
+        $(this).css("cursor", "pointer");
+        $(this).attr("title", "Click to enlarge");
+    });
+
+
+
+    $("#click-to-enlarge").click(function(){
+
+        // Get value of src attribute of img element
+        var src = $("#full-size-image img").attr("src");
+
+        console.log(src);
+
+        // Function assigns value of src variable (path to full-size image)
+        // to src attribute in #main, replacing current value
+        setImg(src);
+
+        $("#content,#footer-style,#bottom").hide();
+        $("#frame, #overlay").fadeIn();
+    });
+
+
+    $("#overlay, #main").hover(function(){
+        $(this).css("cursor", "pointer");
+        $(this).attr("title", "Click to return\nto previous page");
+    });
+
+
+    $("#overlay, #main").click(function(){
+
+       /*  Hide #frame and #overlay  when #overlay is clicked  */
+       $("#frame,#overlay").fadeOut();
+       $("#content,#footer-style,#bottom").fadeIn();
+    });
+
+
+
+    function setImg2(src){
+        $("#main2").attr("src", src);
+    }
+
+    $("#laser-features").hover(function(){
+        $(this).css("cursor", "pointer");
+        $(this).attr("title", "Click to See Features");
+    });
+
+    $("#laser-features").click(function(){
+
+        // Get image path of full-size image
+        var src = $("#laser-features img").attr("src");
+
+        // Function assigns value of src variable (path to full-size image)
+        // to src attribute in #main, replacing current value
+        setImg2(src);
+
+        $("#content,#footer-style,#bottom").hide();
+        $("#frame2, #overlay2").show();
+    });
+
+    $("#overlay2, #main2").hover(function(){
+        $(this).css("cursor", "pointer");
+        $(this).attr("title", "Click to return to previous page");
+    });
+
+
+    $("#overlay2, #main2").click(function(){
+
+       /*  Hide #frame and #overlay  when #overlay is clicked  */
+       $("#frame2,#overlay2").fadeOut();
+       $("#content,#footer-style,#bottom").fadeIn();
+    });
+
+
+    // resource:  http://www.codebelt.com/jquery/open-new-browser-window-with-jquery-custom-size/
+    //https://www.codeofaninja.com/2011/04/how-to-center-screen-pop-up-window-with.html
+    $(".newWindow").click(function(event){
+        event.preventDefault();
+
+        var url = $(this).attr("href");
+        var windowName = "popUp";
+        var windowWidth = 700;
+        var windowHeight = 700;
+        var windowLeft = parseInt((screen.availWidth/2) - (windowWidth/2));
+        var windowTop = parseInt((screen.availHeight/2) - (windowHeight/2));
+        var windowSize = "menubar=no,resizable=yes,width=700,height=700,scrollbars=yes,left=" + windowLeft + ",top=" + windowTop + ",screenX=" + windowLeft + ",screenY=" + windowTop;
+
+        window.open(url, windowName, windowSize);
+    });
+
+
+   // show reverse of image
+   $(".product-details-holster-show-reverse-image a").on("click", function(){
+      // get holster id
+      var id = $(".product-details-holster-show-reverse-image").attr('id');
+      var text = $(this).text();
+
+      // check data
+      console.log(id);
+      console.log(text);
+
+      if(text === '*Image shown is right-hand version. Click to flip image.'){
+
+         $.ajax({
+            url: `/holsters/get-reverse-image-med/${id}`,
+            type: 'GET',
+            data: { id: id },
+            dataType: 'JSON',
+            success: function(data){
+
+               // console.log(data.image_med_reverse);
+               // console.log(data.image_med);
+
+               var reverseImage = data.image_med_reverse;
+               var origImage = data.image_med;
+
+               console.log("User wants to see reverse image.");
+               console.log('=============================');
+               console.log(`Reverse image: ${reverseImage}`);
+               console.log(`Original image: ${origImage}`);
+
+
+               // delete image sources
+               $('picture source').remove();
+
+               // replace image with reverse image
+               $("#product-details-holster-image img").attr("src", "/assets/images/page/holsters/"+reverseImage);
+
+               // change text
+               $(".product-details-holster-show-reverse-image a").text("*Image flipped to represent left-hand version. Click to restore original image.");
+
+            },
+            error: function(request, error){
+               alert("Sorry, an error occurred during the Ajax request.");
+               return false;
+            }
+         });
+      }
+      if(text === '*Image flipped to represent left-hand version. Click to restore original image.') {
+
+         $.ajax({
+            url: `/holsters/get-reverse-image-med/${id}`,
+            type: 'GET',
+            data: { id: id },
+            dataType: 'JSON',
+            success: function(data){
+
+               // console.log(data.image_med_reverse);
+               // console.log(data.image_med);
+
+               var reverseImage = data.image_med_reverse;
+               var origImage = data.image_med;
+
+               console.log("User wants to restore original image.");
+               console.log('=============================');
+               console.log(`Reverse image: ${reverseImage}`);
+               console.log(`Original image: ${origImage}`);
+               // console.log(text);
+
+               // check value
+               // console.log(text);
+               // console.log(`Original image: ${origImage}`);
+
+               // delete image sources
+               $('picture source').remove();
+
+               // restore old image
+               $("#product-details-holster-image img").attr("src", "/assets/images/page/holsters/"+origImage);
+
+               // change text
+               $(".product-details-holster-show-reverse-image a").text("*Image shown is right-hand version. Click to flip image.");
+
+            },
+            error: function(request, error){
+               alert("Sorry, an error occurred during the Ajax request.");
+               return false;
+            }
+         });
+      }
+   });
+
+
+   // Resource: http://jsfiddle.net/H7uar/604/
+   $(function() {
+      var iframe = $('<iframe frameborder="0" width="100%" height="100%" allowfullscreen></iframe> <a target="_blank">Click here if web page does not appear</a> ');
+      var windowWidth = $(window).width();
+      var dialogWidth = windowWidth * .8;
+      var windowHeight = $(window).height();
+      var dialogHeight = windowHeight * .7;
+      var dialog = $("#modal-holster").append(iframe).appendTo("body").dialog({
+         autoOpen: false,
+         modal: true,
+         resizable: true,
+         draggable: true,
+         width: dialogWidth,
+         height: dialogHeight,
+         show: {
+            effect: 'blind',
+            times: 3,
+            delay: 0,
+            duration: 1000
+         },
+         buttons: {
+            Close: function() {
+               iframe.attr('src', '');
+               iframe.attr('href', '');
+               $("#modal-holster").dialog({
+                  hide: {
+                     effect: 'explode',
+                     pieces: 9,
+                     duration: 1500
+                  }
+               })
+               .dialog('close');
+            }
+         }
+      });
+
+      $("#holster-learn-more").on("click", function(e) {
+         e.preventDefault();
+         console.log("holster-learn-more just clicked.");
+         var src = $(this).attr('href');
+         var mfr = $(this).attr('data-mfr');
+         var model = $(this).attr('data-model');
+         console.log(src);
+         console.log(mfr);
+         console.log(model);
+         iframe.attr({
+            mfr: mfr,
+            model: model,
+            src: src,
+            href: src    // pass for a href value
+         });
+         dialog.dialog({ title: 'Learn more about ' + mfr + ' ' + model + ' holster' }).dialog('open');
+         return false;
+      });
+
+   });
+
+
+
+   $(function() {
+      var iframe = $('<iframe frameborder="0" width="100%" height="100%" allowfullscreen></iframe> <p><a target="_blank">Click here if web page does not appear</a></p> ');
+      var windowWidth = $(window).width();
+      var dialogWidth = windowWidth * .8;
+      var windowHeight = $(window).height();
+      var dialogHeight = windowHeight * .7;
+      var dialog = $("#modal-holster-video").append(iframe).appendTo("body").dialog({
+         autoOpen: false,
+         modal: true,
+         resizable: true,
+         draggable: true,
+         width: dialogWidth,
+         height: dialogHeight,
+         show: {
+            effect: 'blind',
+            times: 3,
+            delay: 0,
+            duration: 1000
+         },
+         buttons: {
+            Close: function() {
+               iframe.attr('src', '');
+               iframe.attr('href', '');
+               $("#modal-holster-video").dialog({
+                  hide: {
+                     effect: 'explode',
+                     pieces: 9,
+                     duration: 1500
+                  }
+               })
+               .dialog('close');
+            }
+         }
+      });
+
+      $("#holster-video").on("click", function(e) {
+         e.preventDefault();
+         console.log("holster-video just clicked.");
+         var src = $(this).attr('href');
+         var mfr = $(this).attr('data-mfr');
+         var model = $(this).attr('data-model');
+         console.log(src);
+         console.log(mfr);
+         console.log(model);
+         iframe.attr({
+            mfr: mfr,
+            model: model,
+            src: src,
+            href: src    // pass for a href value
+         });
+         dialog.dialog({ title: mfr + ' holster video' }).dialog('open');
+         return false;
+      });
+
+   });
+
+});
+</script>

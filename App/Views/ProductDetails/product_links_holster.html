@@ -1,0 +1,72 @@
+<!-- - - - - - - - - - - -  PRODUCT LINKS  - - - - - - - - - - - - - - -->
+{% if holster %}
+    <div class="row">
+        <div class="col-md-12 col-sm-12">
+            <div style="border: 2px solid #efefef; margin-bottom: 20px;"></div>
+        </div>
+
+        {% if holster.mfr_href_video %}
+            <div class="col-lg-2 col-md-3 col-sm-4 col-xs-6">
+                <div class="product-links-img-box">
+                   <h3>VIDEO:</h3>
+
+                    <a id="holster-video" data-mfr="{{ holster.holsterMfr }}" data-model="{{ holster.holster_model }}" href="{{ holster.mfr_href_video }}"  title="Watch {{ holster.holsterMfr }} &#10;IWB holster video">
+                        <img src="/assets/images/page/holsters/{{ holster.thumb }}" alt="custom laster-fit holsters for ArmaLaser equipped concealed carry pistols">
+                        <span style="display:block">
+                            {{ holster.mfr|raw }}® {{ holster.holster_model }}
+                        </span>
+                    </a>
+                </div>
+            </div>
+        {% endif %}
+
+
+        {% if holster.mfr_href %}
+            <div class="col-lg-2 col-md-3 col-sm-4 col-xs-6">
+                <div class="product-links-img-box">
+                    <h3>LEARN MORE:</h3>
+                    <!-- <a class="{% if holster.mfr_href %}newWindow{% endif %}" href="{% if holster.mfr_href %}{{ holster.mfr_href }}{% else %}/holsters{% endif %}" title="{% if holster.mfr_href %}Learn more about &#10;{% if holster.model %}{{ holster.model }}{% else %}this holster {% endif %} &#10;at {{ holster.mfr }}'s &#10;Website{% else %}Learn more about&#10;Laser-Fit™ Holsters{% endif %}"> -->
+                    <a id="holster-learn-more" data-mfr="{{ holster.holsterMfr }}" data-model="{{ holster.holster_model }}" href="{% if holster.mfr_href %}{{ holster.mfr_href }}{% else %}/holsters{% endif %}"  title="{% if holster.mfr_href %}Learn more about &#10;{% if holster.holster_model %}{{ holster.holster_model }}{% else %}this holster {% endif %} &#10;at {{ holster.holsterMfr }}'s &#10;Website{% else %}Learn more about&#10;Laser-Fit™ Holsters{% endif %}">
+                        <img src="/assets/images/page/holsters/{{ holster.thumb }}" alt="custom laster-fit holsters for ArmaLaser equipped concealed carry pistols">
+                        <span style="display:block">
+                            {{ holster.holsterMfr|raw }} {{ holster.holster_model|raw }}
+                        </span>
+                    </a>
+                </div>
+            </div>
+        {% endif %}
+
+
+        {% if holster.laser_thumb %}
+            <div class="col-lg-2 col-md-3 col-sm-4 col-xs-6">
+                <div class="product-links-img-box">
+                  <h3>LINK:</h3>
+                    <a href="/{{ holster.pistolMfr }}/{{ holster.slug }}/tr-series/{{ holster.trseries_id }}/{{ holster.trseries_model }}"
+                        title="See {{ holster.trseries_model|upper }} Laser">
+                        <img src="/assets/images/laser-pistol/{{ holster.trseries_model|trim('g') }}/{{ holster.laser_thumb }}" alt="ArmaLaser {{ holster.trseries_model }} laser for {{ holster.pistolMfr }} {{ holster.pistol_models }}">
+                        <span style="display:block">
+                            Red Beam Version
+                        </span>
+                    </a>
+                </div>
+            </div>
+        {% endif %}
+
+
+        {% if holster.laser_thumb %}
+            <div class="col-lg-2 col-md-3 col-sm-4 col-xs-6">
+               <div class="product-links-img-box">
+                    <h3>LINK:</h3>
+                    <a href="/{{ holster.pistolMfr }}/{{ holster.slug }}/tr-series/{{ holster.trseries_id + 1 }}/{{ holster.trseries_model }}g"
+                        title="See {{ holster.trseries_model|upper }}G Laser">
+                        <img src="/assets/images/laser-pistol/{{ holster.trseries_model|trim('g') }}/{{ holster.alt_color_thumb }}" alt="ArmaLaser {{ holster.trseries_model }} laser for {{ holster.pistolMfr }} {{ holster.pistol_models }}">
+                        <span style="display:block">
+                            Green Beam Version
+                        </span>
+                    </a>
+                </div>
+            </div>
+        {% endif %}
+
+    </div><!-- // .row -->
+{% endif %}

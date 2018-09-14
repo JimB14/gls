@@ -1,0 +1,396 @@
+{% extends 'base-admin.html' %}
+
+{% block title %}
+  Add Dealer | ArmaLaser
+{% endblock %}
+
+{% block css %}
+<style>
+.form-control:focus {
+  border-color: transparent !important;
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(255, 0, 0, 0.6);
+}
+
+.glyphicon-remove {
+    color: #ff0000;
+}
+.glyphicon-ok {
+    color: #228b22;
+}
+.help-block {
+    color: #ff0000 !important;
+}
+</style>
+{% endblock %}
+
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div id="dashboard-toggle" class="col-md-8" style="margin-top:-20px;margin-left:254px;margin-bottom: 80px;">
+
+          <h2>Add Dealer</h2>
+          <p style="font-size: 15px;"><<<a href="/admin/dealers/get-dealers"> All dealers</a></p>
+          <hr>
+
+              <form name="add-dealer-form" id="add-dealer-form" class="form-horizontal"
+                  action="/admin/dealers/post-dealer" method="post" >
+
+                 <!-- honeypot -->
+                 <input type="hidden" name="honeypot_register" id="honeypot_register">
+                 <input type="hidden" name="type" value="dealer">
+
+                 <div class="form-group has-feedback">
+                     <label for="dealer_company" class="control-label col-sm-2">
+                       Company
+                     </label>
+                     <div class="col-sm-8">
+                         <input type="text" class="form-control" name="dealer_company"
+                             id="dealer_company" placeholder="Company name" autofocus>
+                             <span class="glyphicon form-control-feedback" id="dealer_company1"></span>
+                             <help><i>*How company will display on website.</i></help>
+                     </div>
+                 </div>
+
+                  <div class="form-group has-feedback">
+                      <label for="dealer_first_name" class="control-label col-sm-2">
+                          First name
+                      </label>
+                      <div class="col-sm-8">
+                          <input type="text" class="form-control" name="dealer_first_name"
+                              id="dealer_first_name" placeholder="First name">
+                              <span class="glyphicon form-control-feedback" id="dealer_first_name1"></span>
+                      </div>
+                  </div>
+
+                  <div class="form-group has-feedback">
+                      <label for="dealer_last_name" class="control-label col-sm-2">
+                        Last name
+                      </label>
+                      <div class="col-sm-8">
+                          <input type="text" class="form-control" name="dealer_last_name"
+                              id="dealer_last_name" placeholder="Last name">
+                              <span class="glyphicon form-control-feedback" id="dealer_last_name1"></span>
+                      </div>
+                  </div>
+
+                  <div class="form-group has-feedback">
+                      <label for="dealer_email" class="control-label col-sm-2">
+                        Email
+                      </label>
+                      <div class="col-sm-8">
+                          <input type="email" class="form-control email" name="dealer_email"
+                              id="dealer_email" placeholder="user@example.com">
+                              <span class="glyphicon form-control-feedback" id="dealer_email1"></span>
+                              <help><i>*Serves also as login credential</i></help>
+                      </div>
+                  </div>
+
+                  <div class="form-group has-feedback">
+                      <label for="dealer_confirm_email" class="control-label col-sm-2">
+                          Confirm email
+                      </label>
+                      <div class="col-sm-8">
+                          <input type="email" class="form-control" name="dealer_confirm_email"
+                              id="dealer_confirm_email" placeholder="user@example.com">
+                              <span class="glyphicon form-control-feedback" id="dealer_confirm_email1"></span>
+                      </div>
+                  </div>
+
+                  <div class="form-group has-feedback">
+                      <label for="dealer_phone" class="control-label col-sm-2">
+                        Telephone
+                      </label>
+                      <div class="col-sm-8">
+                          <input type="text" class="form-control" name="dealer_phone"
+                              id="dealer_phone" placeholder="Telephone">
+                              <span class="glyphicon form-control-feedback" id="dealer_phone1"></span>
+                      </div>
+                  </div>
+
+                  <div class="form-group has-feedback">
+                      <label for="dealer_address" class="control-label col-sm-2">
+                        Address
+                      </label>
+                      <div class="col-sm-8">
+                          <input type="text" class="form-control" name="dealer_address"
+                              id="dealer_address" placeholder="Address">
+                              <span class="glyphicon form-control-feedback" id="dealer_address1"></span>
+                              <help><i>*Will ship <u>only</u> to this address.</i></help>
+                      </div>
+                  </div>
+
+                  <div class="form-group has-feedback">
+                      <label for="dealer_city" class="control-label col-sm-2">
+                        City
+                      </label>
+                      <div class="col-sm-8">
+                          <input type="text" class="form-control" name="dealer_city"
+                              id="dealer_city" placeholder="City">
+                              <span class="glyphicon form-control-feedback" id="dealer_city1"></span>
+                      </div>
+                  </div>
+
+                  <div class="form-group has-feedback">
+                      <label for="dealer_state"  class="control-label col-sm-2">State</label>
+                      <div class="col-sm-8">
+                          <select class="form-control required" id="dealer_state" name="dealer_state">
+                              <option value="">Select state</option>
+                              {% for state in states %}
+                                  <option value="{{ state.abbrev }}">{{ state.name }}</option>
+                              {% endfor %}
+                          </select>
+                          <span class="glyphicon form-control-feedback" id="dealer_state1"></span>
+                      </div>
+                  </div>
+
+                  <div class="form-group has-feedback">
+                      <label for="dealer_zip" class="control-label col-sm-2">
+                        Zip code
+                      </label>
+                      <div class="col-sm-8">
+                          <input type="text" class="form-control" name="dealer_zip"
+                              id="dealer_zip" placeholder="Zip code">
+                              <span class="glyphicon form-control-feedback" id="dealer_zip1"></span>
+                      </div>
+                  </div>
+
+                  <div class="form-group has-feedback">
+                      <label for="dealer_website" class="control-label col-sm-2">
+                        Website
+                      </label>
+                      <div class="col-sm-8">
+                          <input type="text" class="form-control" name="dealer_website"
+                              id="dealer_website" placeholder="e.g. www.mywebsite.com or mywebsite.com">
+                              <span class="glyphicon form-control-feedback" id="dealer_website1"></span>
+                              <help><i>*Check carefully for spelling errors</i></help>
+                      </div>
+                  </div>
+
+                  <div class="form-group has-feedback">
+                      <label for="dealer_map_url" class="control-label col-sm-2">
+                        Map URL
+                      </label>
+                      <div class="col-sm-8">
+                          <input type="text" class="form-control" name="dealer_map_url"
+                              id="dealer_map_url" placeholder="">
+                              <span class="glyphicon form-control-feedback" id="dealer_map_url1"></span>
+                              <help>
+                                  <span style="padding-right: 20px;">
+                                      *<a class="newWindow" href="https://www.google.com/maps/place/{{ dealer.address }}+{{ dealer.city }}+{{ dealer.state }}+{{ dealer.zip }}" title="Search on Google">
+                                          Search address on Google Maps
+                                      </a>
+                                      <span>(Click "SHARE" then "COPY LINK" to copy shortened URL)</span>
+                                  </span>
+                                  <br>
+                                  <span>
+                                      *<a class="newWindow" href="https://bitly.com/" title="Go to Bitly" target="_blank">
+                                          Option: Shorten URL @ Bitly.com where URLs can be saved in your account (free)
+                                      </a>
+                                  </span>
+                              </help>
+                      </div>
+                  </div>
+
+                  <div class="form-group has-feedback">
+                      <label for="dealer_password" class="control-label col-sm-2">
+                        Password
+                      </label>
+                      <div class="col-sm-8">
+                          <input type="password" class="form-control" name="dealer_password"
+                              id="dealer_password" placeholder="Serves as temporary password, e.g. 123456">
+                              <span class="glyphicon form-control-feedback" id="dealer_password1"></span>
+                              <help><i>*Dealer can change password by using "Forgot Password" link on Dealer Login page</i></help>
+                      </div>
+                  </div>
+
+                  <div class="form-group has-feedback">
+                      <label for="dealer_confirm_password" class="control-label col-sm-2">
+                          Verify password
+                      </label>
+                      <div class="col-sm-8">
+                          <input type="password" class="form-control" name="dealer_confirm_password"
+                              id="dealer_confirm_password" placeholder="Verify password">
+                              <span class="glyphicon form-control-feedback" id="dealer_confirm_password1"></span>
+                      </div>
+                  </div>
+
+                  <div class="form-group has-feedback">
+                      <label for="dealer_auth_code" class="control-label col-sm-2">
+                        Authorization code
+                      </label>
+                      <div class="col-sm-8">
+                          <input type="text" class="form-control" name="dealer_auth_code"
+                              id="dealer_auth_code" placeholder="Dealer authorization code">
+                              <span class="glyphicon form-control-feedback" id="dealer_auth_code1"></span>
+                      </div>
+
+                  </div>
+
+                  <div class="col-sm-offset-2 col-sm-8">
+                      <button style="display:inline-block; margin-bottom: 10px;"
+                          id="registerBtn" type="submit" class="btn btn-lg btn-buy">
+                          Register
+                      </button>
+                      <p>
+                          *After submission, the dealer account will be activated.
+                          At first login, the dealer will be taken to the security
+                          questions page to complete the registration.
+                      </p>
+                  </div>
+              </form>
+
+
+          </div><!--  // .col-md-8  -->
+          <div class="col-md-4"></div>
+      </div><!--  // .row  -->
+</div><!--  // .container  -->
+{% endblock %}
+
+
+{% block bottomjs %}
+<script>
+
+    let form = document.getElementById("add-dealer-form");
+    form.addEventListener('focus', function(event) {
+        event.target.style.boxShadow = '0 0 1px 1px #ffa500';
+    }, true);
+    form.addEventListener('blur', function(event) {
+        event.target.style.boxShadow = '';
+    }, true);
+
+$(document).ready(function(){
+
+    $("#add-dealer-form").validate({
+        rules: {
+            dealer_email: {
+                required: true,
+                email: true
+            },
+            dealer_confirm_email: {
+                equalTo: "#dealer_email"
+            },
+            dealer_first_name: {
+                minlength: 2,
+                maxlength: 20,
+                required: true
+            },
+            dealer_last_name: {
+                minlength: 2,
+                maxlength: 30,
+                required: true
+            },
+            dealer_company: {
+                minlength: 5,
+                maxlength: 50,
+                required: true
+            },
+            dealer_phone: {
+                required: true
+            },
+            dealer_address: {
+                required: true
+            },
+            dealer_city: {
+                required: true
+            },
+            dealer_state: {
+                required: true
+            },
+            dealer_zip: {
+                required: true
+            },
+            dealer_passsword: {
+                minlength: 6,
+                maxlength: 10,
+                required: true
+            },
+            dealer_confirm_password: {
+                equalTo: "#dealer_password"
+            },
+            dealer_auth_code: {
+                required: true
+            },
+            agree: "required"
+        },
+        messages: {
+            dealer_email: {
+                required: "*Please enter an email address",
+                email: "*Please enter a valid email address"
+            },
+            dealer_confirm_email: {
+                equalTo: "*Please enter the same email address"
+            },
+            dealer_first_name: {
+                minlength: "*Please enter at least 2 characters",
+                maxlength: "*Please enter less than 20 characters",
+                required: "*Please enter the first name"
+            },
+            dealer_last_name: {
+              minlength: "*Please enter at least 2 characters",
+              maxlength: "*Please enter less than 30 characters",
+              required: "*Please enter the last name"
+            },
+            dealer_company: {
+              minlength: "*Please enter at least 5 characters",
+              maxlength: "*Please enter less than 50 characters",
+              required: "*Please enter the company name"
+            },
+            dealer_phone: {
+                required: "*Please enter a telephone number"
+            },
+            dealer_address: {
+                required: "*Please enter an address"
+            },
+            dealer_city: {
+                required: "*Please enter a city"
+            },
+            dealer_state: {
+                required: "*Please enter a state"
+            },
+            dealer_zip: {
+                required: "*Please enter a zip code"
+            },
+            dealer_password: {
+                minlength: "*Please enter at least 6 characters",
+                maxlength: "*Please enter up to 10 characters",
+                required: "*Please enter a password",
+            },
+            dealer_confirm_password: {
+                equalTo: "*Please enter the same password"
+            },
+            dealer_auth_code: {
+                required: "*Please enter the dealer authorization code"
+            },
+            agree: "*Please accept our terms and conditions"
+        },
+        highlight: function(element) {
+            var id_attr = "#" + $( element ).attr("id") + "1";
+            $(element).closest('.form-group has-feedback').removeClass('has-success').addClass('has-error');
+            $(id_attr).removeClass('glyphicon-ok').addClass('glyphicon-remove');
+        },
+        unhighlight: function(element) {
+            var id_attr = "#" + $( element ).attr("id") + "1";
+            $(element).closest('.form-group has-feedback').removeClass('has-error').addClass('has-success');
+            $(id_attr).removeClass('glyphicon-remove').addClass('glyphicon-ok');
+        },
+        errorElement: 'span',
+            errorClass: 'help-block',
+            errorPlacement: function(error, element) {
+                if(element.length) {
+                    error.insertAfter(element);
+                } else {
+                error.insertAfter(element);
+                }
+            }
+     });
+
+
+
+
+});
+
+
+</script>
+
+{% endblock %}

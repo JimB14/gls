@@ -1,0 +1,191 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Subscribe | ABT
+{% endblock %}
+
+{% block metadescription %}
+
+{% endblock %}
+
+{% block css %}
+{% endblock %}
+
+
+{% block content %}
+<div class="page-wrapper">
+  <div class="row">
+
+    <div class="col-md-12">
+      {% if pagetitle %}
+        <h1>{{ pagetitle }}</h1>
+      {% endif %}
+        <hr>
+    </div>
+
+        <div class="col-md-9" style="margin-bottom: 20px;">
+
+            <form class="form-horizontal" role="form" name="payment-form" id="payment-form"
+                action="/cart/checkout/process-payment" method="post">
+
+                <h3 style="margin-bottom: 25px;">
+                    Credit card information
+                </h3>
+                <div class="form-group">
+                    <label for="first_name" class="col-sm-3 control-label">
+                        First name
+                    </label>
+                    <div class="col-sm-9">
+                      <input type="text" class="form-control required" name="first_name"
+                        id="first_name" placeholder="First name (as it appears on card)">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="last_name" class="col-sm-3 control-label">
+                        Last name
+                    </label>
+                    <div class="col-sm-9">
+                        <input type="text" class="form-control required" name="last_name"
+                        id="last_name" placeholder="Last name (as it appears on card)">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-sm-3 control-label" for="card-holder-name">
+                        Card type
+                    </label>
+                    <div class="col-sm-9">
+                        <select class="form-control col-sm-2 required" name="cardtype" id="cardtype">
+                            <option value="">Select</option>
+                            <option value="0">Visa</option>
+                            <option value="1">MasterCard</option>
+                            <option value="2">Discover</option>
+                            <option value="3">American Express</option>
+                            <option value="4">Diner's Club</option>
+                            <option value="5">JCB</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-3 control-label" for="acct">
+                      Card Number
+                    </label>
+                    <div class="col-sm-9">
+                        <input type="text" class="form-control required" name="acct"
+                            id="ACCT" placeholder="Debit/Credit Card Number">
+                    </div>
+                    <!--sandbox value="4032034487575998" -->
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-3 control-label" for="exp_month">
+                      Expiration Date
+                    </label>
+                    <div class="col-sm-9">
+                        <div class="row">
+                            <div class="col-xs-3">
+                                <select class="form-control col-sm-2 required" name="exp_month" id="exp_month">
+                                    <option>Month</option>
+                                    <option value="01">Jan</option>
+                                    <option value="02">Feb</option>
+                                    <option value="03">Mar</option>
+                                    <option value="04">Apr</option>
+                                    <option value="05">May</option>
+                                    <option value="06">Jun</option>
+                                    <option value="07">Jul</option>
+                                    <option value="08">Aug</option>
+                                    <option value="09">Sep</option>
+                                    <option value="10">Oct</option>
+                                    <option value="11">Nov</option>
+                                    <option value="12">Dec</option>
+                                </select>
+                            </div>
+                            <div class="col-xs-3">
+                                <select class="form-control required" name="exp_year"
+                                    {% if pagetitle == 'Add agents' %}tabindex="6"{% endif %}>
+                                    {% set currentYear = "now"|date("Y") %}
+                                    {% set year = "now"|date("y") %}
+                                    <option value="{{ year }}">{{ currentYear }}</option>
+                                    <option value="{{ year+1 }}">{{ currentYear+1 }}</option>
+                                    <option value="{{ year+2 }}">{{ currentYear+2 }}</option>
+                                    <option value="{{ year+3 }}">{{ currentYear+3 }}</option>
+                                    <option value="{{ year+4 }}">{{ currentYear+4 }}</option>
+                                    <option value="{{ year+5 }}">{{ currentYear+5 }}</option>
+                                <option value="{{ year+6 }}">{{ currentYear+6 }}</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-sm-3 control-label" for="cvv2">
+                        Card CVV
+                    </label>
+                    <div class="col-sm-9">
+                        <input type="text" class="form-control required" name="cvv2" id="cvv2"
+                            placeholder="Security Code">
+                    </div>
+                </div>
+
+
+
+                <div class="form-group">
+                    <label class="col-sm-3 control-label" for="amt">
+                        Amount
+                    </label>
+                    <div class="col-sm-9">
+                        <!-- Twig likes code on one continuous line and without any spaces between elements -->
+                        <input type="text" class="form-control required" name="amt"
+                            style="background-color: #fff;" id="amt" placeholder="Amount">
+                    </div>
+                </div>
+
+
+                <div class="form-group has-feedback has-feedback">
+                    <div class="col-sm-offset-3 col-sm-9">
+                        <div class="checkbox">
+                            <label for="agree">
+                               <input type="checkbox" class="required" name="agree" id="agree">
+                               I agree to the <a href="#">terms &amp; conditions</a>
+                            </label>
+                        </div>
+                    </div>
+                  </div>
+
+                  <!-- <hr> -->
+
+                  <div class="form-group">
+                    <div class="col-sm-offset-3 col-sm-9">
+                        <button type="submit" id="pay-now-btn" class="btn btn-primary btn-lg">
+                            Pay Now
+                        </button>
+
+                        <div style="margin-top:15px;">
+                            <small>
+                                Your credit card information is securely processed
+                                by PayPal's Payflow Gateway. ArmaLaser does not
+                                store credit card information.<br> ArmaLaser will
+                                never email, text or telephone you regarding
+                                your credit card information.
+                            </small>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+  </div><!-- // .row  -->
+</div><!--  // .page-wrapper  -->
+{% endblock %}
+
+{% block bottomjs %}
+<script>
+$(document).ready(function(){
+
+  // $("#payment-form").validate();
+
+
+});
+</script>
+{% endblock %}

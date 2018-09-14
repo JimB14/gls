@@ -1,0 +1,233 @@
+{% extends 'base-admin.html' %}
+
+{% block browsertitle %}
+  Gun Shows | ArmaLaser
+{% endblock %}
+
+{% block css %}
+{% endblock %}
+
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div id="dashboard-toggle" class="col-md-8" style="margin-top:-20px;margin-left:254px;">
+
+          <h2>Update Gun Show</h2>
+          <hr>
+
+            <form method="post" action="/admin/shows/update-gun-show?id={{ show.id }}"
+              class="form-horizontal" name="update-gunshow-form" id="update-gunshow-form" enctype="multipart/form-data">
+
+                <div class="form-group">
+                    <label for="start_date" class="control-label col-sm-3">
+                      Start
+                    </label>
+                    <div class="col-sm-9">
+                        <input type="text" id="start_date" class="form-control"
+                        name="start" value="{{ show.start }}">
+                    </div>
+                </div>
+
+
+                <div class="form-group">
+                    <label for="end_date" class="control-label col-sm-3">
+                      End
+                    </label>
+                    <div class="col-sm-9">
+                        <input type="text" id="end_date" class="form-control"
+                        name="end" value="{{ show.end }}">
+                    </div>
+                </div>
+
+
+                <div class="form-group">
+                    <label for="display" class="control-label col-sm-3">
+                      Display
+                    </label>
+                    <div class="col-sm-9">
+                        <input type="number" id="display" class="form-control"
+                        name="display" min="0" max="1" value="{{ show.display }}">
+                        <small>1=display; 0=hide</small>
+                    </div>
+                </div>
+
+
+                <div class="form-group">
+                    <label for="name" class="control-label col-sm-3">
+                      Name
+                    </label>
+                    <div class="col-sm-9">
+                        <input type="text" class="form-control" name="name"
+                        id="name" placeholder="Gun show name"
+                        value="{{ show.name }}">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="location" class="control-label col-sm-3">
+                      Location
+                    </label>
+                    <div class="col-sm-9">
+                        <input type="text" class="form-control" name="location"
+                        id="image_full_size" placeholder="Location"
+                        value="{{ show.location }}">
+                    </div>
+                </div>
+
+
+                <div class="form-group">
+                    <label for="city" class="control-label col-sm-3">
+                      City
+                    </label>
+                    <div class="col-sm-9">
+                        <input type="text" class="form-control" name="city"
+                        id="city" placeholder="City"
+                        value="{{ show.city }}">
+                    </div>
+                </div>
+
+
+                <div class="form-group">
+                    <label for="state" class="control-label col-sm-3">
+                      State
+                    </label>
+                    <div class="col-sm-9">
+                      <select class="form-control" id="state" name="state">
+                          <option value="{{ show.state }}">{{ show.state }}</option>
+                          <option value="">Select state</option>
+                          {% for state in states %}
+                              <option value="{{ state.abbrev}}">{{ state.name }}</option>
+                          {% endfor %}
+                      </select>
+                    </div>
+                </div>
+
+
+                <div class="form-group">
+                    <label for="rep" class="control-label col-sm-3">
+                      ArmaLaser Rep
+                    </label>
+                    <div class="col-sm-9">
+                      <input type="text" name="rep" class="form-control " id="description"
+                        placeholder="First &amp; last name" value="{{ show.rep }}">
+                      <!-- <script>
+                        CKEDITOR.replace( 'feature02' );
+                      </script> -->
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="show_url" class="control-label col-sm-3">
+                      Show URL
+                    </label>
+                    <div class="col-sm-9">
+                        <input type="text" class="form-control" name="show_url"
+                        id="show_url" placeholder="Show website address"
+                        value="{{ show.show_url }}">
+                    </div>
+                </div>
+
+
+                <div class="form-group">
+                    <label for="show_producer" class="control-label col-sm-3">
+                      Show Production Co
+                    </label>
+                    <div class="col-sm-9">
+                        <input type="text" class="form-control" name="show_producer"
+                        id="show_producer" placeholder="Show production company"
+                        value="{{ show.show_producer }}">
+                    </div>
+                </div>
+
+
+                <div class="form-group">
+                    <label for="producer_url" class="control-label col-sm-3">
+                      Production Co Website
+                    </label>
+                    <div class="col-sm-9">
+                        <input type="text" class="form-control" name="producer_url"
+                        id="producer_url" placeholder="Production Company Website"
+                        value="{{ show.producer_url }}">
+                    </div>
+                </div>
+
+
+                <div class="form-group">
+                    <label for="map" class="control-label col-sm-3">
+                      Map URL
+                    </label>
+                    <div class="col-sm-9">
+                        <input type="text" class="form-control" name="map"
+                        id="map" placeholder="Map URL"
+                        value="{{ show.map }}">
+                    </div>
+                </div>
+
+
+
+                <!-- <div class="form-group">
+                    <label for="special_message" class="control-label col-sm-3">
+                      Special message
+                    </label>
+                    <div class="col-sm-9">
+                        <input type="text" class="form-control "
+                        name="special_message" id="special_message"
+                        placeholder="Information to highlight"
+                        value="{{ show.special_message }}">
+                    </div>
+                </div>
+
+
+                <div class="form-group">
+                    <label for="image" class="control-label col-sm-3">
+                      Image
+                    </label>
+                    <div class="col-sm-9">
+                        <input type="text" class="form-control"
+                        name="image" id="image"
+                        placeholder="Image file name, e.g. image.png"
+                        value="{{ show.image }}">
+                    </div>
+                </div> -->
+
+                <hr>
+
+                <div class="form-group">
+                    <div class="col-sm-offset-3 col-sm-8">
+                        <button  id="submit-listing-btn" type="submit"
+                        class="btn btn-primary btn-lg">
+                        Update Gun Shows
+                      </button>
+                    </div>
+                </div>
+
+            </form>
+
+
+          </div><!--  // .col-md-8  -->
+      </div><!--  // .row  -->
+</div><!--  // .container  -->
+{% endblock %}
+
+
+{% block bottomjs %}
+<!-- Datepicker for warranty-registration.php @https://jqueryui.com/datepicker/#default -->
+<script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+<script src="/assets/js/datepicker.js"></script>
+<script>
+$(document).ready(function(){
+
+    $("#thisID").click(function(){
+        var checked = 1;
+        console.log(checked);
+        if($("#thisID").prop("checked")){
+          $("#lasers_last_name").attr("placeholder", "Enter laser ID");
+        } else {
+          $("#lasers_last_name").attr("placeholder", "Enter laser model");
+        }
+    });
+
+});
+</script>
+{% endblock %}

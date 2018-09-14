@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+
+{% block title %}
+   Accessories for ArmaLaser products
+{% endblock %}
+
+{% block metadescription %}
+Accesssories to enhance your experience with ArmaLaser products such as LaserGlow™ targets, custom-embroidered cap, and glove contacts.{% endblock %}
+
+{% block css %}
+{% endblock %}
+
+{% block outsidecontainer %}
+{% endblock %}
+
+
+{% block content %}
+<div class="container" style="margin-bottom:180px;">
+    <div class="row">
+        <div class="col-md-12">
+
+            <h1 class="text-left">
+               <span style="font-size: 100%;">
+                    ACCESSORIES
+                    <span style="font-style:italic;">
+                        for ArmaLaser products
+                    </span>
+                </span>
+            </h1>
+
+            <div class="products-by-brand">
+                <ul class="">
+                    {% for item in accessories %}
+                        <li class="text-center">
+                            <a href="/laser-accessories/accessory/{{ item.id }}/{{ item.slug }}">
+                                <img src="/assets/images/accessories/{{ item.image_thumb }}" width="125" alt="ArmaLaser {{ item.caption }}"><br>
+                                <span>{{ item.caption }}</span><br>
+                            </a>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div><!-- //  -->
+
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block bottomjs %}
+{% endblock %}

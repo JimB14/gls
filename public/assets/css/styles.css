@@ -1,0 +1,4143 @@
+/**
+*  Created on : Dec 3, 2015, 4:01:37 PM
+*  Author     : Jim Burns
+*
+*/
+/*@import url(https://fonts.googleapis.com/css?family=Open+Sans:400,300);*/
+
+@font-face {
+  font-family: 'Helvetica Neue';
+  src:  url('../HelveticaNeueLTStd-Bd.woff2') format('woff2'),
+        url('../HelveticaNeueLTStd-Bd.woff') format('woff'),
+        url('../HelveticaNeueLTStd-Bd.ttf') format('truetype');
+}
+
+/*@font-face{
+    font-family: 'Calibri';
+    src: url('../Calibri.ttf') format('truetype');
+}*/
+
+@font-face {
+  font-family: 'Helvetica Neue LTPro';
+  src:  url('../HelveticaNeueLTPro-BlkCn.woff2') format('woff2'),
+        url('../HelveticaNeueLTPro-BlkCn.woff') format('woff'),
+        url('../HelveticaNeueLTPro-BlkCn.ttf') format('truetype');
+}
+
+/*  - - - - -  - - - - - - - - - - - - - - - - - - - - - -  */
+<div id="wrapper">
+   <div id="messages"></div>
+   <input id="enterchat" type="text">
+   <button id="sendbtn" type="submit" class="btn btn-default">Send</button>
+</div>
+@font-face {
+  font-family: 'Helvetica Neue';
+  src:  url('https://armalaser.com/HelveticaNeueLTStd-Bd.woff2') format('woff2'),
+        url('https://armalaser.com/HelveticaNeueLTStd-Bd.woff') format('woff'),
+        url('https://armalaser.com/HelveticaNeueLTStd-Bd.ttf') format('truetype');
+}
+
+/*@font-face{
+    font-family: 'Calibri';
+    src: url('http://armalaser.com/Calibri.ttf') format('truetype');
+}*/
+
+@font-face {
+  font-family: 'Helvetica Neue LTPro';
+  src:  url('https://armalaser.com/HelveticaNeueLTPro-BlkCn.woff2') format('woff2'),
+        url('https://armalaser.com/HelveticaNeueLTPro-BlkCn.woff') format('woff'),
+        url('https://armalaser.com/HelveticaNeueLTPro-BlkCn.ttf') format('truetype');
+}
+
+/* Resource:  https://helpx.adobe.com/typekit/using/css-selectors.html
+* Available names, weights, styles, variation-specific names for myriad-pro font; CSS example includes use of variation-specific names for IE bugs (of course!)
+*
+* Light             300 normal  myriad-pro-n3   (e.g. font-family: "myriad-pro-n3","myriad-pro",sans-serif; font-style: normal; font-weight: 300;)
+* Light Italic      300 italic  myrida-pro-i3   (e.g. font-family: "myriad-pro-n3","myriad-pro",sans-serif; font-style: italic; font-weight: 300;)
+* Regular           400 normal  myriad-pro-n4
+* Italic            400 italic  myriad-pro-i4
+* Semibold          600 normal  myriad-pro-n6
+* Semibold italic   600 italic  myriad-pro-i6
+* Bold              700 normal  myriad-pro-n7
+* Bold italic       700 italic  myriad-pro-i7
+* Black             900 normal  myriad-pro-n9   (e.g. font-family: "myriad-pro-n9","myriad-pro",sans-serif; font-style: normal; font-weight: 900;)
+* Black italic      900 italic  myriad-pro-i9   (e.g. font-family: "myriad-pro-i9","myriad-pro",sans-serif; font-style: normal; font-weight: 900;)
+*
+*/
+
+
+body {
+   position: relative; /* The element with data-spy="scroll" requires the CSS position property, with a value of "relative" to work properly.*/
+   font-family: "myriad-pro", "Calibri", sans-serif;
+   /*font-family: "PT Sans Narrow", Arial, sans-serif;  /* "Helvetica Neue", Helvetica, Arial, sans-serif; */
+   font-size: 14px;
+   line-height: 1.42857143;
+   color: #333;
+   background-color: #fff;
+}
+
+.fix-navbar {
+  position: fixed;
+  width: 100%;
+  z-index:999;
+}
+
+/*.affix {
+    top: 0px;
+    width: 100%;
+    z-index:999;
+}
+
+.navbar {
+  margin-bottom: 0px;
+}*/
+
+/*.affix {
+    top: 0;
+    width: 100%;
+    -webkit-transition: all .75s ease-in-out;
+    transition: all .75s ease-in-out;
+}*/
+
+/*.affix-top {
+    position: static;
+    top: 0px;
+}
+*/
+
+/*.affix ~ .container-fluid {
+    padding-top: 30px;
+}*/
+
+
+/*
+.affix + .top-margin-marker {
+    padding-top: 170px;
+}
+.affix + .container {
+    padding-top: 100px;
+}
+*/
+
+/*---------------- Site-wide ---------------------*/
+/* Theme colors */
+.red {color: #ff3333;}
+.Red {color: #ff3333;}
+.blue {color:#0000ff;}
+.black {color: #222222;}
+.yellow{color: #ffff00;}
+.white {color: #fff;}
+.green {color: #00ff00}
+.Green {color: #00ff00}
+.btn-buy-blue {background-color: #0080FF; color:#fff;}
+.green-checkmark{color: #008000;}
+.edit-green{color: #008000;}
+.blue{color: #0000ff;}
+.buy-blue{color:#0080FF;}
+.color838383{color: #838383;}
+.colora9a9a9{color: #a9a9a9;}
+.color222{color: #222;}
+.color787878{color: #787878;}
+.pendingGreen{color: #008000;}
+.returnPendingBurngundy {color: #800020;}
+.bg-ebebeb{background-color: #EBEBEB;}
+.bg-white{background-color: #fff; width:100%;}
+.bg-000{background-color: #000; width:100%;}
+.bg-f2f2f2{background-color: #f2f2f2; width:100%;}
+.bg-red{background-color: #ff0000; width:100%;}
+.bg-d9d9d9{background-color: #d9d9d9; width:100%;}
+.bg-111{background-color: #111111; width: 100%;}
+
+.boxShadow {
+   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+/*---------------- Formatting --------------------*/
+.p0{margin-bottom: .5em;}
+.p1{margin-bottom: 1em;}
+.p2{margin-bottom: 2em;}
+.p3{margin-bottom: 3em;}
+.p4{margin-bottom: 4em;}
+.p5{margin-bottom: 5em;}
+.p6{margin-bottom: 6em;}
+.p7{margin-bottom: 7em;}
+.text-size50{font-size:50%;}
+.text-size60{font-size:60%;}
+.text-size70{font-size:70%;}
+.text-size80{font-size:80%;}
+.text-size90{font-size:90%;}
+.text-size110{font-size:110%;}
+.text-size120{font-size:120%;}
+.text-size130{font-size:130%;}
+.text-size140{font-size:140%;}
+.text-size150{font-size:150%;}
+.text-size160{font-size:160%;}
+.text-size175{font-size:175%;}
+.text-size200{font-size:200%;}
+.text-size350{font-size:350%;}
+.t05{margin-top: .5em;}
+.t1{margin-top: 1em;}
+.t2{margin-top: 2em;}
+.t3{margin-top: 3em;}
+.tminus05{margin-top: -0.5em;}
+.tminus1{margin-top: -1em;}
+.tminus2{margin-top: -2em;}
+.tminus3{margin-top: -3em;}
+.tminus05{margin-top: -5px;}
+.tminus10{margin-top: -10px;}
+.tminus15{margin-top: -15px;}
+.tminus20{margin-top: -20px;}
+.tminus30{margin-top: -30px;}
+.tminus40{margin-top: -40px;}
+.tminus50{margin-top: -50px;}
+.m-left10{margin-left: 10px;}
+.m-left15{margin-left: 15px;}
+.m-left20{margin-left: 20px;}
+.m-left30{margin-left: 30px;}
+.m-leftminus10{margin-left: -10px;}
+.m-leftminus15{margin-left: -15px;}
+.m-leftminus20{margin-left: -20px;}
+.m-leftminus30{margin-left: -30px;}
+.bold{font-weight: bold;}
+.pr05{padding-right: 5px;}
+.pr10{padding-right: 10px;}
+.pr15{padding-right: 15px;}
+.pr20{padding-right: 20px;}
+.pr50{padding-right: 50px;}
+.pr75{padding-right: 75px;}
+.pr100{padding-right: 100px;}
+.pl10{padding-left: 10px;}
+.pl15{padding-left: 15px;}
+.pl20{padding-left: 20px;}
+.ptop20{padding-top:20px;}
+.gray-convert {
+    filter: grayscale(90%);
+    /*-webkit-filter: grayscale(90%);*/
+}
+.italic{font-style:italic;}
+.text50{font-size:50px;}
+.text40{font-size: 40px;}
+.text35{font-size: 35px;}
+.text30{font-size: 30px;}
+.text24{font-size: 24px;}
+.text20{font-size: 20px;}
+
+.box-general {border: #dedede 1px solid; border-radius: 4px; padding: 30px;}
+.box-glove-contacts {
+    /* border: #dedede 1px solid;  */
+    /* border-radius: 4px; */
+    /* padding: 10px 30px; */
+}
+.errMsg {color: #ff0000;}
+.ls1 {letter-spacing: -1px;}
+.ls2 {letter-spacing: -2px;}
+
+/*.ethno {font-family: ethnocentric; font-style: italic;}*/
+/*.calibri {font-family: Calibri, Verdana, sans-serif;}*/
+.helvetica-neue-lt-pro{font-family: "Helvetica Neue LTPro";}
+/* Do not use */
+/*
+.helvetica-neue {font-family: "Helvetica Neue";}  do not use
+*/
+.amaranth-font {font-family: 'Amaranth', sans-serif;}
+
+
+.shipping-message{font-size:90%;}
+.text-italic{font-style: italic;}
+
+.pagetitle {
+  font-size: 30px;
+}
+
+/*  Register/index.html  */
+.alert-padding {
+    padding: 10px 10px 9px 10px !important;
+}
+
+/* .item_added_alert {
+    display: none;
+} */
+
+
+
+/*---------- Custom button ---------------------*/
+.btn-buy {
+  color: #fff;
+  background-color: #0080FF;
+  border-color: #46b8da;
+}
+.btn-buy:focus,
+.btn-buy.focus {
+  color: #fff;
+  background-color: #005ab3;
+  /*border-color: #005ab3;*/
+}
+.btn-buy:hover {
+  color: #fff;
+  background-color: #005ab3;
+  border-color: #269abc;
+}
+.btn-buy:active,
+.btn-buy.active,
+.open > .dropdown-toggle.btn-buy {
+  color: #fff;
+  background-color: #198fc8;
+  border-color: #005ab3;
+}
+.btn-buy:active:hover,
+.btn-buy.active:hover,
+.open > .dropdown-toggle.btn-buy:hover,
+.btn-buy:active:focus,
+.btn-buy.active:focus,
+.open > .dropdown-toggle.btn-buy:focus,
+.btn-buy:active.focus,
+.btn-buy.active.focus,
+.open > .dropdown-toggle.btn-buy.focus {
+  color: #fff;
+  background-color: #005ab3;
+  /*border-color: #005ab3;*/
+}
+.btn-buy:active,
+.btn-buy.active,
+.open > .dropdown-toggle.btn-buy {
+  background-image: none;
+}
+.btn-buy.disabled,
+.btn-buy[disabled],
+fieldset[disabled] .btn-buy,
+.btn-buy.disabled:hover,
+.btn-buy[disabled]:hover,
+fieldset[disabled] .btn-buy:hover,
+.btn-buy.disabled:focus,
+.btn-buy[disabled]:focus,
+fieldset[disabled] .btn-buy:focus,
+.btn-buy.disabled.focus,
+.btn-buy[disabled].focus,
+fieldset[disabled] .btn-buy.focus,
+.btn-buy.disabled:active,
+.btn-buy[disabled]:active,
+fieldset[disabled] .btn-buy:active,
+.btn-buy.disabled.active,
+.btn-buy[disabled].active,
+fieldset[disabled] .btn-buy.active {
+  background-color: #005ab3;
+  /*border-color: #005ab3;*/
+}
+.btn-buy .badge {
+  color: #0080FF;
+  background-color: #fff;
+}
+
+/* - - - - - - - - - - -  Header  - - - - - - - - - - - */
+#header-ots{
+    position: absolute;
+    top:49px;
+    left:12px;
+    font-size: 200%;
+    font-style: italic;
+    font-family: "Helvetica Neue LTPro";
+    color: #fff;
+    text-transform: uppercase;
+}
+
+@media (max-width: 736px){
+    #header-ots{
+        left:20px;
+    }
+}
+
+
+/* - - - - - - - - - - -  Home page  - - - - - - - - - - - */
+.bg-top-header{background-color: #dedede; padding-top: 5px;}
+
+.home-sub-title {
+    font-size: 32px;
+    font-weight: 400;
+    margin-top: 20px;
+    margin-bottom: 30px;
+}
+
+.home-title {
+    font-size: 54px;
+    font-weight: 400;
+    margin-top: 20px;
+    margin-bottom: 30px;
+}
+.btm-border {border-bottom: #dedede dotted 1px;}
+
+.icon-box {
+    max-height: 92px;
+    position: relative;
+    border: #dedede 1px solid;
+    border-radius: 4px; padding: 5px;
+    box-sizing: border-box;
+}
+.icon-box a {text-decoration: none;}
+.icon-box:hover {transform: scale(1.05);border: #dedede 2px solid;}
+.box-general h2 {margin:0;}
+/*
+.gun-brand-icon-box {
+    max-height: 114px;
+    position: relative;
+    border: #dedede 1px solid;
+    border-radius: 4px; padding: 5px;
+    box-sizing: border-box;
+}
+.gun-brand-icon-box:hover {transform: scale(1.05);border: #dedede 2px solid;}
+*/
+
+.brand-icons-home {list-style-type: none; margin:0; padding:0; margin-bottom: 24px;}
+.brand-icons-home li {display:inline-block; padding-right: 15px; margin-bottom:15px;}
+.brand-icons-home img {
+    width: 120px;
+    height:auto;
+    padding:3px 16px;
+    border:1px solid #dedede;
+    border-radius: 4px;
+}
+.brand-icons-home img:hover{border: #000 1px solid;}
+
+#black-friday{
+  display: none;
+}
+
+/* - - - - - - - - -  main.html.php styles  - - - - - - - -  */
+/* Resource: to align images vertically inside div:  http://jsfiddle.net/kizu/4RPFa/4570/  */
+/* Resource:  stackoverflow: See Kizu answer (jsfiddle above is complete code):  http://stackoverflow.com/questions/7273338/how-to-vertically-align-an-image-inside-div  */
+
+#brand-icons-wrapper{
+  width: 100%;
+}
+.brand-icon-box{
+    /*float: left;*/
+    display: inline-block;
+    width: 115px; /*120px;*/
+    height: 100px;
+    border:1px solid #dedede;
+    border-radius: 4px;
+    margin:10px;
+    text-align: center;
+}
+
+.brand-icon-box:hover{border: #000 1px solid;}
+.brand-icon-box img {
+    width: 100px;
+    vertical-align: middle;
+    max-height: 90px;
+    max-width: 100px;
+}
+.helper {
+    display: inline-block;
+    height: 100%;
+    vertical-align: middle;
+}
+
+
+/*
+.brand-icons-home img {transition: all .2s ease-in;}
+.brand-icons-home img:hover{transform: scale(1.2);border: #dedede 1px solid;  -webkit-filter: blur(0);}
+*/
+
+/*-------------- Set text to blink between Red and Green -----------------*/
+/* -webkit and -moz no longer required */
+/*
+@-webkit-keyframes blink {
+    0% { color  : red; }
+    49% { color : red; }
+    50% { color : #00ff00; }
+    100% { color: #00ff00; }
+}
+@-moz-keyframes blink {
+    0% { color  : red; }
+    49% { color : red; }
+    50% { color : #00ff00 }
+    100% { color: #00ff00; }
+}
+*/
+
+@keyframes blink {
+    0% { color  : red; }
+    49% { color : red; }
+    50% { color : #00ff00 }
+    100% { color: #00ff00; }
+}
+
+.red-green-blinking-text {
+    -webkit-animation-name: blink;
+    -webkit-animation-duration: 2s;
+    -webkit-animation-timing-function: linear;
+    -webkit-animation-iteration-count: infinite;
+    -moz-animation: blink 2s linear infinite;
+    animation: blink 2s linear infinite;
+}
+
+/*-------------- Logo and brand styles ------------------*/
+
+.armalaser-name-header{padding-top:5px;color:#ff0000;font-family: "Helvetica Neue LTPro";letter-spacing: 1px;font-size: 63px;}
+.armalaser-name-footer{font-family: "Helvetica Neue LTPro";font-size: 50px;}
+.ots-footer{font-family: "Helvetica Neue LTPro"; font-size:22px; position:relative; display:inline-block; font-style:italic; bottom:32px; left:11px; color:#000;}
+.ots-footer .sup {font-family: "open sans";font-weight: 400;}
+.logo-div {box-sizing: border-box;}
+/* Set font for seven typesets */
+.tr-typeset,
+.tr-series-typeset,
+.gto-typeset,
+.gto-flx-typeset,
+.gto-series-typeset,
+.stingray-typeset,
+/*.stingray-classic-typeset {font-family: ethnocentric, arial, sans-serif; text-transform: uppercase;}*/
+/* Set colors for seven typesets */
+.tr-typeset, .gto-typeset, .stingray-typeset {color:#ff3333;}
+.tr-series-typeset, .gto-series-typeset {color:#060606;}
+.gto-flx-typeset, .stingray-classic-typeset {color: #696868}
+
+/* Set TR Series styles */
+.tr-typeset {font-size: 46px;letter-spacing: -5px;}
+.tr-series-typeset{font-size: 17px; margin-top: -29px;}
+
+/* Set GTO FLX Series styles */
+.gto-typeset{font-size: 46px;letter-spacing: -5px;}
+.gto-flx-typeset, .gto-series-typeset {font-size: 17px;}
+.gto-flx-series-description {margin-top: -29px;}
+
+/* Set Stingray styles */
+.stingray-typeset, .stingray-classic-typeset{display:inline-block; font-size:27px;}
+.stingray-typeset{margin-top: 10px; margin-left: -15px;}
+.stingray-classic-typeset {margin-top: -16px; padding-left: 18%;}
+/* center content for smaller devices */
+.smart-center{}
+@media (max-width: 768px){
+    .smart-center {text-align: center;}
+}
+
+ /* http://stackoverflow.com/questions/18153234/center-a-column-using-twitter-bootstrap-3 */
+.col-center-block {
+    float: none;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+
+
+/*---------------- Navigation  -------------------*/
+/* Do not assign height value to .navbar. It must be min-height or it causes collapse navbar to malfunction  */
+.navbar {min-height: 100px; border-radius:0;margin-bottom: 0px;}
+.navbar-inverse{background-color: #373737; border-color: #373737; opacity:0.9}
+.navbar-inverse .navbar-brand,
+.navbar-inverse .navbar-nav > li > a {
+    color: #fff;
+   font-size: 16px;
+    margin-right: 0px;  /* 20px; */
+}
+.navbar-inverse .navbar-brand:hover,
+.navbar-inverse .navbar-nav > li > a:hover {
+    color: #979797;
+}
+/* remove hover:  http://jsfiddle.net/danield770/7zc94/1/  */
+.navbar-brand .white-hover:hover {
+    color:#fff;;
+}
+
+/*.navbar-nav {margin:2px;}*/
+
+.navbar-inverse .navbar-nav > .active > a, .navbar-inverse .navbar-nav > .active > a:hover, .navbar-inverse .navbar-nav > .active > a:focus {
+    color: #979797;
+}
+.navbar-brand {min-height:63px;margin-bottom: -3px;}
+
+.navbar-inverse .navbar-nav > .active > a,
+.navbar-inverse .navbar-nav > .active > a:hover,
+.navbar-inverse .navbar-nav > .active > a:focus {
+  color: #979797;;
+  background-color: #373737;
+}
+.navbar-inverse .navbar-nav > .open > a,
+.navbar-inverse .navbar-nav > .open > a:hover,
+.navbar-inverse .navbar-nav > .open > a:focus {
+  color: #fff;
+  background-color: #373737;
+}
+
+/* special navbar styles */
+nav li a {font-size:15px;}
+.navbar-brand img {
+  margin-right: 0px; /*40px;*/
+}
+/*.navbar-inverse{background-color: rgba(0,0,0,0.5);}*/
+
+
+/* - - - - - - - -  - - -  - -  - - -  - -  */
+@media (max-width: 769px){
+    .navbar-nav > li a {
+        padding-right: 0px;
+    }
+}
+
+@media (max-width: 767px) {
+  .navbar-inverse .navbar-nav .open .dropdown-menu > .dropdown-header {
+    border-color: #373737;
+  }
+  .navbar-inverse .navbar-nav .open .dropdown-menu .divider {
+    background-color: #373737;
+  }
+  .navbar-inverse .navbar-nav .open .dropdown-menu > .active > a,
+  .navbar-inverse .navbar-nav .open .dropdown-menu > .active > a:hover,
+  .navbar-inverse .navbar-nav .open .dropdown-menu > .active > a:focus {
+    color: #fff;
+    background-color: #373737;
+  }
+}
+@media(max-width: 376px){
+    .navbar-brand img{max-width: 258px; height: auto;}
+}
+@media(max-width: 350px){
+    .navbar-brand img{max-width: 215px; height: auto;}
+}
+
+
+
+
+/* - - - - - - - - - - -  Carousel   - - - - - - - - - - - - - - */
+
+/*  Resource: http://stackoverflow.com/questions/13651515/apply-background-sizecover-to-twitter-bootstrap-carousel-slides  */
+#myCarousel {
+    width: 100%;
+}
+.carousel-control {
+    /*margin-top: 20px;*/
+}
+/*
+.carousel-inner .item {
+    min-width: 100%;
+    height: auto;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+}
+.ad1 {
+    background: #fff url(../images/slider-home/TR10Model_800x400.jpg) no-repeat center center ;
+}
+.ad2 {
+    background: #fff url(../images/slider-home/ArmalaserTR5_Glock43-800x400.jpg) no-repeat center center ;
+}
+.ad3 {
+    background: #fff url(../images/slider-home/GTO_FLX_Web_800x400.jpg) no-repeat center center ;
+}
+.ad4 {
+    background: #fff url(../images/slider-home/background_800x400.jpg) no-repeat center center ;
+}
+*/
+
+/*  To fix Chrome displaying video background as gray. Resource: http://stackoverflow.com/questions/16983018/chrome-html5-video-cant-display-white-has-gray-background    */
+video{
+    /*
+     -webkit-filter: brightness(108.5%);
+     -moz-filter: brightness(108.5%);
+    */
+}
+
+/*  Change gray background to white in Firefox, Chrome, Safari. Resource: http://stackoverflow.com/questions/30359068/firefox-chrome-safari-have-grey-background-for-mp4-html5-video   */
+.brightness{
+    filter: url("data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\'><filter id=\'brightness\'><feColorMatrix type=\'matrix\' values=\'1.2 0 0 0 0 0 1.2 0 0 0 0 0 1.2 0 0 0 0 0 1.2 0\'/></filter></svg>#brightness"); /* Firefox 3.5+ */
+    -webkit-filter:brightness(108.5%); /* Chrome 19+ & Safari 6+ */
+}
+
+#home-carousel-text{
+    position: absolute;
+    left: 36%;
+    bottom: 33%;
+}
+
+
+.carousel-caption sup {vertical-align: top; position: relative; top: 10px; font-size: 12px;}
+sup {vertical-align: top; position: relative; top: 7px; font-size: 8px;}
+.sup {vertical-align: top; position: relative; top: 5px; font-size: 8px; left:4px; font-style:normal;}
+.form-group sup {color: #ff0000; vertical-align: top; position: relative; top: -6px; font-size: 6px;}
+
+.carousel-caption h2 {
+    margin-bottom: 32px;
+    color:#fff;  /* #00ff00; */
+    text-shadow: 2px 2px 2px #000;
+}
+.carousel-caption {bottom: -7px;}
+
+@media (max-width:666px){
+    .carousel-caption h2 {
+        font-size: 140%;
+    }
+    .carousel-caption sup {vertical-align: top; position: relative; top: 3px; font-size: 50%;}
+    .carousel-indicators {
+        display: none;
+    }
+}
+
+/*------- KEY CODE to cause image to grow with window expansion ---------*/
+
+.carousel-inner > .item > img,
+.carousel-inner > .item > a > img {
+    min-width: 100%;
+    height: auto;
+    /*max-height: 500px;*/
+    /*max-height: 410px;*/
+}
+
+/* - - - - - -  VIDEO MOVIE  - - - - - - - - - */
+
+
+#movie {
+    height: auto;
+    /*max-height: 510px;*/
+    /*max-height: 822px;*/
+    width: 100%;
+    /*margin-top:-10px;*/
+    margin-bottom: -5px;
+}
+#movie02 {
+    height: auto;
+    width: 100%;
+    margin-bottom: -5px;
+}
+video{border: none; border-color:transparent;}
+
+
+/*  Simon's answer deep in comments of checked response:; http://stackoverflow.com/questions/20763684/full-width-image-with-fixed-height */
+#image-container {
+    background-image: url(../images/carousel/2.jpg);
+    background-repeat: no-repeat;
+    background-position: center center;
+    -webkit-background-size: cover;
+    background-size: cover;
+    padding-top: 450px; /* This somehow sets the height of the image */
+}
+
+/* Source:  http://stackoverflow.com/questions/19481334/bootstrap-carousel-width-and-height *
+.item img {
+  width: 100%;
+}
+.carousel-inner{
+  width:auto;
+  max-height: 579px !important;
+}
+*/
+
+
+
+/*-------------- Footer ---------------*/
+.bg-footer {
+    background-color: #4b4b4b;  /* #efefef; /*#222; */
+}
+#footer-style {
+    /*font-family: "Open Sans", Arial, sans-serif;*/
+    /*margin-top: 40px;*/
+    font-size: 14px;
+    padding: 12px 0;
+    color: #fff;  /*#222;  #fff;*/
+    border-top:#ddd 1px solid;
+}
+#footer-style h3 {
+    /*font-family: "Open Sans", Arial, sans-serif;*/
+    font-weight: 300;
+    font-size:120%; /*95%;*/
+    color:#fff; /* #222; */
+}
+#footer-style h3 a {
+    color:#fff; /* #222; */
+}
+.logo-typeset,
+.logo-typeset a {
+    /*font-family: "Open Sans", Arial, sans-serif;*/
+    font-size: 73px;
+    color: #ff3333;
+    color:#222;
+    letter-spacing: -2px;
+    margin-bottom: -25px;
+    margin-top: -18px;
+    text-decoration: none;
+}
+#footer-style a {
+    color: #FFF;
+    text-decoration: none;
+    font-size: 104%;  /*79%;*/
+    color: #fff; /* #222; */
+}
+#footer-style a:hover {
+    color: #9d9d9d;  /* #ff3333; */
+}
+
+.bg-logo-slogan{background-color: #dedede;}
+.slogan-typeset,
+.slogan-typeset a {
+    text-transform: uppercase;
+    font-style: italic;
+    font-size: 30px;
+    color: #000;
+    letter-spacing: -2px;
+    margin-bottom: -1px;
+    text-decoration: none;
+}
+.footer-list {
+    list-style-type: none;
+    margin: 0px;
+    padding: 0px;
+}
+
+.footer-list li {
+    padding-left:4px;
+    margin-top: -3px;
+}
+
+  @media (max-width: 767px) {
+      #footer-style {text-align: center;}
+  }
+
+/*-------------- Bottom ---------------*/
+.bg-bottom {
+    background-color: #4b4b4b; /* #efefef; /*#222; }  /* #000;} */
+}
+#bottom {
+    font-size: 12px;
+    padding: 15px 0px;
+    color: #ddd;  /* #bebebe;  /*#808080; */
+    /*border-top: #ddd 1px dotted;*/
+    margin-bottom: -40px;
+}
+#bottom a {
+    color: #ddd;  /* #808080; */
+}
+#bottom a:hover {
+  color: #9d9d9d;  /* #ff3333; */
+  text-decoration: none;
+}
+
+.css3-validation-badge img {float: right;}
+@media (min-width:250px) and (max-width: 767px){
+    .css3-validation-badge img {float:none; margin: 0 auto;}
+}
+
+#bottom .wmp-hide {color: #4b4b4b /*#efefef; */ }  /*#222;*/
+#bottom .wmp-hide a {color: #4b4b4b; /*#efefef; */ font-size: 12px;}
+#bottom .wmp-hide a:hover {cursor:pointer; color: #fff; /* #808080; */ }
+
+
+.social-icons {
+    margin: 0px;
+    padding: 0px;
+    width: auto;
+}
+.social-icons li {
+    display: inline-block;
+    margin: -1px 1px 5px 0px;
+    padding: 0px;
+}
+
+@media (min-width: 270px) and (max-width: 370px) {
+    .logo-typeset,
+    .logo-typeset a {
+        font-size: 59px;
+    }
+    .slogan-typeset,
+    .slogan-typeset a {
+        font-size: 22px;
+    }
+}
+
+/*--------------- Warranty Registration styles -------------*
+#warranty-image {
+    border-radius:50%;
+    -webkit-transition-timing-function: ease-in-out;
+    -webkit-transition-duration: .8s;
+    -webkit-transition: -webkit-transform;
+    -ms-transition: -ms-transform .8s ease-in-out;
+    transition: transform .8s ease-in-out;
+}
+#warranty-image:hover{
+    cursor: pointer;
+    transform:rotate(360deg);
+    -ms-transform:rotate(360deg);
+    -webkit-transform:rotate(360deg);
+}
+*/
+
+#dealer_name {
+  display: none;
+}
+
+#dealer {
+  display: block;
+}
+
+#warranty-registration-form .error {
+  color: #ff0000;
+}
+
+
+/*------------- Exchange Program styles ---------------*/
+@media (min-width: 270px) and (max-width: 767px){
+    #exchange-program-image {display: block; margin: auto auto; width:50%;}
+}
+
+/*------------  error.php styles -------------------*/
+.error-x {font-size: 30px; color: #ff0000;}
+
+
+/*----------------- Contact.php styles -------------------*/
+#corp-info {line-height: 1.6em;}
+.contact-corp-info-sidebar {margin-top: 34px;}
+.contact-corp-info-sidebar p {line-height: 1.8em;}
+.google-map-container {border: #dedede 1px solid; border-radius: 4px; padding: 15px;}
+#mailing-information {display: none;}
+
+/*----------------- faq.php styles -------------------*/
+.faq .panel-body a {color: #0000ff;}
+/*.faq a:hover {text-decoration: none; color: #ff3333;}*/
+
+/*-------------- gun-shows.php styles ----------------*/
+.gun-show-title-bar {
+    border:#ddd 1px solid;
+    border-radius: 4px;
+    padding:20px 30px 15px 20px;
+    margin-bottom: 1em;
+}
+.gun-show-title-bar li {font-size: 130%;margin-bottom: .5em;}
+
+#gun-show-accordion a:focus {font-weight: bold; color: #000;}
+.gun-show-state-list {text-align: center;}
+.gun-show-list-state-block:hover {background-color: #f2f2f2;}
+.gun-show-list-state-block a:focus {font-weight: bold; color: #000;}
+
+.gun-show-image {
+    height: 166px;
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+}
+.gun-show-image img {
+    border-radius: 4px;
+    transition-property: all;
+    transition-duration: 1.2s;
+}
+.gun-show-image img:hover {
+    transform: scale(1.3);
+}
+.gun-show-image:hover .text-description {
+    opacity: 1;
+    transform: translateY(0);
+}
+.text-description {
+    position: absolute;
+    display: block;
+    width: 100%;
+    bottom: 0;
+    left: 0;
+    background-color: rgba(0,0,0,0.4);
+    color: #fff;
+    border-radius: 0 0 4px 4px;
+    text-align: center;
+    font-size: 150%;
+    font-weight: bold;
+    padding: 4px;
+    opacity: 0;
+    transition-property: all;
+    transition-duration: 0.5s;
+    transform: translateY(100%);
+}
+
+.box-show {
+  background-color: transparent;
+  min-height:280px;
+  border: #dedede 1px solid;
+  border-radius: 4px;
+  padding-bottom: 15px;
+  margin-bottom: 20px;
+}
+.box-show h1 {
+  background-color: #4B4B4B;
+  width: 100%;
+  color: #fff;
+  border-radius: 4px 4px 0px 0px;
+  text-align: center;
+  padding: 4px 0px;
+  border:1px solid #4B4B4B;
+}
+.box-show p {
+  font-size: 16px;
+}
+
+.bottom-border{border-bottom: #ddd 1px solid; margin:20px 0px;}
+
+@media (min-width: 768px) and (max-width:1024px){
+    .text-description {font-size:120%;}
+}
+.more-shows-2016 {}
+@media (min-width:250px) and (max-width:420px){
+    .more-shows-2016 {text-align: center;}
+}
+
+.list-styling {list-style-type: none;}
+
+/*--------- reviews.php styles -----------*/
+#lightbulb {margin-bottom: 15px;}
+@media (min-width: 250px) and (max-width: 767px){
+    #lightbulb img {margin: 0 auto;}
+}
+
+@media (max-width: 767px){
+    .gun-show-image img {margin: 0 auto;}
+}
+
+/*----------- tr-series styles ------------*/
+#tr-series-page-array{
+    width: 100%;
+    margin-left: 6%;
+}
+
+.tr-series-models {text-align: center;}
+.tr-series-models li:hover {background-color: #f2f2f2;}
+.tr-series-models a:focus {font-weight: bold; color: #000;}
+
+.box-tr-series {
+    border: #dedede 1px solid;
+    border-radius: 4px;
+    padding: 9px;
+    margin-bottom:2em;
+}
+.box-tr-series p a:hover {color:#ff0000; text-decoration: none;}
+.box-tr-series img {
+    margin: 10px auto;
+    display: block;
+    max-width: 100%;
+    height: auto;
+}
+.box-tr-series h4{color:#bebebe; margin: 0;}
+.box-tr-series h3{
+    font-style: italic;
+}
+
+
+.product-block-title {
+    border-bottom:3px solid #efefef;
+    margin-bottom:5px;
+    color:#bebebe;
+    text-align: left;
+}
+.product-block-title h3,
+.product-block-title span {
+    margin: 0px;
+    margin: 7px  7px 3px;
+}
+.product-block-title span a {color:#727272;}
+.product-block-title span a:hover {color:#ff0000; text-decoration: none;}
+
+
+#find-your-model-01 p,
+#find-your-model-02 p,
+#find-your-model-03 p,
+#find-your-model-04 p,
+#find-your-model-05 p{
+    font-size:16px;
+    font-style:italic;
+    letter-spacing:-1px;
+}
+
+
+#find-your-model-01 {
+    width:280px;
+    position:relative;
+    text-align:center;
+    left:115px;
+    top:200px;
+}
+#find-your-model-01 p{
+    font-size: 16px;
+    line-height: 18px;
+}
+
+#find-your-model-02 {
+    position: absolute;
+}
+#find-your-model-02 p{
+    position: relative;
+    left: 135px;
+    top:  30px;
+}
+
+#find-your-model-03 {
+    position: absolute;
+}
+#find-your-model-03 p{
+    position: relative;
+    left: 114px;
+    top:  227px;
+}
+
+#find-your-model-04 {
+    position: absolute;
+}
+#find-your-model-04 p{
+    position: relative;
+    left: 339px;
+    bottom:  -32px;
+}
+
+#find-your-model-05 {
+    position: absolute;
+}
+#find-your-model-05 p{
+    position: relative;
+    left: 171px;
+    top:  100px;
+}
+
+.pdf-owners-manual {
+  width: 100%;
+  height: 1000px;
+  margin-bottom: 30px;
+}
+
+.pdf-owners-manual embed {
+  width: 800px;
+  height: 1000px;
+}
+
+.pdf-owners-manual object {
+  width: 800px;
+  height: 1000px;
+}
+
+
+
+
+/*  - - - - - - - - - - - - ProductDetails/index.html  - - -  - - - - - - - - */
+/* forces dialog to top so modal: true will make clicking on links impossible */
+.ui-dialog { z-index: 1000 !important ;}
+
+#modal-holster,
+#modal-holster-video {
+   padding: 0;
+}
+
+#productDetailsHeading h1 {
+  font-size: 24px;
+}
+
+#fda_warning_img:hover {
+    cursor: pointer;
+    z-index: 10000;
+    -webkit-transform: scale(1.8);
+    -moz-transform: scale(1.8);
+    -o-transform: scale(1.8);
+    transform: scale(1.8);
+}
+#fda_warning_img {
+	-webkit-transition: all .4s ease-in-out;
+	-moz-transition: all .4s ease-in-out;
+	-o-transition: all .4s ease-in-out;
+	-ms-transition: all .4s ease-in-out;
+}
+
+#fda-label-install .modal-body img {
+  max-width: 560px;
+  height: auto;
+  margin: 0 auto;
+}
+
+
+
+.product-details-pdf-owners-manual {
+  margin-top: -15px;
+}
+.product-details-pdf-owners-manual embed {
+  width: 539px;
+  height: 600px;
+}
+
+.manual {
+  margin-top: -25px;
+  margin-left: -300px;
+  width: 100%;
+}
+
+.catalog {
+  width: 100%;
+}
+
+.product-details-price {
+  text-align: center;
+  padding-top:95px;
+  border-bottom:none;
+  margin-bottom:4px;
+  font-style:normal;
+  font-weight:bold;
+  color:#bebebe;
+}
+
+.product-links-img-box {
+  height: 100px;
+  font-size: 1em;
+  text-align: center;
+  margin-bottom: 70px;
+}
+
+.product-links-img-box h3 {
+  font-style: italic;
+  font-weight: bold;
+  color: #000;
+  margin: 0px;
+  margin-bottom: 2px;
+}
+
+.product-links-img-box img {
+  max-height: 90px;
+  min-height: 90px;
+  max-width: 185px;
+}
+
+#feature-list{}
+#feature-list p {
+    margin:0px;
+    font-size: 12px;
+}
+
+#product-details-patent-pending{
+    position: absolute;
+}
+
+#product-details-patent-pending p {
+    font-size: 10px;
+    top:182px;
+    right: 172px;
+}
+
+.product-details-what-is a {
+    color: #0000ff !important;
+}
+
+.product-details-what-is a:hover {
+    color: #0000ff;
+    text-decoration: underline !important;
+}
+
+#holster-learn-more:hover {
+   cursor: pointer;
+}
+
+
+
+/* Views/base.html  */
+.page-top-padding {
+  padding-top: 113px;
+}
+
+#topnav-chatAlert {
+   display: none;
+}
+#topnav-chatAlert a {
+   color: #ff0000;
+   font-weight: bold;
+}
+
+
+/*.modal-content {
+   background-image: url('/assets/images/arm_weapontronics_small.png');
+   background-repeat: repeat;
+   background-size: cover;
+   background-size: 100px;
+}*/
+/*  end  */
+
+
+
+@media (min-width: 1479px) {
+  #owner-manual-iframe {
+    width: 582px;
+    height: 800px
+  }
+  /* .page-top-padding {
+    padding-top: 113px;
+  } */
+}
+
+@media (min-width: 1200px) and (max-width: 1478px) {
+  #owner-manual-iframe {
+    width: 582px;
+    height: 800px
+  }
+  /* .page-top-padding {
+    padding-top: 164px;
+  } */
+}
+
+@media (max-width: 1199px) {
+  .manual {
+    margin-left: -200px;
+  }
+
+  /* .page-top-padding {
+    padding-top: 164px;
+  } */
+
+}
+
+@media (min-width:1025px){
+     #product-details-patent-pending p {
+        font-size: 10px;
+        width:137px;
+        top: 182px;
+        right: 177px;
+    }
+}
+
+@media (max-width:1024px){
+     #product-details-patent-pending p {
+        font-size: 10px;
+        width:70px;
+        top: 158px;
+        right: 111px;
+    }
+    #owner-manual-iframe {
+      width: 570px;
+      height:570px
+    }
+
+    /* .page-top-padding {
+      padding-top: 164px;
+    } */
+}
+
+
+@media (max-width:991px){
+  .product-details-price {
+    padding-top: 70px;
+  }
+  .manual {
+    margin-left: -92px;
+  }
+
+}
+
+@media (max-width:774px){
+     #product-details-patent-pending p {
+        width:70px;
+        font-size: 10px;
+        top: 155px;
+        right: 113px;
+    }
+
+    #owner-manual-iframe {
+      width: 560px;
+      height:700px
+    }
+}
+
+
+@media (max-width:767px){
+     #product-details-patent-pending p {
+        font-size: 10px;
+        width: 70px;
+        top: 157px;
+        right: 109px;
+    }
+    .product-details-price {
+    }
+    #product-details-specifications-div p,
+    #product-details-specifications-div h4 {
+
+    }
+    .manual {
+      margin-left: 0px;
+    }
+
+
+}
+/* iphone 6 Plus 736px x 414px */
+@media (max-width:737px){
+     #product-details-patent-pending p {
+        font-size: 11px;
+        width: 125px;
+        top: -177px;
+        right: -554px;
+    }
+    #owner-manual-iframe {
+      width: 590px;
+      height:290px
+    }
+
+    /* .page-top-padding {
+      padding-top: 99px;
+    } */
+}
+
+@media (max-width:732px){
+     #product-details-patent-pending p {
+        font-size: 11px;
+        top: -179px;
+        right: -499px;
+    }
+}
+
+/* iphone 6 667px x 375px */
+@media (max-width:668px){
+     #product-details-patent-pending p {
+        top: -175px;
+        right: -484px;
+    }
+    #owner-manual-iframe {
+      width: 600px;
+      height:250px
+    }
+
+    /* .page-top-padding {
+      padding-top: 99px;
+    } */
+}
+
+@media (max-width:641px){
+     #product-details-patent-pending p {
+        top: -177px;
+        right: -465px;
+    }
+}
+
+@media (max-width:636px){
+    .manual {
+      margin-left: -14px;
+    }
+}
+
+@media (max-width:569px){
+     #product-details-patent-pending p {
+        top: -177px;
+        right: -396px;
+    }
+    #owner-manual-iframe {
+      width: 515px;
+      height:195px
+    }
+
+    /* .page-top-padding {
+      padding-top: 99px;
+    } */
+}
+
+@media (max-width:436px){
+     #product-details-patent-pending p {
+        top: -177px;
+        right: -265px;
+    }
+}
+
+@media (max-width:415px){
+     #product-details-patent-pending p {
+        top: -177px;
+        right: -244px;
+    }
+
+    #owner-manual-iframe {
+      width: 350px;
+      height: 500px;
+    }
+
+    /* .page-top-padding {
+      padding-top: 99px;
+    } */
+}
+
+@media (max-width:376px){
+     #product-details-patent-pending p {
+        top: -176px;
+        right: -212px;
+    }
+    #owner-manual-iframe {
+      width: 325px;
+    }
+
+    .page-top-padding {
+      padding-top: 99px;
+    }
+}
+
+@media (max-width:361px){
+     #product-details-patent-pending p {
+        top: -222px;
+        right: -194px;
+    }
+}
+
+@media (max-width:321px){
+
+    #product-details-patent-pending p {
+        top: -232px;
+        right: -160px;
+    }
+    #owner-manual-iframe {
+      width: 300px;
+    }
+
+    /* .page-top-padding {
+      padding-top: 99px;
+    } */
+
+}
+
+#frame{
+    display:none;
+    position: fixed;
+    background-color: #fff;
+    margin: 0 auto;
+    max-width: 1120px;
+    height: 760px;
+    max-height: 760px;
+    left: 50%; /* 1/2 total width */
+    margin-left: -540px; /* 1/2 total width */
+    padding-top: 20px;
+    padding-bottom: 20px;
+    margin-top: 20px;
+}
+#overlay{
+    display: none;
+    width: 100%;
+    height: 100%;
+    position: fixed; /* fixed position is relative to the browser window */
+    background-color: rgba(0,0,0,.75);
+    /*opacity: 0.85;*/
+}
+#main{
+    width:100%;
+    height: auto;
+    /*margin-left: 20px;*/
+}
+
+#frame2{
+    display:none;
+    position: fixed;
+    background-color: #fff;
+    margin: 0 auto;
+    max-width: 640px;
+    height: 375px;
+    max-height: 640px;
+    left: 50%; /* 1/2 total width */
+    margin-left: -320px; /* 1/2 total width */
+    padding-top: 20px;
+    padding-bottom: 20px;
+    margin-top: 20px;
+}
+#overlay2{
+    display: none;
+    width: 100%;
+    height: 100%;
+    position: fixed; /* fixed position is relative to the browser window */
+    background-color: rgba(0,0,0,.75);
+    /*opacity: 0.85;*/
+}
+#main2{
+    width:100%;
+    height: auto;
+    /*margin-left: 20px;*/
+}
+
+#full-size-image,
+#laser-features-image {display:none;}
+#directions{padding-left:3px; font-size:16px; color:#838383; margin-top: 3px;}
+
+.product-image{}
+/*
+.product-image img {transition: all 2s ease-in-out;}
+.product-image img:hover{cursor:pointer; transform: scale(2.0);}
+*/
+
+@media (max-width: 1366px) and (min-width: 1025px) {
+  #frame {
+    max-width: 1024px;
+    height: 704px;
+    max-height: 702px;
+    left: 50%; /* 1/2 total width */
+    margin-left: -512px; /* 1/2 total max-width */
+  }
+}
+
+@media (max-width: 1024px) and (min-width: 769px) {
+  #frame {
+    max-width: 896px;
+    height: 531px;
+    max-height: 608px;
+    left: 50%; /* 1/2 total width */
+    margin-left: -383px; /* 1/2 total max-width */
+  }
+}
+
+@media (max-width: 768px) and (min-width: 767px) {
+  #frame {
+    max-width: 560px;
+    height: 380px;
+    max-height: 380px;
+    left: 50%; /* 1/2 total width */
+    margin-left: -280px; /* 1/2 total width */
+  }
+}
+/* iPhone 6 Plus = 736h x 414w */
+@media (max-width: 766px) and (min-width: 736px) {
+  #frame {
+    max-width: 392px;
+    height: 266px;
+    max-height: 266px;
+    left: 50%; /* 1/2 total width */
+    margin-left: -196px; /* 1/2 total width */
+    padding-top: 13px;
+    padding-bottom: 10px;
+  }
+}
+
+/* iPhone 6 Plus = 736h x 414w */
+@media (max-width: 735px) and (min-width: 667px) {
+  #frame {
+    max-width: 336px;
+    height: 228px;
+    max-height: 228px;
+    left: 50%; /* 1/2 total width */
+    margin-left: -168px; /* 1/2 total width */
+    padding-top: 13px;
+    padding-bottom: 10px;
+  }
+}
+
+/* iPhone 5 = 568h x 320w */
+@media (max-width: 666px) and (min-width: 568px) {
+  #frame {
+    max-width: 280px;
+    height: 181px;
+    max-height: 181px;
+    left: 50%; /* 1/2 total width */
+    margin-left: -140px; /* 1/2 total width */
+    padding-top: 7px;
+    padding-bottom: 10px;
+  }
+}
+
+/* iPhone 5 = 568h x 320w */
+@media (max-width: 567px) and (min-width: 320px) {
+  #frame {
+    max-width: 224px;
+    height: 145px;
+    max-height: 145px;
+    left: 50%; /* 1/2 total width */
+    margin-left: -119px; /* 1/2 total width */
+    padding-top: 7px;
+    padding-bottom: 10px;
+  }
+  #click-to-enlarge {
+    margin-top: 20px;
+  }
+}
+
+
+#social-media-links{text-align: center; margin-bottom: 14px;}
+
+#social-media-links .badge {
+    margin-top:-17px;
+    margin-left: -7px;
+    margin-right: 15px;
+    background-color: #000;
+}
+#social-media-links ul{
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    padding:3px 0px 5px 0px;
+}
+#social-media-links li{
+    display: inline;
+    padding: 10px;
+}
+#social-media-links ul a {
+    color: #727272;
+}
+#social-media-links ul a:hover{
+    color:#fff;
+    background-color: #727272;
+    border-radius: 50%;
+}
+#social-media-links a.icoFacebook:hover {
+    background-color:#3B5998;
+}
+#social-media-links a.icoTwitter:hover {
+	background-color:#33ccff;
+}
+#social-media-links li a{
+    padding:7px;
+    width: 30px;
+    height: 30px;
+    font-size:20px;
+}
+.laser-colors {font-weight: bold;}
+.laser-colors:hover {display:inline-block; transform: scale(1.1);}
+
+
+
+.tab-content > .active {
+    display: block;
+    border: #dedede 1px solid;
+    border-radius: 4px;
+    border-top:none;
+    padding: 9px 16px;
+}
+.nav-tabs > li {margin-bottom:  -2px;}
+
+.modal-content iframe{
+    margin: 0 auto;
+    display: block;
+}
+.modal-body iframe {width: 567px; height:318px}
+@media (max-width:767px){
+    .tr-series-models {text-align: center;}
+}
+
+.pistol-model-list a:visited,
+.pistol-model-list:active {font-weight:bold;}
+
+.box-bottom {border-bottom: #ddd 1px dotted; margin: 20px auto 30px; max-width:80%;}
+
+
+#tr-series-description {
+    color: #838383;
+    line-height: 50px;
+    height:50px;
+    font-size:16px;
+}
+
+#worlds-finest {
+    display: inline-block;
+    float: right;
+}
+
+@media (max-width: 767px){
+    #worlds-finest {float: none;}
+}
+
+
+.bg-f1f1f1{
+    background-color: #f1f1f1;
+    padding-top: 40px;
+    padding-bottom: 66px;
+}
+
+.bg-fff{
+    background-color: #fff;
+    padding-bottom: 30px;
+    padding-top: 30px;
+}
+#bg-pistol {
+    background-image: url('../images/tr-series/tr-series-page/a_tr_series_page_792x453.png');
+    background-repeat: no-repeat;
+    overflow: visible;
+    width: 100%;
+    height: 100%;
+}
+
+#tr-series-text-box {
+    /*border: 1px solid #0000ff;*/
+    position: relative;
+    right: 10px;
+    bottom: 180px;
+}
+
+#tr-series-text-box h1,
+#tr-series-text-box h2,
+#tr-series-text-box h3,
+#tr-series-text-box p {color:#838383; }  /*#979797;}*/
+
+#tr-series-text-box p{font-size:17px;}
+
+
+#tr-series-sensor-text-block {
+    position: relative;
+    color: #838383;   /*#ababab;*/
+}
+#tr-series-sensor-text-block h2 {
+    line-height: 45px;
+    margin-top: 34px;
+}
+
+#tr-series-sensor-caption{
+    position: relative;
+    top:122px;
+    font-size: 16px;
+}
+
+#tr-series-button-caption {
+    text-align: right;
+    color: #838383;
+    font-size: 16px;
+}
+
+
+#tr-series-green-and-red-title {
+
+}
+
+
+#tr-series-green-red-text-block-top p,
+#tr-series-green-red-text-block-bottom p {
+    font-size: 18px;
+}
+
+#tr-series-green-red-text-block-top{
+    color: #838383;
+    position: relative;
+    max-width:370px;
+    height:auto;
+    top: 130px;
+}
+
+#tr-series-green-and-red-image-block {
+    /*margin-top: -98px;*/
+    padding-top: 20px;
+    padding-bottom: 30px;
+}
+
+#tr-series-green-red-text-block-bottom {
+    color: #838383;
+    position: relative;
+    max-width:370px;
+    height:auto;
+    bottom: 265px;
+    left: 591px;
+}
+
+#tr-series-custom-fit-image-block {
+    border: 3px solid #222;
+    padding: 0px;
+    border-radius: 2px;
+}
+
+#tr-series-custom-fit-text-block {
+    font-family: "myriad-pro", "Calibri", sans-serif;
+    position: relative;
+    color: #838383;
+    max-width: 200px;
+    height: auto;
+    font-weight: normal;
+    text-transform: uppercase;
+    left: 231px;
+    bottom: 74px;
+}
+
+#tr-series-custom-fit-zytel-image-block {
+    position: relative;
+    float: right;
+    bottom: 65px;
+}
+
+#tr-series-custom-fit-zytel-text-block {
+    position: relative;
+    color: #838383;
+    max-width: 300px;
+    height: auto;
+    left: 661px;
+    top: 111px;
+    font-size: 16px;
+}
+
+
+.easy-to-live-with-img-box {
+    border: 1px solid #ccc;
+    padding: 20px;
+    border-radius: 3px;
+    max-height: 325px;
+}
+
+.easy-to-live-with-img-box img {
+    max-height: 288px;
+}
+
+.easy-to-live-with-text-box {
+    border: 1px solid #ccc;
+    padding: 20px;
+    border-radius: 3px;
+    height: 325px;
+    max-height:325px;
+}
+
+
+#tr-series-holster-section {
+  color: #838383;
+}
+
+#tr-series-adjustments-section {
+  color: #838383;
+  padding-bottom: 80px
+}
+
+#tr-series-all-pistols-section h1 {
+    color: #838383;
+}
+
+
+/* - - -  @media MUST be below rules to which it applies  - - - - */
+@media (min-width:991px) and (min-width:1200px){
+    #tr-series-text-box {
+        right: -20px;
+    }
+
+    #tr-series-sensor-text-block h2{
+        line-height: 37px;
+    }
+    #tr-series-sensor-caption{
+        /*position: initial;*/
+        top:49px;
+    }
+
+    #tr-series-green-and-red-image-block {
+        margin-top: 45px; /*-53px;*/
+    }
+
+    #tr-series-green-red-text-block-bottom {
+        bottom: 221px;
+        left: 495px;
+    }
+
+    #tr-series-custom-fit-zytel-text-block {
+        left: 484px;
+    }
+
+    #find_your_model_01{top:200px; left:73px;}
+}
+
+
+@media (min-width:991px) and (max-width:1199px){
+    #tr-series-text-box {
+        right: -20px;
+    }
+
+    #tr-series-sensor-text-block h2{
+        line-height: 37px;
+    }
+    #tr-series-sensor-caption{
+        /*position: initial;*/
+        top:49px;
+    }
+
+    #tr-series-green-and-red-image-block {
+        margin-top: 139px; /*-53px;*/
+    }
+
+    #tr-series-green-red-text-block-bottom {
+        bottom: 221px;
+        left: 495px;
+    }
+
+    #tr-series-custom-fit-zytel-text-block {
+        left: 484px;
+    }
+
+    #find_your_model_01{top:200px; left:73px;}
+}
+@media (min-width:768px) and (max-width:990px){
+    #tr-series-text-box {
+        right: -10px;
+        bottom: 30px;
+        font-size: 90%;
+        padding-bottom: 20px;
+    }
+    #tr-series-text-box h2 {
+        font-size: 24px;
+        line-height: 24px;
+        padding-top: 10px;
+    }
+    #video-link {
+        padding-bottom: 9px;
+    }
+
+    #tr-series-sensor-text-block h2{
+        font-size: 24px;
+        line-height: 30px;
+    }
+    #tr-series-sensor-caption{
+        /*position: initial;*/
+        top:18px;
+    }
+
+
+    #tr-series-green-red-text-block-top {
+        max-width:260px;
+        top: 63px;
+    }
+
+    #tr-series-green-and-red-image-block {
+        margin-top: -53px;
+    }
+
+    #tr-series-green-red-text-block-bottom {
+        max-width:260px;
+        bottom: 173px;
+        left: 397px;
+    }
+
+    #tr-series-custom-fit-zytel-text-block {
+        left: 273px;
+    }
+
+    #find_your_model_01{top:-37px; left:361px;}
+    .navbar-brand img {margin-right: 0px;}
+}
+@media (min-width: 320px) and (max-width:767px){
+    #tr-series-text-box {
+        right: -10px;
+        bottom: 13px;
+        font-size: 90%;
+        padding-bottom: 20px;
+    }
+    #tr-series-text-box h2 {
+        font-size: 18px;
+        line-height: 20px;
+        padding-top: 10px;
+    }
+    #video-link {
+        text-align: center;
+        padding-bottom: 6px;
+    }
+
+    #tr-series-sensor-text-block h2{
+        text-align: center;
+        line-height: 25px;
+        font-size: 20px;
+    }
+    #tr-series-sensor-caption{
+        text-align: center;
+        position: initial;
+    }
+
+    #tr-series-holster-section h1{
+      text-align: center;
+    }
+    #tr-series-adjustments-section h1{
+      text-align: center;
+    }
+
+}
+
+@media (min-width: 646px) and (max-width:767px){
+
+    #tr-series-button-caption {
+        text-align: left;
+    }
+
+    #tr-series-green-red-text-block-top {
+        max-width:200px;
+        top: 36px;
+    }
+
+    #tr-series-green-and-red-image-block {
+        margin-top: -81px;
+        margin-left: 12%;
+    }
+
+    #tr-series-green-red-text-block-bottom {
+        max-width:200px;
+        bottom: 147px;
+        left: 325px;
+    }
+
+    #find_your_model_01{top:-10px; left:23px;}
+}
+
+@media (min-width: 320px) and (max-width:645px){
+
+    #tr-series-description {
+        text-align: center;
+    }
+
+    #tr-series-green-and-red-title{
+        text-align: center;
+    }
+
+    #tr-series-button-caption {
+        text-align: left;
+    }
+
+    #tr-series-green-red-text-block-top {
+        max-width:180px;
+        top: 36px;
+    }
+
+    #tr-series-green-and-red-image-block {
+        margin-top: 20px;
+        margin-left: 10%;
+    }
+
+    #tr-series-green-red-text-block-bottom {
+        max-width:180px;
+        bottom: 28px;
+        left: 101px;
+    }
+
+
+    #tr-series-custom-fit-title {
+        text-align: center;
+    }
+    #tr-series-custom-fit-zytel-image-block {
+        position: relative;
+        float: right;
+        bottom: -26px;
+    }
+    #tr-series-custom-fit-text-block {
+        max-width: 200px;
+        left: 66px;
+        bottom: 13px;
+        text-align: center;
+    }
+    #tr-series-custom-fit-zytel-text-block {
+        left: 16px;
+        text-align: center;
+    }
+
+    #find_your_model_01{top:-10px; left:23px;}
+    .navbar-brand img {margin-right: 0px;}
+
+}
+
+
+
+/*----------- products-by-brand.php styles ------------*/
+.pistol-brand-image{
+
+}
+
+.pistol-brand-image p,
+.pistol-brand-image h1,
+.pistol-brand-image h2 {
+   text-align: center;
+   font-size: 47px;
+   color: #fff;
+   font-weight: 400;
+   text-transform: uppercase;
+   line-height: 46px;
+   vertical-align: middle;
+}
+
+.red-band {
+   margin-top: -20px;
+   background-color: #ff3333;
+   height:48px;
+   line-height: 46px;
+   width:100%;
+}
+
+.pistol-box {
+   width: 316px;
+   height: 171px;
+   padding-right: 0px;
+   margin-bottom:20px;
+}
+
+.pistol-box img {
+   width: auto;
+   max-height: 160px;
+   margin-bottom: 0px;
+}
+
+/*
+.brand-icon-box{
+    float: left;
+    width:120px;
+    height: 100px;
+    border:1px solid #dedede;
+    border-radius: 4px;
+    margin:10px;
+    text-align: center;
+}
+.brand-icon-box:hover{border: #000 1px solid;}
+.brand-icon-box img {
+    width: 100px;
+    vertical-align: middle;
+    max-height: 90px;
+    max-width: 100px;
+}
+
+*/
+
+/* parent div */
+.products-by-brand-tr-series-page {
+    float: left;
+    margin-bottom:30px;
+    padding:0;
+    text-align: center;
+    margin-bottom: 30px;
+}
+/* child div */
+.image-box-tr-series-page{
+    border:#ddd 1px solid;
+    width: 250px;  /*221px;  253px;  316px;*/
+    height: 329px;
+    padding-left: 10px;
+    padding-right: 0px;
+    padding-bottom:10px;
+    margin-right: 10px;
+    border-radius: 4px 4px 0 0;
+    overflow: hidden;
+    margin-bottom: -6px;
+}
+
+.image-box-tr-series-page img{
+   margin-bottom: 0px;
+   display: block;
+   height: 130px; /*130px;*/
+   width: auto;
+   margin: 0 auto;
+   padding-top: 10px;
+   padding-bottom: 10px;
+}
+
+.tr-series-video-review-box {
+   padding: 0px 5px;
+   width: 250px;
+   height: 80px;
+   background-color: #fff;
+   border-radius: 0 0 4px 4px;
+   border:#ddd 1px solid;
+}
+
+.tr-series-video-review-box .box-adjust {
+    position: relative;
+    top: 10px;
+}
+
+
+.tr-series-video-review-box img{
+    margin-bottom: 0px;
+    display: block;
+    height: auto;
+    width: 100px;
+    padding-top: 0px; /* offsets padding in .image-box-tr-series-page img */
+    padding-bottom: 0px; /* offsets padding in .image-box-tr-series-page img */
+    margin: 0 auto;
+}
+
+.tr-series-video-review-box .media {
+  margin-top: 0px;
+}
+
+.tr-series-video-review-box p {
+  position: relative;
+  top: 9px;
+  font-size: 16px;
+  line-height: 18px;
+  color: #787878;
+}
+.tr-series-video-review-box h5 {
+  font-size: 16px;
+  line-height: 18px;
+}
+
+
+.submit-your-youtube-review {
+  padding: 0px 5px;
+  width: 250px;
+  height: auto;
+  background-color: #fff;
+  border-radius: 0 0 4px 4px;
+  border:#ddd 1px solid;
+}
+
+.submit-video-text {
+  padding: 10px 0;
+  text-align: center;
+}
+
+.vert-align {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+#video-submit-btn {
+  margin-bottom: 0px;
+  height: 54px;
+  width: 100px;
+  font-size: 19px;
+  line-height: 38px;
+}
+
+
+#tr-series-page-model-match {
+    /*max-width: 221px;*/ /* set =< pistol-box-tr-series-page width */
+    text-align: center;
+    margin-left: -10px; /* to compensate for padding-left: 10px */
+    margin-bottom: 30px;
+}
+
+#tr-series-page-model-match h4 {
+    margin-top: 3px;
+}
+
+#border-under-pistol-brand{
+    border-bottom: #ddd 1px solid;
+    margin-right: 10px;
+    margin-top: -5px;
+    margin-bottom: 10px;
+}
+
+.pistol-box-tr-series-page h4{
+    /*text-align: left;
+    padding-left: 59px;  */
+    margin-left: -10px; /* to compensate for padding-left: 10px */
+}
+
+
+
+.gto-text-box{max-width:240px;}
+
+
+#bg-gto,
+#bg-holsters {
+   background-color: #fff;
+   padding: 20px 0px;
+}
+
+#bg-trseries,
+#bg-stingray,
+#bg-batteries {
+   background-color: #f2f2f2;
+   padding: 20px 0px;
+}
+.products-by-brand {
+    list-style-type: none;
+    margin:0;
+    padding:0;
+    margin-bottom: 24px;
+}
+
+
+/* * * * * * * TR Series section ProductsByBrand/index.html * * * * * * */
+
+.white-band {
+   background-color: #fff;
+   width: 100%;
+   height:15px;
+}
+
+.products-by-brand-tr-series-title-text,
+.products-by-brand-gto-flx-series-title-text {
+   margin: 0;
+   padding: 0;
+}
+
+/* product container div */
+.products-by-brand-tr-series,
+.products-by-brand-gto-flx-series {
+   /*background-color: #fff;*/
+   margin:0;
+   padding:0;
+   border: 1px solid #ddd;
+   border-radius: 4px;
+   padding: 15px 10px;
+   margin-bottom: 20px;
+   height: 339px;
+   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+.products-by-brand-gto-flx-series {
+   height: 336px;
+}
+
+
+.products-by-brand-tr-series-image-box,
+.products-by-brand-gto-flx-series-image-box {
+   display: table;
+   /*border: 1px solid blue;
+   border-radius: 4px;*/
+   padding: 0;
+   margin: 0;
+   margin: 0 auto;
+   height: 150px;
+   padding: 0px 15px;
+}
+.products-by-brand-gto-flx-series-image-box {
+   height: 180px;
+}
+
+
+.products-by-brand-tr-series-image-box img,
+.products-by-brand-gto-flx-series-image-box img {
+   display: table-cell;
+   vertical-align: top;
+   text-align: center;
+   /*border: 1px solid red;
+   border-radius: 4px;*/
+}
+
+.products-by-brand-tr-series-text-box,
+.products-by-brand-gto-flx-series-text-box {
+   width: 100%;
+   display: table;
+   /*border: 1px solid green;
+   border-radius: 4px;*/
+   margin:0;
+   font-size: 16px;
+   text-align: center;
+   height: 60px;
+}
+.products-by-brand-gto-flx-series-text-box {
+   height: 90px;
+}
+
+.products-by-brand-tr-series-text-box-text,
+.products-by-brand-gto-flx-series-text-box-text {
+   display: table-cell;
+   vertical-align: top;
+}
+
+.products-by-brand-tr-series-text-box-text p,
+.products-by-brand-gto-flx-series-text-box-text p {
+   padding: 0;
+   margin: 0;
+   font-size: 1.2em;
+}
+.products-by-brand-tr-series-armalaser-model-text-box,
+.products-by-brand-gto-flx-series-armalaser-model-text-box {
+   display: table;
+   height: 30px;
+   width: 100%;
+   margin :0;
+   padding: 0;
+   font-size: 19px;
+   text-align: center;
+}
+.products-by-brand-tr-series-armalaser-model-text-box-text,
+.products-by-brand-gto-flx-series-armalaser-model-text-box-text {
+   display: table-cell;
+   vertical-align: bottom;
+}
+
+
+
+
+
+
+/*
+.products-by-brand ul {
+    display: inline-block;
+    text-align: center;
+    list-style-type: none;
+    margin: 0;
+    padding:0;
+}
+*/
+.products-by-brand li {
+   display:inline-block;
+   padding-right: 25px;
+   margin-bottom:15px;
+}
+.products-by-brand img {
+    padding:0px;
+    /*display: inline;*/
+}
+
+
+.products-by-brand-holsters  {
+   /*float: left;*/
+   margin: 0px;
+   padding: 20px 5px;
+   /*border: 1px solid #ff0000;*/
+   text-align: center;
+   display:inline-block;
+   margin-bottom:30px;
+   margin-right: 15px;
+   width: 250px; /*170px;*/
+   max-height:495px; /*337px;*/
+   border: 1px solid #eee;
+   border-radius: 4px;
+   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+.products-by-brand-holsters-adtitle {
+   margin-bottom: -10px;
+   padding: 0 15px 0 15px;
+}
+.products-by-brand-holsters-image {
+   /*border: 1px solid #ff0000;*/
+   /* height: 200px; */
+   min-height: 300px;
+   line-height: 300px;
+   width: auto;
+   display: table;
+   margin: 0 auto;
+}
+.products-by-brand-holsters-image-div {
+   display: table-cell;
+   vertical-align: middle;
+}
+.products-by-brand-holsters-image img {
+   /*border: 1px solid #ff0000;*/
+   width: 170px;
+   height: auto;
+   vertical-align: middle;
+}
+.products-by-brand-holsters-image-caption {
+   height: 45px;
+}
+
+
+.product-details-holster-show-reverse-image a {
+   cursor: pointer;
+}
+
+
+
+#bg-gto h3,
+#bg-trseries h3,
+#bg-stingray h3,
+#bg-holsters h3,
+#bg-batteries h3 {margin-bottom:0; padding-top:20px;}
+
+.stingray-text-products-by-brand {
+    margin-top:40px;
+    margin-left: -31px;
+    color: #838383;
+    font-size: 14px;
+}
+
+.gto-text-main-html {
+    display: block;
+    margin-top:0px;
+    margin-left: 0px;
+    color: #838383;
+    font-size: 14px;
+    text-align: left;
+    max-width: 275px;
+    height: 100px;
+}
+
+/*.gto-text-main-html .product-page-pistol-name {
+    font-size:20px;
+}*/
+
+@media (min-width:991px) and (max-width:1199px){
+    .stingray-text-products-by-brand {
+        margin-left: 10px;
+    }
+}
+@media (min-width:768px) and (max-width:990px){
+    .stingray-text-products-by-brand {
+        margin-left: 0px;
+    }
+}
+@media (min-width: 320px) and (max-width:568px){
+    .stingray-text-products-by-brand {
+        text-align: center;
+    }
+    #bg-holsters h1 {
+        text-align: center;
+    }
+    .products-by-brand{
+        max-width: 100%;
+        margin:0 auto;
+        margin-bottom: 24px;
+    }
+    .products-by-brand ul {
+        display: block;
+        margin-left: auto;
+    }
+    .products-by-brand img {
+        display: block;
+        margin: 0 auto;
+    }
+    .products-by-brand li {
+        float:none;
+    }
+}
+
+
+.dividing-line {
+    height:30px;
+    background-color: #fff;
+}
+
+
+/* - - - - - - - - - -  gto.php  - - - - - - - - - - - - */
+.shadow-border{
+    -webkit-box-shadow:0px 1px 1px #de1dde;
+    -moz-box-shadow:0px 1px 1px #de1dde;
+    box-shadow:0px 1px 1px #de1dde;
+ }
+
+ .shadow{
+  -webkit-box-shadow: 0 4px 6px -6px #222;
+  -moz-box-shadow: 0 4px 6px -6px #222;
+  box-shadow: 0 4px 6px -6px #222;
+  margin-bottom: 6px;
+}
+#gto-description{
+    line-height: 50px;
+    height:50px;
+}
+
+.gto-headline{
+     font-size: 52px;
+     letter-spacing: 1px;
+     margin-top: 50px;
+}
+.gto-headline h1{
+    font-size:52px;
+    letter-spacing: 1px;
+}
+
+.gto-headline h3{
+    color:#838383;
+}
+
+.gto-headline2{
+    font-size: 52px;
+    letter-spacing: 1px;
+    margin-top: -20px;
+}
+
+.btn-fix button:hover {background-color:#005ab3; color:#fff;}
+.gto-video-bank {margin-bottom: 1em;}
+.video-bank-btn{display:block; padding: 12px 0px 5px 0px;font-size:150%;}
+.btn-align {margin-right:6px;margin-bottom:7px;}
+
+#gto-text-box-top-one {
+    position: relative;
+    right: -315px;
+    bottom: -136px;
+    color:#838383;
+    font-size:18px;
+}
+
+#gto-text-box-top-two {
+    position: relative;
+    right: 0px;
+    bottom: 120px;
+    color:#838383;
+    font-size:18px;
+}
+
+#gto-text-box-top-three {
+    position: relative;
+    right: 89px;
+    bottom: 37px;
+}
+/* Controls Group below */
+#gto-text-box-top-four {
+    position: relative;
+    right: 0px;
+    bottom: 81px;
+}
+/* - - - Group - - - */
+#button-group{
+    position: relative;
+}
+#button-images{
+    position: absolute;
+    left: 40px;
+}
+#push-button-on-grip{
+    position: absolute;
+    color: #0000ff;
+    top: 128px;
+    left: 50px;
+    font-size: 12px;
+}
+#push-button-on-laser-body{
+    position: absolute;
+    color: #0000ff;
+    top: 122px;
+    left: 220px;
+    font-size: 12px;
+}
+#the-competition{
+    position: absolute;
+    bottom: 0px;
+    left: 102px;
+    font-size: 20px;
+    color:#000;
+}
+/* - - - // Group - - - */
+
+/* space below competition buttons */
+#competition-div{
+
+}
+
+#gto-text-box-top-five {
+    position: relative;
+    left: 100px;
+    bottom: 0px;
+}
+
+#gto-text-box-top-six {
+    position: relative;
+    right: 290px;
+    top: 90px;
+    color:#838383;
+    font-size: 14px;
+}
+
+#gto-text-box-top-seven {
+    position: relative;
+    left: 100px;
+    bottom: 120px;
+    color:#838383;
+}
+
+#gto-text-box-top-eight {
+    position: relative;
+    top: 91px;
+    left: 0px;
+}
+
+#gto-text-box-top-nine {
+    position: relative;
+    top: 76px;
+    right: 20px;
+}
+#gto-shown{
+    position:relative;
+    color: #838383;
+    margin-bottom: 30px;
+    margin-left: 42px;
+}
+#activate-laser-by{
+    position:relative;
+    color: #838383;
+}
+#dont-install{
+    position:relative;
+    color: #838383;
+}
+#convenient-battery-door{
+    margin-bottom: 30px;
+    letter-spacing: 1px;
+    font-size:20px;
+    color:#838383;
+}
+#used-without-flx{
+
+}
+
+#gto-page-match-box {
+    background-color: #fff;
+    padding: 14px 20px 5px 25px;
+    margin-bottom: 3px;
+}
+
+#gto-page-show {
+    cursor: pointer;
+    display: none;
+}
+#gto-page-hide {
+    cursor: pointer;
+}
+
+/* - - -  @media MUST be below rules to which it applies  - - - - */
+
+@media (min-width:991px) and (max-width:1199px){
+    #gto-text-box-top-one {
+        bottom: -111px;
+    }
+    #gto-text-box-top-three {
+        right: 45px;
+    }
+
+    /* Controls Group below */
+    #gto-text-box-top-four {
+        position: relative;
+        right: 0px;
+        bottom: 81px;
+    }
+    /* - - - Group - - - */
+    #button-group{
+        position: relative;
+    }
+    #button-images{
+        position: absolute;
+        left: 40px;
+    }
+    #push-button-on-grip{
+        position: absolute;
+        color: #0000ff;
+        top: 102px;
+        left: 50px;
+        font-size: 12px;
+    }
+    #push-button-on-laser-body{
+        position: absolute;
+        color: #0000ff;
+        top: 99px;
+        left: 220px;
+        font-size: 11px;
+    }
+    #the-competition{
+        position: absolute;
+        bottom: 0px;
+        left: 73px;
+        font-size: 20px;
+        color:#000;
+    }
+    /* - - - // Group - - - */
+    #gto-text-box-top-six {
+        right: 163px;
+    }
+    #gto-text-box-top-seven {
+        position: relative;
+        left: 148px;
+        bottom: 120px;
+    }
+    #gto-text-box-top-nine {
+        top: 25px;
+        right: 20px;
+    }
+}
+/*  - - - - - - - - - - - - - - - - - - - - - - - - - */
+@media (min-width:768px) and (max-width:990px){
+    .gto-headline h1{
+        font-size:41px;
+    }
+    #gto-text-box-top-one {
+        right: -246px;
+        bottom: -77px;
+    }
+    #gto-text-box-top-two {
+        bottom: 93px;
+    }
+    #gto-text-box-top-three {
+        right: -60px;
+    }
+    #the-competition{
+        position: relative;
+        left: 356px;
+    }
+
+    /* Controls Group below */
+    #gto-text-box-top-four {
+        position: relative;
+        right: -175px;
+        bottom: 96px;
+    }
+    /* - - - Group - - - */
+    #button-group{
+        position: relative;
+    }
+    #button-images{
+        position: absolute;
+        left: 40px;
+    }
+    #push-button-on-grip{
+        position: absolute;
+        color: #0000ff;
+        top: 127px;
+        left: 50px;
+        font-size: 12px;
+    }
+    #push-button-on-laser-body{
+        position: absolute;
+        color: #0000ff;
+        top: 119px;
+        left: 220px;
+        font-size: 11px;
+    }
+    #the-competition{
+        position: absolute;
+        bottom: 0px;
+        left: 95px;
+        font-size: 20px;
+        color:#000;
+    }
+    /* - - - // Group - - - */
+
+    #competition-div{
+        margin-bottom: 120px;
+    }
+
+    #gto-text-box-top-five {
+        left: 8px;
+        bottom: 21px;
+        margin-bottom: 140px;
+    }
+    #gto-text-box-top-six {
+        right: 392px;
+    }
+    #gto-text-box-top-seven {
+        left: 30px;
+        bottom: 120px;
+    }
+    #gto-text-box-top-eight {
+        top: 0px;
+        left: 0px;
+    }
+    #gto-text-box-top-nine {
+        top: 12px;
+        right: -236px;
+        font-size:18px;
+    }
+    #gto-shown{
+        font-size:18px;
+    }
+    #activate-laser-by{
+        font-size:18px;
+        left: 157px;
+    }
+    #dont-install{
+        font-size:18px;
+        left: 252px;
+    }
+}
+/*  - - - - - - - - - - - - - - - - - - - - - - - - - */
+@media (min-width: 569px) and (max-width:767px){
+
+    .gto-headline {
+        font-size:33px;
+    }
+    .gto-headline h1 {
+        font-size:33px;
+    }
+    .gto-headline h3{
+        font-size:17px;
+        margin-bottom: 25px;
+    }
+    #gto-text-box-top-one {
+        right: -206px;
+        bottom: -57px;
+        font-size: 16px;
+    }
+    #gto-text-box-top-two {
+        bottom: 74px;
+    }
+    #gto-text-box-top-three {
+        right: -60px;
+        top: -27px;
+    }
+
+    /* Controls Group below */
+    #gto-text-box-top-four {
+        position: relative;
+        right: -175px;
+        bottom: -13px;
+    }
+    /* - - - Group - - - */
+    #button-group{
+        position: relative;
+    }
+    #button-images{
+        position: absolute;
+        left: 40px;
+    }
+    #push-button-on-grip{
+        position: absolute;
+        color: #0000ff;
+        top: 127px;
+        left: 50px;
+        font-size: 12px;
+    }
+    #push-button-on-laser-body{
+        position: absolute;
+        color: #0000ff;
+        top: 119px;
+        left: 220px;
+        font-size: 11px;
+    }
+    #the-competition{
+        position: absolute;
+        bottom: 0px;
+        left: 95px;
+        font-size: 20px;
+        color:#000;
+    }
+    /* - - - // Group - - - */
+
+    #competition-div{
+        margin-bottom: 236px;
+    }
+    #gto-text-box-top-five {
+        left: 8px;
+        bottom: 29px;
+    }
+    #gto-text-box-top-six {
+        right: 305px;
+        top: 44px;
+        font-size: 12px;
+    }
+    #gto-text-box-top-seven {
+        left: 93px;
+        bottom: 120px;
+    }
+    #gto-text-box-top-eight {
+        top: 0px;
+        left: 0px;
+    }
+    #gto-text-box-top-nine {
+        top: 12px;
+        right: -236px;
+        font-size:18px;
+    }
+    #gto-shown{
+        font-size:18px;
+    }
+    #activate-laser-by{
+        font-size:18px;
+    }
+    #dont-install{
+        font-size:18px;
+    }
+    #convenient-battery-door{
+        margin-bottom: 30px;
+        font-size:15px;
+    }
+    #used-without-flx{
+        text-align: center;
+    }
+}
+
+/*  - - - - - - - - - - - - - - - - - - - - - - - - - */
+@media (min-width: 320px) and (max-width:568px){
+     .gto-headline {
+        font-size:26px;
+        margin-top: -20px;
+    }
+    .gto-headline h1 {
+        font-size:26px;
+    }
+    .gto-headline h3{
+        font-size:14px;
+        margin-bottom: 25px;
+    }
+
+    .never-been-anything {
+        margin-bottom: 50px;
+    }
+
+    #gto-text-box-top-one {
+        right: 0px;
+        bottom: -135px;
+        font-size: 14px;
+    }
+    #gto-text-box-top-two {
+        bottom: -18px;
+        font-size: 14px;
+    }
+    #gto-text-box-top-three {
+        right: -10px;
+        top: 2px;
+        font-size: 13px;
+    }
+
+    /* Controls Group below */
+    #gto-text-box-top-four {
+        position: relative;
+        right: 18px;
+        bottom: -30px;
+    }
+    /* - - - Group - - - */
+    #button-group{
+        position: relative;
+    }
+    #button-images{
+        position: absolute;
+        left: 40px;
+    }
+    #push-button-on-grip{
+        position: absolute;
+        color: #0000ff;
+        top: 127px;
+        left: 50px;
+        font-size: 12px;
+    }
+    #push-button-on-laser-body{
+        position: absolute;
+        color: #0000ff;
+        top: 119px;
+        left: 220px;
+        font-size: 11px;
+    }
+    #the-competition{
+        position: absolute;
+        bottom: 0px;
+        left: 95px;
+        font-size: 20px;
+        color:#000;
+    }
+    /* - - - // Group - - - */
+
+    #competition-div{
+        margin-bottom: 236px;
+    }
+    #gto-text-box-top-five {
+        left: 8px;
+        bottom: 3px;
+    }
+    #gto-text-box-top-six {
+        right: 48px;
+        top: 9px;
+        font-size: 12px;
+    }
+    #gto-text-box-top-seven {
+        left: 24px;
+        bottom: 18px;
+        font-size: 12px;
+    }
+    #gto-text-box-top-eight {
+        top: 0px;
+        left: 0px;
+    }
+    #gto-text-box-top-nine {
+        top: 12px;
+        right: -62px;
+        font-size:14px;
+    }
+    #gto-shown{
+        font-size:14px;
+    }
+    #activate-laser-by{
+        font-size:14px;
+    }
+    #dont-install{
+        font-size:14px;
+    }
+    #convenient-battery-door{
+        margin-bottom: 30px;
+        font-size:15px;
+    }
+    #used-without-flx{
+        text-align: center;
+    }
+
+}
+
+/*  - - - - - - - - - - - - - - - - - - - - - - - - - */
+@media (max-width:1025px){
+    .gto-headline2 {
+        font-size:22px;
+        margin-top: 12px;
+    }
+    #gto-text-box-top-one {
+        right: 0px;
+        top: 589px;
+        font-size: 30px;
+    }
+    .never-been-anything{margin-bottom: 116px;}
+    #gto-text-box-top-five {
+        position: relative;
+        left: 100px;
+        bottom: 27px;
+    }
+    .gto-headline2{
+        font-size: 43px;
+    }
+    #gto-custom-fit-for{
+        margin-top: 20px;
+    }
+}
+@media (max-width:768px){
+    .gto-headline2 {
+        font-size:22px;
+        margin-top: 12px;
+    }
+    #gto-text-box-top-one {
+        right: 0px;
+        top: 453px;
+        font-size: 27px;
+    }
+    .never-been-anything{margin-bottom: 102px;}
+}
+
+@media (max-width: 415px){
+     .gto-headline2 {
+        font-size:22px;
+        margin-top: 12px;
+    }
+    #gto-text-box-top-one {
+        right: 0px;
+        bottom: -236px;
+        font-size: 20px;
+    }
+    .never-been-anything{margin-bottom: 102px;}
+}
+@media (max-width: 376px){
+     .gto-headline2 {
+        font-size:22px;
+        margin-top: 12px;
+    }
+    #gto-text-box-top-one {
+        right: 0px;
+        bottom: -209px;
+        font-size: 20px;
+    }
+    .never-been-anything{margin-bottom: 102px;}
+}
+@media (max-width: 321px){
+     .gto-headline2 {
+        font-size:22px;
+        margin-top: 12px;
+    }
+    #gto-text-box-top-one {
+        right: 0px;
+        bottom: -163px;
+        font-size: 14px;
+    }
+    .never-been-anything{margin-bottom: 69px;}
+}
+
+
+/* - - - - - - - - - - - - - - - - - - - - -   Stingray.php   - - - - - - - - - - - - - - - - - - - - - - - -  */
+#stingray-heading{
+
+}
+#stingray-heading h1{
+    font-size: 60px;
+    text-transform: uppercase;
+    font-weight: 700;
+}
+
+#stingray-heading h2{
+    color: #a9a9a9;
+    font-style: italic;
+    margin-top:-17px
+}
+
+#stingray-description{
+    line-height: 50px;
+    height:50px;
+}
+
+#stingray-one{
+    position: relative;
+}
+
+#stingray-one-text{
+    position: absolute;
+    line-height:18px;
+    bottom: 288px;
+    left: 650px;
+    width: 300px;
+    font-size: 14px;
+    font-weight: bold;
+    text-align: center;
+}
+
+#stingray-one-choose{
+    position: relative;
+    margin-top: 20px;
+}
+.text-box-300 {
+    margin-top: 30px;
+    max-width: 467px;
+    text-align: center;
+    margin: 0 auto;
+}
+.text-box200{
+    position: relative;
+    font-size: 12px;
+    top: 91px;
+    text-align: center;
+
+}
+
+#stingray-convenient-battery-door{
+    margin-top: -8px;
+    margin-bottom: 62px;
+    font-size:14px;
+    color:#838383;
+}
+
+/* - - - - - -   stingray.php @media : keep at bottom  - - - - - - - -  */
+
+@media (max-width:767px){
+    #stingray{margin-left: 10px;}
+    #stingray-find-pistol{padding-left: 60px;}
+    .stingray-title{font-size: 24px;}
+}
+@media (max-width:667px){
+    .stingray-title{font-size: 18px;}
+    #stingray-faq{padding-left: 32px;}
+    #stingray-find-pistol{padding-left: 22px;}
+    #stingray-heading h1{font-size: 50px !important;  margin-top: -20px !important;}
+    #stingray-heading h2{font-size: 22px !important;  margin-top: -13px !important;}
+}
+
+
+
+/*
+@media (min-width: 320px) and (max-width:568px){
+    .text50{font-size:35px;}
+    h2{font-size: 24px;}
+    h3{font-size: 20px;}
+    h4{font-size: 18px;}
+}
+*/
+
+/* - - - - - - - - - - - - - - - - - - - - -   flx.php   - - - - - - - - - - - - - - - - - - - - - - - -  */
+#gto-flx-section{display: block;}
+
+#flx-finest-concealed{
+    font-size: 16px;
+    color: #838383;
+    text-transform: uppercase;
+    float:right;
+}
+#flx-text-one{
+    color: #0000ff;
+    position: relative;
+    bottom: 152px;
+    left: 475px;
+}
+#show{display: none;}
+
+#flx-description{
+    color: #838383;
+    line-height: 50px;
+    height:50px;
+}
+.flx-title,
+.flx-subtitle{
+    font-size: 30px;
+}
+.flx-subtitle{
+    color:#a9a9a9;
+}
+
+/*  - - - - - - - - - -   flx.php @media styles   - - - - - - - - - - - - - - - */
+@media (max-width:1025px){
+    .flx-title, .flx-subtitle{font-size: 22px;}
+    #flx-text-one{font-size:20px; bottom: 120px; left: 427px;}
+}
+@media (max-width:768px){
+    .flx-title, .flx-subtitle{font-size: 22px;}
+    #flx-text-one{font-size: 16px; bottom: 102px; left: 314px;}
+    #flx-finest-concealed{font-size: 12px;}
+}
+@media (max-width:667px){
+    #flx-text-one{font-size: 11px; bottom: 52px; left: 166px;}
+}
+@media (max-width:568px){
+    .flx-title, .flx-subtitle{font-size: 18px;}
+    #flx-text-one{font-size: 9px; bottom: 52px; left: 166px;}
+}
+@media (max-width:436px){
+    .flx-title, .flx-subtitle{font-size: 18px;}
+    #flx-text-one{font-size: 9px; bottom: 55px; left: 180px;}
+}
+@media (max-width:415px){
+    .flx-title, .flx-subtitle{font-size: 18px;}
+    #flx-text-one{font-size: 9px; bottom: 52px; left: 166px;}
+}
+@media (max-width:376px){
+    .flx-title, .flx-subtitle{font-size: 18px;}
+    #flx-text-one{font-size: 8px; bottom: 48px; left: 150px;}
+}
+@media (max-width:361px){
+    .flx-title, .flx-subtitle{font-size: 18px;}
+    #flx-text-one{font-size: 8px; bottom: 45px; left: 140px;}
+}
+@media (max-width:321px){
+    .flx-title, .flx-subtitle{font-size: 18px;}
+    #flx-text-one{font-size: 8px; bottom: 40px; left: 114px;}
+}
+
+
+
+/*----------- glove-contacts.php  -----------------*/
+@media (max-width:767px){
+    .details {text-align: center;}
+}
+
+/*--------------------- flx-list.php  ----------------------*/
+.top-arrow {color:#0080FF;}
+.top-arrow:hover {color: #ff2222;}
+
+/*--------------------- final.html.php  ----------------------*/
+.final-shipping-message{color:#878787; margin-bottom: 3px; font-size:80%;}
+.final-gray-text{color: #878787;}
+
+.final-wrapper-box{border-right: #ddd 1px solid; margin-bottom: 2em;}
+
+.final-img {
+    display: block;
+    margin: 0 auto;
+    max-width: 100%;
+    height: auto;
+}
+.final-product-box {padding: 10px 20px; max-width: 400px; margin: 0 auto; text-align: center; margin-bottom: 2em;}
+.final-product-box i{vertical-align: top; position: relative; top: -5px;}
+.final-product-box h3,
+.final-product-box h4,
+.final-product-box h5,
+.final-product-box h6 {margin: 0px; color: #878787;}
+.final-product-box h5{margin-bottom: 3px;}
+.final-product-box h6{margin-bottom: 1.5em;}
+
+.final-product-list-box {color: #878787; margin-bottom: 1em;}
+.final-product-list-box ul{text-align: left; list-style: disc;}
+.final-product-list-box li{font-size:95%;}
+.final-product-list-box i{font-size: 90%; color:#ff0000;}
+
+/*  - - - - - - - - - -  tr series, gto, stingray, flx navbar subheading styles   - - - - - - - - - - - - - - - */
+
+.navbar-subheading p{
+    font-size: 24px;
+    line-height: 48px;
+    vertical-align: middle;
+    padding: 0px;
+    margin: 0px;
+}
+.title-name{font-size: 24px;}
+.title-faq{font-size: 24px;}
+.title-find-pistol{font-size: 24px;}
+.title-finest-concealed-carry{font-size: 24px; float:right;}
+
+.series-name {
+  display: inline-block;
+
+}
+
+
+
+#tr{font-size: 24px; margin-left: 5px;}
+#series{font-size: 24px;}
+#gto{color:#222; font-size:24px; margin-left: 5px;}
+#stingray{color:#222; font-size:22px; margin-left: 5px;}
+#classic{color:#838383; font-size:22px;}
+#flx{color:#838383; font-size:24px;}
+
+/*.faq, .find-pistol, .finest-concealed-carry{font-size: 24px;}*/
+
+/*.faq{padding-left:0px;}
+.find-pistol{padding-left:0px;}
+.finest-concealed-carry{padding-left:0px;}*/
+
+
+/* Fine grain control of elements */
+/*
+#trseries-faq{padding-left: 74px;}
+#trseries-find-pistol{padding-left: 96px;}
+#trseries-finest-concealed{padding-left: 0px;}
+#gto-faq{padding-left: 84px; }
+#gto-find-pistol{padding-left: 109px; }
+#gto-finest-concealed{padding-left: 169px;}
+#stingray-faq{padding-left: 84px;}
+#stingray-find-pistol{padding-left: 109px;}
+#stingray-finest-concealed{padding-left: 104px;}
+*/
+
+/*@media (max-width:1025px){
+    #trseries-faq{padding-left: 160px;}
+    #trseries-find-pistol{padding-left: 160px;}
+    #trseries-finest-concealed{padding-left: 157px;}
+    #gto-faq{padding-left: 160px;}
+    #gto-find-pistol{padding-left: 160px;}
+    #gto-finest-concealed{padding-left: 147px;}
+    #stingray-faq{padding-left: 130px;}
+    #stingray-find-pistol{padding-left: 130px;}
+    #stingray-finest-concealed{padding-left:127px}
+}
+
+@media (max-width:774px){
+    #trseries-faq{padding-left: 70px;}
+    #trseries-find-pistol{padding-left: 70px;}
+    #trseries-finest-concealed{padding-left:117px;}
+    #gto-faq{padding-left: 70px;}
+    #gto-find-pistol{padding-left: 70px;}
+    #gto-finest-concealed{padding-left: 117px;}
+    #stingray-faq{padding-left: 60px;}
+    #stingray-find-pistol{padding-left: 60px;}
+    #stingray-finest-concealed{padding-left: 47px;}
+    #stingray-heading h1{margin-top: -20px;}
+}
+
+@media (max-width:737px){
+    #stingray{margin-left: 10px;}
+    #stingray-faq{padding-left: 16px;}
+    #stingray-find-pistol{padding-left: 16px;}
+    #stingray-finest-concealed{padding-left: 66px;}
+    #trseries-finest-concealed{padding-left:93px;}
+    #gto-finest-concealed{padding-left:93px;}
+}
+
+@media (max-width:667px){
+    #stingray-faq{}
+    #gto-finest-concealed{padding-left: 28px;}
+    #trseries-finest-concealed{padding-left: 0px;}
+}
+
+@media (max-width:641px){
+    #trseries-faq{padding-left: 25px;}
+    #trseries-find-pistol{padding-left: 25px;}
+    #trseries-finest-concealed{padding-left: 95px;}
+    #gto-find-pistol{padding-left: 42px;}
+    #gto-finest-concealed{padding-left: 36px;}
+    #stingray-faq{padding-left: 15px;}
+    #stingray-find-pistol{padding-left: 15px;}
+    #stingray-finest-concealed{padding-left: 19px;}
+}
+
+@media (max-width:569px){
+    #trseries-faq{padding-left: 12px;}
+    #trseries-find-pistol{padding-left: 12px;}
+    #trseries-finest-concealed{padding-left: 44px;}
+    #gto-faq{padding-left: 12px;}
+    #gto-find-pistol{padding-left: 12px;}
+    #gto-finest-concealed{padding-left: 44px;}
+    #stingray-faq{padding-left: 5px;}
+    #stingray-find-pistol{padding-left: 5px;}
+    #stingray-finest-concealed{padding-left: 2px;}
+}
+
+
+@media (max-width:436px){
+    .navbar-subheading{display:none;}
+}
+
+@media (max-width:320px){
+    .navbar-subheading{display:none;}
+    #stingray-heading h1{font-size:36px !important; margin-top:-20px !important}
+    #stingray-heading h2{font-size:16px !important; margin-top:-10px !important;}
+    #stingray-heading h2{margin-top:-17px}
+}
+*/
+
+/* - - - - - - - - - - - - -   dealers/  - - - - - - - - - - - - - -  */
+.purple-bar{
+    background-color: #8c509f;
+    width: 100%;
+}
+
+.purple-bar h1,
+.purple-bar h2 {
+    font-size: 48px;
+    font-weight: bold;
+    text-align: center;
+    padding:20px 0px;
+    margin-bottom: 30px;
+    /* WebKit (Safari/Chrome) Only
+    -webkit-text-stroke: 1px black;*/
+    color: #fff;
+    text-shadow:
+      3px 3px 0 #262626;
+      /* Simulated effect for Firefox and Opera
+         and nice enhancement for WebKit
+     -1px -1px 0 #262626,
+      1px -1px 0 #262626,
+     -1px  1px 0 #262626,
+      1px  1px 0 #262626;
+      */
+}
+
+.authorized-dealer p,
+.combo-program p,
+.authorized-dealer p,
+#one-price-policy p {
+    padding: 0px 15px;
+    font-size: 17px;
+    text-align: center;
+}
+
+
+
+.red-bar{
+    background-color: #e21838;
+    width: 100%;
+}
+
+.red-bar h2 {
+    color: #fff;
+    font-size: 48px;
+    font-weight: bold;
+    text-align: center;
+    padding:20px 0px;
+    margin-bottom: 30px;
+    text-transform: uppercase;
+}
+
+#one-price-policy{
+    width: 40%;
+    margin: 0 auto;
+    margin-bottom: 30px;
+}
+
+#amazon-block{
+    float:left;
+    background-color: #fdbd69;
+    min-width: 32%;
+    margin-right:3px;
+}
+
+#amazon-block p,
+#ebay-block p,
+#strategic-partners-block p {
+    font-size: 37px;
+    line-height: 37px;
+    font-weight: bold;
+    text-align: center;
+    /* WebKit (Safari/Chrome) Only
+    -webkit-text-stroke: 1px black;
+    */
+    color: #fff;
+    text-shadow:
+      1px 1px 2px #f2f2f2;
+      /* Simulated effect for Firefox and Opera
+         and nice enhancement for WebKit
+     -1px -1px 0 #f2f2f2,
+      1px -1px 0 #f2f2f2,
+     -1px  1px 0 #f2f2f2,
+      1px  1px 0 #f2f2f2;
+    */
+}
+
+#strategic-partners-block{
+    float:left;
+    background-color: #076249;
+    min-width: 32%;
+    margin-right:3px;
+
+}
+
+#ebay-block{
+    float:left;
+    background-color: #3850a1;
+    min-width: 32%;
+    margin-bottom: 95px;
+}
+
+.purple-bar2{
+    clear: left;
+    background-color: #8c509f;
+    width: 100%;
+}
+
+.purple-bar2 h1,
+.purple-bar2 h2 {
+    font-size: 48px;
+    font-weight: bold;
+    text-align: center;
+    padding:20px 0px;
+    margin-bottom: 30px;
+    color: #fff;
+
+}
+
+.purple-bar2 h1 > span {
+    font-size: 48px;
+    font-weight: bold;
+    text-align: center;
+    padding:20px 0px;
+    margin-bottom: 30px;
+    /* WebKit (Safari/Chrome) Only
+    -webkit-text-stroke: 1px black; */
+    color: #fff;
+    text-shadow:
+      3px 3px 2px #4c4c4c;
+      /* Simulated effect for Firefox and Opera
+         and nice enhancement for WebKit
+     -1px -1px 0 #262626,
+      1px -1px 0 #262626,
+     -1px  1px 0 #262626,
+      1px  1px 0 #262626;
+      */
+}
+
+.dealer-text-styles{
+    padding-left:15px;
+    padding-right:15px;
+}
+
+#ffl-submit{
+    width: 100%;
+    margin: 0 auto;
+    margin-bottom: 20px;
+}
+#ffl-submit h1,
+#ffl-submit h2{
+  font-style: italic;
+  font-size: 36px;
+}
+
+#ffl-form .error {
+  color: #ff0000;
+}
+
+#spam_fighter {
+  display: none;
+}
+
+/* move pistol brand name to right margin */
+@media (min-width: 1025px){
+
+   .pistol-brand-image p,
+   .pistol-brand-image h1,
+   .pistol-brand-image h2 {
+      text-align: right;
+      margin-right: 287px;
+   }
+
+}
+
+/* move pistol brand name to right margin */
+@media (max-width: 768px){
+
+   .products-by-brand-tr-series-title-text,
+   .products-by-brand-gto-flx-series-title-text {
+      padding-left: 20px;
+   }
+
+}
+
+
+
+@media (max-width: 1024px){
+    .navbar-brand img{
+        margin-right: -22px;
+        max-width: 169px;
+    }
+}
+
+@media (max-width: 775px){
+    .navbar-brand img{
+        max-width: 236px;
+        margin-right: -22px;
+    }
+    #amazon-block p,
+    #ebay-block p,
+    #strategic-partners-block p {
+        font-size: 24px;
+        line-height: 26px;
+        padding-top:5px;
+    }
+}
+
+@media (max-width: 768px){
+    #amazon-block p,
+    #ebay-block p,
+    #strategic-partners-block p {
+        font-size: 24px;
+        line-height: 26px;
+        padding-top:5px;
+    }
+    .navbar-brand img{
+        max-width: 245px;
+        height: auto;
+    }
+    .purple-bar h1,
+    .purple-bar2 h1,
+    .purple-bar2 h1 > span,
+    .red-bar h1 {
+        font-size: 40px;
+        padding: 10px 0px;
+    }
+
+}
+
+/* @media (max-width: 435px){ */
+/* @media (max-width: 568px){ */
+/* @media (max-width: 640px){ */
+@media (max-width: 668px){
+
+    #amazon-block p,
+    #ebay-block p,
+    #strategic-partners-block p {
+        font-size: 13px;
+        line-height: 16px;
+        padding-top:5px;
+    }
+    .purple-bar h1,
+    .purple-bar2 h1,
+    .purple-bar2 h1 > span,
+    .red-bar h1 {
+        font-size: 28px;
+        padding: 10px 0px;
+    }
+    #ebay-block{
+        margin-bottom: 60px;
+    }
+    #one-price-policy{
+        width: 80%;
+    }
+
+}
+
+.hide-div{display: none;}
+.show-div{display: block;}
+a#trigger{cursor: pointer;}
+
+/* amazon button */
+.amazon-btn{
+    background:url(../images/amazon_reviews_btn.png) no-repeat;
+    cursor: pointer;
+    border: none;
+    /*width:  100px;
+    height:45px;*/
+}
+
+.img-thumbnail-modified {
+    display: inline-block;
+    /*max-width: 100%;*/
+    height: 125px;
+    width: 125px;
+    padding: 4px;
+    line-height: 1.42857143;
+    background-color: #fff;
+    border: 2px solid #ddd;
+    border-radius: 4px;
+    -webkit-transition: all .2s ease-in-out;
+    -o-transition: all .2s ease-in-out;
+    transition: all .2s ease-in-out;
+}
+
+.holster-img-thumbnail-modified {
+    display: inline-block;
+    /*max-width: 100%;*/
+    height: 125px;
+    width: 125px;
+    margin: 15px;
+    padding: 4px;
+    line-height: 1.42857143;
+    background-color: none;
+    /*border: 2px solid #ddd;*/
+    /*border-radius: 4px;*/
+    -webkit-transition: all .2s ease-in-out;
+    -o-transition: all .2s ease-in-out;
+    transition: all .2s ease-in-out;
+}
+/* admin/index.html styles */
+.admin-bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    min-width: 100%;
+    min-height: 100%;
+    opacity: .25;
+    z-index: -1;
+}
+.dropdown-menu {
+  top:71%;
+  z-index: 1000;
+}
+
+
+/* holsters/index.html styles */
+.holsters-table-container {
+   overflow-x: auto;
+   text-align: center;
+   margin-top:30px;
+   margin-bottom: 40px;
+}
+.holster-container {
+   /*float:left;*/
+   display:inline-block;
+   padding: 5px 11px;
+   margin: 10px 0px;
+   margin-right: 10px;
+   width: 150px;
+   border: 1px solid #222;
+   height: 262px;
+   /*min-height: 305px;*/
+}
+.holster-ad-title-container {
+   height: 64px;
+   /*border:1px solid green;*/
+   overflow: hidden;
+   margin-bottom: 5px;
+}
+.holster-mfr {
+   margin: 0px;
+   text-align: center;
+}
+#holster-mfr-name {
+   margin: 0;
+   font-size: 20px;
+   font-weight: 700;
+}
+.holster-model {
+   margin: 0px;
+   font-size: 18px;
+   text-align: center;
+}
+.holster-model p {
+   margin: 0;
+   margin-top:-10px;
+}
+#holster-model-name {
+   font-size: 18px;
+   font-weight: 600;
+}
+#holster-model-waist {
+   margin-top: -5px;
+   font-size: 14px;
+}
+.holster-image-container {
+   display: table-cell;
+   vertical-align: middle;
+   border:1px solid #ddd;
+   padding: 0px 10px;
+   margin-bottom: 10px;
+   height: 150px;
+}
+.holster-image-container img {
+   display: inline-block;
+   width: 100%;
+   padding: 0px;
+   /*border:1px solid blue;*/
+}
+.holster-description-container {
+   margin: 0;
+   padding: 10px;
+   /*border:1px solid purple;*/
+   text-align: center;
+   margin-top: 5px;
+   /*height: 68px;*/
+}
+.holster-description {
+   width: 100%;
+}
+.holster-description p {
+   margin: 0;
+   font-size: 13px;
+   line-height: 14px;
+}
+.holster-description-learn-more {
+   margin: 0;
+}
+
+table.holsters-holster-table tbody td,
+table.holsters-holster-table thead th {
+   text-align: center;
+}
+table.holsters-holster-table tbody td,
+table.holsters-holster-table thead th {
+   vertical-align: middle;
+}
+table.holsters-holster-table tbody td {
+   background-color: #ddd;
+   border-color: #fff;
+}
+table.holsters-holster-table tbody td a{
+   color: #fff;
+}
+
+
+#table-title {
+   font-size: 26px;
+}
+#holsters-table-col-1,
+#holsters-table-col-2,
+#holsters-table-col-3 {
+   text-align: left;
+   font-size: 12px;
+   background-color: #fff;
+   border-color: #ddd;
+}
+#holsters-table-col-1 a,
+#holsters-table-col-2 a,
+#holsters-table-col-3 a {
+   color: #337ab7;
+}
+
+#holsters-table-col-2,
+#holsters-table-col-3 {
+   border-color: #fff;
+   border-bottom-color: #ddd;
+}
+
+#holsters-table-col-1 {
+   border-right-color: #fff;
+}
+
+#holsters-table-col-1 {
+   width: 71px;
+}
+#holsters-table-col-2 {
+   width: 163px;
+   /*width: 246px;*/
+}
+
+/*#holsters-table-col-4,
+#holsters-table-col-5,
+#holsters-table-col-6,
+#holsters-table-col-7,
+#holsters-table-col-8,
+#holsters-table-col-9 {
+   border-right-color: #ddd;
+}*/
+
+
+
+.holsters-table-thead-image-container {
+   /*border: 1px solid red;*/
+   display: table-cell;
+   vertical-align: middle;
+   width: 100px;
+   height: 100px;
+   padding: 5px;
+}
+.holsters-table-thead-image-container img {
+   width: 100%;
+   display: block;
+}
+.holsters-table-thead-learn-more {
+   margin: 0;
+   font-size: 13px;
+   line-height: 14px;
+}
+
+
+.holsters-table-image {
+   display: none;
+}
+.addBackground {
+   background-color: #000;  /*#f9f9f9;*/
+   color: #fff;
+}
+.addBackground a {
+   color: #fff;
+}
+
+/*table.holsters-holster-table tbody:before {
+   content: "-";
+   display: block;
+   line-height: 16px;
+   visibility: hidden;
+}*/
+
+.holsters-partners-container {
+   display: table;
+   width: 100%;
+   height: 150px;
+   background: #000;
+   color: #fff;
+   /*padding: 20px;*/
+   margin: 15px;
+}
+.holsters-partners-container:hover {
+   /*transform: scale(1.2);*/
+}
+.holsters-partners-img-container {
+   display: table-cell;
+   /*text-align: center;*/
+   vertical-align: middle;
+}
+.holsters-partners-container img {
+   display: block;
+   margin: 0 auto;
+   width: auto;
+   max-width: 267px; /*300px;*/
+   max-height: 91px; /*110px;*/
+   transition: all .4s ease-in-out;
+}
+.holsters-partners-container img:hover {
+   transform: scale(1.2);
+}
+.list-group.holsters-partners-list-group a:hover {
+   background-color: #000; /*#484848;*/
+   color: #fff;
+}
+.holsters-partners-list-group .list-group-item {
+   background-color: #000;
+   color: #fff;
+}
+.holsters-partners-list-group h3 {
+   color: #fff;
+}
+
+
+
+.holsters-textbox-1
+{
+  border:1px solid #eee;
+  margin-top: 127px;
+  margin-left: -309px;
+}
+.holsters-textbox-2
+{
+  border:1px solid #eee;
+  margin-top: 247px;
+  margin-right: -309px;
+}
+
+/*  Views/404.html  */
+#target {
+  background: url("/assets/images/page/404/miss_target.jpg");
+  background-size: contain; /* Scale the image to the largest size such that
+  both its width and its height can fit inside the content area */
+  background-repeat: no-repeat;
+  color: #787878;
+  display: block;
+  max-width: 100%;
+  height: 723px;
+  opacity: .85;
+  margin-bottom: 30px;
+}
+#update-registration-form #dealer_name {
+  display: block;
+}
+
+
+@media(max-width: 767px){
+
+   .products-by-brand-tr-series,
+   .products-by-brand-gto-flx-series {
+      height: 376px;
+   }
+   .products-by-brand-gto-flx-series {
+      height: 385px;
+   }
+   .products-by-brand-tr-series-text-box {
+      height: 60px;
+   }
+   .products-by-brand-gto-flx-series-text-box {
+      height: 75px;
+   }
+}
+
+@media(max-width: 1199px){
+   .products-by-brand-tr-series {
+
+   }
+   .products-by-brand-gto-flx-series {
+      height: 390px;
+   }
+}
+
+@media(max-width: 1199px ) {
+    #instructors-ad-copy h3 {
+        font-size: 20px;
+    }
+}
+
+
+/* code for spinning gif that displays during Ajax requests  */
+/* resource: https://stackoverflow.com/questions/1964839/how-can-i-create-a-please-wait-loading-animation-using-jquery  */
+
+/* Start by setting display:none to make this hidden.
+   Then we position it in relation to the viewport window
+   with position:fixed. Width, height, top and left speak
+   for themselves. Background we set to 80% white with
+   our animation centered, and no-repeating */
+.gifModal {
+    display:    none;
+    position:   fixed;
+    z-index:    1000;
+    top:        0;
+    left:       0;
+    height:     100%;
+    width:      100%;
+    background: rgba( 255, 255, 255, .8 )
+                url('/assets/images/ajax-loader.gif')
+                50% 50%
+                no-repeat;
+}
+
+/* When the body has the loading class, we turn
+   the scrollbar off with overflow:hidden */
+body.loading .gifModal {
+    overflow: hidden;
+}
+
+/* Anytime the body has the loading class, our
+   modal element will be visible */
+body.loading .gifModal {
+    display: block;
+}
+
+@media (min-width: 768px) {
+    .modal-xl {
+       width: 90%;
+       max-width:1200px;
+    }
+}

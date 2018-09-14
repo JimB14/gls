@@ -1,0 +1,123 @@
+{% extends 'base-admin.html' %}
+
+{% block title %}
+  Labels | ArmaLaser
+{% endblock %}
+
+{% block css %}
+<style>
+.grow_rotate img {
+    transition: all .2s ease-out; /* Animation */
+}
+.grow_rotate:hover {
+    cursor:pointer;
+    -webkit-transform : rotate(90deg) scale(8.0); /* Chrome, Opera 15+, Safari 3.1+ */
+    -ms-transform     : rotate(90deg) scale(8.0); /* IE 9 */
+    transform         : rotate(90deg) scale(8.0); /* Firefox 16+, IE 10+, Opera */
+    top : 250px;
+    position: relative;
+}
+.grow_usps img {
+    -webkit-transition: .2s ease-in-out;
+    -moz-transition:  .2s ease-in-out;
+    -o-transition:  .2s ease-in-out;
+    transition:  .2s ease-in-out;
+}
+.grow_usps:hover {
+    cursor: pointer;
+    -webkit-transform : scale(10.0); /* Chrome, Opera 15+, Safari 3.1+ */
+    -ms-transform     : scale(10.0); /* IE 9 */
+    transform         : scale(10.0); /* Firefox 16+, IE 10+, Opera */
+    top : 150px;
+    position: relative;
+}
+
+</style>
+{% endblock %}
+
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div id="dashboard-toggle" class="col-md-10" style="margin-top:-20px;margin-left:254px;">
+
+            <div class="col-md-4">
+                {% if pagetitle %}
+                    <h2 style="margin-left:-15px;">
+                          {% if pagetitle == 'USPS Labels' %}<span><img height="29" src="/assets/images/usps/logo.png"></span> {{ pagetitle }}{% else %}<span><img height="29" src="/assets/images/ups/logo_small.gif"></span> {{ pagetitle }}{% endif %}
+                        {% if images|length > 0 %}
+                            <span class="badge" style="margin: -18px 0px 0px 7px;">
+                                {{ images|length }}
+                            </span>
+                        {% endif %}
+                    </h2>
+                {% endif %}
+            </div>
+
+            {% if images %}
+                <table class="table table-bordered table-striped bg-fff">
+                    <thead>
+                        <tr>
+                            <th>
+                                <span class="glyphicon glyphicon-download"></span>
+                                Download: File / Tracking Number - click file name to download
+                            </th>
+                            <th>Image</th>
+                            <th>See order</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        {% for image in images %}
+                            <tr>
+                                <td style="width: 35%;"><a href="/admin/labels/download?file={{ image|url_encode }}&amp;shipper={% if pagetitle == 'USPS Labels' %}usps{% else %}ups{% endif %}">{{ image|slice(0, -4) }}</a></td>
+                                {% if shipper == 'USPS' %}
+                                    <td style="width:15%; text-align:center;"><img style="display: inline-block; overflow: visible;" class="grow_usps" src="/assets/shipping_labels/usps/{{ image }}" height="50px"></td>
+                                {% else %}
+                                    <td style="width:15%; text-align:center;"><img style="display: inline-block; overflow: visible;" class="grow_rotate" src="/assets/shipping_labels/ups/{{ image }}" height="50px"></td>
+                                {% endif %}
+                                <td style="width: 50%;"><a href="/admin/orders/get-order-by-tracking-number?trackingcode={{ image|slice(0, -4) }}">View this order</a></td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+
+                <p style="margin-top: -3px;" class="pull-left"><a href="#top" title="Go to top of page"><i style="margin-top: -15px; color:#ccc;" class="fa fa-arrow-circle-o-up fa-3x" aria-hidden="true"></i></a></p>
+                <p style="margin-top: -3px;" class="pull-right"><a href="#top" title="Go to top of page"><i style="margin-top: -15px; color:#ccc;" class="fa fa-arrow-circle-o-up fa-3x" aria-hidden="true"></i></a></p>
+                <div style="margin-bottom: 250px">&nbsp;</div>
+            {% else %}
+                <div class="col-sm-12" style="margin-left:-15px;">
+                    <div class="alert alert-warning" style="margin-top:30px;">
+                        <h4 style="margin-bottom:0px;">
+                          No labels to display
+                        </h4>
+                    </div>
+                </div>
+            {% endif %}
+
+      </div><!--  // col-md-12  -->
+    </div><!--  // .row  -->
+</div><!-- // .container-fluid  -->
+{% endblock %}
+
+
+{% block bottomjs %}
+<script>
+$(document).ready(function(){
+
+
+    $("#thisID").click(function(){
+        var checked = 1;
+        console.log(checked);
+        if($("#thisID").prop("checked")){
+          $("#lasers_last_name").attr("placeholder", "Enter laser ID");
+        } else {
+          $("#lasers_last_name").attr("placeholder", "Enter agent last name");
+        }
+    });
+
+
+});
+</script>
+
+{% endblock %}

@@ -1,0 +1,263 @@
+{% extends 'base.html' %}
+
+{% block title %}
+  Warranty Registration | ArmaLaser
+{% endblock %}
+
+{% block metadescription %}
+Conveniently register the purchase of your new ArmaLaser laser online.
+{% endblock %}
+
+{% block css %}
+<style>
+   #serialInfo {
+      cursor:pointer;
+   }
+</style>
+{% endblock %}
+
+{% block outsidecontainer %}
+{% endblock %}
+
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-8">
+          <h1 class="pagetitle">{{ pagetitle }}</h1>
+
+            <div class="box-general" style="margin-bottom:20px;">
+                <h4 style="color: #838383; margin-top:0px">
+                  Thank you for your purchase of an ArmaLaser product. If you are
+                  new to ArmaLaser <i>Welcome!</i> If you are a returning client
+                  <i>Welcome back!</i>
+                  <br><br>
+                  Please provide the following information.
+                </h4>
+
+                <form class="p2" method="post" action="/warranty/submit-warranty-registration"
+                    name="warranty-registration-form" id="warranty-registration-form">
+
+                    <!-- honeypot -->
+                    <input type="hidden" name="honeypot" id="honeypot">
+
+                    <div class="form-group">
+                        <label for="first_name">
+                            First name
+                        </label>
+                        <sup>
+                          <span class="glyphicon glyphicon-asterisk"></span>
+                        </sup>
+                        <input type="text" class="form-control required" name="first_name" id="first_name"
+                        placeholder="First name" autofocus>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="last_name">
+                            Last name
+                        </label>
+                        <sup>
+                          <span class="glyphicon glyphicon-asterisk"></span>
+                        </sup>
+                        <input type="text" class="form-control required" name="last_name" id="last_name"
+                        placeholder="Last name" autofocus>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="address">
+                            Address
+                        </label>
+                        <sup>
+                          <span class="glyphicon glyphicon-asterisk"></span>
+                        </sup>
+                        <input type=text class="form-control required" name="address" id="address"
+                        placeholder="Address">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="city">
+                            City
+                        </label>
+                        <sup>
+                          <span class="glyphicon glyphicon-asterisk"></span>
+                        </sup>
+                        <input type=text class="form-control required" name="city" id="city"
+                        placeholder="City">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="state">
+                            State
+                        </label>
+                        <sup>
+                          <span class="glyphicon glyphicon-asterisk"></span>
+                        </sup>
+                        <select class="form-control required" id="state" name="state">
+                            <option value="">Select state</option>
+                            {% for state in states %}
+                                <option value="{{ state.name}}">{{ state.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="zipcode">
+                            Zip code
+                        </label>
+                        <sup>
+                          <span class="glyphicon glyphicon-asterisk"></span>
+                        </sup>
+                        <input type=text class="form-control required" name="zipcode" id="zipcode"
+                        placeholder="Zip code">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="dealer">
+                            Purchased from
+                        </label>
+                        <sup><span class="glyphicon glyphicon-asterisk"></span>
+                        </sup>
+                        <select class="form-control required" id="dealer" name="dealer">
+                            <option value="">Select seller</option>
+                            {% for dealer in dealers %}
+                                <option value="{{ dealer }}">{{ dealer }}</option>
+                            {% endfor %}
+                        </select>
+                        <input type=text class="form-control" name="dealer_name" id="dealer_name"
+                          placeholder="Dealer name">
+                    </div>
+
+                    <div class="form-group">
+                        <label>
+                            Date of purchase
+                        </label>
+                        <sup><span class="glyphicon glyphicon-asterisk"></span>
+                        </sup>
+                        <input type="text" id="datepicker" class="form-control required" name="purchase_date">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="model">
+                            Model purchased
+                        </label>
+                        <sup><span class="glyphicon glyphicon-asterisk"></span>
+                        </sup>
+                        <input type=text class="form-control required"  name="model" id="model"
+                          placeholder="Model name - e.g. TR10G">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="serial">
+                            Serial number
+                        </label>
+                        <sup><span class="glyphicon glyphicon-asterisk"></span>
+                        </sup>
+                        <!-- <span class="text-muted">
+                           (be careful to enter correct serial number)
+                         </span> -->
+
+                         <a
+                            id="serialInfo"
+                            title="Where is my serial number?"
+                            data-toggle="serialInfo"
+                            data-placement="top"
+                            data-content="The Serial Number is located in two locations.
+                            It is a 6-7 digit number on the ArmaLaser packaging on
+                            a white sticker next to the UPC sticker. Also on a
+                            square black and gold sticker on the laser sight itself,
+                            only seen when the laser sight is off the firearm.">
+                            <span style="padding-left:10px;" class="glyphicon glyphicon-info-sign"></span>
+                            <span>Where is my Serial number?</span>
+                         </a>
+
+                        <input type=text class="form-control required"  name="serial" id="serial"
+                          placeholder="Serial number">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">
+                            Email
+                        </label>
+                        <sup><span class="glyphicon glyphicon-asterisk"></span>
+                        </sup>
+                        <!-- <span class="text-muted">
+                           (no advertising)
+                         </span> -->
+                        <input type="email" class="form-control required" name="email" id="email"
+                        placeholder="Email address">
+                    </div>
+
+                    <h5 class="text-success bold pl10">
+                        Please make sure all fields are filled before clicking Submit.
+                    </h5>
+
+                    <button id="warranty-registration-btn" type="submit" class="btn btn-buy btn-lg btn-block">
+                        Submit
+                    </button>
+                    <p class="text-muted">
+                      *By registering your product, you are agreeing to opt in to
+                      our mailing list. You can unsubscribe at any time.
+                    </p>
+                </form>
+
+                <div class="well well-sm">
+                    *5 Year Limited Warranty.  Please refer to Owners Manual for
+                    complete details.
+                </div>
+            </div>
+        </div><!-- // .col-md-8 -->
+
+        <div class="col-md-4">
+            <h2>&nbsp;</h2>
+            <img class="img-responsive center-block" id="warranty-image"
+            src="/assets/images/page/warranty/armalaser_5_yr_warranty.png" alt="ArmaLaser">
+        </div><!-- // .col-md-4 -->
+
+    </div>
+</div>
+{% endblock %}
+
+
+{% block bottomjs %}
+<!-- Datepicker for warranty-registration.php @https://jqueryui.com/datepicker/#default -->
+<script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+<script src="/assets/js/datepicker.js"></script>
+<script>
+$(document).ready(function(){
+    $("#warranty-registration-form").validate();
+
+    $("#").submit(function(){
+        $("#warranty-registration-btn").text("Sending data...please wait");
+    });
+
+    $("#dealer").blur(function(){
+      var choice = $(this).val();
+      console.log(choice);
+      if(choice == 'ArmaLaser dealer') {
+        // $("#dealer").attr("disabled","true");
+        $("#dealer_name").css("margin-top", "15px");
+        $("#dealer_name").show("slow").focus();
+        $("#dealer_name").attr("placeholder", "Enter Authorized Dealer name");
+      }
+      if (choice == 'Other') {
+        // $("#dealer").attr("disabled","true");
+        $("#dealer_name").css("margin-top", "15px");
+        $("#dealer_name").show("slow").focus();
+        $("#dealer_name").attr("placeholder", "Enter Seller Name & Address");
+      }
+      if( (choice == 'ArmaLaser.com') || (choice == 'ArmaLaser representative at Gun Show')
+          || (choice == 'ArmaLaser on Amazon.com') || (choice == 'OpticsPlanet on Amazon.com')
+          || (choice == 'OpticsPlanet.com') ) {
+        $("#dealer_name").css("display", "none");
+      }
+
+    });
+
+
+   $('[data-toggle="serialInfo"]').popover();
+
+
+
+});
+</script>
+{% endblock %}

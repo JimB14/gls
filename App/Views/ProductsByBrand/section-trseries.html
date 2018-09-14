@@ -1,0 +1,99 @@
+<!-- - - - - - - - - - - - - - -  TR SERIES  - - - - - - - - - - - - - - - - -->
+<!-- If array is not empty, execute foreach loop and display; if empty, display message -->
+{% if trseries %}
+  <div id="bg-trseries">
+      <div class="container">
+         <div class="row">
+            <div class="products-by-brand-tr-series-title-text">
+               <h2 class="text-left">
+                  <span style="font-size: 130%;">
+                        TR
+                     <span style="color:#b7b7b7;">
+                        SERIES
+                     </span>
+                     {% if trseries|length > 1 %}
+                        <span class="badge" style="margin: -35px 0px 0px -5px;">
+                           {{ trseries|length }}
+                        </span>
+                     {% endif %}
+                  </span>
+                  <span style="font-size:16px;padding-left:12px;">
+                     TRIGGER GUARD MOUNTED &nbsp;&nbsp;
+                     <a href="/tr-series-lasers">
+                        <span class="italic">
+                           What is TR Series?
+                        </span>
+                     </a>
+                  </span>
+               </h2>
+            </div>
+
+               <div class="col-md-12 col-sm-12">
+
+                  {% for item in trseries %}
+                     <div class="col-md-3 col-sm-6 col-xs-12">
+
+                        <div class="products-by-brand-tr-series">
+
+                            <div class="products-by-brand-tr-series-image-box">
+                                <!-- <a href="/products/lasers/tr-series/{{ item.pistolMfr }}/{{ item.id }}/{{ item.model }}"> -->
+                                <a href="/{{ item.pistolMfr }}/{{ item.slug }}/tr-series/{{ item.id }}/{{ item.model }}">
+                                    <picture>
+                                        <source srcset="/assets/images/laser-pistol/{{ item.model|trim('g') }}/{{ item.thumb }}"
+                                            alt="ArmaLaser {{ item.model|upper }} laser for {{ pistolMfr|upper }}® {{ item.pistol_models }}"
+                                            media="(min-width:400px)">
+
+                                        <img class="img-responsive" style="width: 100%;"
+                                            src="/assets/images/laser-pistol/{{ item.model|trim('g') }}/{{ item.thumb }}"
+                                            alt="ArmaLaser {{ item.model|upper }} laser for {{ pistolMfr|upper }}® {{ item.pistol_models }}">
+                                    </picture>
+                                </a>
+                            </div>
+
+                            <div class="products-by-brand-tr-series-text-box">
+                                <div class="products-by-brand-tr-series-text-box-text">
+                                    <p>
+                                        <a href="/{{ item.pistolMfr }}/{{ item.slug }}/tr-series/{{ item.id }}/{{ item.model }}">
+                                            {% if item.pistolMfr == 'smith-wesson' %}
+                                                S&amp;W®
+                                            {% elseif item.pistolMfr == 'sig-sauer' %}
+                                                SIG SAUER®
+                                            {% else %}
+                                                {{ item.pistolMfr|upper }}®
+                                            {% endif %}
+                                                <br>
+                                            <span style="display:inline-block;font-size:14px;line-height:19px;">
+                                                {{ item.pistol_models|raw }}
+                                            </span>
+                                        </a>
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div class="products-by-brand-tr-series-armalaser-model-text-box">
+
+                                <div class="products-by-brand-tr-series-armalaser-model-text-box">
+                                    <a href="/{{ item.pistolMfr }}/{{ item.slug }}/tr-series/{{ item.id }}/{{ item.model }}">
+                                        <p style="margin-top: 10px;">
+                                            ArmaLaser {{ item.model|upper }}
+                                        </p>
+                                    </a>
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                     </div><!-- //col-sm-3 -->
+                  {% endfor %}
+
+                     <p class="text-size90 m-left30">
+                        <a href="/#top"> Search all brands.</a>
+                     </p>
+
+            </div><!-- // .col-md-12 -->
+
+         </div><!--  // .row  -->
+      </div><!--  // . container -->
+   </div><!-- // #bg-trseries -->
+{% endif %}

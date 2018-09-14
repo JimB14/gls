@@ -1,0 +1,96 @@
+{% extends 'base-admin.html' %}
+
+{% block title %}
+  Customer Details | ArmaLaser
+{% endblock %}
+
+{% block css %}
+{% endblock %}
+
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div id="dashboard-toggle" class="col-md-6" style="margin-top:-20px;margin-left:254px;">
+
+            <div class="col-md-12" style="margin-bottom: 10px;">
+                {% if pagetitle %}
+                    <h2 style="margin-left:-15px;">
+                        {{ pagetitle }}: <span style="font-size: 90%;">{{ customer.first_name }} {{ customer.last_name }}, {% if customer.company %} {{ customer.company|raw }},{% endif %} {{ customer.city }}, {{ customer.state }}</span>
+                    </h2>
+                {% endif %}
+            </div>
+            <p style="margin-left:0px;"><a onclick="window.history.go(-1); return false;" style="cursor:pointer;"><span class="glyphicon glyphicon-menu-left"></span> Back</a></p>
+            <table class="table table-bordered table-striped bg-fff">
+                <thead>
+                    <tr>
+                        <th>Property</th>
+                        <th>Value</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <tr>
+                        <td>Customer ID</td>
+                        <td>{{ customer.id }}</td>
+                    </tr>
+                    <tr>
+                        <td>First</td>
+                        <td>{{ customer.first_name }}</td>
+                    </tr>
+                    <tr>
+                        <td>Last</td>
+                        <td>{{ customer.last_name }}</td>
+                    </tr>
+                    <tr>
+                        <td>Company</td>
+                        <td>{{ customer.company|raw }}</td>
+                    </tr>
+                    <tr>
+                        <td>Email</td>
+                        <td>{{ customer.email }}</td>
+                    </tr>
+                    <tr>
+                        <td>Phone</td>
+                        <td>{{ customer.telephone }}</td>
+                    </tr>
+                    <tr>
+                        <td>Address</td>
+                        <td>{{ customer.address }}</td>
+                    </tr>
+                    <tr>
+                        <td>City</td>
+                        <td>{{ customer.city }}</td>
+                    </tr>
+                    <tr>
+                        <td>State</td>
+                        <td>{{ customer.state }}</td>
+                    </tr>
+                    <tr>
+                        <td>Zip</td>
+                        <td>{{ customer.zip }}</td>
+                    </tr>
+
+                </tbody>
+            </table>
+
+
+
+        </div><!--  // col-md-10 -->
+    </div><!--  // .row  -->
+</div><!-- // .container-fluid  -->
+{% endblock %}
+
+
+{% block bottomjs %}
+<!-- Datepicker for warranty-registration.php @https://jqueryui.com/datepicker/#default -->
+<script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+<script src="/assets/js/datepicker.js"></script>
+<script>
+$(document).ready(function(){
+
+
+});
+</script>
+
+{% endblock %}

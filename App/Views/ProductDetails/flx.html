@@ -1,0 +1,161 @@
+{% extends 'base.html' %}
+
+{% block title %}
+{{ flx.flx_model|upper }} for {{ flx.pistolMfr|upper }}® {{ flx.pistol_model|upper }}
+{% endblock %}
+
+
+{% block metadescription %}
+{{ flx.ad_blurb }}
+{% endblock %}
+
+
+{% block css %}
+<style>
+   .ui-dialog .ui-dialog-titlebar {
+      display: block;
+   }
+   .ui-dialog.ui-dialog-content {
+      padding: 0;
+   }
+</style>
+{% endblock %}
+
+
+{% block outsidecontainer %}
+{% endblock %}
+
+
+{% block content %}
+<div class="container">
+    <div id="content"> <!-- to hide content when full size image displays -->
+        <div class="row">
+
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="product-block-title bold ptop20">
+                    <h3>
+                        <span class="text-uppercase" style="color:#ababab">
+                            <span>FLX</span>
+                        </span>
+
+                        <span class="pull-right text-size60" style="display:inline-block; font-style:normal;margin-bottom:0px;">
+                            <span class="text-size120">
+                              <a href="/warranty">
+                                Warranty Support
+                              </a>
+                            </span>
+                        </span>
+                    </h3>
+                </div><!-- // .product-block-title  -->
+
+            </div><!-- // .col-md-12  -->
+        </div><!-- //.row  -->
+
+        <!-- - - - - - - - -  IMAGE - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+        <div class="row">
+            <div id="laser-features-image">
+                <img src="/assets/images/laser-pistol/{{ flx.flx_model }}/{{ flx.fullsize }}"
+                    alt="{{ flx.flx_model|upper }} for {{ flx.pistolMfr|upper }} {{ flx.pistol_models }}">
+            </div>
+
+            <div class="col-md-7 col-sm-6 col-xs-5">
+                <div class="product-image">
+
+                   <!-- store values of full-size images -->
+                    <div id="full-size-image">
+                        <img src="/assets/images/laser-pistol/{{ flx.flx_model }}/{{ flx.fullsize }}" alt="{{ flx.name }} {{ flx.description }}">
+                    </div>
+
+                     <!-- assign id (displayed-image) for jQuery code below that is necessary to display large image -->
+                    <div id="displayed-image">
+                        <div class="col-md-12">
+                            <div class="col-md-10 col-center-block" style="margin-top: 30px;">
+                                <picture>
+                                    <source srcset="/assets/images/laser-pistol/{{ flx.flx_model }}/{{ flx.raw }}"
+                                        alt="{{ flx.flx_model|upper }} for {{ flx.pistolMfr|upper }} {{ flx.pistol_models }}"
+                                        media="(min-width:1200px)">
+
+                                    <source srcset="/assets/images/laser-pistol/{{ flx.flx_model }}/{{ flx.med }}"
+                                        alt="{{ flx.flx_model|upper }} for {{ flx.pistolMfr|upper }} {{ flx.pistol_models }}"
+                                        media="(min-width:760px)">
+
+                                    <source srcset="/assets/images/laser-pistol/{{ flx.flx_model }}/{{ flx.small }}"
+                                        alt="{{ flx.flx_model|upper }} for {{ flx.pistolMfr|upper }} {{ flx.pistol_models }}"
+                                        media="(min-width:200px)">
+
+                                    <img class="img-responsive" style="width: 100%;"
+                                        src="/assets/images/laser-pistol/{{ flx.flx_model }}/{{ flx.thumb }}"
+                                        alt="{{ flx.flx_model|upper }} for {{ flx.pistolMfr|upper }} {{ flx.pistol_models }}">
+                                </picture>
+                            </div>
+                        </div>
+                    </div><!-- // #displayed-image -->
+
+                </div><!-- // .product-image -->
+
+            </div><!-- / col  -->
+
+
+            <!-- - - - - - PRODUCT DESCRIPTION - TEXT - - - - - - - - - - - - - - -->
+
+            <div class="col-md-5 col-sm-6 col-xs-7" id="productDetailsHeading">
+                <h1 style="color:#727272;">
+                    {{ flx.flx_model|upper }}
+                    <br>
+                    <span class="text-size70" style="display:inline-block;margin-top:10px;font-style:normal; color:#848484;">
+                        Fits {{ flx.pistolMfr|upper }}® {{ flx.pistol_models }}
+                    </span>
+                </h1>
+
+                <div class="text-justify">
+                    <p style="font-size:14px; color:#ababab; border:none;">
+                        {{ flx.ad_blurb }}
+                    </p>
+
+                    <p class="text-uppercase text-left" style="border:none;">
+                      Features
+                    </p>
+                    <div id="feature-list">
+                        <div class="col-sm-6 col-xs-6" style="margin-bottom: 0px;">
+                            <div style="margin-left: -14px;">
+                                <p>{{ flx.feature01 }}</p>
+                                <p>{{ flx.feature02 }}</p>
+                                <p>{{ flx.feature03 }}</p>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-xs-6" style="margin-bottom: 0px;">
+                            <div style="margin-right: -14px;" class="text-right">
+                                  <p>{% if flx.upc %}UPC: {{ flx.upc }}{% endif %}</p>
+                                  <p>{{ flx.patent_pend|raw }}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <h3 class="product-details-price">
+                    <span>${{ flx.price }}</span>
+                </h3>
+
+                {% include 'ProductDetails/add-to-cart-button.html' %}
+
+                {% if flx.special_message %}
+                    <p class="text-center" style="color: #ff0000;">
+                        *{{ flx.special_message|raw }}
+                    </p>
+                {% endif %}
+
+                <div id="social-media-links">
+                    <div class="sharethis-inline-share-buttons" style="margin-bottom: 15px;"></div>
+                </div><!-- //#social-media-links -->
+            </div><!-- // .col-md-5  -->
+       </div><!-- /row -->
+
+    </div><!-- // #content -->
+</div><!-- // .container  -->
+{% endblock %}
+
+
+{% block bottomjs %}
+
+{% endblock %}

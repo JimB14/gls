@@ -1,0 +1,54 @@
+<!-- - - - - - - - -  SPECIFICATIONS  -  - - - - - - - - - - - - - - - -->
+<div class="row">
+    <div id="product-details-specifications-div"> <!-- for @media only -->
+        <div class="col-md-12 col-sm-12 col-xs-12">
+            <div style="border-top: 3px solid #efefef;margin-top:10px;padding-top:5px;">
+                <h4 class="text-uppercase text-left" style="margin-bottom:10px;">
+                  {% if stingray_model %}
+                    Specifications - {{ stingray_model.series }} {{ stingray_model.laser_model }}
+                  {% else %}
+                    Specifications - {{ model.series }}: {{ model.model }}
+                  {% endif %}
+                </h4>
+            </div>
+        </div>
+
+        <div class="col-md-4 col-sm-4 col-xs-12">
+            <p class="text-left" style="font-size:12px; border:none;">
+                {{ specs.attachment_style }}<br>
+                {{ specs.dot_visibility }}<br>
+                {{ specs.battery_life }}<br>
+                {{ specs.sensor_location }}
+            </p>
+
+        </div>
+
+        <div class="col-md-3 col-sm-3 col-xs-12">
+            <p class="text-left" style="font-size:12px;border:none;">
+                {{ specs.material }} <br>
+                {{ specs.platform }} <br>
+                {{ specs.battery_type }} <br>
+                {{ specs.laser_adjustment }}
+            </p>
+        </div>
+
+        <div class="col-md-3 col-sm-3 col-xs-12" style="margin-bottom: 20px;">
+            <p class="text-left" style="font-size:12px;border:none;">
+                {{ specs.output }}<br>
+                {{ specs.master_on_off_switch }}<br>
+                {{ specs.warranty }}<br>
+                {{ specs.beam_modes }}
+            </p>
+        </div>
+
+        <div class="col-md-2 col-sm-2 col-xs-5">
+            <p class="text-center" style="font-size:12px;border:none;">
+                <a href="#fda-label-install" data-toggle="modal" title="Click for Label &#10;Installation Instructions">
+                    <img style="margin-top:-5px;" id="fda_warning_img" class="img-responsive"
+                        src="/assets/images/fda/{{ specs.fda_warning }}" alt="warning statement">
+                        Read Warning Statement
+                </a>
+           </p>
+        </div>
+    </div><!-- // #product-details-specifications-div -->
+</div><!-- // .row  -->

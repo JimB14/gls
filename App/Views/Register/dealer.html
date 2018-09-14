@@ -1,0 +1,399 @@
+{% extends 'base.html' %}
+
+{% block title %}
+  Dealer Registration | ArmaLaser
+{% endblock %}
+
+
+{% block css %}
+<style>
+.glyphicon-remove {
+    color: #ff0000;
+}
+.glyphicon-ok {
+    color: #228b22;
+}
+.help-block {
+    color: #ff0000 !important;
+}
+</style>
+{% endblock %}
+
+
+{% block outsidecontainer %}
+{% endblock %}
+
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-8">
+          <h2>{{ pagetitle }}</h2>
+            <div class="panel panel-default">
+                <div class="panel-body" style="padding:20px 32px;">
+
+                    <h4 style="color: #838383;">
+                        *Please provide the following information to create
+                        your account. Make sure you have the correct Authorization
+                        Code.
+                    </h4>
+                    <p><i>*All fields are required.</i></p>
+                    <!--  Display results from ajax_processing/  -->
+                    <div id="message"></div>
+
+                    {% if success %}
+                    <div class="alert alert-success alert-padding">{{ success }}</div>
+                    {% endif %}
+
+                    <form name="dealerregistrationform" id="dealerregistrationform"
+                        action="/register/register-new-dealer" method="post">
+
+                       <!-- honeypot -->
+                       <input type="hidden" name="honeypot_register" id="honeypot_register">
+                       <input type="hidden" name="type" value="dealer">
+
+                        <div class="form-group has-feedback">
+                            <label for="dealer_email" class="control-label">
+                              Email
+                            </label>
+                            <input type="email" class="form-control email" name="dealer_email"
+                                id="dealer_email" placeholder="user@example.com"
+                                value="{{ dealer_email }}" autofocus>
+                                <span class="glyphicon form-control-feedback" id="dealer_email1"></span>
+                                <help><i>*Important! All correspondence from ArmaLaser will be directed to this email address</i></help>
+                        </div>
+
+                        <div class="form-group has-feedback">
+                            <label for="dealer_confirm_email" class="control-label">
+                                Confirm email
+                            </label>
+                            <input type="email" class="form-control" name="dealer_confirm_email"
+                                id="dealer_confirm_email" placeholder="user@example.com" value="{{ dealer_confirm_email2 }}">
+                                <span class="glyphicon form-control-feedback" id="dealer_confirm_email1"></span>
+                        </div>
+
+                        <div class="form-group has-feedback">
+                            <label for="dealer_first_name" class="control-label">
+                                First name
+                            </label>
+                            <input type="text" class="form-control" name="dealer_first_name"
+                                id="dealer_first_name" placeholder="First name" value="{{ dealer_first_name }}">
+                                <span class="glyphicon form-control-feedback" id="dealer_first_name1"></span>
+                        </div>
+
+                        <div class="form-group has-feedback">
+                            <label for="dealer_last_name" class="control-label">
+                              Last name
+                            </label>
+                            <input type="text" class="form-control" name="dealer_last_name"
+                                id="dealer_last_name" placeholder="Last name" value="{{ dealer_last_name }}">
+                                <span class="glyphicon form-control-feedback" id="dealer_last_name1"></span>
+                        </div>
+
+                        <div class="form-group has-feedback">
+                            <label for="dealer_company" class="control-label">
+                              Company
+                            </label>
+                            <input type="text" class="form-control" name="dealer_company"
+                                id="dealer_company" placeholder="Company name" value="{{ dealer_company }}">
+                                <span class="glyphicon form-control-feedback" id="dealer_company1"></span>
+                                <help><i>*How your company will be displayed on our website.</i></help>
+                        </div>
+
+                        <div class="form-group has-feedback">
+                            <label for="dealer_phone" class="control-label">
+                              Telephone
+                            </label>
+                            <input type="text" class="form-control" name="dealer_phone"
+                                id="dealer_phone" placeholder="Telephone" value="{{ dealer_phone }}">
+                                <span class="glyphicon form-control-feedback" id="dealer_phone1"></span>
+                        </div>
+
+                        <div class="form-group has-feedback">
+                            <label for="dealer_address" class="control-label">
+                              Address
+                            </label>
+                            <input type="text" class="form-control" name="dealer_address"
+                                id="dealer_address" placeholder="Address" value="{{ dealer_address }}">
+                                <span class="glyphicon form-control-feedback" id="dealer_address1"></span>
+                                <help><i>*We will ship <u>only</u> to this address.</i></help>
+                        </div>
+
+                        <div class="form-group has-feedback">
+                            <label for="dealer_city" class="control-label">
+                              City
+                            </label>
+                            <input type="text" class="form-control" name="dealer_city"
+                                id="dealer_city" placeholder="City" value="{{ dealer_city }}">
+                                <span class="glyphicon form-control-feedback" id="dealer_city1"></span>
+                        </div>
+
+                        <div class="form-group has-feedback">
+                            <label for="dealer_state">State</label>
+                            <select class="form-control required" id="dealer_state" name="dealer_state">
+                                <option value="">Select state</option>
+                                {% for state in states %}
+                                    <option value="{{ state.abbrev}}">{{ state.name }}</option>
+                                {% endfor %}
+                            </select>
+                            <span class="glyphicon form-control-feedback" id="dealer_state1"></span>
+                        </div>
+
+                        <div class="form-group has-feedback">
+                            <label for="dealer_zip" class="control-label">
+                              Zip code
+                            </label>
+                            <input type="text" class="form-control" name="dealer_zip"
+                                id="dealer_zip" placeholder="Zip code" value="{{ dealer_zip }}">
+                                <span class="glyphicon form-control-feedback" id="dealer_zip1"></span>
+                        </div>
+
+                        <div class="form-group has-feedback">
+                            <label for="dealer_website" class="control-label">
+                              Website
+                            </label>
+                            <input type="text" class="form-control" name="dealer_website"
+                                id="dealer_website" placeholder="e.g. www.mywebsite.com or mywebsite.com"
+                                    value="{{ dealer_website }}">
+                                <span class="glyphicon form-control-feedback" id="dealer_website1"></span>
+                                <help><i>*Check carefully for spelling errors</i></help>
+                        </div>
+
+                        <div class="form-group has-feedback">
+                            <label for="dealer_password" class="control-label">
+                              Password (<small>Minimum 6 characters</small>)
+                            </label>
+                            <input type="password" class="form-control" name="dealer_password"
+                                id="dealer_password" placeholder="Password - minimum 6 characters">
+                                <span class="glyphicon form-control-feedback" id="dealer_password1"></span>
+                        </div>
+
+                        <div class="form-group has-feedback">
+                            <label for="dealer_confirm_password" class="control-label">
+                                Confirm password
+                            </label>
+                            <input type="password" class="form-control" name="dealer_confirm_password"
+                                id="dealer_confirm_password" placeholder="Verify password">
+                                <span class="glyphicon form-control-feedback" id="dealer_confirm_password1"></span>
+                        </div>
+
+                        <div class="form-group has-feedback">
+                            <label for="dealer_auth_code" class="control-label">
+                              Authorization code
+                            </label>
+                            <input type="text" class="form-control" name="dealer_auth_code"
+                                id="dealer_auth_code" placeholder="Authorization code"
+                                    value="{{ dealer_auth_code }}">
+                                <span class="glyphicon form-control-feedback" id="dealer_auth_code1"></span>
+                        </div>
+
+                        <div class="form-group has-feedback">
+                            <div class="checkbox">
+                                <label for="agree">
+                                    <input type="checkbox" name="agree" id="agree">
+                                        I agree to the Terms.
+                                    <a href="/terms/terms-of-use">
+                                        Read terms
+                                    </a>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="form-group has-feedback">
+                            <button id="registerBtn" type="submit" class="btn btn-lg btn-buy btn-block">
+                                Register
+                            </button>
+                        </div>
+                    </form>
+
+                </div><!--  // .panel-body  -->
+            </div><!--  // .panel  -->
+        </div><!-- // .col-md-8  -->
+
+        <div class="col-md-4">
+
+        </div><!-- // .col-md-4  -->
+
+    </div>
+</div>
+{% endblock %}
+
+
+{% block bottomjs %}
+
+<script>
+$(document).ready(function(){
+
+    $("#dealerregistrationform").validate({
+        rules: {
+            dealer_email: {
+                required: true,
+                email: true
+            },
+            dealer_confirm_email: {
+                equalTo: "#dealer_email"
+            },
+            dealer_first_name: {
+                minlength: 2,
+                maxlength: 20,
+                required: true
+            },
+            dealer_last_name: {
+                minlength: 2,
+                maxlength: 30,
+                required: true
+            },
+            dealer_company: {
+                minlength: 5,
+                maxlength: 50,
+                required: true
+            },
+            dealer_phone: {
+                required: true
+            },
+            dealer_address: {
+                required: true
+            },
+            dealer_city: {
+                required: true
+            },
+            dealer_state: {
+                required: true
+            },
+            dealer_zip: {
+                required: true
+            },
+            dealer_passsword: {
+                minlength: 6,
+                maxlength: 10,
+                required: true
+            },
+            dealer_confirm_password: {
+                equalTo: "#dealer_password"
+            },
+            dealer_auth_code: {
+                required: true
+            },
+            agree: "required"
+        },
+        messages: {
+            dealer_email: {
+                required: "*Please enter your email address",
+                email: "*Please enter a valid email address"
+            },
+            dealer_confirm_email: {
+                equalTo: "*Please enter the same email address"
+            },
+            dealer_first_name: {
+                minlength: "*Please enter at least 2 characters",
+                maxlength: "*Please enter less than 20 characters",
+                required: "*Please enter your first name"
+            },
+            dealer_last_name: {
+              minlength: "*Please enter at least 2 characters",
+              maxlength: "*Please enter less than 30 characters",
+              required: "*Please enter your last name"
+            },
+            dealer_company: {
+              minlength: "*Please enter at least 5 characters",
+              maxlength: "*Please enter less than 50 characters",
+              required: "*Please enter your company name"
+            },
+            dealer_phone: {
+                required: "*Please enter your telephone number"
+            },
+            dealer_address: {
+                required: "*Please enter your address"
+            },
+            dealer_city: {
+                required: "*Please enter your city"
+            },
+            dealer_state: {
+                required: "*Please enter your state"
+            },
+            dealer_zip: {
+                required: "*Please enter your zip code"
+            },
+            dealer_password: {
+                minlength: "*Please enter at least 6 characters",
+                maxlength: "*Please enter up to 10 characters",
+                required: "*Please enter a password",
+            },
+            dealer_confirm_password: {
+                equalTo: "*Please enter the same password"
+            },
+            dealer_auth_code: {
+                required: "*Please enter your authorization code"
+            },
+            agree: "*Please accept our terms and conditions"
+        },
+        highlight: function(element) {
+            var id_attr = "#" + $( element ).attr("id") + "1";
+            $(element).closest('.form-group has-feedback').removeClass('has-success').addClass('has-error');
+            $(id_attr).removeClass('glyphicon-ok').addClass('glyphicon-remove');
+        },
+        unhighlight: function(element) {
+            var id_attr = "#" + $( element ).attr("id") + "1";
+            $(element).closest('.form-group has-feedback').removeClass('has-error').addClass('has-success');
+            $(id_attr).removeClass('glyphicon-remove').addClass('glyphicon-ok');
+        },
+        errorElement: 'span',
+            errorClass: 'help-block',
+            errorPlacement: function(error, element) {
+                if(element.length) {
+                    error.insertAfter(element);
+                } else {
+                error.insertAfter(element);
+                }
+            }
+     });
+
+
+  /* - - - - Check if email in db  - - - -  */
+
+    $("#dealer_email").blur(function(){
+        var email = $( this ).val();
+        console.log(`email =  ${email}`);
+        console.log('index of @: ' + email.indexOf('@'));
+
+        // check for content and @
+        if (email !== '' || email.indexOf('@') > 0) {
+            $.ajax({
+                url: "/register/checkIfEmailAvailable",
+                type: 'POST',
+                data: {
+                  email: email,
+                  type: 'dealer'
+                },
+                cache: false,
+                success: function(data){
+                    var available = '<div class="alert alert-success alert-padding">';
+                    available += 'Email address is available!';
+                    available += '</div>';
+
+                    var not_available = '<div class="alert alert-danger alert-padding">';
+                    not_available += 'Sorry, the email address you entered is not available. If you are already registered, *Please <a href="/admin/dealer/login">log in</a>.';
+                    not_available += '</div>';
+
+                    if( data === 'available' ){
+                        $("#message").html(available);
+                    }
+                    else {
+                        $("#message").html(not_available);
+                    }
+                },
+                error: function(){
+                    alert("Ajax error occurred.");
+                }
+            });
+        }
+        // error with email address
+        // else {
+        //     alert("There is a problem with the email address you entered.");
+        //     return false;
+        // }
+    });
+
+});
+</script>
+{% endblock %}

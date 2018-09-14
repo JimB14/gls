@@ -1,0 +1,254 @@
+{% extends 'base-admin.html' %}
+
+{% block title %}
+  Update Laser | ArmaLaser
+{% endblock %}
+
+{% block css %}
+{% endblock %}
+
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div id="dashboard-toggle" class="col-md-8" style="margin-top:-20px;margin-left:254px;">
+
+          <h2>Update TR Series laser</h2>
+          <hr>
+
+            <form method="post" action="/admin/lasers/update-trseries?id={{ laser.id }}"
+              class="form-horizontal" name="update-laser-form" id="update-laser-form"
+              enctype="multipart/form-data">
+
+                <div class="form-group">
+                    <label for="laser_series" class="control-label col-sm-3">
+                      Name
+                    </label>
+                    <div class="col-sm-9">
+                        <input type="text" class="form-control" name="name"
+                        value="{{ laser.name }}">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="laser_series" class="control-label col-sm-3">
+                      ID
+                    </label>
+                    <div class="col-sm-9">
+                        <input style="background-color: #fff;" type="text" class="form-control" name="name"
+                        value="{{ laser.id }}" disabled>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="laser_model" class="control-label col-sm-3">
+                      Series
+                    </label>
+                    <div class="col-sm-9">
+                        <input style="background-color: #fff;" type="text" class="form-control" name="series"
+                        value="{{ laser.series }}" disabled>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="laser_model" class="control-label col-sm-3">
+                      Model
+                    </label>
+                    <div class="col-sm-9">
+                        <input style="background-color: #fff;" type="text" class="form-control"
+                            name="model" value="{{ laser.model }}" disabled>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="laser_color" class="control-label col-sm-3">
+                      Beam
+                    </label>
+                    <div class="col-sm-9">
+                        <input style="background-color: #fff;" type="text" class="form-control"
+                            name="beam" value="{{ laser.beam }}" disabled>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="price" class="control-label col-sm-3">
+                      Price
+                    </label>
+                    <div class="col-sm-9">
+                        <input type="number" class="form-control" name="price"
+                            min="98.75" step="any"
+                            placeholder="Price" value="{{ laser.price }}">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="image" class="control-label col-sm-3">
+                      Image name (thumb)
+                    </label>
+                    <div class="col-sm-9">
+                        <input style="background-color: #fff;" type="text" class="form-control"
+                            name="image" placeholder="e.g. imageName.png"
+                            value="{{ laser.thumb }}" disabled>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="ad_blurb" class="control-label col-sm-3">
+                      Ad blurb
+                    </label>
+                    <div class="col-sm-9">
+                      <textarea name="ad_blurb" class="form-control " id="ad_blurb" placeholder="Marketing blurb" rows="2">{{ laser.ad_blurb }}</textarea>
+                      <script>
+                        CKEDITOR.replace( 'ad_blurb' );
+                      </script>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="feature01" class="control-label col-sm-3">
+                      Feature 1
+                    </label>
+                    <div class="col-sm-9">
+                      <textarea name="feature01" class="form-control " id="feature01" placeholder="Feature position 1" rows="2">{{ laser.feature01 }}</textarea>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="feature02" class="control-label col-sm-3">
+                      Feature 2
+                    </label>
+                    <div class="col-sm-9">
+                      <textarea name="feature02" class="form-control " id="feature02" placeholder="Feature position 2" rows="2">{{ laser.feature02 }}</textarea>
+                      <!-- <script>
+                        CKEDITOR.replace( 'feature02' );
+                      </script> -->
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="feature03" class="control-label col-sm-3">
+                      Feature 3
+                    </label>
+                    <div class="col-sm-9">
+                      <textarea name="feature03" class="form-control " id="feature03" placeholder="Feature position 3" rows="2">{{ laser.feature03 }}</textarea>
+                      <!-- <script>
+                        CKEDITOR.replace( 'feature03' );
+                      </script> -->
+                    </div>
+                </div>
+
+
+                <div class="form-group">
+                    <label for="patent_pend" class="control-label col-sm-3">
+                      Patent pending
+                    </label>
+                    <div class="col-sm-9">
+                        <input type="text" class="form-control"
+                        name="patent_pend" id="patent_pend"
+                        placeholder="Patent pending data" value="{{ laser.patent_pend }}">
+                        <small>Note:  &lt;br&gt; is HTML code that forces a line break</small>
+                    </div>
+                </div>
+
+
+                <div class="form-group">
+                    <label for="upc" class="control-label col-sm-3">
+                      UPC
+                    </label>
+                    <div class="col-sm-9">
+                        <input type="text" class="form-control "
+                        name="upc" id="upc"
+                        placeholder="UPC ID, e.g. 768612094274" value="{{ laser.upc }}">
+                    </div>
+                </div>
+
+
+                <div class="form-group">
+                    <label for="review_url" class="control-label col-sm-3">
+                      Amazon review URL
+                    </label>
+                    <div class="col-sm-9">
+                        <input type="text" class="form-control "
+                        name="review_url" id="review_url"
+                        placeholder="Full URL to Amazon review - includes http://"
+                        value="{{ laser.review_url }}">
+                        <span><a class="newWindow" href="{{ laser.review_url }}" title="Go to Amazon review URL">See current number of reviews at Amazon</a></span>
+                    </div>
+                </div>
+
+
+                <div class="form-group">
+                    <label for="review_count" class="control-label col-sm-3">
+                      Number of reviews
+                    </label>
+                    <div class="col-sm-9">
+                        <input type="number" class="form-control"
+                        name="review_count" id="review_count"
+                        placeholder="Number of reviews" value="{{ laser.review_count }}">
+                    </div>
+                </div>
+
+
+                <div class="form-group">
+                    <label for="special_note" class="control-label col-sm-3">
+                      Special note
+                    </label>
+                    <div class="col-sm-9">
+                        <input type="text" class="form-control "
+                            name="special_note" id="special_note"
+                            placeholder="Simple note, e.g. This laser doesn't fit pistol X";
+                            value="{{ laser.special_note }}">
+                    </div>
+                </div>
+
+
+
+                <div class="form-group">
+                    <label for="special_message" class="control-label col-sm-3">
+                      Special message
+                    </label>
+                    <div class="col-sm-9">
+                        <input type="text" class="form-control "
+                            name="special_message" id="special_message"
+                            placeholder="Temporary message, e.g. 'Due to high sales volume please allow 4 - 5 days for your order to be shipped.'"
+                            value="{{ laser.special_message }}">
+                    </div>
+                </div>
+
+                <hr>
+
+                <div class="form-group">
+                    <div class="col-sm-offset-3 col-sm-8">
+                        <button  id="submit-listing-btn" type="submit"
+                        class="btn btn-primary btn-lg">
+                        Update Now
+                      </button>
+                    </div>
+                </div>
+
+            </form>
+
+
+          </div><!--  // .col-md-8  -->
+      </div><!--  // .row  -->
+</div><!--  // .container  -->
+{% endblock %}
+
+
+{% block bottomjs %}
+<script>
+$(document).ready(function(){
+
+    $("#thisID").click(function(){
+        var checked = 1;
+        console.log(checked);
+        if($("#thisID").prop("checked")){
+          $("#lasers_last_name").attr("placeholder", "Enter laser ID");
+        } else {
+          $("#lasers_last_name").attr("placeholder", "Enter laser model");
+        }
+    });
+
+});
+</script>
+{% endblock %}

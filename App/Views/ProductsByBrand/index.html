@@ -1,0 +1,105 @@
+{% extends 'base.html' %}
+
+{% block title %}
+  Laser Products for {{ pistolMfr|title }}® pistols | ArmaLaser
+{% endblock %}
+
+{% block metadescription %}
+  ArmaLaser manufactures the world's most advanced laser sights, pistol lasers and related products for {{ pistolMfr|title }}® pistols.
+{% endblock %}
+
+{% block css %}
+{% endblock %}
+
+{% block outsidecontainer %}
+{% endblock %}
+
+
+{% block content %}
+<div class="red-band">
+    <div class="pistol-brand-image">
+        <h1>
+            {{ pistolMfr }}®
+        </h1>
+    </div>
+</div>
+
+
+<!-- - - - - - - - - - -  TR SERIES  - - - - - - - - - - - - - - - - - - - - -->
+
+{% if trseries %}
+   {% include 'ProductsByBrand/section-trseries.html' %}
+{% else %}
+    <div class="white-band"></div>
+{% endif %}
+
+<!-- - - - - -  - - - -  /TR SERIES  - - - - - - - - - - - - - - - - - - - - -->
+
+
+
+<!-- - - - - - - - - -  GTO / FLX  - - - - - - - - - - - - - - - - - - - - - -->
+
+{% if gtoseries %}
+   {% include 'ProductsByBrand/section-gtoflx.html' %}
+{% else %}
+    <div class="white-band"></div>
+{% endif %}
+
+<!-- - - - - -  - -   /GTO / FLX  - - - - - - - - - - - - - - - - - - - - - -->
+
+
+
+<!-- - - - - - - - - -  STINGRAY  - - - - - - - - - - - - - - - - - - - - - -->
+{% if stingray %}
+   {% include 'ProductsByBrand/section-stingray.html' %}
+{% else %}
+    <div class="white-band"></div>
+{% endif %}
+
+<!-- - - - - -  - -   /STINGRAY  - - - - - - - - - - - - - - - - - - - - - -->
+
+
+
+
+<!-- - - - - - - - - -  HOLSTERS  - - - - - - - - - - - - - - - - - - - - -->
+{% if holsters %}
+   {% include 'ProductsByBrand/section-holsters.html' %}
+{% else %}
+<div class="white-band"></div>
+{% endif %}
+
+<!-- - - - - -  - - - /HOLSTERS  - - - - - - - - - - - - - - - - - - - - -->
+
+
+
+<!-- - - - - - - - - -  BATTERIES & PARTS  - - - - - - - - - - - - - - - -->
+{% if batteries %}
+   {% include 'ProductsByBrand/section-batteries-parts.html' %}
+{% else %}
+<div class="white-band"></div>
+{% endif %}
+
+<!-- - - - - -  - - - /BATTERIES & PARTS  - - - - - - - - - - - - - - - - -->
+
+
+
+<!-- - - - - - - - - -  ACCESSORIES  - - - - - - - - - - - - - - - - - - - - -->
+{% if accessories %}
+   {% include 'ProductsByBrand/section-accessories.html' %}
+{% else %}
+<div class="white-band"></div>
+{% endif %}
+
+<!-- - - - - -  - - - /ACCESSORIES  - - - - - - - - - - - - - - - - - - - - -->
+
+{% endblock %}
+
+
+{% block bottomjs %}
+<script>
+$(document).ready(function(){
+
+
+});
+</script>
+{% endblock %}

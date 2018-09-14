@@ -1,0 +1,330 @@
+{% extends 'base.html' %}
+
+{% block title %}
+  Authorized Dealers | ArmaLaser
+{% endblock %}
+
+{% block metadescription %}
+ArmaLaser products are carried by factory trained dealers committed to ArmaLaser quality and integrity. Interested in becoming an authorized ArmaLaser dealer?
+{% endblock %}
+
+{% block css %}
+{% endblock %}
+
+{% block outsidecontainer %}
+{% endblock %}
+
+
+{% block content %}
+<div class="container p3">
+
+    <div class="row">
+
+        <div class="col-md-12">
+            <div style="margin-top: 30px;">
+                <picture>
+                    <source srcset="/assets/images/page/dealers/fiveways_large.png"
+                        alt="Become an ArmaLaser dealer" media="(min-width:1200px)">
+
+                    <source srcset="/assets/images/page/dealers/fiveways_med.png"
+                        alt="Become an ArmaLaser dealer" media="(min-width:760px)">
+
+                    <source srcset="/assets/images/page/dealers/fiveways_small.png"
+                        alt="Become an ArmaLaser dealer" media="(min-width:200px)">
+
+                    <img class="img-responsive center-block"
+                        src="/assets/images/page/dealers/fiveways_thumb.png"
+                        alt="Become an ArmaLaser dealer">
+                </picture>
+
+                <!-- <img class="img-responsive" src="/assets/images/page/dealers/fiveways.png"
+                  alt="Become an ArmaLaser dealer"> -->
+            </div>
+        </div><!-- // .col-md-12  -->
+
+
+        <div class="col-md-12">
+            <div class="purple-bar">
+                <h1 class="text-uppercase">Authorized Dealer</h1>
+            </div>
+
+            <div class="authorized-dealer p3">
+                <p>
+                    ArmaLaser products are carried by factory trained dealers who have made a commitment to our brand.
+                </p>
+
+                <p>
+                    ArmaLaser does not distribute products through distributors. Dealers can purchase directly from ArmaLaser. This upholds the integrity of our pricing policy in an Amazon-centric
+                    world.
+                </p>
+
+            </div>
+
+        </div><!-- // .col-md-12  -->
+
+
+        <div class="col-md-12">
+
+            <div class="red-bar">
+                <h2>One Price Policy</h2>
+            </div>
+
+            <p class="text-center text-uppercase bold" style="font-size: 16px;">
+                map and msrp are the same number. &nbsp; no large dealer will undercut you.
+            </p>
+
+            <div id="one-price-policy">
+                <p class="dealer-text-styles">
+                    <strong>ArmaLaser</strong> is the <em>only</em> major laser brand that does not allow any discounting. Whether the consumer buys on Amazon, eBay, a major retailer, ArmaLaser Direct, or
+                    in your store, the price is IDENTICAL.
+                </p>
+            </div>
+
+
+            <div id="amazon-block">
+                <p>
+                    amazon
+                </p>
+            </div>
+
+            <div id="strategic-partners-block">
+                <p>
+                    strategic-partners
+                </p>
+            </div>
+
+
+             <div id="ebay-block">
+                <p>
+                    eBay
+                </p>
+            </div>
+
+        </div><!-- // .col-md-12  -->
+
+
+        <div class="col-md-12">
+
+            <div class="purple-bar2">
+                <h2 class="text-uppercase">combo <span>program</span></h2>
+            </div>
+
+            <div class="combo-program p4">
+                <p>
+                    Our Authorized Dealers are the exclusive source for ArmaLaser Combo Program lasers. The consumer can purchase an ArmaLaser-equipped pistol installed by you and sold along with the pistol as a combo.
+
+                </p>
+                <p>
+                    Every Authorized Dealer receives a counter-top display, an in-counter lucite plaque, and feature ArmaLaser-equipped pistols in their display cases.
+                </p>
+            </div>
+
+        </div>
+
+
+        <div class="col-md-12">
+            <div style="margin-top: 30px;">
+                <picture>
+                    <source srcset="/assets/images/page/dealers/incase_large.png"
+                        alt="ArmaLaser pistol laser combos" media="(min-width:1200px)">
+
+                    <source srcset="/assets/images/page/dealers/incase_med.png"
+                        alt="ArmaLaser pistol laser combos" media="(min-width:760px)">
+
+                    <source srcset="/assets/images/page/dealers/incase_small.png"
+                        alt="ArmaLaser pistol laser combos" media="(min-width:200px)">
+
+                    <img class="img-responsive center-block"
+                        src="/assets/images/page/dealers/incase_thumb.png"
+                        alt="ArmaLaser pistol laser combos">
+                </picture>
+
+                <!-- <img class="img-responsive" src="/assets/images/page/dealers/incase.png" alt="Become an ArmaLaser dealer"> -->
+            </div>
+        </div><!-- // .col-md-12  -->
+
+
+        <div class="col-md-12">
+            <div class="p2" style="margin-top: 30px;">
+                <picture>
+                    <source srcset="/assets/images/page/dealers/oncounter_large.png"
+                        alt="Become an ArmaLaser dealer" media="(min-width:1200px)">
+
+                    <source srcset="/assets/images/page/dealers/oncounter_med.png"
+                        alt="Become an ArmaLaser dealer" media="(min-width:760px)">
+
+                    <source srcset="/assets/images/page/dealers/oncounter_small.png"
+                        alt="Become an ArmaLaser dealer" media="(min-width:200px)">
+
+                    <img class="img-responsive center-block"
+                        src="/assets/images/page/dealers/oncounter_thumb.png"
+                        alt="Become an ArmaLaser dealer">
+                </picture>
+
+                <!-- <img class="img-responsive" src="/assets/images/page/dealers/oncounter.png" alt="Become an ArmaLaser dealer"> -->
+            </div>
+        </div><!-- // .col-md-12  -->
+
+
+        <div class="col-md-12">
+            <div id="ffl-submit">
+                <h2 class="text-center">Send us your FFL for complete ArmaLaser Authorized Dealer Info</h2>
+            </div>
+        </div><!-- // .col-md-12  -->
+
+
+        <div class="col-md-offset-1 col-md-6">
+
+            <form action="/dealers/send-dealer-info" id="ffl-form" name="ffl-form" method="post"
+                enctype="multipart/form-data">
+
+                <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+               <div id="spam_fighter">
+                   **Leave field blank**
+                   <input type="text" name="spam_fighter" value="">
+               </div>
+               <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+
+                <div class="form-group has-feedback">
+                    <label class="control-label">
+                      Name
+                    </label>
+                    <sup>
+                      <span class="glyphicon glyphicon-asterisk"></span>
+                    </sup>
+                    <input type="text" name="name" class="form-control required" id="name"
+                      placeholder="Name">
+                    <i class="glyphicon glyphicon-user form-control-feedback"></i>
+                </div>
+
+                <div class="form-group has-feedback">
+                    <label class="control-label">
+                      Email address
+                    </label>
+                    <sup>
+                      <span class="glyphicon glyphicon-asterisk"></span>
+                    </sup>
+                    <input type="email" name="email" class="form-control required" id="email"
+                      placeholder="Email">
+                    <i class="glyphicon glyphicon-envelope form-control-feedback"></i>
+                </div>
+
+                <div class="form-group has-feedback">
+                    <label class="control-label">
+                      Telephone
+                    </label>
+                    <sup>
+                      <span class="glyphicon glyphicon-asterisk"></span>
+                    </sup>
+                    <input type="text" name="telephone" class="form-control required" id="telephone"
+                      placeholder="Telephone">
+                    <i class="glyphicon glyphicon-earphone form-control-feedback"></i>
+                </div>
+
+                <div class="form-group has-feedback">
+                    <label class="control-label">
+                      Company
+                    </label>
+                    <sup>
+                      <span class="glyphicon glyphicon-asterisk"></span>
+                    </sup>
+                    <input type="text" name="company" class="form-control required" id="company"
+                    placeholder="Company name (matches FFL name)">
+                </div>
+
+
+                <div class="form-group">
+                    <label for="image">
+                      Upload FFL
+                    </label>
+                    <input type="file" name="image" id="image">
+                    <p class="help-block small">
+                        *Must be gif, jpg, png or pdf.
+                    </p>
+                </div>
+
+
+                <div class="radio">
+                    <label>
+                        <input type="radio" name="ffl_radio" id="ffl_radio" value="I uploaded my FFL" required>
+                        I am uploading my FFL now with this form
+                    </label>
+                </div>
+                <div class="radio">
+                    <label>
+                        <input type="radio" name="ffl_radio" id="ffl_radio" value="I will fax my FFL to you">
+                        I will fax my FFL to ArmaLaser at 352-515-9245
+                    </label>
+                </div>
+                <div class="radio p2">
+                    <label>
+                        <input type="radio" name="ffl_radio" id="ffl_radio" value="I will email my FFL to you">
+                        I will email my FFL to ArmaLaser Dealer Services
+                    </label>
+                </div>
+
+
+                <button type="submit" class="btn btn-buy btn-lg btn-block">
+                  Submit
+                </button>
+            </form>
+
+        </div><!--  // .col-md-6  -->
+
+
+        <div class="col-md-4 col-sm-4">
+            <div class="contact-corp-info-sidebar">
+
+                <div class="list-group" style="border-radius: 4px;">
+                    <p class="list-group-item" id="corp-info">
+                        ArmaLaser Inc.<br>
+                        Corporate Headquarters<br>
+                        5200 NW 43rd Street<br>
+                        Gainesville, FL 32606<br>
+                        USA
+                    </p>
+                </div>
+
+                <div class="list-group">
+                    <h4 class="list-group-item-heading">
+                      Contact Information
+                    </h4>
+                    <p class="list-group-item">
+                        <span class="glyphicon glyphicon-earphone"></span>
+                        Telephone:
+                        <a href="telephone:8006805020" title="Press to dial">
+                          800-680-5020
+                        </a><br>
+                        <span class="glyphicon glyphicon-globe"></span>
+                        International: 352-353-0418<br>
+                        <span class="glyphicon glyphicon-print"></span>
+                        Fax: 352-515-9245<br>
+                        <span class="glyphicon glyphicon-envelope"></span>
+                        <a href="mailto:dealer@armalaser.com?Subject=Become%20a%20Dealer" target="_top">
+                          Email Dealer Services
+                        </a><br>
+                    </p>
+                </div>
+            </div>
+        </div><!-- // .col-md-4 -->
+
+        <div class="col-md-1 col-sm-1">
+            &nbsp;
+        </div>
+
+
+
+    </div><!-- // .row -->
+
+</div><!-- // .container -->
+{% endblock %}
+
+{% block bottomjs %}
+<script>
+$(document).ready(function(){
+
+  $("#ffl-form").validate();
+
+});
+</script>
+{% endblock %}

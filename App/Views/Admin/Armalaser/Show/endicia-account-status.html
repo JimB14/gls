@@ -1,0 +1,151 @@
+{% extends 'base-admin.html' %}
+
+{% block title %}
+  Endicia Accout | ArmaLaser
+{% endblock %}
+
+{% block css %}
+<style>
+#purchase-postage-div {
+    display: none;
+}
+#purchase-postage-title {
+    text-decoration: underline;
+    cursor: pointer;
+}
+</style>
+{% endblock %}
+
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div id="dashboard-toggle" class="col-md-10" style="margin-top:-20px;margin-left:254px;">
+
+            <div class="col-md-4">
+                {% if pagetitle %}
+                    <h2 style="margin-left:-15px;">
+                        {{ pagetitle }}
+                    </h2>
+                {% endif %}
+            </div>
+
+            {% if account %}
+                <table class="table table-bordered table-striped bg-fff">
+                    <thead>
+                        <tr>
+                            <th>Account<br>ID</th>
+                            <th>Postage<br>balance</th>
+                            <th>Account<br>status</th>
+                            <th>Account<br>type</th>
+                            <th>First</th>
+                            <th>Last</th>
+                            <th>Address</th>
+                            {% if account['Address2'] %}
+                              <th>Address2</th>
+                            {% endif %}
+                            <th>City</th>
+                            <th>State</th>
+                            <th>Zip5</th>
+                            <th>Zip add on</th>
+                            <th>Phone</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        <tr>
+                            <td>{{ account['AccountID'] }}</td>
+                            <td class="pendingGreen bold">${{ account['PostageBalance']|number_format(2) }}</td>
+                            <td>{{ account['AccountStatus'] }}</td>
+                            <td>{{ account['AccountType'] }}</td>
+                            <td>{{ account['FirstName'] }}</td>
+                            <td>{{ account['LastName'] }}</td>
+                            <td>{{ account['Address1'] }}</td>
+                            {% if account['Address2'] %}
+                              <td>{{ account['Address2'] }}</td>
+                            {% endif %}
+                            <td>{{ account['City'] }}</td>
+                            <td>{{ account['State'] }}</td>
+                            <td>{{ account['ZipCode'] }}</td>
+                            <td>{{ account['ZipCodeAddOn'] }}</td>
+                            <td>{{ account['PhoneNumber'] }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            {% endif %}
+
+            <!-- display timed out success message -->
+            {% if successMsg %}
+                <div style="width: 300px;">
+                    <div class="alert alert-success" id="postage-purchase-alert">
+                        <p class="text-center">{{ successMsg }}</p>
+                    </div>
+                </div>
+            {% endif %}
+
+            <h2 id="purchase-postage-title"><a>Purchase postage from Endicia</a></h2>
+            <div style="margin-top: 30px;" id="purchase-postage-div">
+                <form action="/admin/postage/buy-postage" method="post" class="form-horizontal">
+                    <div class="form-group">
+                        <label for="name" class="control-label col-sm-1">
+                          Amount
+                        </label>
+                        <div class="col-sm-2">
+                            <input type="number" class="form-control" name="postage_amount" min="10" placeholder="Enter amount" required>
+                            <small>
+                                *The minimum amount of postage that can be purchased
+                                is $10. The maximum amount is based on the settings of the account.
+                            </small>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-sm-1">
+                            &nbsp;
+                        </label>
+                        <div class="col-sm-5">
+                            <button role="submit" class="btn btn-primary btn-lg">
+                                Purchase Now
+                            </button>
+                            <br>
+                            <small>*After the purchase, the "Postage balance" above (${{ account['PostageBalance']|number_format(2) }}) will be updated.</small>
+                        </div>
+                </form>
+            </div>
+
+      </div><!--  // col-md-12  -->
+    </div><!--  // .row  -->
+</div><!-- // .container-fluid  -->
+{% endblock %}
+
+
+{% block bottomjs %}
+<script>
+$(document).ready(function(){
+
+
+    $("#thisID").click(function(){
+        var checked = 1;
+        console.log(checked);
+        if($("#thisID").prop("checked")){
+          $("#flxs_last_name").attr("placeholder", "Enter flx ID");
+        } else {
+          $("#flxs_last_name").attr("placeholder", "Enter agent last name");
+        }
+    });
+
+
+    // purchase postage
+    $("#purchase-postage-title").click(function(){
+        $("#purchase-postage-div").toggle('slow');
+    });
+
+    // fade out success message
+    setTimeout(function(){
+       $("#postage-purchase-alert").fadeOut(3000);
+   }, 3000);
+
+
+});
+</script>
+
+{% endblock %}

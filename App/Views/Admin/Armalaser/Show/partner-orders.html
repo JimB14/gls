@@ -1,0 +1,174 @@
+{% extends 'base-admin.html' %}
+
+{% block title %}
+  Orders | ArmaLaser
+{% endblock %}
+
+{% block css %}
+{% endblock %}
+
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div id="dashboard-toggle" class="col-md-10" style="margin-top:-20px;margin-left:254px;">
+
+            <div class="col-md-4">
+                {% if pagetitle %}
+                    <h2 style="margin-left:-15px;">
+                          {{ pagetitle|raw }}
+                        {% if orders|length > 0 %}
+                            <span class="badge" style="margin: -18px 0px 0px 7px;">
+                                {{ orders|length }}
+                            </span>
+                        {% endif %}
+                    </h2>
+                {% endif %}
+                <p style="margin-left: -10px;">
+                    <span class="glyphicon glyphicon-menu-left"></span>
+                    <a onclick="window.history.go(-1)" style="cursor:pointer;">
+                        Go  Back
+                    </a>
+                </p>
+
+            </div>
+            <div  class="col-md-5 col-sm-7 col-xs-12" style="margin:15px 0px 15px -15px;">
+                <form class="form-inline" method="get" action="/admin/orders/search-by-last-name">
+                    <div class="form-group">
+                        <label class="sr-only">Last name</label>
+                    </div>
+                    <div class="form-group">
+                        <label for="inputPassword2" class="sr-only">Password</label>
+                        <input type="text" class="form-control" name="last_name" placeholder="Last name">
+                    </div>
+                    <div class="form-group">
+                        <select class="form-control" name="status">
+                            <option value="">Order status</option>
+                            <option value="all">All</option>
+                            <option value="pending">Pending</option>
+                            <option value="shipped">Shipped</option>
+                            <option value="return-pending">Return-pending</option>
+                            <option value="returned">Returned</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-default">Search</button>
+                </form>
+                {% if searched %}
+                    <div>
+                        <h3>Search criteria: <span class="blue">"{{ searched }}"</span> and <span class="blue">"{{ order_status }} orders"</span></h3>
+                    </div>
+                {% endif %}
+            </div>
+
+            {% if orders %}
+                <table class="table table-bordered table-striped bg-fff">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Status</th>
+                            <th>Transaction timestamp</th>
+                            <th>PayPal PNREF</th>
+                            <th>Type</th>
+                            <th>Buyer ID</th>
+                            <th>First</th>
+                            <th>Last</th>
+                            <th>Email</th>
+                            <th>Order amt</th>
+                            <th>Shipped date</th>
+                            <th>Ship method</th>
+                            <th>Tracking code</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        {% for order in orders %}
+                            <tr>
+                                <td>
+                                    <a style="color:#0000ff; text-decoration:underline;" title="See order details"
+                                        href="/admin/orders/get-order?id={{ order.id }}">
+                                        {{ order.id }}
+                                    </a>
+                                </td>
+                                <td {% if order.order_status == 'pending' %}class="pendingGreen bold"{% elseif order.order_status == 'return-pending' %} class="returnPendingBurngundy bold"{% endif %}>{{ order.order_status }}</td>
+                                <td>{{ order.odate }}</td>
+                                <td>{{ order.pnref }}</td>
+                                {% if order.customerid > 0 and order.callerid == 0 and order.guestid == 0 and order.dealerid == 0 and order.partnerid == 0 %}
+                                    <td>Customer</td>
+                                    <td>{{ order.customerid }}</td>
+                                    <td>{{ customer.billing_firstname }}</td>
+                                    <td>{{ customer.billing_lastname }}</td>
+                                    <td>{{ customer.email }}</td>
+                                {% elseif order.callerid > 0 and order.customerid == 0 and order.guestid == 0 and order.dealerid == 0 and order.partnerid == 0 %}
+                                    <td>Caller</td>
+                                    <td>{{ order.callerid }}</td>
+                                    <td>{{ order.caller_firstname }}</td>
+                                    <td>{{ order.caller_lastname }}</td>
+                                    <td>{{ order.caller_email }}</td>
+                                {% elseif order.guestid > 0 and order.customerid == 0 and order.callerid == 0 and order.dealerid == 0 and order.partnerid == 0 %}
+                                    <td>Guest</td>
+                                    <td>{{ order.guestid }}</td>
+                                    <td>{{ order.guest_firstname }}</td>
+                                    <td>{{ order.guest_lastname }}</td>
+                                    <td>{{ order.guest_email }}</td>
+                                {% elseif order.dealerid > 0 and order.customerid == 0 and order.guestid == 0 and order.callerid == 0 and order.partnerid == 0 %}
+                                    <td>Dealer</td>
+                                    <td>{{ order.dealerid }}</td>
+                                    <td>{{ order.dealer_firstname }}</td>
+                                    <td>{{ order.dealer_lastname }}</td>
+                                    <td>{{ order.dealer_email }}</td>
+                                {% elseif order.partnerid > 0 and order.customerid == 0 and order.guestid == 0 and order.callerid == 0 and order.dealerid == 0 %}
+                                    <td>Partner</td>
+                                    <td>{{ order.partnerid }}</td>
+                                    <td>{{ customer.first_name }}</td>
+                                    <td>{{ customer.last_name }}</td>
+                                    <td>{{ customer.email }}</td>
+                                {% endif %}
+                                <td>{{ order.orderamount }}</td>
+                                <td>{% if order.oshippeddate == '' and order.order_status == 'pending' %}<span class="pendingGreen bold">pending{% else %}{{ order.oshippeddate }}{% endif %}</td>
+                                <td>{{ order.oshipmethod }}</td>
+                                <td>{% if order.oshippeddate == '' and order.order_status == 'pending' %}<span class="pendingGreen bold">pending{% else %}{{ order.trackingcode }}{% endif %}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+
+                <p style="margin-top: -3px;" class="pull-left"><a href="#top" title="Go to top of page"><i style="margin-top: -15px; color:#ccc;" class="fa fa-arrow-circle-o-up fa-3x" aria-hidden="true"></i></a></p>
+                <p style="margin-top: -3px;" class="pull-right"><a href="#top" title="Go to top of page"><i style="margin-top: -15px; color:#ccc;" class="fa fa-arrow-circle-o-up fa-3x" aria-hidden="true"></i></a></p>
+
+            <!-- no data to display -->
+            {% else %}
+                <div class="col-md-10" style="margin-left:-15px;">
+                    <div class="alert alert-warning" style="margin-top:30px;">
+                        <h4 style="margin-bottom:0px;">
+                          No orders to display
+                        </h4>
+                    </div>
+                </div>
+            {% endif %}
+
+      </div><!--  // col-md-12  -->
+    </div><!--  // .row  -->
+</div><!-- // .container-fluid  -->
+{% endblock %}
+
+
+{% block bottomjs %}
+<script>
+$(document).ready(function(){
+
+
+    $("#thisID").click(function(){
+        var checked = 1;
+        console.log(checked);
+        if($("#thisID").prop("checked")){
+          $("#lasers_last_name").attr("placeholder", "Enter laser ID");
+        } else {
+          $("#lasers_last_name").attr("placeholder", "Enter agent last name");
+        }
+    });
+
+
+});
+</script>
+
+{% endblock %}

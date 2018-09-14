@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+
+{% block title %}
+   Laser parts for ArmaLaser Lasers
+{% endblock %}
+
+{% block metadescription %}
+   Purchase direct from ArmaLaser laser parts, tools and other items to help care and maintain ArmaLaser TR SERIES, GTO/FLX SERIES and STINGRAY CLASSIC lasers.
+{% endblock %}
+
+{% block css %}
+{% endblock %}
+
+{% block outsidecontainer %}
+{% endblock %}
+
+
+{% block content %}
+<div class="container" style="margin-bottom:246px;">
+    <div class="row">
+        <div class="col-md-12">
+
+            <h1 class="text-left">
+                <span style="font-size: 100%;">
+                    Laser Parts
+                        <span style="font-style:italic;">
+                            for ArmaLaser Lasers
+                        </span>
+                </span>
+            </h1>
+
+            <div class="products-by-brand">
+                <ul class="">
+                    {% for item in toolkits %}
+                       <li class="text-center">
+                          <a href="/laser-accessories/toolkit/{{ item.id }}/{{ item.laser_series }}-toolkit">
+                             <img src="/assets/images/toolkits/{{ item.image_thumb }}" width="125" alt="Toolkit for ArmaLaser {{ item.caption }} Laser"><br>
+                             <span>{{ item.caption }}</span><br>
+                          </a>
+                       </li>
+                    {% endfor %}
+                </ul>
+            </div><!-- //  -->
+
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block bottomjs %}
+{% endblock %}

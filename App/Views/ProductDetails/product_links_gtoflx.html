@@ -1,0 +1,241 @@
+<!-- - - - - - - - - - - -  PRODUCT LINKS  - - - - - - - - - - - - - - -->
+<div class="row">
+    {% if links %}
+        <div class="col-md-12 col-sm-12">
+            <div style="border: 2px solid #efefef; margin-bottom: 20px;"></div>
+        </div>
+
+        {% if links.holster_poster %}
+            <div class="col-lg-2 col-md-3 col-sm-4 col-xs-6">
+                <div class="product-links-img-box">
+                    <h3>HOLSTERS:</h3>
+                    {% if model.beam == 'red'%}
+                        <a href="/products/holsters/{{ model.pistolMfr }}/{{ model.id }}/{{ model.model|trim }}" title="Laser-Fit™ Holster &#10;for {{ model.model|upper }} / {{ model.model|upper }}G">
+                    {% else %}
+                        <!-- id for red laser model is the model in holster_trseries_pistol_lookup; red ID = green ID - 1 -->
+                        <a href="/products/holsters/{{ model.pistolMfr }}/{{ model.id - 1 }}/{{ model.model|trim('g') }}" title="Laser-Fit™ Holster &#10;for {{ model.model|upper }} / {{ model.model|upper }}G">
+                    {% endif  %}
+                        <img src="/assets/images/page/holsters/tr02-owb-rh-minislide_thumb.png"
+                            alt="custom laster-fit holsters for ArmaLaser equipped concealed carry pistols">
+                        <span style="display:block">
+                           {{ model.model|upper }} {{ links.holster_title }}
+                        </span>
+                    </a>
+                </div>
+            </div>
+        {% endif %}
+
+
+       {% if links.comm_video_poster %}
+            <div class="col-lg-2 col-md-3 col-sm-4 col-xs-6">
+                <div class="product-links-img-box">
+                    <h3>VIDEO:</h3>
+                    <a href="/#{{ links.id }}" data-toggle="modal" title="Watch {{ links.laser_series }} &#10;{{ model.model }} video">
+                        <img src="/assets/images/youtube/{{ links.comm_video_poster }}" alt="ArmaLaser YouTube">
+                        <span style="display:block">
+                           {{ model.model|upper }} YouTube Ad
+                        </span>
+                    </a>
+                </div>
+            </div>
+       {% endif %}
+
+
+        {% if links.img01 != '' %}
+            <div class="col-lg-2 col-md-3 col-sm-4 col-xs-6">
+               <div class="product-links-img-box">
+                 <h3>GRAPHIC:</h3>
+                 <div id="laser-features">
+                     <a>
+                       <img src="/assets/images/page/productDetails/{{ links.img01 }}" alt="{{ model.model }} Features">
+                       <span style="display:block">
+                         All {{ model.model|upper }} Features
+                       </span>
+                     </a>
+                 </div>
+               </div>
+            </div>
+        {% endif %}
+
+
+        {% if links.pro_video_review_poster %}
+             <div class="col-lg-2 col-md-3 col-sm-4 col-xs-6">
+                <div class="product-links-img-box">
+                   <h3>VIDEO:</h3>
+                   <a href="/#{{ model.id }}" data-toggle="modal" title="Watch {{ model.series }} &#10;{{ model.model }} video review">
+                      <img src="/assets/images/youtube/{{ links.pro_video_review_poster }}" alt="{{ model.model }} video review">
+                      <span style="display:block">
+                         {{ links.pro_video_review_title }}
+                      </span>
+                   </a>
+                </div>
+             </div>
+        {% endif %}
+
+        {% if links.install_video_poster %}
+             <div class="col-lg-2 col-md-3 col-sm-4 col-xs-6">
+                <div class="product-links-img-box">
+                    <h3>VIDEO:</h3>
+                    <a href="/#install-video" data-toggle="modal" title="Watch {{ model.series }} &#10;installation video">
+                        <img src="/assets/images/youtube/{{ links.install_video_poster }}" alt="{{ links.laser_series }} installation video">
+                        <span style="display:block">
+                            {{ links.laser_series }} {{ links.install_video_title }}
+                        </span>
+                    </a>
+                </div>
+             </div>
+        {% endif %}
+
+
+        {% if links.laser_series_poster %}
+            <div class="col-lg-2 col-md-3 col-sm-4 col-xs-6">
+                <div class="product-links-img-box">
+                    <h3>LINK:</h3>
+                    <a href="/{{ links.laser_series_href }}" title="Learn more about &#10;{{ model.series|upper }} Lasers">
+                        <img src="/assets/images/page/productDetails/{{ links.laser_series_poster }}" alt="{{ model.series|upper }} Lasers">
+                        <span style="display:block">
+                            {{ links.laser_series_title }}
+                        </span>
+                    </a>
+                </div>
+            </div>
+        {% endif %}
+
+
+
+        {% if links.cust_reviews_poster %}
+            <div class="col-lg-2 col-md-3 col-sm-4 col-xs-6">
+                {% if model.review_count > 0 %}
+                    <div class="product-links-img-box">
+                        <h3>LINK:</h3>
+                        <a class="newWindow" href="{{ model.review_url }}" rel="0" title="Read Real Reviews for &#10;{{ model.series }} {{ model.model }}">
+                            <img src="/assets/images/page/productDetails/{{ links.cust_reviews_poster }}" alt="Read reviews">
+                            <span style="display:inline-block">
+                               {{ links.cust_reviews_title }}
+                            </span>
+                            <span class="badge" style="margin-top:-15px; font-size:95%;">{{ links.review_count }}</span>
+                        </a>
+                    </div>
+                {% else %}
+                    <div class="product-links-img-box">
+                        <h3>LINK:</h3>
+                        <img src="/assets/images/page/productDetails/{{ links.cust_reviews_poster }}" alt="Read reviews">
+                        <span style="display:block">
+                            {{ links.cust_reviews_title }}
+                        </span>
+                    </div>
+                {% endif %}
+            </div>
+        {% endif %}
+
+
+        <div class="col-lg-2 col-md-3 col-sm-4 col-xs-6">
+            {% if model.beam == 'red' %}
+                {% set red_id = model.id %}
+                {% if model.thumb %}
+                    <div class="product-links-img-box">
+                        <h3>LINK:</h3>
+                        <a href="/{{ pistolMfr }}/{{ model.slug }}/gto-flx/{{ red_id + 1 }}/{{ model.model|replace({'gto':'gtog'}) }}"
+                            title="See {{ model.model|replace({'gto':'gtog'})|upper }} &#10; with green beam">
+                            <img src="/assets/images/laser-pistol/{{ model.model|slice(-5,5) }}/{{ model.alt_color_thumb }}" alt="ArmaLaser {{ model.series }} {{ model.model }}">
+                            <span style="display:block">
+                                See Green Beam Version
+                            </span>
+                        </a>
+                    </div>
+                {% endif %}
+            {% elseif model.beam == 'green' %}
+            {% set green_id = model.id %}
+                {% if model.thumb %}
+                    <div class="product-links-img-box">
+                        <h3>LINK:</h3>
+                        <a href="/{{ pistolMfr }}/{{ model.slug }}/gto-flx/{{ green_id - 1 }}/{{ model.model|replace({'gtog':'gto'}) }}"
+                            title="See {{ model.model|replace({'gtog':'gto'})|upper }} &#10; with red beam">
+                            <img src="/assets/images/laser-pistol/{{ model.model|slice(-5,5) }}/{{ model.alt_color_thumb }}" alt="ArmaLaser {{ model.series }} {{ model.model }}">
+                            <span style="display:block">
+                                See Red Beam Version
+                            </span>
+                        </a>
+                    </div>
+               {% endif %}
+            {% endif %}
+        </div>
+
+        {% if links.battery_image_thumb %}
+            <div class="col-lg-2 col-md-3 col-sm-4 col-xs-6">
+                <div class="product-links-img-box">
+                    <h3>LINK:</h3>
+                    <a href="/laser-accessories/battery/{{ links.battery_id }}/{{ model.series }}-battery"
+                        title="See {{ model.series|upper }} &#10;replacement battery">
+                        <img src="/assets/images/batteries/{{ links.battery_image_thumb }}" alt="{{ links.battery_title }}">
+                        <span style="display:block">
+                            Battery
+                        </span>
+                    </a>
+                </div>
+            </div>
+        {% endif %}
+
+
+        {% if links.toolkit_id %}
+            <div class="col-lg-2 col-md-3 col-sm-4 col-xs-6">
+                <div class="product-links-img-box">
+                    <h3>LINK:</h3>
+                    <a href="/laser-accessories/toolkit/{{ links.toolkit_id }}/{{ model.series }}-toolkit"
+                        title="See {{ model.series|upper }} &#10;Toolkit">
+                        <img src="/assets/images/toolkits/{{ links.toolkit_image_thumb }}" alt="Replacement batter for {{ model.series }} {{ model.model }}">
+                        <span style="display:block">
+                            Toolkit for {{ model.series|upper }}
+                        </span>
+                    </a>
+                </div>
+            </div>
+        {% endif %}
+
+
+        {% if links.warranty_poster %}
+            <div class="col-lg-2 col-md-3 col-sm-4 col-xs-6">
+                <div class="product-links-img-box">
+                    <h3>LINK:</h3>
+                    <a href="/#modal-warranty" data-toggle="modal" title="Learn more about &#10;our Five-Year Warranty &#10;on the {{ model.series }}">
+                        <img src="/assets/images/page/productDetails/{{ links.warranty_poster }}" alt="Five-Year Warranty on the {{ model.series }}">
+                        <span style="display:block">
+                            {{ links.warranty_title }}
+                        </span>
+                  </a>
+                </div>
+            </div>
+        {% endif %}
+
+
+
+        {% if links.owner_manual_poster %}
+            <div class="col-lg-2 col-md-3 col-sm-4 col-xs-6">
+                <div class="product-links-img-box">
+                    <h3>PDF:</h3>
+                    <a href="/#owner-manual" data-toggle="modal" title="See {{ model.series }} &#10;Owner&apos;s Manual">
+                        <img src="/assets/images/page/productDetails/{{ links.owner_manual_poster }}" alt="{{ model.series }} Owner&apos;s Manual">
+                        <span style="display:block">
+                           {{ links.owner_manual_title }}
+                        </span>
+                  </a>
+                </div>
+            </div>
+        {% endif %}
+
+
+        {% if model %}
+            <div class="col-lg-2 col-md-3 col-sm-4 col-xs-6">
+                <div class="product-links-img-box">
+                    <h3 class="text-uppercase">Your Review:</h3>
+                    <a href="/contact/submit-video-review?laser_series={{ model.series }}&amp;laser_model={{ model.model }}" title="Submit your own &#10;YouTube Review">
+                        <img src="/assets/images/page/productDetails/tv-thumb.png" alt="Submit your own YouTube Review">
+                        <span style="display:block">
+                            Submit your own YouTube Review
+                        </span>
+                    </a>
+                </div>
+            </div>
+        {% endif%}
+    {% endif %}
+</div><!-- // .row -->

@@ -1,0 +1,152 @@
+<nav class="navbar navbar-inverse fix-navbar">
+    <div class="container-fluid">
+            <div class="navbar-header">
+
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+
+                <a class="navbar-brand" style="margin-bottom:10px;" href="/" title="Home">
+                   <img src="/assets/images/logo_290x70.png" alt="ArmaLaser logo">
+                </a>
+
+            </div><!-- // .navbar-header  -->
+
+
+            <div class="collapse navbar-collapse" id="myNavbar" style="padding: 31px 0px;">
+
+               <ul class="nav navbar-nav text-uppercase">
+
+                  <li class="dropdown {% if activemenu == 'trseries' or activemenu == 'gtoflxseries' or activemenu == 'stingray' %}active{% endif %}">
+                     <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                        Lasers <span class="caret"></span>
+                     </a>
+                     <ul class="dropdown-menu">
+                        <li><a href="/lasers/tr-series">TR-Series</a></li>
+                        <li><a href="/lasers/gto-flx-series">GTO/FLX Series</a></li>
+                        <li><a href="/lasers/stingray-classic">Stingray</a></li>
+                     </ul>
+                  </li>
+                 <!-- <li class="{% if activemenu == 'holsters' %}active{% endif %}"><a href="/holsters">HOLSTERS</a></li> -->
+                 <!-- <li class="{% if activemenu == 'targets' %}active{% endif %}"><a href="/targets">TARGETS</a></li> -->
+                 <!-- <li class="{% if activemenu == 'accessories' %}active{% endif %}"><a href="/accessories">ACCESSORIES</a></li> -->
+                 <li class="dropdown {% if activemenu == 'accessories' %}active{% endif %}">
+                     <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-exanded="false">
+                        ACCESSORIES <span class="caret"></span>
+                     </a>
+                     <ul class="dropdown-menu">
+                        <li><a href="/products/holsters">HOLSTERS</a></li>
+                        <li><a href="/products/laser-batteries">LASER BATTERIES</a></li>
+                        <li><a href="/products/laser-parts">LASER PARTS</a></li>
+                        <li><a href="/products/accessories">ACCESSORIES</a></li>
+                        <li><a href="/products/laserglow-targets">TARGETS</a></li>
+                        <li><a href="/products/flx">FLX List</a></li>
+                     </ul>
+                 </li>
+                  <!--  - - - - - - - - - - - - - - - -  -->
+                  {% include 'chat_nav_navbar.html' %}
+                  <!--  - - - - - - - - - - - - - - - -  -->
+
+                    {% if session.user %}
+                      <!-- <li class="{% if activemenu == 'addtestimonial' %}active{% endif %}">
+                        <a href="/testimonials/add-testimonial">
+                          Add testimonial
+                        </a>
+                      </li> -->
+                      {% if session.userType in ['admin', 'customer', 'partner', 'dealer', 'supervisor'] %}
+                        <li class="dropdown text-capitalize">
+                            <a href"=#" class="dropdown-toggle" id="drop1" data-toggle="dropdown"
+                              role="button" aria-haspopup="true" aria-expanded="false">
+                              Admin
+                              <span class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="drop1">
+                                {% if session.userType in ['customer', 'partner'] %}
+                                    <li><a href="/admin/main/index?user_id={{ session.user_id }}&type={{ session.userType }}">Dashboard</a></li>
+                                {% elseif session.userType == 'dealer' %}
+                                    <li><a href="/admin/main/index?user_id={{ session.user_id }}&type={{ session.userType }}">Dashboard</a></li>
+                                {% else %}
+                                    <li><a href="/admin/main/index?user_id={{ session.user_id }}&type={{ session.userType }}">Admin Panel</a></li>
+                                {% endif %}
+                            </ul>
+                        </li>
+                      {% endif %}
+                      <li class="text-capitalize">
+                        <a>
+                          <span style="color:#fff;">
+                            <i>
+                              Welcome {{ session.full_name }}!
+                            </i>
+                          </span>
+                        </a>
+                      </li>
+                    {% endif %}
+
+                </ul>
+
+                <ul class="nav navbar-nav navbar-right">
+
+                    {% if session.cart_count > 0 %}
+                        <li style="color:#fff;" class="{% if activemenu == '' %}active{% endif %}">
+                            <a href="/cart/view/shopping-cart" style="color:#fff;" title="View Cart">
+                                CART
+                                <i style="color:#fff;" class="fa fa-shopping-cart fa-lg"></i>
+                                {% if session.cart_count > 0 %}<span class="badge"  style="background-color:#fff;"><span style="color:#000;">{{ session.cart_count }}</span></span>{% endif %}
+                            </a>
+                        </li>
+                    {% endif %}
+
+                    <li class=" dropdown {% if activemenu == 'instructors' %}active{% endif %}">
+                       <a class="dropdown-toggle" data-toggle="dropdown" href="#"
+                           role="button" aria-haspopup="true" aria-exanded="false">
+                         INSTRUCTORS <span class="caret"></span>
+                      </a>
+                      <ul class="dropdown-menu">
+                         <li><a href="/program/firearm-instructor-program">FIREARM INSTRUCTOR PROGRAM</a></li>
+                      </ul>
+                    </li>
+
+                   <li class=" dropdown {% if activemenu == 'finddealer' %}active{% endif %}">
+                      <a class="dropdown-toggle" data-toggle="dropdown" href="#"
+                          role="button" aria-haspopup="true" aria-exanded="false">
+                        DEALER <span class="caret"></span>
+                     </a>
+                     <ul class="dropdown-menu">
+                        <li><a href="/info/find-armalaser-authorized-dealer">FIND A DEALER</a></li>
+                        <li><a href="/info/become-armalaser-authorized-dealer">BECOME A DEALER</a></li>
+                     </ul>
+                   </li>
+                   <!-- <li><a href="tel:8006805020">800-680-5020</a></li> -->
+                   <li class="{% if activemenu == 'shows' %}active{% endif %}" style="margin-right:20px;">
+                     <a href="/shows/gun-shows">
+                       GUN SHOWS
+                     </a>
+                   </li>
+
+                    <!-- <li>
+                      <a href="https://armalaser.3dcartstores.com/myaccount.asp">
+                        MY ACCOUNT
+                      </a>
+                    </li> -->
+
+                    <li class="{% if activemenu == 'contact' %}active{% endif %}">
+                      <a href="/help/contact">
+                        CONTACT
+                      </a>
+                    </li>
+
+
+                    {% if session.user %}
+                        <!-- <li><a href="/logout"><span class="glyphicon glyphicon-lock"></span> Logout</a></li> -->
+                    {% endif %}
+                    {% if session.user == false %}
+                        <!-- <li class=""><a href="/login"><span class="glyphicon glyphicon-lock"></span> Login</a></li> -->
+                    {% endif %}
+                </ul>
+
+            </div>
+        <!--</div>--><!-- // .container -->
+    </div><!-- // .container-fluid -->
+</nav>

@@ -1,0 +1,275 @@
+{% extends 'base.html' %}
+
+{% block title %}
+ArmaLaser {{ model.model|upper }} laser with {{ model.beam }} beam for {% if model.pistolMfr == 'smith-wesson' %}SMITH & WESSON®{% elseif model.pistolMfr == 'sig-sauer' %}SIG SAUER®{% else %}{{ model.pistolMfr|upper }}®{% endif %} {{ model.pistol_models }}
+{% endblock %}
+
+
+{% block metadescription %}
+ArmaLaser's {{ (model.model|replace({'-':'/'}))|upper }} laser with a {{ model.beam }} beam is from ArmaLaser's {{ (model.series|replace({'-':'/'})|upper) }} series of rail-mounted lasers. The {{ (model.model|replace({'-':'/'}))|upper }} is designed specifically for the {% if model.pistolMfr == 'smith-wesson' %}SMITH & WESSON®{% elseif model.pistolMfr == 'sig-sauer' %}SIG SAUER®{% else %}{{ model.pistolMfr|upper }}®{% endif %} {{ model.pistol_models }} pistol(s). ArmaLaser is the leader in advanced laser sights and pistol laser technology.{% endblock %}
+
+
+{% block css %}
+<style>
+   .ui-dialog .ui-dialog-titlebar {
+      display: block;
+   }
+   .ui-dialog.ui-dialog-content {
+      padding: 0;
+   }
+</style>
+{% endblock %}
+
+
+{% block outsidecontainer %}
+{% endblock %}
+
+
+{% block content %}
+<div id="modal-holster"></div>
+<div id="modal-holster-video"></div>
+
+<div id="overlay"></div>
+
+<div class="col-md-9 col-xs-12" id="frame">
+    <!-- value of src attribute comes from jQuery code below -->
+    <img class="img-responsive"
+    id="main"
+    src=""
+    alt="ArmaLaser {{ (model.model|replace({'-':'/'}))|upper }} {{ model.beam }} laser for {{ model.pistolMfr|upper }}® {{ model.pistol_models }}">
+</div>
+
+<div id="overlay2"></div>
+
+<div class="col-md-9 col-xs-12" id="frame2">
+    <img class="img-responsive"
+    id="main2"
+    src=""
+    alt="ArmaLaser {{ (model.model|replace({'-':'/'}))|upper }} {{ model.beam }} laser for {{ model.pistolMfr|upper }}® {{ model.pistol_models }}">
+</div>
+
+
+<div class="container">
+    <div id="content"> <!-- to hide content when full size image displays -->
+        <div class="row">
+
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="product-block-title bold ptop20">
+                    <h3>
+                        <span class="text-uppercase" style="color:#ababab">
+                            <!-- resource: https://twig.symfony.com/doc/2.x/filters/replace.html -->
+                            <span>{{ model.series|replace({ 'gto-flx': 'gto/flx' }) }}</span>
+                        </span>
+
+                        <span class="product-details-what-is">
+                            <span class='text-uppercase' style='font-size:12px;'>
+                                <a href='/lasers/gto-flx-series'>
+                                    What is GTO Series?
+                                </a>
+                            </span>
+                        </span>
+
+                        <span class="pull-right text-size60" style="display:inline-block; font-style:normal;margin-bottom:0px;">
+
+                            <span class="text-size120">
+                                <a href="/gto-flx-series-laser-owners-manual">
+                                    Owners Manual
+                                </a>
+                            </span>
+
+                            <span class="text-size120">
+                              <a href="/warranty">
+                                Warranty Support
+                              </a>
+                            </span>
+
+                        </span>
+                    </h3>
+                </div><!-- // .product-block-title  -->
+
+                <p class="text-right text-uppercase bold" style="font-size:12px; margin-right:40px;">
+                    <span style="padding-right:10px;">
+                        <a href="/laser-accessories/{{ model.battery_id }}/{{ model.series }}-battery">
+                           Battery
+                        </a>
+                    </span>
+                    <span style="padding-right:10px;">
+                        <a href="/laser-accessories/{{ model.toolkit_id }}/{{ model.series }}-toolkit">
+                           GTO Series Toolkit
+                        </a>
+                    </span>
+                </p>
+
+            </div><!-- // .col-md-12  -->
+        </div><!-- //.row  -->
+
+        <!-- - - - - - - - -  IMAGE - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+        <div class="row">
+            <div id="laser-features-image">
+                <img src="/assets/images/page/productDetails/{{ model.img_lg }}"
+                    alt="ArmaLaser {{ (model.model|replace({'-':'/'}))|upper }} {{ model.beam }} laser for {{ model.pistolMfr|upper }}® {{ model.pistol_models }}">
+            </div>
+
+            <div class="col-md-7 col-sm-6 col-xs-5">
+                <div class="product-image">
+
+                   <!-- store values of full-size images -->
+                    <div id="full-size-image">
+                        <img src="/assets/images/laser-pistol/{{ model.model|slice(-5,5) }}/{{ model.fullsize }}" alt="ArmaLaser {{ model.model }} {{ model.beam }} laser">
+                    </div>
+
+                     <!-- assign id (displayed-image) for jQuery code below that is necessary to display large image -->
+                    <div id="displayed-image">
+                        <picture>
+                            <source srcset="/assets/images/laser-pistol/{{ model.model|slice(-5,5) }}/{{ model.med }}"
+                                alt="ArmaLaser {{ (model.model|replace({'-':'/'}))|upper }} {{ model.beam }} laser for {{ model.pistolMfr|upper }}® {{ model.pistol_models }}"
+                                media="(min-width:1200px)">
+
+                            <source srcset="/assets/images/laser-pistol/{{ model.model|slice(-5,5) }}/{{ model.small }}"
+                                alt="ArmaLaser {{ (model.model|replace({'-':'/'}))|upper }} {{ model.beam }} laser for {{ model.pistolMfr|upper }}® {{ model.pistol_models }}"
+                                media="(min-width:760px)">
+
+                            <source srcset="/assets/images/laser-pistol/{{ model.model|slice(-5,5) }}/{{ model.thumb }}"
+                                alt="ArmaLaser {{ (model.model|replace({'-':'/'}))|upper }} {{ model.beam }} laser for {{ model.pistolMfr|upper }}® {{ model.pistol_models }}"
+                                media="(min-width:200px)">
+
+                            <img class="img-responsive" style="width: 100%;"
+                                src="/assets/images/laser-pistol/{{ model.model|slice(-5,5) }}/{{ model.thumb }}"
+                                alt="ArmaLaser {{ (model.model|replace({'-':'/'}))|upper }} {{ model.beam }} laser for {{ model.pistolMfr|upper }}® {{ model.pistol_models }}">
+                        </picture>
+
+                        <p class="text-center" style="color:#0000ff;" id="click-to-enlarge">
+                           Click to enlarge
+                        </p>
+                    </div><!-- // #displayed-image -->
+
+                </div><!-- // .product-image -->
+
+            </div><!-- / col  -->
+
+
+            <!-- - - - - - PRODUCT DESCRIPTION - TEXT - - - - - - - - - - - - - - -->
+
+            <div class="col-md-5 col-sm-6 col-xs-7" id="productDetailsHeading">
+                <h1 style="color:#727272;">
+                      {{ (model.model|replace({'-':'/'}))|upper }} for {% if model.pistolMfr == 'smith-wesson' %}SMITH & WESSON®{% else %}{{ model.pistolMfr|upper }}®{% endif %}
+
+                    <span class="text-uppercase pull-right" id="other-laser-color"
+                        style="font-size:10px;display:inline-block;padding-top:10px;">
+                        {% if model.beam == 'red' %}
+                            {% set red_id = model.id %}
+                            <a href="/{{ pistolMfr }}/{{ model.slug }}/gto-flx/{{ red_id + 1 }}/{{ model.model|replace({'gto':'gtog'}) }}">
+                                Show green beam version
+                            </a>
+                        {% endif %}
+
+                        {% if model.beam == 'green' %}
+                            {% set green_id = model.id %}
+                            <a href="/{{ pistolMfr }}/{{ model.slug }}/gto-flx/{{ green_id - 1 }}/{{ model.model|replace({'gtog':'gto'}) }}">
+                            <!-- <a href="/products/lasers/gto-flx/{{ pistolMfr }}/{{ green_id - 1 }}/{{ model.model }}"> -->
+                                Show red beam version
+                            </a>
+                        {% endif %}
+                    </span>
+
+                    <div style="margin-top:-20px;">&nbsp;</div>
+
+                    <span style="padding-left:3px;font-style:normal; color:#848484;"
+                      class="text-size70">
+                        {{ (model.model|replace({'-':'/'}))|upper }} fits
+                        {{ pistolMfr|upper }}®
+                        {{ model.pistol_models|raw }}
+                    </span>
+                </h1>
+
+                <div class="text-justify">
+                    <p style="font-size:14px; color:#ababab; border:none;">
+                        Custom designed to fit perfectly. The {{ (model.model|replace({'-':'/'}))|upper }}
+                        is the most technologically-advanced laser sight
+                        available for the {{ model.pistolMfr|upper }}® {{ model.pistol_models|raw }}.
+                    </p>
+
+                    <p class="text-uppercase text-left" style="border:none;">
+                      Features
+                    </p>
+                    <div id="feature-list">
+                        <div class="col-sm-6 col-xs-6" style="margin-bottom: 0px;">
+                            <div style="margin-left: -14px;">
+                                <p>{{ model.feature01 }}</p>
+                                <p>{{ model.feature02 }}</p>
+                                <p>{{ model.feature03 }}</p>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-xs-6" style="margin-bottom: 0px;">
+                            <div style="margin-right: -14px;" class="text-right">
+                                  <p>UPC: {{ model.upc }} </p>
+                                  <p>{{ model.patent_pend|raw }}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <h3 class="product-details-price">
+                    <!-- ====  PRESIDENT'S DAY THU Midnight 2/15/18 - MON Midnight 2/19/18  ===== -->
+                    {% if now > '2018-02-15 23:59:59' and now < '2018-02-19 23:59:59' %}
+
+                        <span style="text-decoration:line-through">${{ model.price }}</span>
+                        {% if model.beam == 'red' %}
+                            $98.75
+                        {% elseif model.beam == 'green' %}
+                            $148.75
+                        {% endif %}
+
+                    {% else %}
+                       <span>${{ model.price }}</span>
+                    {% endif %}
+                </h3>
+
+                {% include 'ProductDetails/add-to-cart-button.html' %}
+
+
+                {% if model.special_message %}
+                    <p class="text-center" style="color: #ff0000;">
+                        *{{ model.special_message|raw }}
+                    </p>
+                {% endif %}
+
+                <div id="social-media-links">
+                    <div class="sharethis-inline-share-buttons" style="margin-bottom: 15px;"></div>
+
+                    <!--<a class="newWindow" href="<?php htmlout($laser['review_url']); ?>" data-popup="width=700,height=700,scrollbars=yes">-->
+                    {% if model.review_count > 0 %}
+                        <a class="newWindow" href="{{ model.review_url }}" rel="0">
+                            <img  style="margin-top: -5px; margin-right:10px;"
+                                src="/assets/images/page/productDetails/amazon_reviews_btn2.png"
+                                height="30" title="Read Amazon reviews" alt="read Amazon reviews">
+                        {% if model.review_count > 0 %}
+                            <span class="badge">{{ model.review_count }}</span>
+                        {% endif %}
+                        </a>
+                    {% endif %}
+                </div><!-- //#social-media-links -->
+            </div><!-- // .col-md-5  -->
+       </div><!-- /row -->
+
+
+        {% if links %}
+            {% include 'ProductDetails/product_links_gtoflx.html' %}
+        {% endif %}
+
+        {% if specs %}
+            {% include 'ProductDetails/inc.details.specifications.html' %}
+        {% endif %}
+
+
+    </div><!-- // #content -->
+</div><!-- // .container  -->
+
+    {% include 'ProductDetails/inc.details.modals.html' %}
+{% endblock %}
+
+
+{% block bottomjs %}
+    {% include 'ProductDetails/inc.details.javascript.html' %}
+{% endblock %}

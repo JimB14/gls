@@ -1,0 +1,188 @@
+{% extends 'base.html' %}
+
+{% block title %}
+  FLX grip activation technology for Armalaser GTO/FLX series lasers
+{% endblock %}
+
+{% block metadescription %}
+Superior to a mechanical on/off switch. Customize your ArmaLaser GTO/FLX laser with FLX for grip activation. Find the FLX for your ArmaLaser GTO/FLX laser-equipped pistol to add grip-touch-activation using FLX.{% endblock %}
+
+{% block css %}
+<style>
+#flx-watch-installation-video {
+    cursor: pointer;
+}
+#flx-installation-video-div {
+    display: none;
+}
+</style>
+{% endblock %}
+
+{% block outsidecontainer %}
+{% endblock %}
+
+
+{% block content %}
+<div class="container">
+    <div class="text-center home-sub-title pagetitle">
+        <h1>
+            Custom-Fit Grip-Activation Switches
+            <span style="display:block;font-size:95%;">For Use with GTO</span>
+        </h1>
+        <img src="/assets/images/page/gtoflx/flexpic_469x430.png"
+            alt="ArmaLaser FLX for grip-touch-activation">
+    </div>
+
+    <!-- to establish top of page after clicking "See All FLXs" -->
+    <div id="flx-top">&nbsp;</div>
+
+    <div class="text-center" style="margin:50px 0px 50px 0px;">
+        <button id="flx-watch-installation-video" class="btn btn-success btn-lg"
+            style="padding:10px 80px 10px 80px">
+            <span style="font-size:26px;">Watch FLX Installation Video</span>
+        </button>
+    </div>
+
+
+
+    <div id="flx-installation-video-div">
+        <!-- 16:9 aspect ratio -->
+        <div class="embed-responsive embed-responsive-16by9 p3">
+            <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/9z6foYm2-Dc?rel=0&amp;showinfo=0" allowfullscreen></iframe>
+        </div>
+    </div>
+
+
+
+    <div class="text-center">
+        <h2>FIND FLX BY PISTOL MAKE &amp; MODEL</h2>
+        <p>
+            <a href="/lasers/gto-flx-series">
+                Learn more about GTO/FLX series lasers
+            </a>
+        </p>
+        {% if brand_searched %}
+            <div>
+                <h3>
+                    FLX for: "{% if brand_searched == 'smith-wesson' %}S&W{% else %}{{ brand_searched|upper }}{% endif %}®"
+                </h3>
+                <h4>
+                    <a href="/products/flx#flx-top">See All FLXs</a>
+                </h4>
+            </div>
+        {% endif %}
+    </div>
+
+
+    <div class="row p2">
+        <div class="col-md-2">
+            <h3 style="margin-top:0px;">Filter by Brand</h3>
+
+            <form method="get" action="/flxs/search-by-brand" name="get_brands" id="get_brands">
+                <div class="form-group">
+                    <select class="form-control" name="brand" id="brand">
+                        <option value="">Select brand</option>
+                        {% for brand in brands %}
+                            <option value={{ brand.id }}>
+                                {% if brand.pistolMfr == 'smith-wesson' %}
+                                    S&W
+                                {% elseif brand.pistolMfr == 'sig-sauer' %}
+                                    SIG SAUER
+                                {% else %}
+                                    {{ brand.pistolMfr|upper }}
+                                {% endif %}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary btn-block">Go</button>
+            </form>
+        </div>
+
+        <div class="col-md-10">
+            {% if flx %}
+                <table class="table table-striped table-hover table-responsive">
+                    <thead>
+                        <tr>
+                            <th>Pistol Brand</th>
+                            <th>Model(s)</th>
+                            <th>FLX</th>
+                            <th>Price</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        {% for item in flx %}
+                            <tr>
+                                <td>{% if item.pistolMfr == 'smith-wesson' %}S&W{% else %}{{ item.pistolMfr|upper }}{% endif %}®</td>
+                                <td>{{ item.pistol_model }}</td>
+                                <td>{{ item.flx_model|upper }}</td>
+                                <td>${{ item.price }}</td>
+                                <td>
+                                    <a class="btn btn-buy"
+                                        href="/flx/{{ item.pistolMfr}}/{{ item.slug }}/{{ item.flx_id }}">
+                                        Learn more
+                                    </a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+
+                <div class="pull-right">
+                    <a class="top-arrow" href="#top" title="To top">
+                        <i class="fa fa-arrow-circle-o-up fa-3x"></i>
+                    </a>
+                </div>
+
+            {% else %}
+                <div class="alert alert-info text-center">
+                    <h3 style="margin-top:0px;">
+                        <a href="/home/brand-products/{{ brand_searched }}">
+                            See other ArmaLaser products for {{ brand_searched }}
+                        </a>
+                    </h3>
+                </div>
+            {% endif %}
+
+        </div><!-- // .col-md-10 -->
+    </div><!-- // .row -->
+</div><!-- // .container -->
+{% endblock %}
+
+
+{% block bottomjs %}
+<script>
+$(document).ready(function() {
+
+    // resource: https://stackoverflow.com/questions/646628/how-to-check-if-a-string-startswith-another-string?noredirect=1&lq=1
+    // scroll to certain position after search
+    // get url value
+    let url = window.location.href;
+    console.log(url);
+    // check if this string contained in URL
+    if ( url.indexOf('http://localhost/flxs/search-by-brand') == 0 || url.indexOf('https://armalaser.com/flxs/search-by-brand') == 0 || url.indexOf('http://gunlaser.store/flxs/search-by-brand') == 0 ) {
+        console.log("Match!");
+        $(this).scrollTop(650);
+    } else {
+        console.log('Not a match');
+    }
+
+
+    // show & hide video div
+    $("#flx-watch-installation-video").on("click", function() {
+        let text = $(this).text().trim();
+         console.log(text);
+        if (text === 'Watch FLX Installation Video') {
+            $("#flx-installation-video-div").slideDown(1500);
+            $(this).text("Click to Hide Video");
+        } else {
+            $("#flx-installation-video-div").slideUp(1000);
+            $(this).text("Watch FLX Installation Video");
+        }
+    });
+
+});
+</script>
+{% endblock %}

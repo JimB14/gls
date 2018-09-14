@@ -1,0 +1,39 @@
+<!-- <form name="loginform" id="loginform" action="/login/login-user" method="post" class="form-horizontal"> -->
+
+<form name="loginform" id="loginform" action="/login/login-customer" method="post" class="form-horizontal">
+    <!--<input type="hidden" name="_token" value="{!! htmlspecialchars($signer->getSignature()) !!}">-->
+    <div class="form-group">
+        <label for="email" class="control-label">
+            Email
+        </label>
+        <input type="email" class="form-control email required" name="email"
+            id="email" placeholder="user@example.com" autofocus>
+    </div>
+
+    <div class="form-group">
+        <label for="password" class="control-label">
+            Password
+        </label>
+        <input type="password" class="form-control required" name="password"
+            id="password" placeholder="Password">
+    </div>
+
+
+    <div class="form-group">
+        {% if page_title|slice(0,8) != 'Checkout' %}
+            <button type="submit" class="btn btn-buy btn-lg btn-block">Sign in</button>
+        {% else %}
+            <button type="submit" class="btn btn-buy">Sign in</button>
+        {% endif %}
+    </div>
+
+</form>
+
+<div style="margin-top:-10px;font-size:90%;margin-bottom: 20px;">
+    {% if page_title|slice(0,8) != 'Checkout' %}
+        <a class="pull-left" href="/admin/customer/get-new-password">Forgot password</a>
+        <a class="pull-right" href="/admin/customer/register">Register</a>
+    {% else %}
+        <a style="margin-left:-15px; margin-top:10px;" href="/admin/customer/get-new-password">Forgot password</a>
+    {% endif %}
+</div>

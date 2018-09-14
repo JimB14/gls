@@ -1,0 +1,47 @@
+{% if series == 'trseries' %}
+<div class="container navbar-subheading">
+{% elseif series == 'gtoflxseries' or 'stingrayclasssic' %}
+<div class="shadow navbar-subheading">
+<div class="container">
+{% endif %}
+    <div class="row">
+
+        <div class="col-sm-2">
+            <p class="title-name">
+                {% if series == 'trseries' %}
+                <span class="series-name">TR</span><span id="series">SERIES</span>
+                {% elseif series == 'gtoflxseries' %}
+                <span class="series-name">GTO</span><span id="flx">FLX</span>
+                {% elseif series == 'stingrayclassic' %}
+                <span class="series-name">STINGRAY</span><!--<span id="classic">CLASSIC</span>-->
+                {% endif %}
+            </p>
+        </div>
+
+        <div class="col-sm-2">
+            <p class="title-faq">
+                <a href="/help/frequently-asked-questions">
+                    FAQs
+                </a>
+            </p>
+        </div>
+
+        <div class="col-sm-3">
+            <p class="title-find-pistol">
+                <a href="/">
+                    FIND YOUR PISTOL
+                </a>
+            </p>
+        </div>
+
+        <div class="col-sm-5">
+            <p class="title-finest-concealed-carry text-uppercase">
+                World&#39;s  Finest Concealed Carry Laser
+            </p>
+        </div>
+
+    </div><!-- // .row  -->
+</div> <!--  // .container  -->
+{% if series == 'gtoflxseries' or 'stingrayclasssic' %}
+</div>
+{% endif %}

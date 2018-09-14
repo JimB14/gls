@@ -1,0 +1,178 @@
+{% if session.cart|length < 1 %}
+    <div class="col-md-8 col-center-block">
+        <div class="alert alert-info" style="margin: 30px 0px 350px 0px;">
+            <h2 class="text-center" style="padding:0px; padding: 0px 0px 15px 0px">Your shopping cart is empty.</h2>
+        </div>
+    </div>
+{% else %}
+    <h1>{{ page_title }}</h1>
+
+    <table class="table table-responsive table-bordered table-condensed"  style="background-color:#fff; border-bottom: 0px solid;">
+
+        <thead>
+            <tr>
+                <th></th>
+                <th>Description</th>
+                <th>Each</th>
+                <!-- <th style="width:12em;">Quantity</th> -->
+                <th>Qty</th>
+                <th>Extended</th>
+                <th class="text-center"></th>
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for item in cartContent %}
+                <tr>
+                    <td>
+                        <img class="center-block"
+                        src="{% if item.mvc_model == 'trseries' or item.mvc_model == 'trseriesnp' %}
+                            /assets/images/laser-pistol/{{ item.model|trim('g')}}/{{ item.thumb }}
+                        {% elseif item.mvc_model == 'gtoflx' %}
+                            /assets/images/laser-pistol/{{ item.model|slice(-5,5)}}/{{ item.thumb }}
+                        {% elseif item.mvc_model == 'gtonp' %}
+                            /assets/images/laser-pistol/{{ item.model|slice(-5,5)}}/{{ item.thumb }}
+                        {% elseif item.mvc_model in ['stingray', 'stingraynp'] %}
+                            /assets/images/laser-pistol/{{ item.series}}/{{ item.thumb }}
+                        {% elseif item.mvc_model == 'holster' %}
+                            /assets/images/page/holsters/{{ item.thumb }}
+                        {% elseif item.mvc_model == 'battery' %}
+                            /assets/images/batteries/{{ item.thumb }}
+                        {% elseif item.mvc_model == 'toolkit' %}
+                            /assets/images/toolkits/{{ item.thumb }}
+                        {% elseif item.mvc_model == 'accessory' %}
+                            /assets/images/accessories/{{ item.thumb }}
+                        {% elseif item.mvc_model == 'flx' %}
+                            /assets/images/laser-pistol/{{ item.model}}/{{ item.thumb }}
+                        {% endif %}"
+                        height="75">
+                    </td>
+                    <td>
+                        <!-- description -->
+                        <!-- TR Series -->
+                        {% if item.mvc_model == 'trseries'%}
+                            {{ item.series|upper }}
+                            {{ item.model|upper }} Laser
+                            with {{ item.beam }} beam.
+                            <br>
+                            Fits {{ item.pistolMfr|upper }}® {{ item.pistol_models }}.
+
+                        <!-- TR Series NP -->
+                        {% elseif item.mvc_model == 'trseriesnp' %}
+                            {{ item.name }} Laser
+                            with {{ item.beam }} beam.
+                            <br>
+                            Fits {{ item.pistolMfr|upper }}® {{ item.pistol_models }}.
+
+                        <!-- GTO/FLX -->
+                        {% elseif item.mvc_model == 'gtoflx' %}
+                            {{ item.series|replace({'-':'/'})|upper }} SERIES
+                            {{ item.model|replace({'-':'/'})|upper }} Laser
+                            with {{ item.beam }} beam.
+                            <br>
+                            Fits {{ item.pistolMfr|upper }}® {{ item.pistol_models }}.
+
+                        <!-- GTO NP or GTO (no FLX) -->
+                        {% elseif item.mvc_model == 'gtonp' %}
+                            {{ item.name }}
+                            with {{ item.beam }} beam.
+                            <br>
+                            Fits pistols with picatinny rail.
+
+                        <!-- Stingray -->
+                        {% elseif item.mvc_model == 'stingray' %}
+                            {{ item.series|upper }}
+                            {{ item.model|upper }} Laser
+                            with {{ item.beam }} beam.
+                            <br>
+                            {% if not session.userType == 'dealer' or not session.userType == 'partner' %}
+                                Fits {{ item.pistolMfr|upper }}® {{ item.pistol_models }}.
+                            {% endif %}
+
+                        <!-- Stingray NP -->
+                        {% elseif item.mvc_model == 'stingraynp' %}
+                            {{ item.name }}
+                            with {{ item.beam }} beam.
+                            <br>
+                            Fits pistols with picatinny rail.
+
+                        <!-- Holster  -->
+                        {% elseif item.mvc_model == 'holster' %}
+                            {{ item.holsterMfr }}® {{ item.model }}
+                            {{ item.waist|upper }}
+                            {% if item.hand == 'right' or  item.hand == 'left' %}
+                                {{ item.hand |upper}}-HAND
+                            {% endif %}
+                            HOLSTER
+                            <br>
+                            Fits  {{ item.pistolMfr|upper }} {{ item.pistol_models }}
+                            <br>
+                            with TR Series {{ item.trseriesModel|upper }} / {{ item.trseriesModel|upper }}G Laser
+
+                        <!-- Battery  -->
+                        {% elseif item.mvc_model == 'battery' %}
+                            {{ item.name }}. {{ item.description }}.
+
+                        <!-- Toolkit  -->
+                        {% elseif item.mvc_model == 'toolkit' %}
+                            {{ item.name }}.
+
+                        <!-- Accessory  -->
+                        {% elseif item.mvc_model == 'accessory' %}
+                            {{ item.name }}. {{ item.description }}.
+
+                        <!-- Flx  -->
+                        {% elseif item.mvc_model == 'flx' %}
+                            {{ item.model|upper }} for {{ item.pistolMfr|upper }}® {{ item.pistol_models }}
+
+                        {% endif %}
+                    </td>
+                    <td>{{ item.price|number_format(2) }}</td>
+                    <td style="width:10em;">
+                        <form method="post" action="/cart/update-quantity">
+                            <div class="input-group">
+                                <input type="number" class="form-control" name="new_quantity" id="update_qty" min="1" value="{{ item.quantity }}">
+                                <span class="input-group-btn">
+                                    <input type="hidden" name="id" value="{{ item.id }}">
+                                    <input type="hidden" name="series" value="{{ item.series }}">
+                                    <input type="hidden" name="model" value="{{ item.model }}">
+                                    <button class="btn btn-default"  type="submit">
+                                        Update
+                                    </button>
+                                </span>
+                            </div>
+                        </form>
+                    </td>
+                    <td style="text-align: right;">{{ (item.price * item.quantity)|number_format(2) }}</td>
+                    <td class="text-center">
+                        <a href="/cart/delete-item?id={{ item.id }}"
+                            onclick="return confirm('Delete {{ item.series|upper }} {{ item.model|upper}} from cart now?');"
+                            title="Delete item from cart">
+                            <span style="color:#ff0000;" class='glyphicon glyphicon-trash'></span>
+                        </a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+
+        <!--  Resource:  https://developer.paypal.com/docs/classic/paypal-payments-standard/integration-guide/Appx_websitestandard_htmlvariables/ -->
+
+        <tfoot>
+            <tr style="height: 30px;">
+                <td colspan="4" style="text-align: right; font-size:120%;">TOTAL</td>
+                <td style="text-align:right;">{{ cartMetaData.pretax_total|number_format(2) }}</td>
+                <td class="text-center" style="text-align:middle;"></td>
+                <tr style="border-left: 0px solid; border-right: 0px solid;">
+                    <td colspan="4" style="border-left: 0px solid; border-right: 0px solid; border-bottom: 0px solid; vertical-align:top!important;">
+                        <small>*Firearm shown for display purposes only. Firearm not included.</small>
+                    </td>
+                    {% if checkout_btn == 'show' %}
+                        <td colspan="3" style="border-left: 0px solid; border-right: 0px solid; border-bottom: 0px solid;">
+                            <a href="/cart/checkout" style="vertical-align:middle" class="btn btn-primary btn-block">Checkout</a>
+                        </td>
+                    {% endif %}
+                </tr>
+            </tr>
+        </tfoot>
+    </table>
+{% endif %}

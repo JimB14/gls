@@ -1,0 +1,385 @@
+{% extends 'base-admin.html' %}
+
+{% block title %}
+  Update Holster | ArmaLaser
+{% endblock %}
+
+{% block css %}
+{% endblock %}
+
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div id="dashboard-toggle" class="col-md-8" style="margin-top:-20px;margin-left:254px;">
+
+          <h2>Update holster</h2>
+          <hr>
+
+            <form method="post" action="/admin/holsters/update-holster?id={{ holster.id }}"
+              class="form-horizontal" name="update-holster-form" id="update-holster-form" enctype="multipart/form-data">
+
+                <div class="form-group">
+                    <label for="image" class="control-label col-sm-3">
+                      Image raw
+                    </label>
+                    <div class="col-sm-9">
+                        <input type="text" class="form-control" name="image"
+                        id="image" placeholder="Image" value="{{ holster.image }}">
+                    </div>
+                </div>
+
+
+                <div class="form-group">
+                    <label for="image_full_size" class="control-label col-sm-3">
+                      Image full size
+                    </label>
+                    <div class="col-sm-9">
+                        <input type="text" class="form-control" name="image_full_size"
+                        id="image_full_size" placeholder="Image full size" value="{{ holster.image_full_size }}">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                   <label for="image_med" class="control-label col-sm-3">
+                     Image med
+                   </label>
+                   <div class="col-sm-9">
+                       <input type="text" class="form-control" name="image_med"
+                       id="image_med" placeholder="Image medium" value="{{ holster.image_med }}">
+                   </div>
+               </div>
+
+
+               <div class="form-group">
+                  <label for="image_med_reverse" class="control-label col-sm-3">
+                    Image med reverse
+                  </label>
+                  <div class="col-sm-9">
+                      <input type="text" class="form-control" name="image_med_reverse"
+                      id="image_med_reverse" placeholder="Image medium reverse" value="{{ holster.image_med_reverse }}">
+                  </div>
+               </div>
+
+
+               <div class="form-group">
+                  <label for="image_small" class="control-label col-sm-3">
+                    Image small
+                  </label>
+                  <div class="col-sm-9">
+                      <input type="text" class="form-control" name="image_small"
+                      id="image_small" placeholder="Image small" value="{{ holster.image_small }}">
+                  </div>
+               </div>
+
+
+               <div class="form-group">
+                  <label for="image_thumb" class="control-label col-sm-3">
+                    Image thumb
+                  </label>
+                  <div class="col-sm-9">
+                      <input type="text" class="form-control" name="image_thumb"
+                      id="image_thumb" placeholder="Image thumb" value="{{ holster.image_thumb }}">
+                  </div>
+               </div>
+
+
+               <div class="form-group">
+                  <label for="image_thumb" class="control-label col-sm-3">
+                    Pistol Mfr
+                  </label>
+                  <div class="col-sm-9">
+                     <select name="" id="" class="form-control">
+                        <option value="{{ holster.pistol_mfr }}">{{ holster.pistol_mfr }}</option>
+                        {% for mfr in pistol_mfrs %}
+                           <option value="{{ mfr.pistol_brand_name }}">{{ mfr.pistol_brand_name }}</option>
+                        {% endfor %}
+                     </select>
+                  </div>
+               </div>
+
+
+                <div class="form-group">
+                    <label for="pistol_model_match" class="control-label col-sm-3">
+                      Model match(es)
+                    </label>
+                    <div class="col-sm-9">
+                        <input type="text" class="form-control" name="pistol_model_match"
+                        id="pistol_model_match" placeholder="Comma separated list, e.g. model 1, model2"
+                        value="{{ holster.pistol_model_match }}">
+                        <small>*To type registered symbol:  alt+0174</small>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="laser_series" class="control-label col-sm-3">
+                      Laser Series
+                    </label>
+                    <div class="col-sm-9">
+                       <select name="laser_series" id="laser_series" class="form-control">
+                          <option value="{{ holster.laser_series }}">{{ holster.laser_series }}</option>
+                          {% for series in laser_series %}
+                              <option value="{{ series }}">{{ series }}</option>
+                          {% endfor %}
+                       </select>
+                    </div>
+                </div>
+
+
+                <div class="form-group">
+                    <label for="laser_model_match" class="control-label col-sm-3">
+                      Laser model match
+                    </label>
+                    <div class="col-sm-9">
+                        <input type="text" class="form-control"
+                        name="laser_model_match" id="laser_model_match"
+                        placeholder="Laser series model, e.g. TR6"
+                        value="{{ holster.laser_model_match }}">
+                    </div>
+                </div>
+
+
+                <div class="form-group">
+                    <label for="mfr" class="control-label col-sm-3">
+                      Mfr
+                    </label>
+                    <div class="col-sm-9">
+                       <select name="mfr" id="mfr" class="form-control">
+                          <option value="{{ holster.mfr }}">{{ holster.mfr }}</option>
+                          {% for mfr in mfrs %}
+                              <option value="{{ mfr }}">{{ mfr }}</option>
+                          {% endfor %}
+                       </select>
+                    </div>
+                </div>
+
+
+                <div class="form-group">
+                    <label for="model" class="control-label col-sm-3">
+                      Model
+                    </label>
+                    <div class="col-sm-9">
+                        <input type="text" class="form-control"
+                        name="model" id="model"
+                        placeholder="Holster model, e.g. MiniTuck" value="{{ holster.model }}">
+                        <small>*Register symbol required for CrossBreed models. To type register symbol:  alt+0174</small>
+                    </div>
+                </div>
+
+
+                <div class="form-group">
+                    <label for="hand" class="control-label col-sm-3">
+                      Hand
+                    </label>
+                    <div class="col-sm-9">
+                       <select name="hand" id="mfr" class="form-control">
+                          <option value="{{ holster.hand }}">{{ holster.hand }}</option>
+                          {% for hand in hands %}
+                              <option value="{{ hand }}">{{ hand }}</option>
+                          {% endfor %}
+                       </select>
+                    </div>
+                </div>
+
+
+                <div class="form-group">
+                    <label for="ad_title" class="control-label col-sm-3">
+                      Ad title
+                    </label>
+                    <div class="col-sm-9">
+                      <textarea name="ad_title" class="form-control" id="ad_title" placeholder="Ad title" rows="2">{{ holster.ad_title }}</textarea>
+                      <script>
+                        CKEDITOR.replace( 'ad_title' );
+                      </script>
+                    </div>
+                </div>
+
+
+                <div class="form-group">
+                    <label for="price" class="control-label col-sm-3">
+                      Price
+                    </label>
+                    <div class="col-sm-9">
+                        <input type="number" class="form-control"
+                        name="price" id="price" min="9.75" step=".01"
+                        placeholder="Price" value="{{ holster.price }}">
+                    </div>
+                </div>
+
+
+                <div class="form-group">
+                    <label for="ad_blurb" class="control-label col-sm-3">
+                      Ad blurb
+                    </label>
+                    <div class="col-sm-9">
+                      <textarea name="ad_blurb" class="form-control" id="ad_blurb" placeholder="Marketing blurb">{{ holster.ad_blurb }}</textarea>
+                      <script>
+                        CKEDITOR.replace( 'ad_blurb' );
+                      </script>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="feature01" class="control-label col-sm-3">
+                      Feature 1
+                    </label>
+                    <div class="col-sm-9">
+                      <textarea name="feature01" class="form-control" id="feature01" placeholder="Feature position 1" rows="1">{{ holster.feature01 }}</textarea>
+                      <!-- <script>
+                        CKEDITOR.replace( 'feature01' );
+                      </script> -->
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="feature02" class="control-label col-sm-3">
+                      Feature 2
+                    </label>
+                    <div class="col-sm-9">
+                      <textarea name="feature02" class="form-control" id="feature02" placeholder="Feature position 2" rows="1">{{ holster.feature02 }}</textarea>
+                      <!-- <script>
+                        CKEDITOR.replace( 'feature02' );
+                      </script> -->
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="feature03" class="control-label col-sm-3">
+                      Feature 3
+                    </label>
+                    <div class="col-sm-9">
+                      <textarea name="feature03" class="form-control" id="feature03" placeholder="Feature position 3" rows="1">{{ holster.feature03 }}</textarea>
+                      <!-- <script>
+                        CKEDITOR.replace( 'feature03' );
+                      </script> -->
+                    </div>
+                </div>
+
+
+                <div class="form-group">
+                    <label for="size" class="control-label col-sm-3">
+                      Size
+                    </label>
+                    <div class="col-sm-9">
+                        <input type="text" class="form-control"
+                        name="size" id="size"
+                        placeholder="size"
+                        value="{{ holster.size }}">
+                    </div>
+                </div>
+
+
+                <div class="form-group">
+                    <label for="weight" class="control-label col-sm-3">
+                      Weight
+                    </label>
+                    <div class="col-sm-9">
+                        <input type="text" class="form-control"
+                        name="weight" id="weight"
+                        placeholder="Weight"
+                        value="{{ holster.weight }}">
+                    </div>
+                </div>
+
+
+                <div class="form-group">
+                    <label for="upc" class="control-label col-sm-3">
+                      UPC
+                    </label>
+                    <div class="col-sm-9">
+                        <input type="text" class="form-control"
+                        name="upc" id="upc"
+                        placeholder="UPC ID, e.g. 768612094274"
+                        value="{{ holster.upc }}">
+                    </div>
+                </div>
+
+
+                <div class="form-group">
+                    <label for="mfr_href" class="control-label col-sm-3">
+                      Mfr URL
+                    </label>
+                    <div class="col-sm-9">
+                        <input type="text" class="form-control"
+                        name="mfr_href" id="mfr_href"
+                        placeholder="Website URL, e.g. http://domainName.com/product"
+                        value="{{ holster.mfr_href }}">
+                    </div>
+                </div>
+
+
+                <div class="form-group">
+                    <label for="mfr_href_video" class="control-label col-sm-3">
+                      Mfr video URL
+                    </label>
+                    <div class="col-sm-9">
+                        <input type="text" class="form-control"
+                        name="mfr_href_video" id="mfr_href_video"
+                        placeholder="Website video URL, e.g. http://domainName.com/product-video"
+                        value="{{ holster.mfr_href_video }}">
+                    </div>
+                </div>
+
+
+                <div class="form-group">
+                    <label for="buy_link" class="control-label col-sm-3">
+                      Link to 3d Cart
+                    </label>
+                    <div class="col-sm-9">
+                        <input type="text" class="form-control"
+                        name="buy_link" id="buy_link"
+                        placeholder="Full URL to 3d cart - must include http://"
+                        value="{{ holster.buy_link }}">
+                    </div>
+                </div>
+
+
+                <div class="form-group">
+                    <label for="special_message" class="control-label col-sm-3">
+                      Special message
+                    </label>
+                    <div class="col-sm-9">
+                        <input type="text" class="form-control"
+                        name="special_message" id="special_message"
+                        placeholder="Temporary message, e.g. 'out of inventory until Feb 1'"
+                        value="{{ holster.special_message }}">
+                    </div>
+                </div>
+
+                <hr>
+
+                <div class="form-group">
+                    <div class="col-sm-offset-3 col-sm-8">
+                        <button  id="submit-listing-btn" type="submit"
+                            class="btn btn-primary btn-lg">
+                          Update holster
+                      </button>
+                    </div>
+                </div>
+
+            </form>
+
+
+          </div><!--  // .col-md-8  -->
+      </div><!--  // .row  -->
+</div><!--  // .container  -->
+{% endblock %}
+
+
+{% block bottomjs %}
+<script>
+$(document).ready(function(){
+
+    $("#thisID").click(function(){
+        var checked = 1;
+        console.log(checked);
+        if($("#thisID").prop("checked")){
+          $("#lasers_last_name").attr("placeholder", "Enter laser ID");
+        } else {
+          $("#lasers_last_name").attr("placeholder", "Enter laser model");
+        }
+    });
+
+});
+</script>
+{% endblock %}

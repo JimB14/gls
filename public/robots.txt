@@ -1,0 +1,4 @@
+# space intentionally left blank
+Sitemap: https://armalaser.com/sitemap.xml
+User-agent: *
+Disallow:

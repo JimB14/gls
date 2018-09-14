@@ -1,0 +1,1257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>
+        {% block title %}
+
+        {% endblock %}
+    </title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!--  The above 3 meta tags *must* come first in the head; any other head
+          content must come *after* these tags -->
+    <meta name="description" content="">
+    <link rel="icon" href="/assets/images/favicon/favicon.ico">
+
+    {% if session.user == true and session.access_level > 0 %}
+      <!-- <script src="//cdnjs.cloudflare.com/ajax/libs/ckeditor/4.5.10/ckeditor.js"></script> -->
+      <script src="https://cdn.ckeditor.com/4.10.0/full/ckeditor.js"></script>
+    {% endif %}
+
+    {% block css %}
+    {% endblock %}
+
+
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+    integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+    crossorigin="anonymous">
+    <link rel="stylesheet" href="/assets/css/bootstrap.css">
+    <!-- <link rel="stylesheet" href="/assets/css/home-page-image-styles.css"> -->
+    <link rel="stylesheet" href="/assets/css/jquery-ui.min.css">
+    <link rel="stylesheet" href="/assets/css/styles.css">
+    <link rel="stylesheet" href="/assets/css/simple-sidebar.css">
+
+    <!-- Datepicker for event_date @https://jqueryui.com/datepicker/#default -->
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+
+    <link href='//fonts.googleapis.com/css?family=Raleway:400,700' rel='stylesheet' type='text/css'>
+    <link href='//fonts.googleapis.com/css?family=PT+Sans+Narrow' rel='stylesheet' type='text/css'>
+    <link href="//fonts.googleapis.com/css?family=PT+Sans" rel="stylesheet">
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body style="background: #fff;">
+
+    <div id="wrapper">
+        <!-- - - - - - - - - - - -  Sidebar  - - - - - - - - - - -->
+        <div id="sidebar-wrapper">
+
+            <p style="font-size:36px; margin:-5px 0px 0px 12px;">
+                <a style="color:#fff;" href="/">
+                    ArmaLaser
+                </a>
+            </p>
+
+            <ul class="sidebar-nav">
+
+                <!-- - - Home - - - - - - - - - - - - - - - - - - - - - -->
+                <li>
+                    <a style="display:inline; cursor:pointer;" id="expand-all">
+                        &nbsp; Expand
+                    </a>
+                    <a style="display:inline; cursor:pointer;" id="collapse-all">
+                        &nbsp; Collapse
+                    </a>
+                </li>
+
+                <li class="title" id="base-admin-home-title">
+                    <a id="home-title" href="/admin/main/index?user_id={{ session.user_id }}&type={{ session.userType }}">
+                        <span class="glyphicon glyphicon-home text-size130 m-leftminus20"></span>
+                            &nbsp; Home
+                    </a>
+                </li>
+
+                <!-- = =  Logged  in Customer  = = = = = = = -->
+                {% if session.userType == 'customer' %}
+                    {% include 'menu-customer.html' %}
+                {% endif %}
+                <!-- end customers  -->
+
+                <!-- = =  Logged  in Dealer  = = = = = = = -->
+                {% if session.userType == 'dealer' %}
+                    {% include 'menu-dealer.html' %}
+                {% endif %}
+                <!-- end dealers  -->
+
+                <!-- = =  Logged  in Partner  = = = = = = = -->
+                {% if session.userType == 'partner' %}
+                    {% include 'menu-partner.html' %}
+                {% endif %}
+                <!-- end partners  -->
+
+                <!-- = =  Logged  in supervisor  = = = = = = = -->
+                {% if session.userType == 'supervisor' %}
+                    {% include 'menu-supervisor.html' %}
+                {% endif %}
+                <!-- end supervisor  -->
+
+                <!-- - Logged in admin for shipping/administration  - -->
+                {% if session.userType == 'admin' and session.access_level == 3 %}
+                    {% include 'menu-admin.html' %}
+                {% endif %}
+
+                <!-- - Logged in admin for internal ordering  - -->
+                {% if session.userType == 'admin' and session.access_level == 4 %}
+                    {% include 'menu-telephone-order.html' %}
+                {% endif %}
+
+
+                <!-- - - Logout - - - - - - - - - - - - - - - - - - - - -->
+
+                <div style="margin-left:25px;margin-top:20px;margin-bottom: 30px;">
+                    <a id="logout-btn" class="btn btn-default" href="/admin/logout">
+                        Logout
+                    </a>
+                </div>
+
+            </ul>
+
+        </div><!-- // #sidebar-wrapper  -->
+    </div><!-- /#wrapper -->
+
+<div id="navbar-subheader-bar">
+    <div class="row">
+        <div class="col-md-12">
+            <p style="margin-left:254px;font-size: 20px;">
+                <span id="menu-hide-show" style="margin-right: 15px;">
+                  <a href="#menu-toggle" style="background-color: #fff; padding:0px; color: #337AB7" id="menu-toggle">
+                    <span id="glyph" class="glyphicon glyphicon-chevron-left"></span>
+                  </a>
+                </span>
+                <span class="glyphicon glyphicon-user text-size120"></span>
+                 &nbsp;
+                 <span>
+                   {% if session.user %} {{ session.full_name }} - {{ session.userType }} {% if user.company %} ({{ user.company|raw }}){% endif %}{% endif %}
+                 </span>
+                <span style="padding-left: 15px;"><script>var utc = new Date().toJSON().slice(0,10);document.write(utc);</script></span>
+
+                {% if session.cart_count > 0 %}
+                    <span style="color:#fff;padding-left:30px;">
+                        <a href="/cart/view/shopping-cart" style="color:#fff;" title="View Cart">
+                            CART
+                            <i style="color:#fff;" class="fa fa-shopping-cart fa-lg"></i>
+                            {% if session.cart_count > 0 %}<span class="badge"  style="background-color:#fff;"><span style="color:#000;">{{ session.cart_count }}</span></span>{% endif %}
+                        </a>
+                    </span>
+                {% endif %}
+            </p>
+
+        </div>
+    </div><!--  // .row  -->
+</div><!-- // #navbar-subheader-bar  -->
+  {% block content %}
+
+
+
+  {% endblock %}
+<!--  footer -->
+<!-- <div class="footer text-center" style="background-color: #fff; margin-top: 60px; padding:10px;color:#fff;">
+
+</div> -->
+
+
+  <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+  <script src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+  <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.15.0/jquery.validate.js"></script>
+  <script src="//use.fontawesome.com/6acf38a2cb.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.15.0/jquery.validate.js"></script>
+
+  {% if session.user == true and session.access_level == 2 %}
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery.form/3.51/jquery.form.min.js"></script>
+    <script src="//code.jquery.com/ui/1.12.0/jquery-ui.min.js"></script>
+  {% endif %}
+
+<script>
+$(document).ready(function(){
+
+      // resource:  http://www.codebelt.com/jquery/open-new-browser-window-with-jquery-custom-size/
+      //https://www.codeofaninja.com/2011/04/how-to-center-screen-pop-up-window-with.html
+      // center calculation = half window width/height - half pop-up width/height
+      $(".newWindow").click(function(event){
+          event.preventDefault();
+          // console.log(screen.availWidth);  // 1920px available
+          // console.log(screen.availHeight); // 1080px available
+          console.log($(window).width());  // 1902px actually being used
+          console.log($(window).height()); //  502px actually being used
+
+          var url = $(this).attr("href");
+          var windowName = "popUp";
+          var windowWidth = 900;
+          var windowHeight = 600;
+          var windowLeft = ($(window).width()) - (windowWidth);
+          var windowTop = ($(window).height()  / 2) - (windowHeight / 2);
+          // var windowLeft = parseInt((screen.availWidth/2) - (windowWidth/2));
+          // var windowTop = parseInt((screen.availHeight/2) - (windowHeight/2));
+          // var windowSize = "menubar=yes,resizable=yes,width=900,height=600,scrollbars=yes, left=" + windowLeft + ",top=" + windowTop + ",screenX=" + windowLeft + ",screenY=" + windowTop;
+          var windowSize = "menubar=yes, resizable=yes, width=900 , height=600, scrollbars=yes, left=" + windowLeft + ",top=" + windowTop;
+
+          // call function
+          window.open(url, windowName, windowSize);
+      });
+
+      $("#menu-toggle").click(function(e) {
+          e.preventDefault();
+          $("#wrapper").toggleClass("toggled");
+      });
+
+
+      $("#menu-hide-show").click(function(){
+          var value = $("#glyph").attr("class");
+          var margin = $("#dashboard-toggle").css("margin-left");
+          console.log(margin);
+
+          if(value == "glyphicon glyphicon-chevron-left"){
+              $( "#glyph" ).removeClass("glyphicon glyphicon-chevron-left");
+              $( "#glyph" ).addClass("glyphicon glyphicon-chevron-right");
+          }
+          if(value == "glyphicon glyphicon-chevron-right"){
+              $( "#glyph" ).removeClass("glyphicon glyphicon-chevron-right");
+              $( "#glyph" ).addClass("glyphicon glyphicon-chevron-left");
+          }
+
+          if(margin == '254px')
+          {
+              $("#dashboard-toggle").css( {"margin-left": "0px"} );
+          }
+          else if(margin == '0px')
+          {
+              $("#dashboard-toggle").css( {"margin-left": "254px"} );
+          }
+      });
+
+
+
+
+      $(".menu-item a").click(function(){
+          //alert("It works!");
+            $(this).addClass('active').siblings().removeClass('active');
+      });
+
+
+    // open / collapse menu
+    document.getElementById('expand-all').addEventListener('click', openMenu);
+    document.getElementById('collapse-all').addEventListener('click', collapseMenu);
+
+
+    // store href/url in variable
+    var url = window.location.href;
+    console.log('URL:', url);
+    console.log("Truncated URL: " + url.substring(0,42));
+
+
+    // = = = = = = = =  Logged in Customer section  = = = = = = = = = = = //
+    // Account
+    $("#base-admin-customers-myaccount-title").click(function(){
+        console.log('Customers -> Account clicked');
+        $("#base-admin-customers-myaccount-section").toggle(250);
+    });
+    if (
+        url === 'http://localhost/admin/customers/get-account' ||
+        url === 'http://gunlaser.store/admin/customers/get-account') {
+
+            $("#base-admin-customers-myaccount-section").show();
+            $("#base-admin-customers-myaccount-show").css({'background-color':'#fff'});
+    }
+    if (
+        url.substring(0,49) === 'http://localhost/admin/customers/main/get-account' ||
+        url.substring(0,54) === 'http://gunlaser.store/admin/cusomers/main/get-account') {
+
+            $("#base-admin-customers-myaccount-section").show();
+    }
+
+    // Orders
+    $("#base-admin-customer-orders-title").click(function(){
+        console.log('Customer orders clicked');
+        $("#base-admin-customer-orders-section").toggle(250);
+    });
+    if (
+        url.substring(0,48) === 'http://localhost/admin/customers/main/get-orders' ||
+        url.substring(0,53) === 'http://gunlaser.store/admin/orders/main/get-orders') {
+
+            $("#base-admin-customer-orders-section").show();
+            $("#base-admin-customer-orders").css({'background-color':'#fff'});
+    }
+    if (
+        url.substring(0,50) === 'http://localhost/admin/customers/main/get-my-order' ||
+        url.substring(0,55) === 'http://gunlaser.store/admin/customers/main/get-my-order') {
+
+            $("#base-admin-customer-orders-section").show();
+            $("#base-admin-customer-orders").css({'background-color':'#fff'});
+    }
+
+    // Warranty
+    $("#base-admin-customer-warranty-title").click(function(){
+        console.log('Warranty clicked');
+        console.log(url);
+        let str = 'http://localhost/admin/warranty_registrations/registration';
+        console.log(str.length);
+        console.log(url.substring(0,58));
+        $("#base-admin-customer-warranty-section").toggle(250);
+    });
+    if (
+        url.substring(0,50) === 'http://localhost/admin/customers/main/registration' ||
+        url.substring(0,55) === 'http://gunlaser.store/admin/customers/main/registration') {
+
+            $("#base-admin-customer-warranty-section").show();
+            $("#base-admin-register-for-warranty").css({'background-color':'#fff'});
+    }
+
+    // = = = = = = =  end logged in customer section  = = = = = = = = = //
+
+
+    // = = = = =  Logged In Dealer section  = = = = = = = = = = = = = //
+    // Account
+    $("#base-admin-dealers-myaccount-title").click(function(){
+        console.log('Dealers -> Account clicked');
+        $("#base-admin-dealers-myaccount-section").toggle(250);
+    });
+    if (
+        url.substring(0,47) === 'http://localhost/admin/dealers/main/get-account' ||
+        url.substring(0,52) === 'http://gunlaser.store/admin/dealers/main/get-account') {
+
+            $("#base-admin-dealers-myaccount-section").show();
+            $("#base-admin-dealers-myaccount-show").css({'background-color':'#fff'});
+    }
+
+    // Orders
+    $("#base-admin-dealer-orders-title").click(function(){
+        console.log('Dealer orders clicked');
+        $("#base-admin-dealer-orders-section").toggle(250);
+    });
+    if (
+        url.substring(0,46) === 'http://localhost/admin/dealers/main/get-orders' ||
+        url.substring(0,51) === 'http://gunlaser.store/admin/dealers/main/get-orders') {
+
+            $("#base-admin-dealer-orders-section").show();
+            $("#base-admin-dealer-orders").css({'background-color':'#fff'});
+    }
+    if (
+        url.substring(0,48) === 'http://localhost/admin/dealers/main/get-my-order' ||
+        url.substring(0,53) === 'http://gunlaser.store/admin/dealers/main/get-my-order') {
+
+            $("#base-admin-dealer-orders-section").show();
+    }
+
+    // Lasers
+    $("#base-admin-dealers-lasers-title").click(function(){
+        console.log('Dealers -> Lasers clicked');
+        $("#base-admin-dealers-lasers-section").toggle(250);
+    });
+    if (
+        url === 'http://localhost/admin/dealers/main/get-trseries'||
+        url === 'http://gunlaser.store/admin/dealers/main/get-trseries') {
+
+            $("#base-admin-dealers-lasers-section").show();
+            $("#base-admin-dealers-trseries-show").css({'background-color':'#fff'});
+    }
+    if (
+        url === 'http://localhost/admin/dealers/main/get-trseriesnp' ||
+        url === 'http://gunlaser.store/admin/dealers/main/get-trseriesnp') {
+
+            $("#base-admin-dealers-lasers-section").show();
+            $("#base-admin-dealers-trseriesnp-show").css({'background-color':'#fff'});
+    }
+    if (
+        url === 'http://localhost/admin/dealers/main/get-gtoflx' ||
+        url === 'http://gunlaser.store/admin/dealers/get-gtoflx') {
+
+            $("#base-admin-dealers-lasers-section").show();
+            $("#base-admin-dealers-gtoflx-show").css({'background-color':'#fff'});
+    }
+    if (
+        url === 'http://localhost/admin/dealers/main/get-gtonp' ||
+        url === 'http://gunlaser.store/admin/dealers/get-gtonp') {
+
+            $("#base-admin-dealers-lasers-section").show();
+            $("#base-admin-dealers-gtonp-show").css({'background-color':'#fff'});
+    }
+    if (
+        url === 'http://localhost/admin/dealers/main/get-stingrays' ||
+        url === 'http://gunlaser.store/admin/dealers/main/get-stingrays') {
+
+            $("#base-admin-dealers-lasers-section").show();
+            $("#base-admin-dealers-stingray-show").css({'background-color':'#fff'});
+    }
+    if (
+        url === 'http://localhost/admin/dealers/main/get-stingraysnp' ||
+        url === 'http://gunlaser.store/admin/dealers/main/get-stingraysnp') {
+
+            $("#base-admin-dealers-lasers-section").show();
+            $("#base-admin-dealers-stingraynp-show").css({'background-color':'#fff'});
+    }
+
+    // Holsters
+    $("#base-admin-dealers-holsters-title").click(function(){
+        console.log('Holsters clicked');
+        $("#base-admin-dealers-holsters-section").toggle(250);
+    });
+    if (
+        url === 'http://localhost/admin/dealers/main/get-holsters' ||
+        url === 'http://gunlaser.store/admin/dealers/main/get-holsters') {
+
+            $("#base-admin-dealers-holsters-section").show();
+            $("#base-admin-dealers-holsters-show").css({'background-color':'#fff'});
+    }
+
+    // Accessories
+    $("#base-admin-dealers-accessories-title").click(function(){
+        console.log('Accessories clicked');
+        $("#base-admin-dealers-accessories-section").toggle(250);
+    });
+    if (
+        url === 'http://localhost/admin/dealers/main/get-batteries' ||
+        url === 'http://gunlaser.store/admin/dealers/main/get-batteries') {
+
+            $("#base-admin-dealers-accessories-section").show();
+            $("#base-admin-dealers-batteries-show").css({'background-color':'#fff'});
+    }
+    if (
+        url === 'http://localhost/admin/dealers/main/get-toolkits' ||
+        url === 'http://gunlaser.store/admin/dealers/main/get-toolkits') {
+
+            $("#base-admin-dealers-accessories-section").show();
+            $("#base-admin-dealers-toolkits-show").css({'background-color':'#fff'});
+    }
+    if (
+        url === 'http://localhost/admin/dealers/main/get-accessories' ||
+        url === 'http://gunlaser.store/admin/dealers/main/get-accessories') {
+
+            $("#base-admin-dealers-accessories-section").show();
+            $("#base-admin-dealers-accessories-show").css({'background-color':'#fff'});
+    }
+
+    // FLXs
+    $("#base-admin-dealers-flx-title").click(function(){
+        console.log('Accessories clicked');
+        $("#base-admin-dealers-flx-section").toggle(250);
+    });
+    if (
+        url === 'http://localhost/admin/dealers/main/get-flxs' ||
+        url === 'http://gunlaser.store/admin/dealers/main/get-flxs') {
+
+            $("#base-admin-dealers-flx-section").show();
+            $("#base-admin-dealers-flx-show").css({'background-color':'#fff'});
+    }
+
+    // = = = = =  end Logged In Dealer section  = = = = = = = = = = = = = //
+
+
+    // = = = = =  Logged In Partner section  = = = = = = = = = = = = = //
+    // Account
+    $("#base-admin-partners-myaccount-title").click(function(){
+        console.log('Partners -> Account clicked');
+        $("#base-admin-partners-myaccount-section").toggle(250);
+    });
+    if (
+        url.substring(0,48) === 'http://localhost/admin/partners/main/get-account' ||
+        url.substring(0,53) === 'http://gunlaser.store/admin/partners/main/get-account') {
+
+            $("#base-admin-partners-myaccount-section").show();
+            $("#base-admin-partners-myaccount-show").css({'background-color':'#fff'});
+    }
+
+    // Orders
+    $("#base-admin-partner-orders-title").click(function(){
+        console.log('Partner orders clicked');
+        $("#base-admin-partner-orders-section").toggle(250);
+    });
+    if (
+        url.substring(0,47) === 'http://localhost/admin/partners/main/get-orders' ||
+        url.substring(0,52) === 'http://gunlaser.store/admin/partners/main/get-orders') {
+
+            $("#base-admin-partner-orders-section").show();
+            $("#base-admin-partner-orders").css({'background-color':'#fff'});
+    }
+    if (
+        url.substring(0,49) === 'http://localhost/admin/partners/main/get-my-order' ||
+        url.substring(0,54) === 'http://gunlaser.store/admin/partners/main/get-my-order') {
+
+            $("#base-admin-partner-orders-section").show();
+            $("#base-admin-partner-orders").css({'background-color':'#fff'});
+    }
+
+    // Lasers
+    $("#base-admin-lasers-partners-lasers-title").click(function(){
+        console.log('Partners -> Lasers clicked');
+        $("#base-admin-partners-lasers-section").toggle(250);
+    });
+    if (
+        url === 'http://localhost/admin/partners/main/get-trseries' ||
+        url === 'http://gunlaser.store/admin/partners/main/get-trseries') {
+
+            $("#base-admin-partners-lasers-section").show();
+            $("#base-admin-partners-trseries-show").css({'background-color':'#fff'});
+    }
+    if (
+        url === 'http://localhost/admin/partners/main/get-trseriesnp' ||
+        url === 'http://gunlaser.store/admin/partners/main/get-trseriesnp') {
+
+            $("#base-admin-partners-lasers-section").show();
+            $("#base-admin-partners-trseriesnp-show").css({'background-color':'#fff'});
+    }
+    if (
+        url === 'http://localhost/admin/partners/main/get-gtoflx' ||
+        url === 'http://gunlaser.store/admin/partners/main/get-gtoflx') {
+
+            $("#base-admin-partners-lasers-section").show();
+            $("#base-admin-partners-gtoflx-show").css({'background-color':'#fff'});
+    }
+    if (
+        url === 'http://localhost/admin/partners/main/get-gtonp' ||
+        url === 'http://gunlaser.store/admin/partners/main/get-gtofnp') {
+
+            $("#base-admin-partners-lasers-section").show();
+            $("#base-admin-partners-gtonp-show").css({'background-color':'#fff'});
+    }
+    if (
+        url === 'http://localhost/admin/partners/main/get-stingrays' ||
+        url === 'http://gunlaser.store/admin/partners/main/get-stingrays') {
+
+            $("#base-admin-partners-lasers-section").show();
+            $("#base-admin-partners-stingray-show").css({'background-color':'#fff'});
+    }
+    if (
+        url === 'http://localhost/admin/partners/main/get-stingraysnp' ||
+        url === 'http://gunlaser.store/admin/partners/main/get-stingraysnp') {
+
+            $("#base-admin-partners-lasers-section").show();
+            $("#base-admin-partners-stingraynp-show").css({'background-color':'#fff'});
+    }
+
+    // Holsters
+    $("#base-admin-partners-holsters-title").click(function(){
+        console.log('Holsters clicked');
+        $("#base-admin-partners-holsters-section").toggle(250);
+    });
+    if (
+        url === 'http://localhost/admin/partners/main/get-holsters' ||
+        url === 'http://gunlaser.store/admin/partners/main/get-holsters') {
+
+            $("#base-admin-partners-holsters-section").show();
+            $("#base-admin-partners-holsters-show").css({'background-color':'#fff'});
+    }
+
+    // Accessories
+    $("#base-admin-partners-accessories-title").click(function(){
+        console.log('Accessories clicked');
+        $("#base-admin-partners-accessories-section").toggle(250);
+    });
+    if (
+        url === 'http://localhost/admin/partners/main/get-batteries'
+        || url === 'http://gunlaser.store/admin/partners/main/get-batteries') {
+
+            $("#base-admin-partners-accessories-section").show();
+            $("#base-admin-partners-batteries-show").css({'background-color':'#fff'});
+    }
+    if (
+        url === 'http://localhost/admin/partners/main/get-toolkits'
+        || url === 'http://gunlaser.store/admin/partners/main/get-toolkits') {
+
+            $("#base-admin-partners-accessories-section").show();
+            $("#base-admin-partners-toolkits-show").css({'background-color':'#fff'});
+    }
+    if (
+        url === 'http://localhost/admin/partners/main/get-accessories'
+        || url === 'http://gunlaser.store/admin/partners/main/get-accessories') {
+
+            $("#base-admin-partners-accessories-section").show();
+            $("#base-admin-partners-accessories-show").css({'background-color':'#fff'});
+    }
+
+    // FLXs
+    $("#base-admin-partners-flx-title").click(function(){
+        console.log('Flx title clicked');
+        $("#base-admin-partners-flx-section").toggle(250);
+    });
+    if (
+        url === 'http://localhost/admin/partners/main/get-flxs'
+        || url === 'http://gunlaser.store/admin/partners/main/get-flxs') {
+
+            $("#base-admin-partners-flx-section").show();
+            $("#base-admin-partners-flx-show").css({'background-color':'#fff'});
+    }
+
+    // = = = = =  end Logged In Partner section  = = = = = = = = = = = = = //
+
+
+   // = = = = =  Logged In Admin section  = = = = = = = = = = = = = //
+
+    // tr series section
+    $("#base-admin-tr-series-title").click(function(){
+        console.log('TR Series clicked');
+        $("#base-admin-tr-series-section").toggle(250);
+    });
+    if (
+        url === 'http://localhost/admin/lasers/add-trseries'
+        || url === 'http://gunlaser.store/admin/lasers/add-trseries') {
+
+            $("#base-admin-tr-series-section").show();
+            $("#base-admin-tr-series-add").css({'background-color':'#fff'});
+    }
+    if (
+        url === 'http://localhost/admin/lasers/get-trseries'
+        || url === 'http://gunlaser.store/admin/lasers/get-trseries') {
+
+            $("#base-admin-tr-series-section").show();
+            $("#base-admin-tr-series-manage").css({'background-color':'#fff'});
+    }
+
+
+    // gto/flx section
+    $("#base-admin-gto-flx-title").click(function(){
+        console.log('GTO/FLX clicked');
+        $("#base-admin-gtoflx-section").toggle(250);
+    });
+    if (
+        url === 'http://localhost/admin/lasers/add-gtoflx'
+        || url === 'http://gunlaser.store/admin/lasers/add-gtoflx') {
+
+            $("#base-admin-gtoflx-section").show();
+            $("#base-admin-gtoflx-add").css({'background-color':'#fff'});
+    }
+    if (
+        url === 'http://localhost/admin/lasers/get-gtoflx'
+        || url === 'http://gunlaser.store/admin/lasers/get-gtoflxs') {
+
+            $("#base-admin-gtoflx-section").show();
+            $("#base-admin-gtoflx-manage").css({'background-color':'#fff'});
+    }
+
+
+    // stingray section
+    $("#base-admin-stingray-title").click(function(){
+        console.log('Stingray clicked');
+        $("#base-admin-stingray-section").toggle(250);
+    });
+    if (
+        url === 'http://localhost/admin/lasers/add-stingray'
+        || url === 'http://gunlaser.store/admin/lasers/add-stingray') {
+
+            $("#base-admin-stingray-section").show();
+            $("#base-admin-stingray-add").css({'background-color':'#fff'});
+    }
+    if (
+        url === 'http://localhost/admin/lasers/get-stingray'
+        || url === 'http://gunlaser.store/admin/lasers/get-stingrays') {
+
+            $("#base-admin-stingray-section").show();
+            $("#base-admin-tr-stingray-manage").css({'background-color':'#fff'});
+    }
+
+
+    // flx section
+    $("#base-admin-flx-title").click(function(){
+        console.log('FLX clicked');
+        $("#base-admin-flx-section").toggle(250);
+    });
+    if (
+        url === 'http://localhost/admin/lasers/add-flx'
+        || url === 'http://gunlaser.store/admin/lasers/add-flx') {
+
+            $("#base-admin-flx-section").show();
+            $("#base-admin-flx-add").css({'background-color':'#fff'});
+    }
+    if (
+        url === 'http://localhost/admin/lasers/get-flxs'
+        || url === 'http://gunlaser.store/admin/lasers/get-flxs') {
+
+            $("#base-admin-flx-section").show();
+            $("#base-admin-flx-manage").css({'background-color':'#fff'});
+    }
+
+
+    // holsters section
+    $("#base-admin-holsters-title").click(function(){
+        console.log('Holsters clicked');
+        $("#base-admin-holsters-section").toggle(250);
+    });
+    if (
+        url === 'http://localhost/admin/holsters/add-holster'
+        || url === 'http://gunlaser.store/admin/holsters/add-holster') {
+
+            $("#base-admin-holsters-section").show();
+            $("#base-admin-holsters-add").css({'background-color':'#fff'});
+    }
+    if (
+        url === 'http://localhost/admin/holsters/get-holsters'
+        || url === 'http://gunlaser.store/admin/holsters/get-holsters') {
+
+            $("#base-admin-holsters-section").show();
+            $("#base-admin-holsters-manage").css({'background-color':'#fff'});
+    }
+
+
+    // accessories section
+    $("#base-admin-accessories-title").click(function(){
+        console.log('Accessories clicked');
+        $("#base-admin-accessories-section").toggle(250);
+    });
+    if (
+        url === 'http://localhost/admin/accessories/add-accessory'
+        || url === 'http://gunlaser.store/admin/accessories/add-accessory') {
+
+            $("#base-admin-accessories-section").show();
+            $("#base-admin-accessories-add").css({'background-color':'#fff'});
+    }
+    if (
+        url === 'http://localhost/admin/accessories/get-accessories'
+        || url === 'http://gunlaser.store/admin/accessories/get-accessories') {
+
+            $("#base-admin-accessories-section").show();
+            $("#base-admin-accessories-manage").css({'background-color':'#fff'});
+    }
+
+
+    // batteries section
+    $("#base-admin-batteries-title").click(function(){
+        console.log('Batteries clicked');
+        $("#base-admin-batteries-section").toggle(250);
+    });
+    if (
+        url === 'http://localhost/admin/accessories/add-battery'
+        || url === 'http://gunlaser.store/admin/accessories/add-battery') {
+
+            $("#base-admin-batteries-section").show();
+            $("#base-admin-batteries-add").css({'background-color':'#fff'});
+    }
+    if (
+        url === 'http://localhost/admin/accessories/get-batteries'
+        || url === 'http://gunlaser.store/admin/accessories/get-batteries') {
+
+            $("#base-admin-batteries-section").show();
+            $("#base-admin-batteries-manage").css({'background-color':'#fff'});
+    }
+
+
+    // toolkits section
+    $("#base-admin-toolkits-title").click(function(){
+        console.log('Toolkits clicked');
+        $("#base-admin-toolkits-section").toggle(250);
+    });
+    if (
+        url === 'http://localhost/admin/accessories/add-toolkit'
+        || url === 'http://gunlaser.store/admin/accessories/add-toolkit') {
+
+            $("#base-admin-toolkits-section").show();
+            $("#base-admin-toolkits-add").css({'background-color':'#fff'});
+    }
+    if (
+        url === 'http://localhost/admin/accessories/get-toolkits'
+        || url === 'http://gunlaser.store/admin/accessories/get-toolkits') {
+
+            $("#base-admin-batteries-section").show();
+            $("#base-admin-batteries-manage").css({'background-color':'#fff'});
+    }
+
+
+    // gun shows section
+    $("#base-admin-shows-title").click(function(){
+        console.log('Gun shows clicked');
+        $("#base-admin-shows-section").toggle(250);
+    });
+    if (
+        url === 'http://localhost/admin/shows/add-show'
+        || url === 'http://gunlaser.store/admin/shows/add-show') {
+
+            $("#base-admin-shows-section").show();
+            $("#base-admin-shows-add").css({'background-color':'#fff'});
+    }
+    if (
+        url === 'http://localhost/admin/shows/get-shows'
+        || url === 'http://gunlaser.store/admin/shows/get-shows') {
+
+            $("#base-admin-shows-section").show();
+            $("#base-admin-shows-manage").css({'background-color':'#fff'});
+    }
+    if (
+        url.substring(0,38) === 'http://localhost/admin/shows/edit-show'
+        || url.substring(0,43) === 'http://gunlaser.store/admin/shows/edit-show') {
+
+            $("#base-admin-shows-section").show();
+    }
+
+
+    // customers section
+    $("#base-admin-customers-title").click(function(){
+        console.log('Customers clicked');
+        $("#base-admin-customers-section").toggle(250);
+    });
+    if (
+        url === 'http://localhost/admin/customers/add-customer'
+        || url === 'http://gunlaser.store/admin/customers/add-customer') {
+
+            $("#base-admin-customers-section").show();
+            $("#base-admin-customers-add").css({'background-color':'#fff'});
+    }
+    if (
+        url === 'http://localhost/admin/customers/get-customers'
+        || url === 'http://gunlaser.store/admin/customers/get-customers') {
+
+            $("#base-admin-customers-section").show();
+            $("#base-admin-customers-manage").css({'background-color':'#fff'});
+    }
+    if (
+        url.substring(0,46) === 'http://localhost/admin/customers/edit-customer'
+        || url.substring(0,51) === 'http://gunlaser.store/admin/customers/edit-customer') {
+
+            $("#base-admin-customers-section").show();
+    }
+    if (
+        url.substring(0,43) === 'http://localhost/admin/customers/get-orders'
+        || url.substring(0,48) === 'http://gunlaser.store/admin/customers/get-orders') {
+
+            $("#base-admin-customers-section").show();
+    }
+
+
+    // dealers section
+    $("#base-admin-dealers-title").click(function(){
+        console.log('Dealers clicked');
+        $("#base-admin-dealers-section").toggle(250);
+    });
+    if (
+        url === 'http://localhost/admin/dealers/add-dealer'
+        || url === 'http://gunlaser.store/admin/dealers/add-dealer') {
+
+            $("#base-admin-dealers-section").show();
+            $("#base-admin-dealers-add").css({'background-color':'#fff'});
+    }
+    if (
+        url === 'http://localhost/admin/dealers/get-dealers'
+        || url === 'http://gunlaser.store/admin/dealers/get-dealers') {
+
+            $("#base-admin-dealers-section").show();
+            $("#base-admin-dealers-manage").css({'background-color':'#fff'});
+    }
+    if (
+        url.substring(0,42) === 'http://localhost/admin/dealers/edit-dealer'
+        || url.substring(0,47) === 'http://gunlaser.store/admin/dealers/edit-dealer') {
+
+            $("#base-admin-dealers-section").show();
+    }
+    if (
+        url.substring(0,41) === 'http://localhost/admin/dealers/get-orders'
+        || url.substring(0,46) === 'http://gunlaser.store/admin/dealers/get-orders') {
+
+            $("#base-admin-dealers-section").show();
+    }
+
+    // parters section
+    $("#base-admin-partners-title").click(function(){
+        console.log('Partners clicked');
+        $("#base-admin-partners-section").toggle(250);
+    });
+    if (
+        url === 'http://localhost/admin/partners/add-partner'
+        || url === 'http://gunlaser.store/admin/partners/add-partner') {
+
+            $("#base-admin-partners-section").show();
+            $("#base-admin-partners-add").css({'background-color':'#fff'});
+    }
+    if (
+        url === 'http://localhost/admin/partners/get-partners'
+        || url === 'http://gunlaser.store/admin/partners/get-partners') {
+
+            $("#base-admin-partners-section").show();
+            $("#base-admin-partners-manage").css({'background-color':'#fff'});
+    }
+    if (
+        url.substring(0,44) === 'http://localhost/admin/partners/edit-partner'
+        || url.substring(0,49) === 'http://gunlaser.store/admin/partners/edit-partner') {
+
+            $("#base-admin-partners-section").show();
+    }
+    if (
+        url.substring(0,42) === 'http://localhost/admin/partners/get-orders'
+        || url.substring(0,47) === 'http://gunlaser.store/admin/partners/get-orders') {
+
+            $("#base-admin-partners-section").show();
+    }
+
+
+    // users section
+    $("#base-admin-users-title").click(function(){
+        console.log('Users clicked');
+        $("#base-admin-users-section").toggle(250);
+    });
+    if (
+        url === 'http://localhost/admin/users/add-user'
+        || url === 'http://gunlaser.store/admin/users/add-user') {
+
+            $("#base-admin-users-section").show();
+            $("#base-admin-users-add").css({'background-color':'#fff'});
+    }
+    if (
+        url === 'http://localhost/admin/users/get-users'
+        || url === 'http://gunlaser.store/admin/users/get-users') {
+
+            $("#base-admin-users-section").show();
+            $("#base-admin-users-manage").css({'background-color':'#fff'});
+    }
+    if (
+        url.substring(0,38) === 'http://localhost/admin/users/edit-user'
+        || url.substring(0,43) === 'http://gunlaser.store/admin/users/edit-user') {
+
+            $("#base-admin-users-section").show();
+    }
+
+
+    // postage section
+    $("#base-admin-postage-title").click(function(){
+        console.log('Postage clicked');
+        $("#base-admin-postage-section").toggle(250);
+    });
+    if (
+        url === 'http://localhost/admin/postage/get-account-status'
+        || url === 'http://gunlaser.store/admin/postage/get-account-status') {
+
+            $("#base-admin-postage-section").show();
+            $("#base-admin-postage-account-status").css({'background-color':'#fff'});
+    }
+
+
+    // orders section
+    $("#base-admin-orders-title").click(function(){
+        console.log('Orders clicked');
+        $("#base-admin-orders-section").toggle(250);
+    });
+    if (
+        url === 'http://localhost/admin/orders/get-orders?status=all'
+        || url === 'http://gunlaser.store/admin/orders/get-orders?status=all') {
+
+            $("#base-admin-orders-section").show();
+            $("#base-admin-orders-all").css({'background-color':'#fff'});
+    }
+    if (
+        url === 'http://localhost/admin/orders/get-orders?status=pending'
+        || url === 'http://gunlaser.store/admin/orders/get-orders?status=pending') {
+
+            $("#base-admin-orders-section").show();
+            $("#base-admin-orders-pending").css({'background-color':'#fff'});
+    }
+    if (
+        url === 'http://localhost/admin/orders/get-orders?status=label-created'
+        || url === 'http://gunlaser.store/admin/orders/get-orders?status=label-created') {
+
+            $("#base-admin-orders-section").show();
+            $("#base-admin-orders-label-created").css({'background-color':'#fff'});
+    }
+    if (
+        url === 'http://localhost/admin/orders/get-orders?status=shipped'
+        || url === 'http://gunlaser.store/admin/orders/get-orders?status=shipped') {
+
+            $("#base-admin-orders-section").show();
+            $("#base-admin-orders-shipped").css({'background-color':'#fff'});
+    }
+    if (
+        url === 'http://localhost/admin/orders/get-orders?status=return-pending'
+        || url === 'http://gunlaser.store/admin/orders/get-orders?status=return-pending') {
+
+            $("#base-admin-orders-section").show();
+            $("#base-admin-orders-return-pending").css({'background-color':'#fff'});
+    }
+    if (
+        url === 'http://localhost/admin/orders/get-orders?status=returned'
+        || url === 'http://gunlaser.store/admin/orders/get-orders?status=returned') {
+
+            $("#base-admin-orders-section").show();
+            $("#base-admin-orders-returned").css({'background-color':'#fff'});
+    }
+    if (
+        url.substring(0,39) === 'http://localhost/admin/orders/get-order'
+        || url.substring(0,44) === 'http://gunlaser.store/admin/orders/get-order') {
+
+            $("#base-admin-orders-section").show();
+    }
+
+
+
+
+    // labels section
+    $("#base-admin-labels-title").click(function(){
+        console.log('Labels clicked');
+        console.log(url);
+        $("#base-admin-labels-section").toggle(250);
+    });
+    if (
+        url === 'http://localhost/admin/labels/get-usps-labels'
+        || url === 'http://gunlaser.store/admin/labels/get-usps-labels') {
+
+            $("#base-admin-labels-section").show();
+            $("#base-admin-labels-usps").css({'background-color':'#fff'});
+    }
+    if (
+        url === 'http://localhost/admin/labels/get-ups-labels'
+        || url === 'http://gunlaser.store/admin/labels/get-ups-labels') {
+
+            $("#base-admin-labels-section").show();
+            $("#base-admin-labels-ups").css({'background-color':'#fff'});
+    }
+    if (
+        url === 'http://localhost/admin/labels/get-ups-return-labels'
+        || url === 'http://gunlaser.store/admin/labels/get-ups-return-labels') {
+
+            $("#base-admin-labels-section").show();
+            $("#base-admin-return-labels-ups").css({'background-color':'#fff'});
+    }
+
+
+    // warranty registration section
+    $("#base-admin-warranty-title").click(function(){
+        console.log('Warranty clicked');
+        console.log(url);
+        $("#base-admin-warranty-section").toggle(250);
+    });
+    if (
+        url === 'http://localhost/admin/warrantyregistrations/get-warranty-registrations'
+        || url === 'http://gunlaser.store/admin/warrantyregistrations/get-warranty-registrations') {
+
+            $("#base-admin-warranty-section").show();
+            $("#base-admin-warranty-search").css({'background-color':'#fff'});
+    }
+
+    // = = = = =  end Logged In Customers section  = = = = = = = = = = = = = //
+
+
+ });
+
+    // - - - - - - - - - functions - - - - - - - - - - //
+
+    // resource: https://www.abeautifulsite.net/parsing-urls-in-javascript
+    function parseURL(url) {
+        var parser = document.createElement('a'),
+            searchObject = {},
+            queries, split, i;
+
+        // Let the browser do the work
+        parser.href = url;
+
+        // Convert query string to object
+        queries = parser.search.replace(/^\?/, '').split('&');
+        for( i = 0; i < queries.length; i++ ) {
+            split = queries[i].split('=');
+            searchObject[split[0]] = split[1];
+        }
+
+        // return object
+        return {
+            protocol: parser.protocol,
+            host: parser.host,
+            hostname: parser.hostname,
+            port: parser.port,
+            pathname: parser.pathname,
+            search: parser.search,
+            searchObject: searchObject,
+            hash: parser.hash
+        };
+    }
+
+
+    function openMenu() {
+        console.log("Open clicked.");
+        // get url
+        var url = window.location.href;
+
+        // parse URL & store in object
+        let resultsObj = parseURL(url);
+        console.log('userType', resultsObj.searchObject.type);
+
+        const type = resultsObj.searchObject.type;
+        console.log(type);
+
+        if (type === 'supervisor') {
+            supervisorExpandMenu();
+        } else if (type === 'customer') {
+            customerExpandMenu();
+        } else if (type === 'dealer') {
+            dealerExpandMenu();
+        } else if (type === 'partner') {
+            partnerExpandMenu();
+        } else if (type === 'admin') {
+            adminExpandMenu();
+        }
+    }
+
+    function collapseMenu() {
+        console.log("Collapse clicked.");
+        // get url
+        var url = window.location.href;
+
+        // parse URL & store in object
+        let resultsObj = parseURL(url);
+        console.log('userType', resultsObj.searchObject.type);
+
+        const type = resultsObj.searchObject.type;
+        console.log(type);
+
+        if (type === 'supervisor') {
+            supervisorCollapseMenu();
+        } else if (type === 'customer') {
+            customerCollapseMenu();
+        } else if (type === 'dealer') {
+            dealerCollapseMenu();
+        } else if (type === 'partner') {
+            partnerCollapseMenu();
+        } else if (type === 'admin') {
+            adminCollapseMenu();
+        }
+    }
+
+    // supervisor
+    function supervisorExpandMenu() {
+        document.getElementById('base-admin-tr-series-section').style.display = 'block';
+        document.getElementById('base-admin-gtoflx-section').style.display = 'block';
+        document.getElementById('base-admin-stingray-section').style.display = 'block';
+        document.getElementById('base-admin-flx-section').style.display = 'block';
+        document.getElementById('base-admin-holsters-section').style.display = 'block';
+        document.getElementById('base-admin-accessories-section').style.display = 'block';
+        document.getElementById('base-admin-batteries-section').style.display = 'block';
+        document.getElementById('base-admin-toolkits-section').style.display = 'block';
+        document.getElementById('base-admin-shows-section').style.display = 'block';
+        document.getElementById('base-admin-customers-section').style.display = 'block';
+        document.getElementById('base-admin-dealers-section').style.display = 'block';
+        document.getElementById('base-admin-partners-section').style.display = 'block';
+        document.getElementById('base-admin-users-section').style.display = 'block';
+        document.getElementById('base-admin-postage-section').style.display = 'block';
+        document.getElementById('base-admin-orders-section').style.display = 'block';
+        document.getElementById('base-admin-labels-section').style.display = 'block';
+        document.getElementById('base-admin-warranty-section').style.display = 'block';
+    }
+
+    function supervisorCollapseMenu() {
+        console.log("Collapse clicked.");
+        document.getElementById('base-admin-tr-series-section').style.display = 'none';
+        document.getElementById('base-admin-gtoflx-section').style.display = 'none';
+        document.getElementById('base-admin-stingray-section').style.display = 'none';
+        document.getElementById('base-admin-flx-section').style.display = 'none';
+        document.getElementById('base-admin-holsters-section').style.display = 'none';
+        document.getElementById('base-admin-accessories-section').style.display = 'none';
+        document.getElementById('base-admin-batteries-section').style.display = 'none';
+        document.getElementById('base-admin-toolkits-section').style.display = 'none';
+        document.getElementById('base-admin-shows-section').style.display = 'none';
+        document.getElementById('base-admin-customers-section').style.display = 'none';
+        document.getElementById('base-admin-dealers-section').style.display = 'none';
+        document.getElementById('base-admin-partners-section').style.display = 'none';
+        document.getElementById('base-admin-users-section').style.display = 'none';
+        document.getElementById('base-admin-postage-section').style.display = 'none';
+        document.getElementById('base-admin-orders-section').style.display = 'none';
+        document.getElementById('base-admin-labels-section').style.display = 'none';
+        document.getElementById('base-admin-warranty-section').style.display = 'none';
+    }
+
+    // customer
+    function customerExpandMenu() {
+        document.getElementById('base-admin-customers-myaccount-section').style.display = 'block';
+        document.getElementById('base-admin-customer-orders-section').style.display = 'block';
+        document.getElementById('base-admin-customer-warranty-section').style.display = 'block';
+    }
+
+    function customerCollapseMenu() {
+        document.getElementById('base-admin-customers-myaccount-section').style.display = 'none';
+        document.getElementById('base-admin-customer-orders-section').style.display = 'none';
+        document.getElementById('base-admin-customer-warranty-section').style.display = 'none';
+    }
+
+    // dealer
+    function dealerExpandMenu() {
+        document.getElementById('base-admin-dealers-myaccount-section').style.display = 'block';
+        document.getElementById('base-admin-dealer-orders-section').style.display = 'block';
+        document.getElementById('base-admin-dealers-lasers-section').style.display = 'block';
+        document.getElementById('base-admin-dealers-holsters-section').style.display = 'block';
+        document.getElementById('base-admin-dealers-accessories-section').style.display = 'block';
+        document.getElementById('base-admin-dealers-flx-section').style.display = 'block';
+    }
+
+    function dealerCollapseMenu() {
+        document.getElementById('base-admin-dealers-myaccount-section').style.display = 'none';
+        document.getElementById('base-admin-dealer-orders-section').style.display = 'none';
+        document.getElementById('base-admin-dealers-lasers-section').style.display = 'none';
+        document.getElementById('base-admin-dealers-holsters-section').style.display = 'none';
+        document.getElementById('base-admin-dealers-accessories-section').style.display = 'none';
+        document.getElementById('base-admin-dealers-flx-section').style.display = 'none';
+    }
+    // partner
+    function partnerExpandMenu() {
+        document.getElementById('base-admin-partners-myaccount-section').style.display = 'block';
+        document.getElementById('base-admin-partner-orders-section').style.display = 'block';
+        document.getElementById('base-admin-partners-lasers-section').style.display = 'block';
+        document.getElementById('base-admin-partners-holsters-section').style.display = 'block';
+        document.getElementById('base-admin-partners-accessories-section').style.display = 'block';
+        document.getElementById('base-admin-partners-flx-section').style.display = 'block';
+    }
+
+    function partnerCollapseMenu() {
+        document.getElementById('base-admin-partners-myaccount-section').style.display = 'none';
+        document.getElementById('base-admin-partner-orders-section').style.display = 'none';
+        document.getElementById('base-admin-partners-lasers-section').style.display = 'none';
+        document.getElementById('base-admin-partners-holsters-section').style.display = 'none';
+        document.getElementById('base-admin-partners-accessories-section').style.display = 'none';
+        document.getElementById('base-admin-partners-flx-section').style.display = 'none';
+    }
+
+    // admin
+    function adminExpandMenu() {
+        document.getElementById('base-admin-tr-series-section').style.display = 'block';
+        document.getElementById('base-admin-gtoflx-section').style.display = 'block';
+        document.getElementById('base-admin-stingray-section').style.display = 'block';
+        document.getElementById('base-admin-flx-section').style.display = 'block';
+        document.getElementById('base-admin-holsters-section').style.display = 'block';
+        document.getElementById('base-admin-accessories-section').style.display = 'block';
+        document.getElementById('base-admin-batteries-section').style.display = 'block';
+        document.getElementById('base-admin-toolkits-section').style.display = 'block';
+        document.getElementById('base-admin-shows-section').style.display = 'block';
+        document.getElementById('base-admin-customers-section').style.display = 'block';
+        document.getElementById('base-admin-dealers-section').style.display = 'block';
+        document.getElementById('base-admin-partners-section').style.display = 'block';
+        document.getElementById('base-admin-postage-section').style.display = 'block';
+        document.getElementById('base-admin-orders-section').style.display = 'block';
+        document.getElementById('base-admin-labels-section').style.display = 'block';
+        document.getElementById('base-admin-warranty-section').style.display = 'block';
+    }
+
+    function adminCollapseMenu() {
+        console.log("Collapse clicked.");
+        document.getElementById('base-admin-tr-series-section').style.display = 'none';
+        document.getElementById('base-admin-gtoflx-section').style.display = 'none';
+        document.getElementById('base-admin-stingray-section').style.display = 'none';
+        document.getElementById('base-admin-flx-section').style.display = 'none';
+        document.getElementById('base-admin-holsters-section').style.display = 'none';
+        document.getElementById('base-admin-accessories-section').style.display = 'none';
+        document.getElementById('base-admin-batteries-section').style.display = 'none';
+        document.getElementById('base-admin-toolkits-section').style.display = 'none';
+        document.getElementById('base-admin-shows-section').style.display = 'none';
+        document.getElementById('base-admin-customers-section').style.display = 'none';
+        document.getElementById('base-admin-dealers-section').style.display = 'none';
+        document.getElementById('base-admin-partners-section').style.display = 'none';
+        document.getElementById('base-admin-postage-section').style.display = 'none';
+        document.getElementById('base-admin-orders-section').style.display = 'none';
+        document.getElementById('base-admin-labels-section').style.display = 'none';
+        document.getElementById('base-admin-warranty-section').style.display = 'none';
+    }
+
+ </script>
+
+{% block bottomjs %}
+
+{% endblock %}
+</body>
+</html>

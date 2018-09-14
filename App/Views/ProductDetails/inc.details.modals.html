@@ -1,0 +1,224 @@
+<!--=======================  Modal1 - Commercial  ============================-->
+
+<!-- http://www.tutorialrepublic.com/faq/how-to-embed-youtube-video-inside-bootstrap-modal.php -->
+<div class="bs-example">
+    <!-- Modal HTML -->
+    <div id="{{ links.id }}" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h3 class="modal-title">
+                        ArmaLaser {{ model.model|upper }} for {{ model.pistolMfr|upper }}® {{ model.pistol_model_matches }}
+                    </h3>
+                </div>
+                <div class="modal-body videoModal">
+                     <iframe width="560" height="315" src="{% if links.comm_video_href %}{{ links.comm_video_href }}{% endif %}" frameborder="0" allowfullscreen></iframe>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--======================  // Modal1  ===========================-->
+
+
+
+<!--=======================  Modal2 - Pro review ============================-->
+
+<!-- http://www.tutorialrepublic.com/faq/how-to-embed-youtube-video-inside-bootstrap-modal.php -->
+<div class="bs-example">
+    <!-- Modal HTML -->
+    <div id="{{ model.id }}" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h3 class="modal-title">
+                        {{ model.series|upper }} {{ model.model  }} for {{ model.pistolMfr }} {{ model.pistol_model_matches }}
+                    </h3>
+                </div>
+                <div class="modal-body">
+                     <iframe width="560" height="315" src="{% if links.pro_video_review_href %}{{ links.pro_video_review_href }}{% endif %}" frameborder="0" allowfullscreen></iframe>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--======================  // Modal2  ===========================-->
+
+
+<!--=======================  Modal3 - install  ============================-->
+
+<!-- http://www.tutorialrepublic.com/faq/how-to-embed-youtube-video-inside-bootstrap-modal.php -->
+<div class="bs-example">
+    <!-- Modal HTML -->
+    <div id="install-video" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h3 class="modal-title">
+                        {{ links.laser_series }} Installation Video
+                    </h3>
+                </div>
+                <div class="modal-body">
+                     <iframe width="560" height="315" src="{% if links.install_video_href %}{{ links.install_video_href }}{% endif %}" frameborder="0" allowfullscreen></iframe>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--======================  // Modal3  ===========================-->
+
+
+<!--=======================  Modal4 - install  ============================-->
+
+<!-- http://www.tutorialrepublic.com/faq/how-to-embed-youtube-video-inside-bootstrap-modal.php -->
+<div class="bs-example">
+    <!-- Modal HTML -->
+    <div id="trseries-install-modal" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h3 class="modal-title">
+                        {{ model.series }} Installation Video
+                    </h3>
+                </div>
+                <div class="modal-body">
+                     <iframe width="560" height="315" src="https://www.youtube.com/embed/eLBQmA_RgY8" frameborder="0" allowfullscreen></iframe>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--======================  // Modal4  ===========================-->
+
+
+<!--=======================  Modal5 - pdf  ============================-->
+
+<!-- http://www.tutorialrepublic.com/faq/how-to-embed-youtube-video-inside-bootstrap-modal.php -->
+<div class="bs-example">
+    <!-- Modal HTML -->
+    <div id="owner-manual" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h3 class="modal-title">
+                        {{ model.series|upper }} Owner manual
+                    </h3>
+                </div>
+                <div class="modal-body">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-md-12">
+                              <h2>{{ pagetitle }}</h2>
+                                  <div class="product-details-pdf-owners-manual">
+                                     <embed src="/assets/manuals/{{ links.owner_manual_href }}">
+                                  </div>
+                                 <!-- <div class="manual">
+                                    <iframe id="owner-manual-iframe" src="{{ model.owner_manual_href }}"
+                                      frameborder="0">
+                                    </iframe>
+                                 </div> -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--======================  // Modal5  ===========================-->
+
+
+<!--=======================  Modal6 - warranty  ============================-->
+
+<!-- http://www.tutorialrepublic.com/faq/how-to-embed-youtube-video-inside-bootstrap-modal.php -->
+<div class="bs-example">
+    <!-- Modal HTML -->
+    <div id="modal-warranty" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h3 class="modal-title">
+                        ArmaLaser 5-Year Warranty
+                    </h3>
+                </div>
+                <div class="modal-body">
+
+                    <div class="well well-default">
+                        <p class="bold text-size130">Return Policy</p>
+                        <p>
+                          If for any reason you are not satisfied with any product you purchase
+                          from ArmaLaser Inc., you may return it to us within 30 days of receipt
+                          for a full refund of the item(s) cost.
+                        </p>
+                        <p>
+                          We want you to be satisfied with your purchase and hope to earn your
+                          business in the future as well.
+                        </p>
+                    </div>
+
+                    <h3>ARMALASER LIMITED WARRANTY</h3>
+                    <p>
+                      For a period of sixty months (5 years) from the date of purchase,
+                      ArmaLaser Inc will, at no charge, repair this Product if determined by
+                      ArmaLaser Inc. to be defective in either parts or labor.
+                    </p>
+                    <p>
+                      This warranty is transferable to subsequent owners as long as the original
+                      receipt is presented.
+                    </p>
+                    <p>
+                      Warranty coverage does not apply to Products that have been abused,
+                      improperly installed, altered or modified, or when batteries have been
+                      improperly installed and caused damage beyond repair.
+                    </p>
+                    <p>
+                      <a href="/contact/get-rma-number">
+                        Click here to contact us for an RMA number for warranty service.
+                      </a>
+                    </p>
+                    <p>
+                      <small>This warranty applies to ArmaLaser manufactured products only,
+                        not to batteries or holsters. Please check with the holster
+                        manufacturers for warranty information.
+                      </small>
+                    </p>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--======================  // Modal6  ===========================-->
+
+
+<!--===============  Modal7 - install FDA label  ============================-->
+
+<!-- http://www.tutorialrepublic.com/faq/how-to-embed-youtube-video-inside-bootstrap-modal.php -->
+<div class="bs-example">
+    <!-- Modal HTML -->
+    <div id="fda-label-install" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h3 class="modal-title">
+                        Instructions:  FDA Warning Label Installation
+                    </h3>
+                </div>
+                <div class="modal-body">
+                    <h2 class="text-center text-uppercase" style="margin:0px; margin-bottom: 10px;">
+                        {{ model.series }}
+                    </h2>
+                    <img src="/assets/images/fda/{{ specs.label_install }}" alt="">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--======================  // Modal7  ===========================-->

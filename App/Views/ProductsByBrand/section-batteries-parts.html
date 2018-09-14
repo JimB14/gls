@@ -1,0 +1,39 @@
+<!-- - - - - - -  BATTERIES & PARTS  - - - - - - - - - - - - - -->
+<div id="bg-stingray">
+   <div class="container" id="batteries">
+      <div class="row">
+         <h2 class="text-left">
+            <span style="font-size: 130%;">
+               BATTERIES &amp; LASER PARTS
+               <span style="font-style:italic;">
+                  for ArmaLaser Products
+               </span>
+            </span>
+         </h2>
+
+         <div class="col-md-12 col-sm-12 text-left">
+            <div class="products-by-brand">
+               <ul class="">
+                  {% for item in batteries %}
+                     <li class="text-size90 text-center">
+                        <a href="/laser-accessories/{{ item.mvc_model }}/{{ item.id }}/{{ item.slug }}">
+                           <img src="/assets/images/batteries/{{ item.image_thumb }}" width="125" alt="Battery for ArmaLaser {{ item.caption }}"><br>
+                           <span>{{ item.caption }}</span><br>
+                        </a>
+                     </li>
+                  {% endfor %}
+                  {% for item in toolkits %}
+                     <li class="text-size90 text-center">
+                        <a href="/laser-accessories/{{ item.mvc_model }}/{{ item.id }}/{{ item.slug }}">
+                           <img src="/assets/images/toolkits/{{ item.image_thumb }}" width="125" alt="Toolkit for ArmaLaser {{ item.caption }} Laser"><br>
+                           <span>{{ item.caption }}</span><br>
+                        </a>
+                     </li>
+                  {% endfor %}
+               </ul>
+            </div><!-- //  -->
+         </div><!-- // .col-md-12 -->
+
+      </div><!-- // .row -->
+  </div><!-- // .container -->
+</div><!-- // #bg-holsters  -->

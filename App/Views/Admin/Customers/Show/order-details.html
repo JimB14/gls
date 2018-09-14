@@ -1,0 +1,353 @@
+{% extends 'base-admin.html' %}
+
+{% block title %}
+  Order Details | ArmaLaser
+{% endblock %}
+
+{% block css %}
+<style>
+#voidUpsLabel,
+#voidUspsLabel,
+#createUpsReturnLabel,
+#issue-refund-toggle {
+    cursor: pointer;
+}
+#form-void-ups-label,
+#form-void-usps-label {
+    display: none;
+    margin-bottom: 60px;
+}
+#new-comment-form,
+#form-create-ups-return-label,
+#modal-order-details-section,
+#issue-refund-section,
+#form-assign-serial-number {
+    display: none;
+}
+#enter-serial-numbers a,
+#show-enter-serial-form a {
+    text-decoration: underline;
+    cursor: pointer;
+}
+.error {
+    color: #ff0000;
+}
+
+.nav-tabs > li a {
+    background-color: #eee;
+    border-radius: 4px 4px 0 0;
+    /* margin-right: 2px; */
+    border: none;
+}
+
+.nav-tabs > li.active > a,
+.nav-tabs > li.active > a:hover,
+.nav-tabs > li.active > a:focus {
+    color: #555 !important;
+    cursor: default;
+    background-color: #fff !important;
+    border: 1px solid #ddd;
+    border-bottom-color: transparent;
+    /* margin-right: -2px; */
+}
+
+.nav-tabs > li > a:hover {
+    border: 1px solid #ddd !important;
+    border-bottom: transparent !important;
+    border-radius: 4px 4px 0 0;
+    color: #fff !important;
+}
+.tab-pane {
+    padding-bottom: 60px !important;
+}
+</style>
+{% endblock %}
+
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div id="dashboard-toggle" class="col-md-10" style="margin-top:-20px;margin-left:254px;">
+
+            <div class="col-md-12" style="margin-bottom: 10px;">
+                {% if pagetitle %}
+                    <h2 style="margin-left:-15px;">
+                        {{ pagetitle }}
+                    </h2>
+                {% else %}
+                    <h2 style="margin-left:-15px;">
+                        Order Details
+                    </h2>
+                {% endif %}
+                <p style="margin-left: -10px;">
+                    <span class="glyphicon glyphicon-menu-left"></span>
+                    <a onclick="window.history.go(-1)" style="cursor:pointer;">
+                        Go  Back
+                    </a>
+                </p>
+            </div>
+
+            {% if customer %}
+                {% if order.customerid != 0 and order.guestid == 0 and order.callerid == 0 and order.dealerid == 0 and order.partnerid == 0 %}
+                    <h3>Customer information:</h3>
+                {% elseif order.callerid != 0 and order.customerid == 0 and order.guestid == 0 and order.dealerid == 0 and order.partnerid == 0 %}
+                    <h3>Caller information:</h3>
+                {% elseif order.guestid != 0 and order.customerid == 0 and order.callerid == 0 and order.dealerid == 0 and order.partnerid == 0 %}
+                    <h3>Guest information:</h3>
+                {% elseif order.dealerid != 0 and order.customerid == 0 and order.guestid == 0 and order.callerid == 0 and order.partnerid == 0 %}
+                    <h3>Dealer information - <span style="color:#0000FF;">{{ customer.company|raw }}</span></h3>
+                {% elseif order.partnerid != 0 and order.customerid == 0 and order.guestid == 0 and order.callerid == 0 and order.dealerid == 0 %}
+                    <h3>Partner information - <span style="color:#0000FF;">{{ customer.company|raw }}</span></h3>
+                {% endif %}
+
+                <table class="table table-bordered table-striped bg-fff">
+                    <thead>
+                        <tr>
+                            {% if order.customerid != 0 and order.guestid == 0 and order.callerid == 0 and order.dealerid == 0 and order.partnerid == 0 %}
+                                <th>Customer<br>ID</th>
+                            {% elseif order.callerid != 0 and order.customerid == 0 and order.guestid == 0 and order.dealerid == 0 and order.partnerid == 0 %}
+                                <th>Caller<br>ID</th>
+                            {% elseif order.guestid != 0 and order.customerid == 0 and order.callerid == 0 and order.dealerid == 0 and order.partnerid == 0 %}
+                                <th>Guest<br>ID</th>
+                            {% elseif order.dealerid != 0 and order.customerid == 0 and order.guestid == 0 and order.callerid == 0 and order.partnerid == 0 %}
+                                <th>Dealer<br>ID</th>
+                            {% elseif order.partnerid != 0 and order.customerid == 0 and order.guestid == 0 and order.callerid == 0 and order.dealerid == 0 %}
+                                <th>Partner<br>ID</th>
+                            {% endif %}
+                            <th>First</th>
+                            <th>Last</th>
+                            <th>Address</th>
+                            {% if customer.billing_address2 or customer.address2 %}
+                                <th>Address2</th>
+                            {% endif %}
+                            <th>City</th>
+                            <th>State</th>
+                            <th>Zip</th>
+                            <th>Telephone</th>
+                            <th>Email</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        <tr>
+                            <td>{{ customer.id }}</td>
+                            <td>{% if customer.first_name %}{{customer.first_name }}{% else %}{{ customer.billing_firstname }}{% endif %}</td>
+                            <td>{% if customer.last_name %}{{customer.last_name }}{% else %}{{ customer.billing_lastname }}{% endif %}</td>
+                            <td>{% if customer.address1 %}{{ customer.address1 }}{% elseif customer.address %}{{ customer.address}}{% else %}{{ customer.billing_address }}{% endif %}</td>
+                            {% if customer.address2 or customer.billing_address2 %}
+                                {% if customer.address2 %}
+                                    <td>{{ customer.address2 }}</td>
+                                {% elseif customer.billing_address2 %}
+                                    <td>{{ customer.billing_address2 }}</td>
+                                {% endif %}
+                            {% endif %}
+                            <td>{% if customer.city %}{{ customer.city }}{% else %}{{ customer.billing_city }}{% endif %}</td>
+                            <td>{% if customer.state %}{{ customer.state }}{% else %}{{ customer.billing_state }}{% endif %}</td>
+                            <td>{% if customer.zip %}{{ customer.zip }}{% else %}{{ customer.billing_zip }}{% endif %}</td>
+                            <td>{% if customer.telephone %}{{ customer.telephone }}{% else %}{{ customer.billing_phone }}{% endif %}</td>
+                            <td>{{ customer.email }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            {% endif %}
+
+
+
+            {% if order %}
+                <h3>Order & Shipping information:</h3>
+                <table class="table table-bordered table-striped bg-fff">
+                    <thead>
+                        <tr>
+                            <th>Order<br>ID</th>
+                            <th>Status</th>
+                            <th>PayPal PNREF</th>
+                            {% if order.customerid != 0 and order.guestid == 0 and order.callerid == 0 and order.dealerid == 0 and order.partnerid == 0 %}
+                                <th>Customer<br>ID</th>
+                            {% elseif order.callerid != 0 and order.customerid == 0 and order.guestid == 0 and order.dealerid == 0 and order.partnerid == 0 %}
+                                <th>Caller<br>ID</th>
+                            {% elseif order.guestid != 0 and order.customerid == 0 and order.callerid == 0 and order.dealerid == 0 and order.partnerid == 0 %}
+                                <th>Guest<br>ID</th>
+                            {% elseif order.dealerid != 0 and order.customerid == 0 and order.guestid == 0 and order.callerid == 0 and order.partnerid == 0 %}
+                                <th>Dealer<br>ID</th>
+                            {% elseif order.partnerid != 0 and order.customerid == 0 and order.guestid == 0 and order.callerid == 0 and order.dealerid == 0 %}
+                                <th>Partner<br>ID</th>
+                            {% endif %}
+                            <th>Total</th>
+                            <th>Products</th>
+                            <th>Tax</th>
+                            <th>Shipping</th>
+                            <th>Ship<br>method</th>
+                            <th>Shipped<br>date</th>
+                            {% if order.oshipmethod|slice(0,3) == 'UPS' and order.order_status == 'shipped' %}
+                                <th>Tracking number<br><a  style="text-decoration: underline" href="https://www.ups.com/tracking/tracking.html" target="_blank">Track UPS package</a></th>
+                            {% elseif order.oshipmethod|slice(0,4) == 'USPS' and order.order_status == 'shipped' %}
+                                <th>Tracking number<br><a  style="text-decoration: underline" href="https://tools.usps.com/go/TrackConfirmAction_input" target="_blank">Track USPS package</a></th>
+                            {% else %}
+                                <th>Tracking number</th>
+                            {% endif %}
+                            <th>Transaction ID<br>(USPS only)</th>
+                            {% if order.oshipcompany %}
+                                <th>Company</th>
+                            {% endif %}
+                            <th>Address</th>
+                            {% if order.oshipaddress2 %}
+                                <th>Address2</th>
+                            {% endif %}
+                            <th>City</th>
+                            <th>State</th>
+                            <th>Zip</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        <tr>
+                            <td>{{ order.id }}</td>
+                            {% if order.order_status == 'return-pending' %}
+                                <td class="bold" style="color: #008000">{{ order.order_status }}</td>
+                            {% elseif order.order_status == 'returned' %}
+                                <td class="bold" style="color: #ff0000">{{ order.order_status }}</td>
+                            {% elseif order.order_status == 'pending' %}
+                                <td class="pendingGreen bold">{{ order.order_status }}</td>
+                            {% else %}
+                                <td>{{ order.order_status }}</td>
+                            {% endif %}
+                            <td>{{ order.pnref }}</td>
+                            {% if order.customerid != 0 and order.guestid == 0 and order.callerid == 0 and order.dealerid == 0 and order.partnerid == 0 %}
+                                <td>{{ order.customerid }}</td>
+                            {% elseif order.callerid != 0 and order.customerid == 0 and order.guestid == 0 and order.dealerid == 0 and order.partnerid == 0 %}
+                                <td>{{ order.callerid }}</td>
+                            {% elseif order.guestid != 0 and order.customerid == 0 and order.callerid == 0 and order.dealerid == 0 and order.partnerid == 0 %}
+                                <td>{{ order.guestid }}</td>
+                            {% elseif order.dealerid != 0 and order.customerid == 0 and order.callerid == 0 and order.guestid == 0 and order.partnerid == 0 %}
+                                <td>{{ order.dealerid }}</td>
+                            {% elseif order.partnerid != 0 and order.customerid == 0 and order.callerid == 0 and order.guestid == 0 and order.dealerid == 0 %}
+                                <td>{{ order.partnerid }}</td>
+                            {% endif %}
+                            <td>{{ order.orderamount }}</td>
+                            <td>{{ order.itemamount }}</td>
+                            <td>{{ order.otax_total }}</td>
+                            <td>{{ order.oshipcost }}</td>
+                            <td>{{ order.oshipmethod }}</td>
+                            <td>{% if order.oshippeddate == '' and order.order_status == 'pending' %}<span class="pendingGreen bold">pending{% else %}{{ order.oshippeddate }}{% endif %}</td>
+                            <td>{% if order.oshippeddate == '' and order.order_status == 'pending' %}<span class="pendingGreen bold">pending{% else %}{{ order.trackingcode }}{% endif %}</td>
+                            <td>{% if order.oshippeddate == '' and order.order_status == 'pending' %}<span class="pendingGreen bold">pending{% else %}{{ order.transaction_id }}{% endif %}</td>
+                            {% if order.oshipcompany %}
+                                <td>{{ order.oshipcompany }}</td>
+                            {% endif %}
+                            <td>{{ order.oshipaddress }}</td>
+                            {% if order.oshipaddress2 %}
+                                <td>{{ order.oshipaddress2 }}</td>
+                            {% endif %}
+                            <td>{{ order.oshipcity }}</td>
+                            <td>{{ order.oshipstate }}</td>
+                            <td>{{ order.oshipzip }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            {% else %}
+                <div class="col-md-8" style="margin-left:-15px;">
+                    <div class="alert alert-warning" style="margin-top:30px;">
+                        <h4 style="margin-bottom:0px;">
+                          No order data to display
+                        </h4>
+                    </div>
+                </div>
+            {% endif %}
+
+
+
+            {% if order_content %}
+                <h3>Products purchased:</h3>
+                <table class="table table-bordered table-striped bg-fff">
+                    <thead>
+                        <tr>
+                            <th>Order<br>ID</th>
+                            <th>RMA</th>
+                            {% if order.customerid != 0 and order.guestid == 0 and order.callerid == 0 and order.dealerid == 0 and order.partnerid == 0 %}
+                                <th>Customer<br>ID</th>
+                            {% elseif order.callerid != 0 and order.customerid == 0 and order.guestid == 0 and order.dealerid == 0 and order.partnerid == 0 %}
+                                <th>Caller<br>ID</th>
+                            {% elseif order.guestid != 0 and order.customerid == 0 and order.callerid == 0 and order.dealerid == 0 and order.partnerid == 0 %}
+                                <th>Guest<br>ID</th>
+                            {% elseif order.dealerid != 0 and order.customerid == 0 and order.guestid == 0 and order.callerid == 0 and order.partnerid == 0 %}
+                                <th>Dealer<br>ID</th>
+                            {% elseif order.partnerid != 0 and order.customerid == 0 and order.guestid == 0 and order.callerid == 0 and order.dealerid == 0 %}
+                                <th>Partner<br>ID</th>
+                            {% endif %}
+                            <th>Qty</th>
+                            <th>Item<br>ID</th>
+                            <th>Serial Number</th>
+                            <th>Name</th>
+                            <th>Price</th>
+                            <th>Extended</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        {% for item in order_content %}
+                            <tr>
+                                <td>{{ item.orderid }}</td>
+                                <th class="red bold">{{ item.rma_number }}</th>
+                                <td>{{ item.customerid }}</td>
+                                <td>{{ item.qty }}</td>
+                                <td>{{ item.itemid }}</td>
+                                <td>{{ item.serial_number }}</td>
+                                <td>{{ item.name }}</td>
+                                <td>{{ item.unitprice }}</td>
+                                <td>{{ item.itemtotal }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <div class="col-md-8" style="margin-left:-15px;">
+                    <div class="alert alert-warning" style="margin-top:30px;">
+                        <h4 style="margin-bottom:0px;">
+                          No order data to display
+                        </h4>
+                    </div>
+                </div>
+            {% endif %}
+
+
+            {% if order and order.refund_issued == 1 %}
+                <h3 style="color: #ff0000">Refund Issued:</h3>
+                <table class="table table-bordered table-striped bg-fff">
+                    <thead>
+                        <tr>
+                            <th>Order ID</th>
+                            <th>Date</th>
+                            <th>Amount</th>
+                            <th>PayPal ID (PNREF)</th>
+                            <th>PayPal Reference (PPREF)</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        <tr>
+                            <td>{{ order.id }}</td>
+                            <td>{{ order.refund_transtime }}</td>
+                            <td>{{ order.refund_amt }}</td>
+                            <td>{{ order.refund_pnref }}</td>
+                            <td>{{ order.refund_ppref }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            {% endif %}
+
+      </div><!--  // col-md-12  -->
+    </div><!--  // .row  -->
+</div><!-- // .container-fluid  -->
+{% endblock %}
+
+
+{% block bottomjs %}
+<script>
+$(document).ready(function(){
+
+
+
+});
+</script>
+
+{% endblock %}

@@ -1,0 +1,110 @@
+{% extends 'base.html' %}
+
+{% block title %}
+   Chat Busy
+{% endblock %}
+
+{% block metadescription %}
+   Chat live with ArmaLaser
+{% endblock %}
+
+{% block css %}
+<style>
+   #wrapper {
+      min-height: 400px;
+      background-color: #fff;
+      margin: 40px 0px;
+      /*border: 1px solid #ff0000;
+      border-radius: 3px;*/
+   }
+   #wrapper h1 {
+      margin: 0;
+      margin-bottom: 10px;
+   }
+   #messages {
+      padding: 15px;
+      width: 90%;
+      margin: 0 auto;
+      border: 1px solid #ddd;
+      border-radius: 3px;
+      min-height: 300px;
+      overflow: auto;
+   }
+   #message-input-container {
+      width: 90%;
+      margin: 0 auto;
+      margin-top: 10px;
+   }
+
+   #clock {
+      width: 131px;
+      text-align: center;
+      margin: 0 auto;
+      background-color: #4b4b4b;
+      color: #fff;
+      padding: 7px 10px;
+      border-radius: 4px;
+   }
+</style>
+
+{% endblock %}
+
+{% block outsidecontainer %}
+{% endblock %}
+
+
+{% block content %}
+<div class="container">
+   <div class="row">
+      <div class="col-md-12">
+
+            <div class="col-md-10 col-center-block">
+               <div id="wrapper">
+
+                  <div class="text-center">
+                     <h1 class="text-center">{{ message|raw }}</h1>
+                     <h4 id="clock"></h4>
+                  </div>
+                  <br><br>
+                  <div id="messages"></div>
+
+                  <div id="message-input-container" class="input-group"></div>
+            </div>
+
+         </div>
+      </div>
+   </div>
+</div>
+{% endblock %}
+
+{% block bottomjs %}
+<script>
+
+//  ======= CLOCK ==============================
+   // https://codepen.io/Tcip/pen/BNKjeN
+   var myVar = setInterval(function() {
+     myTimer();
+   }, 1000);
+
+   function myTimer() {
+     var d = new Date();
+     document.getElementById("clock").innerHTML = d.toLocaleTimeString();
+   }
+// =============================================
+
+
+$(document).ready(function() {
+
+   // assign day and time variables
+   var date = new Date();
+   var today = date.getDay();
+   console.log(`Today: ${today}`);
+
+   var now = date.toLocaleTimeString();
+   console.log(`Now: ${now}`);
+
+
+});
+</script>
+
+{% endblock %}

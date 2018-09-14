@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>
+        {% block title %}
+
+        {% endblock %}
+    </title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!--  The above 3 meta tags *must* come first in the head; any other head
+          content must come *after* these tags -->
+    <meta name="description" content="{% block metadescription %}ArmaLaser is the leader in laser sight technologies for the world's most popular pistols.{% endblock %}">
+    <!-- <link rel="shortcut icon" href="/assets/images/favicon.ico" type="image/x-icon"> -->
+
+    {% block css %}
+
+    {% endblock %}
+
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+    integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+    crossorigin="anonymous">
+    <link rel="stylesheet" href="/assets/css/bootstrap.css">
+    <link rel="icon" href="/assets/images/favicon/favicon.ico">
+
+    <link rel="stylesheet" href="/assets/css/jquery-ui.min.css">
+    <link rel="stylesheet" href="/assets/css/jquery-ui.theme.css">
+    <link rel="stylesheet" href="/assets/css/jquery-ui.structure.css">
+    <link rel="stylesheet" href="/assets/css/styles.css">
+
+    <link href='//fonts.googleapis.com/css?family=Raleway:400,700' rel='stylesheet' type='text/css'>
+    <link href='//fonts.googleapis.com/css?family=PT+Sans+Narrow' rel='stylesheet' type='text/css'>
+    <link href="//fonts.googleapis.com/css?family=PT+Sans" rel="stylesheet">
+    <link href="//fonts.googleapis.com/css?family=Amaranth:400,400i,700,700i" rel="stylesheet">
+    <link href="//fonts.googleapis.com/css?family=Shadows+Into+Light+Two" rel="stylesheet" type="text/css">
+
+    <!-- Datepicker for warranty-registration.php @https://jqueryui.com/datepicker/#default -->
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+
+    <!-- jquery for jquery UI dialog modal -->
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <!-- must follow jquery  -->
+    <script src="//code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+
+    <!-- Google requirement -->
+    <!-- <link rel="alternate" hreflang="en" href="http://armalaser.com"> -->
+    <!-- <link rel="alternate" hreflang="en" href="http://www.armalaser.com"> -->
+
+    <!-- Google site verification for http://www.armalaser.com -->
+    <meta name="google-site-verification" content="2pWtZCvZOedEP63O87oLsxz4HCWGyPM3S-2lz8wMCVo">
+    <!-- Google site verification for http://armalaser.com -->
+    <meta name="google-site-verification" content="2pWtZCvZOedEP63O87oLsxz4HCWGyPM3S-2lz8wMCVo" >
+
+    {# if canonURL #}
+    <!-- <link href="{{ canonURL }}" rel="canonical"> -->
+    {# endif #}
+
+    <!-- for SEO -->
+    {% if pagetitle == "Submit Video Review" %}
+      <link href="https://armalaser.com/contact/submit-video-review?" rel="canonical">
+    {% endif %}
+
+    <!-- for SEO -->
+    {# if flxDetails == "true" #}
+      <!-- <link href="http://armalaser.com/flxs/get-flx/" rel="canonical"> -->
+    {# endif #}
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body>
+  <!-- Facebook share code. Resource: https://developers.facebook.com/docs/plugins/share-button#settings  -->
+  <!-- <div id="fb-root"></div>
+  <script>(function(d, s, id) {
+    var js, fjs = d.getElementsByTagName(s)[0];
+    if (d.getElementById(id)) return;
+    js = d.createElement(s); js.id = id;
+    js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.6";
+    fjs.parentNode.insertBefore(js, fjs);
+  }(document, 'script', 'facebook-jssdk'));</script> -->
+  <!--  // Facebook share  -->
+
+    {% include 'topnav.html' %}
+
+    {% block outsidecontainer %}
+
+    {% endblock %}
+
+
+   <div class="page-top-padding"></div>
+
+   <!--  Item added to cart  -->
+    <!-- <div class="item_added_alert">
+        <div class="col-md-4 col-center-block t1">
+            <div class="alert alert-success">
+                <h4 class="text-center">Item successfully added to cart.</h4>
+            </div>
+        </div>
+    </div> -->
+
+     {% block content %}
+
+
+     {% endblock %}
+
+
+     {% include 'live-chat-modal.html' %}
+     {% include 'warranty-registration-modal.html' %}
+
+
+    <!-- html for animated gif that displays during Ajax request -->
+    <div class="gifModal"><!-- Place at bottom of page --></div>
+   <!--   Footer  -->
+   <div id="footer-style" class="bg-footer">
+      <div class="container">
+         <div class="row">
+            <div class="col-sm-2">
+               <h3>LASERS</h3>
+               <ul class="footer-list">
+                  <li><a href="/lasers/tr-series"><span class="">TR-SERIES</span></a></li>
+                  <li><a href="/lasers/gto-flx-series"><span class="">GTO/FLX SERIES</span></a></li>
+                  <li><a href="/lasers/stingray-classic"><span class="">STINGRAY</span></a></li>
+                  <!--<li><a href="index.php?goto=flx"><span class="">FLX</span> - search</a></li>-->
+               </ul>
+               <h3>
+                  <!-- <a href="/holsters/search-holsters"><span class="text-uppercase">Holsters</span> - search</a>
+                  <br> -->
+                  <a href="/products/flx"><span class="text-uppercase">FLX LIST</span></a>
+                  <br>
+                  <a href="/products/holsters"><span class="text-uppercase">Holsters</span></a>
+                  <br>
+                  <a href="/products/laser-batteries"><span class="text-uppercase">Batteries</span></a>
+                  <br>
+                  <a href="/products/laser-parts"><span class="text-uppercase">Laser Parts</span></a>
+                  <br>
+                  <a href="/products/accessories"><span class="text-uppercase">Accessories</span></a>
+                  <br>
+                  <a href="/products/laserglow-targets"><span class="text-uppercase">LaserGlow Targets</span></a>
+               </h3>
+               <!-- <h3>
+                  <a href="https://armalaser.3dcartstores.com/myaccount.asp">MY ACCOUNT</a>
+               </h3> -->
+            </div>
+
+            <div class="col-sm-2">
+               <h3>OWNERS MANUALS</h3>
+               <ul class="footer-list">
+                  <li><a href="/manual/tr-series-laser-owners-manual"><span class="">TR-SERIES</span></a></li>
+                  <li><a href="/manual/gto-flx-series-laser-owners-manual"><span class="">GTO/FLX-SERIES</span></a></li>
+                  <li><a href="/manual/stingray-classic-laser-owners-manual"><span class="">STINGRAY</span></a></li>
+               </ul>
+               <h3><a href="/program/laser-exchange">EXCHANGE PROGRAM</a></h3>
+               <h3><a href="/program/nra-instructor-program">NRA INSTRUCTOR PROGRAM</a></h3>
+               <h3><a href="/help/frequently-asked-questions">FAQs</a></h3>
+            </div>
+
+            <div class="col-sm-3">
+               <h3><a href="/shows/gun-shows">GUN SHOWS</a></h3>
+               <h3>WHY TOUCH-ACTIVATION</h3>
+               <ul class="footer-list">
+                  <li><a href="/info/touch-activation">WHAT IS IT?</a></li>
+                  <li><a href="/touch-activation/glove-contacts">MAKE IT WORK WITH GLOVES</a></li>
+               </ul>
+               <h3><a href="/admin/subscribe" title="Subscribe to receive special offers">SUBSCRIBE</a></h3>
+               {% include 'chat_nav_footer.html' %}
+            </div>
+
+             <div class="col-sm-3">
+               <h3>CATALOG</h3>
+               <ul class="footer-list">
+                  <!-- <li><a href="/contact/request-catalog">REQUEST CATALOG BY MAIL</a></li> -->
+                  <li><a href="/download/armalaser-catalog">DOWNLOAD CATALOG (pdf)</a></li>
+               </ul>
+
+               <h3>WARRANTY</h3>
+               <ul class="footer-list">
+                  <li><a href="/info/laser-warranty">5 YEAR WARRANTY</a></li>
+                  {% if session.user_id and session.userType == 'customer' %}
+                      <li><a href="/admin/main/index?user_id={{ session.user_id }}&type={{ session.userType }}">WARRANTY REGISTRATION</a></li>
+                  {% else %}
+                    <li><a href="#" title="Warranty Registration" data-toggle="modal" data-target="#customerRegister">WARRANTY REGISTRATION</a></<li>
+                    <!-- <li><a href="/warranty/registration">WARRANTY REGISTRATION</a></li> -->
+                  {% endif %}
+                  <li><a href="/contact/warranty-help">GET WARRANTY HELP</a></li>
+               </ul>
+
+               <h3>
+                   <a href="https://armalaser.3dcartstores.com/myaccount.asp">
+                     MY ACCOUNT
+                   </a>
+               </h3>
+             </div>
+
+            <div class="col-sm-2">
+               <h3 class="text-center">PARTNERS</h3>
+               <a href="https://www.nssf.org/" alt="national shooting sports foundation"
+                  target="_blank">
+                  <img class="img-responsive center-block" src="/assets/images/national_shooting_sports_foundation_thumb.png">
+               </a>
+            </div>
+
+         </div> <!-- // row -->
+      </div><!-- // .container  -->
+   </div><!--  // .bg-footer  -->
+
+   <!--  bottom  -->
+
+   <div id="bottom" class="bg-bottom text-center">
+      <div class="container">
+         <div class="row">
+
+            <div class="col-md-3">
+               <div class="text-left" style="margin-top: -10px;">
+                  <img class="img-responsive" src="/assets/images/arm_weapontronics_small.png" alt="ArmaLaser Logo">
+               </div>
+            </div>
+
+            <div class="col-md-9">
+               &copy; 2004 - <script>var today = new Date();
+                      document.write(today.getFullYear());</script>
+               ArmaLaser &nbsp;
+               | &nbsp; www.armalaser.com &nbsp;
+               <!--| &nbsp; All Rights Reserved &nbsp;-->
+               | &nbsp; Gainesville, FL USA
+               | &nbsp; <a href="mailto:customercare@armalaser.com?subject=Please%20contact%20me"><i class="fa fa-envelope"></i> Email</a> &nbsp;
+               | &nbsp; <a href="tel:8006805020"><i class="fa fa-phone"></i> 800-680-5020</a>&nbsp;
+               | &nbsp; <a href="/terms/terms-of-use">Terms of Use</a> &nbsp;
+               | &nbsp; <a href="/terms/privacy-policy"> Privacy Policy</a> &nbsp;
+               <!-- | &nbsp; <a href="/subscribe" title="Subscribe to receive special offers">Subscribe</a> &nbsp; -->
+               <br>
+               &nbsp; <a href="/admin/customer/login">Customer LogIn</a> &nbsp;
+               | &nbsp; <a href="/admin/partner/login">Partner</a> &nbsp;
+               | &nbsp; <a href="/admin/dealer/login">Dealer</a> &nbsp;
+               | &nbsp; <a href="/admin/user/login">Admin</a> &nbsp;
+               {% if session.chatuser_id %}
+                 <br><a href="/chat/logout">LogOut</a><br><br>
+               {% else %}
+                 <br><a href="/admin/logout">LogOut</a><br><br>
+               {% endif %}
+               <span class="wmp-hide text-center">
+                   Web development by
+                   <a href="http://www.webmediapartners.com" target="_blank" title="Web Media Partners">
+                       Web development by Web Media Partners
+                   </a>
+               </span>
+            </div><!-- // .col-md-12 -->
+         </div><!-- // .row -->
+      </div>
+   </div><!-- // #bottom  -->
+
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <!-- <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script> -->
+    <script src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.15.0/jquery.validate.js"></script>
+    <script src="//use.fontawesome.com/6acf38a2cb.js"></script>
+    <!--  Adobe Typekit -->
+    <script src="//use.typekit.net/suh2zda.js"></script>
+    <script>try{Typekit.load({ async: true });}catch(e){}</script>
+    {% if session.user == true and session.access_level == 2 %}
+      <script src="//cdnjs.cloudflare.com/ajax/libs/ckeditor/4.5.10/ckeditor.js"></script>
+      <script src="//cdnjs.cloudflare.com/ajax/libs/jquery.form/3.51/jquery.form.min.js"></script>
+      <script src="//code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+    {% endif %}
+    <!-- Sharethis  -->
+    <script type="text/javascript" src="//platform-api.sharethis.com/js/sharethis.js#property=58a85e57d390d3001182107a&amp;product=inline-share-buttons"></script>
+
+    <script>
+      $(document).ready(function(){
+
+        // animated gif during Ajax request script
+        $body = $("body");
+
+        $(document).on({
+            ajaxStart: function() { $body.addClass("loading");    },
+            ajaxStop: function() { $body.removeClass("loading"); }
+        });
+
+        // $("#chatRegisterForm").validate();
+
+         /* - - - - Check if email in db  - - - -  */
+         $("input[name^='email_chat_modal']").focus(function(){
+
+            var hasFocus = 'focus';
+            console.log("input has " + hasFocus);
+
+            $(this).blur(function(){
+               var email_chat = $( this ).val();
+               console.log("email = " + email_chat);
+
+               $.ajax({
+                  url: "/chats/is-email-available",
+                  type: 'POST',
+                  data: {
+                    email_chat: email_chat
+                  },
+                  cache: false,
+                  success: function(data){
+                     console.log(data);
+
+                     var available = '<div class="alert alert-success alert-padding text-center">';
+                     available += '<h4>Email address is available!</h4>';
+                     available += '</div>';
+
+                     var not_available = '<div class="alert alert-danger alert-padding text-center">';
+                     not_available += '<h4>Email address already registered. <a href="/chatlogin?email='+ email_chat +'">Please sign in</a>.</h4>';
+                     not_available += '</div>';
+
+                     if( data === 'available' ){
+                        $("#register-message").html(available);
+                     }
+                     else {
+                        $("#register-message").html(not_available);
+                     }
+                  },
+                  error: function(){
+                     alert("An error occurred.");
+                  }
+               });
+            });
+         });
+
+        // add to cart response - button change
+        // $(".add_to_cart").click(function(){
+        //     setTimeout(function(){
+        //         $(".add_to_cart").css({ 'background-color' : '#d2f8d2' });
+        //         $(".add_to_cart").text("Item added to cart");
+        //     }, 5000);
+        // });
+
+
+        // display alert that item successfully added to cart
+        let this_page_url = window.location.href;
+            console.log(this_page_url);
+
+        // get last nine characters of URL
+        let lastEight = this_page_url.slice(-9);
+            console.log(lastEight);
+
+        if (lastEight === 'itemadded') {
+            console.log("Match!");
+            $(".add_to_cart").css({ 'background-color' : '#d2f8d2', 'border' : 'none', 'color' : '#727272' });
+            $(".add_to_cart").html("<span style='color:green'><span class='glyphicon glyphicon-ok-sign'></span> Item added to cart!</span> <br><a href='/cart/view/shopping-cart'>View cart</a>");
+
+            // setTimeout(function(){
+            //     $(".add_to_cart").css({ 'background-color' : '#005AB3', 'color' : '#fff' });
+            //     $(".add_to_cart").html('Add to Cart <i class="fa fa-shopping-cart fa-lg"></i>');
+            // }, 1000);
+        }
+
+    });
+</script>
+
+{% if session.user == true and session.access_level >= 2 %}
+<!-- ============= CHAT  =========================================== -->
+<script>
+   function newChatAlert() {
+
+      // create instance of audio object
+      let alert = new Audio();
+
+      // store sound in src property of alert obj
+      alert.src = "/assets/sound/good-morning.mp3";
+
+      // call play method of alert object
+      alert.play();
+   }
+
+
+    // run function every 10 seconds
+    setInterval(function() {
+        let count = isChatNew();
+    }, 15000);
+
+
+    function isChatNew() {
+        let newChatId = '';
+
+        $.ajax({
+            url: '/chats/check-for-chat',
+            type: 'POST',
+            data: { newChatId: 'newChatId' },
+            dataType: 'JSON',
+            success: function(count){
+                console.log(`Count: ${count}`);
+
+            // new chat launched
+            if (count == 1) {
+               console.log(`Count inside success: ${count}`);
+               $("#topnav-chatAlert a").html("New Chat Alert!");
+               $("#topnav-chatAlert").css("display", "block");
+               newChatAlert();
+            // ArmaLaser responded - chat now in session
+            } else if (count > 1) {
+               $("#topnav-chatAlert a").html("Chat in Session!");
+               $("#topnav-chatAlert").css("display", "block");
+            // chat ended - restore menu to normal
+            } else {
+               $("#topnav-chatAlert a").html("");
+               $("#topnav-chatAlert").css("display", "none");
+            }
+
+            },
+                error: function(){
+                console.log('Error in Ajax request.');
+            }
+        });
+    }
+</script>
+   {% endif %}
+
+   {% include 'google-analytics.html' %}
+   {% block bottomjs %}
+
+   {% endblock %}
+   </body>
+</html>

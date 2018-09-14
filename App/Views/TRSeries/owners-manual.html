@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+
+{% block title %}
+  TR Series Owners Manual | ArmaLaser
+{% endblock %}
+
+{% block metadescription %}
+View or download the owner's manual for ArmaLaser's TR Series lasers.
+{% endblock %}
+
+{% block css %}
+{% endblock %}
+
+{% block outsidecontainer %}
+{% endblock %}
+
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-8 col-md-offset-2">
+          <h1 class="pagetitle">{{ pagetitle }}</h1>
+             <div class="pdf-owners-manual">
+                <!-- <iframe src="http://docs.google.com/gview?url=http://www.armalaser.com/manuals/tr-manual.pdf&embedded=true"
+                  style="width:100%; height:1000px;" frameborder="0">
+                </iframe> -->
+                <!-- <embed src="/assets/manuals/tr-manual.pdf"> -->
+
+                <object data="/assets/manuals/tr-manual.pdf" type="application/pdf" width="100%" height="100%">
+                    <h3>
+                        This browser does not support PDFs.
+                        <br><br>
+                        Please download the PDF to view it:
+                    </h3>
+                    <h3>
+                        <a href="/assets/manuals/tr-manual.pdf">
+                           <img class="img-responsive" src="/assets/images/download_pdf.jpg" alt="Download owners manual">
+                        </a>
+                    </h3>
+                </object>
+             </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+
+{% block bottomjs %}
+
+{% endblock %}

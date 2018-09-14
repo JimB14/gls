@@ -1,0 +1,102 @@
+{% extends 'base-admin.html' %}
+
+{% block title %}
+  Batteries | Armaitem
+{% endblock %}
+
+{% block css %}
+{% endblock %}
+
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div id="dashboard-toggle" class="col-md-10" style="margin-top:-20px;margin-left:254px;">
+
+          <div class="col-md-4">
+              {% if pagetitle %}
+                <h2 style="margin-left:-15px;">
+                  {{ pagetitle }}
+                  {% if batteries|length > 0 %}
+                    <span class="badge" style="margin: -18px 0px 0px 7px;">
+                        {{ batteries|length }}
+                    </span>
+                  {% endif %}
+                </h2>
+          </div>
+
+
+          {% if batteries %}
+            <table class="table table-bordered table-striped bg-fff display-broker-agents">
+              <thead>
+                  <tr>
+                      <th class="text-center">Add to Cart</th>
+                      <th>Image</th>
+                      <th>Name</th>
+                      <th>Laser Series</th>
+                      <th>MAP</th>
+                      <th>Price</th>
+                      <th>% off MAP</th>
+                      <th>UPC</th>
+                  </tr>
+              </thead>
+
+              <tbody>
+                  {% for item in batteries %}
+                  <tr>
+                      <td class="text-center">
+                          <a id="add-to-dealer-cart-{{ item.id }}" class='btn btn-success btn-sm'
+                              href="/admin/dealer/add-to-cart/{{ item.mvc_model }}/{{ item.id }}/{{ item.slug }}/{{ item.laser_series }}"
+                              {% if item.id in session.ids %} disabled {% endif %}>
+
+                              {% if item.id in session.ids %} In Cart {% else %} Add{% endif %}
+                          </a>
+                      </td>
+                      <td class="text-center">
+                          <a href="/laser-accessories/{{ item.mvc_model }}/{{ item.id }}/{{ item.slug }}">
+                              <img src="/assets/images/batteries/{{ item.image_thumb }}"
+                                  height="40px" alt="Need image">
+                          </a>
+                      </td>
+                      <td><a title="See item details"  href="/laser-accessories/{{ item.mvc_model }}/{{ item.id }}/{{ item.slug }}">{{ item.name }}</a></td>
+                      <td>{% if item.laser_series == 'tr-series-gto-flx' %}TR SERIES &amp; GTO/FLX {% else %}{{ item.laser_series|upper }}{% endif %}</td>
+                      <td>{{ item.price }}</td>
+                      <td>{{ item.price_dealer }}</td>
+                      <td>{{ (((item.price - item.price_dealer)/item.price) * 100)|number_format(1) }}%</td>
+                      <td>{{ item.upc }}</td>
+                  </tr>
+                  {% endfor %}
+              </tbody>
+            </table>
+
+            <p style="margin-top: -3px;" class="pull-left"><a href="#top" title="Go to top of page"><i style="margin-top: -15px; color:#ccc;" class="fa fa-arrow-circle-o-up fa-3x" aria-hidden="true"></i></a></p>
+            <p style="margin-top: -3px;" class="pull-right"><a href="#top" title="Go to top of page"><i style="margin-top: -15px; color:#ccc;" class="fa fa-arrow-circle-o-up fa-3x" aria-hidden="true"></i></a></p>
+
+
+            {% else %}
+            <div class="col-md-8" style="margin-left:-15px;">
+                <div class="alert alert-warning" style="margin-top:30px;">
+                    <h4 style="margin-bottom:0px;">
+                      No batteries to display
+                    </h4>
+                </div>
+            </div>
+            {% endif %}
+        {% endif %}    
+
+
+      </div><!--  // col-md-12  -->
+    </div><!--  // .row  -->
+</div><!-- // .container-fluid  -->
+{% endblock %}
+
+
+{% block bottomjs %}
+<script>
+$(document).ready(function(){
+
+
+});
+</script>
+
+{% endblock %}

@@ -1,0 +1,446 @@
+RewriteEngine On
+
+RewriteRule .* public/$0 [L]
+
+# Redirect SCCY link in promotion
+Redirect 301 /sccy.html http://gunlaser.store/sccy/cpx-2-tt-9mm/tr-series/1019/tr10
+
+#Redirect TR Series links
+#TR1 & TR1G
+Redirect 301 /lasers/get-laser-model/149 http://gunlaser.store/kel-tec/p-3at/tr-series/1001/tr1
+Redirect 301 /lasers/get-laser-model/150 http://gunlaser.store/kel-tec/p-32/tr-series/1002/tr1g
+#TR2 & TR2G
+Redirect 301 /lasers/get-laser-model/179 http://gunlaser.store/ruger/lcp/tr-series/1003/tr2
+Redirect 301 /lasers/get-laser-model/180 http://gunlaser.store/ruger/lcp/tr-series/1004/tr2g
+#TR4 & TR4G
+Redirect 301 /lasers/get-laser-model/151 http://gunlaser.store/smith-wesson/mp-9-shield/tr-series/1007/tr4
+Redirect 301 /lasers/get-laser-model/152 http://gunlaser.store/smith-wesson/mp-9-shield/tr-series/1008/tr4g
+#TR5 & TR5G
+Redirect 301 /lasers/get-laser-model/153 http://gunlaser.store/glock/g42/tr-series/1009/tr5
+Redirect 301 /lasers/get-laser-model/154 http://gunlaser.store/glock/g42/tr-series/1010/tr5g
+#TR6 & TR6G
+Redirect 301 /lasers/get-laser-model/189 http://gunlaser.store/glock/g26/tr-series/1011/tr6
+Redirect 301 /lasers/get-laser-model/190 http://gunlaser.store/glock/g33/tr-series/1012/tr6g
+#TR7 & TR7G
+Redirect 301 /lasers/get-laser-model/155 http://gunlaser.store/hk/usp/tr-series/1013/tr7
+Redirect 301 /lasers/get-laser-model/156 http://gunlaser.store/hk/usp/tr-series/1014/tr7g
+#TR8 & TR8G
+Redirect 301 /lasers/get-laser-model/171 http://gunlaser.store/sig-sauer/p238/tr-series/1015/tr8
+Redirect 301 /lasers/get-laser-model/172 http://gunlaser.store/sig-sauer/p938/tr-series/1016/tr8g
+#TR9 & TR9G
+Redirect 301 /lasers/get-laser-model/157 http://gunlaser.store/ruger/ec9s/tr-series/1017/tr9
+Redirect 301 /lasers/get-laser-model/158 http://gunlaser.store/ruger/ec9s/tr-series/1018/tr9g
+#TR10 & TR10G
+Redirect 301 /lasers/get-laser-model/159 http://gunlaser.store/sccy/cpx-1-cb-9mm/tr-series/1019/tr10
+Redirect 301 /lasers/get-laser-model/160 http://gunlaser.store/sccy/cpx-1-cb-9mm/tr-series/1020/tr10g
+#TR11 & TR11G
+Redirect 301 /lasers/get-laser-model/161 http://gunlaser.store/taurus/pt-111-millennium-pro/tr-series/1021/tr11
+Redirect 301 /lasers/get-laser-model/162 http://gunlaser.store/taurus/pt-111-millennium-pro/tr-series/1022/tr11g
+#TR12 & TR12G
+Redirect 301 /lasers/get-laser-model/209 http://gunlaser.store/ruger/lcpii/tr-series/1023/tr12
+Redirect 301 /lasers/get-laser-model/210 http://gunlaser.store/ruger/lcpii/tr-series/1024/tr12g
+#TR14 & TR14G
+Redirect 301 /lasers/get-laser-model/163 http://gunlaser.store/kel-tec/p-11/tr-series/1027/tr14
+Redirect 301 /lasers/get-laser-model/164 http://gunlaser.store/kel-tec/p-11/tr-series/1028/tr14g
+#TR15 & TR15G
+Redirect 301 /lasers/get-laser-model/165 http://gunlaser.store/smith-wesson/sigma-sw9p/tr-series/1029/tr15
+Redirect 301 /lasers/get-laser-model/166 http://gunlaser.store/smith-wesson/sigma-sw9ve/tr-series/1030/tr15g
+#TR16 & TR16G
+Redirect 301 /lasers/get-laser-model/181 http://gunlaser.store/bersa/firestorm-380/tr-series/1031/tr16
+Redirect 301 /lasers/get-laser-model/182 http://gunlaser.store/bersa/thunder-380-combat/tr-series/1032/tr16g
+#TR17 & TR17G
+Redirect 301 /lasers/get-laser-model/183 http://gunlaser.store/colt/mustang-xsp/tr-series/1033/tr17
+Redirect 301 /lasers/get-laser-model/184 http://gunlaser.store/colt/mustang-xsp/tr-series/1034/tr17g
+#TR18 & TR18G
+Redirect 301 /lasers/get-laser-model/167 http://gunlaser.store/taurus/pt-709-slim/tr-series/1035/tr18
+Redirect 301 /lasers/get-laser-model/168 http://gunlaser.store/taurus/pt-709-slim/tr-series/1036/tr18g
+#TR19 & TR19G
+Redirect 301 /lasers/get-laser-model/187 http://gunlaser.store/kahr/p380-kp3833/tr-series/1037/tr19
+Redirect 301 /lasers/get-laser-model/188 http://gunlaser.store/kahr/p380-kp3833/tr-series/1038/tr19g
+#TR21 & TR21G
+Redirect 301 /lasers/get-laser-model/211 http://gunlaser.store/taurus/spectrum/tr-series/1041/tr21
+Redirect 301 /lasers/get-laser-model/212 http://gunlaser.store/taurus/spectrum/tr-series/1042/tr21g
+#TR23 & TR23G
+Redirect 301 /lasers/get-laser-model/185 http://gunlaser.store/taurus/pt-111-millennium-g2/tr-series/1045/tr23
+Redirect 301 /lasers/get-laser-model/186 http://gunlaser.store/taurus/pt-111-millennium-g2/tr-series/1046/tr23g
+
+#products by brand
+#beretta
+Redirect 301 /home/brand-products/Beretta  http://gunlaser.store/beretta?
+Redirect 301 /home/brand-products/beretta  http://gunlaser.store/beretta?
+#bersa
+Redirect 301 /home/brand-products/Bersa  http://gunlaser.store/bersa?
+Redirect 301 /home/brand-products/bersa  http://gunlaser.store/bersa?
+#century
+Redirect 301 /home/brand-products/Century  http://gunlaser.store/century?
+Redirect 301 /home/brand-products/century  http://gunlaser.store/century?
+#colt
+Redirect 301 /home/brand-products/Colt  http://gunlaser.store/colt?
+Redirect 301 /home/brand-products/colt  http://gunlaser.store/colt?
+#cz
+Redirect 301 /home/brand-products/CZ  http://gunlaser.store/cz?
+Redirect 301 /home/brand-products/cz  http://gunlaser.store/cz?
+#eaa
+Redirect 301 /home/brand-products/EAA  http://gunlaser.store/eaa?
+Redirect 301 /home/brand-products/eaa  http://gunlaser.store/eaa?
+#fmk
+Redirect 301 /home/brand-products/FMK  http://gunlaser.store/fmk?
+Redirect 301 /home/brand-products/fmk  http://gunlaser.store/fmk?
+#fn
+Redirect 301 /home/brand-products/FN  http://gunlaser.store/fn?
+Redirect 301 /home/brand-products/fn  http://gunlaser.store/fn?
+#glock
+Redirect 301 /home/brand-products/GLOCK  http://gunlaser.store/glock?
+Redirect 301 /home/brand-products/glock  http://gunlaser.store/glock?
+Redirect 301 /home/brand-products/Glock  http://gunlaser.store/glock?
+#hk
+Redirect 301 /home/brand-products/HK  http://gunlaser.store/hk?
+Redirect 301 /home/brand-products/hk  http://gunlaser.store/hk?
+#iwi
+Redirect 301 /home/brand-products/Jericho  http://gunlaser.store/jericho?
+Redirect 301 /home/brand-products/jericho  http://gunlaser.store/jericho?
+#kahr
+Redirect 301 /home/brand-products/Kahr  http://gunlaser.store/kahr?
+Redirect 301 /home/brand-products/kahr  http://gunlaser.store/kahr?
+#kel-tec
+Redirect 301 /home/brand-products/Kel-Tec  http://gunlaser.store/kel-tec?
+Redirect 301 /home/brand-products/kel-tec  http://gunlaser.store/kel-tec?
+#ruger
+Redirect 301 /home/brand-products/Ruger  http://gunlaser.store/ruger?
+Redirect 301 /home/brand-products/ruger  http://gunlaser.store/ruger?
+#sccy
+Redirect 301 /home/brand-products/SCCY  http://gunlaser.store/sccy?
+Redirect 301 /home/brand-products/sccy  http://gunlaser.store/sccy?
+#sig-sauer
+Redirect 301 /home/brand-products/SIG%20Sauer  http://gunlaser.store/sig-sauer?
+Redirect 301 /home/brand-products/SIG-Sauer  http://gunlaser.store/sig-sauer?
+Redirect 301 /home/brand-products/sig%20sauer  http://gunlaser.store/sig-sauer?
+Redirect 301 /home/brand-products/sig-sauer  http://gunlaser.store/sig-sauer?
+Redirect 301 /home/brand-products/sigsauer  http://gunlaser.store/sig-sauer?
+#smith-wesson
+Redirect 301 /home/brand-products/Smith-Wesson  http://gunlaser.store/smith-wesson?
+Redirect 301 /home/brand-products/smith-wesson  http://gunlaser.store/smith-wesson?
+Redirect 301 /home/brand-products/smith%20wesson  http://gunlaser.store/smith-wesson?
+#springfield
+Redirect 301 /home/brand-products/Springfield  http://gunlaser.store/springfield?
+Redirect 301 /home/brand-products/springfield  http://gunlaser.store/springfield?
+#steyr
+Redirect 301 /home/brand-products/Steyr  http://gunlaser.store/steyr?
+Redirect 301 /home/brand-products/steyr  http://gunlaser.store/steyr?
+#taurus
+Redirect 301 /home/brand-products/Taurus  http://gunlaser.store/taurus?
+Redirect 301 /home/brand-products/taurus  http://gunlaser.store/taurus?
+#walther
+Redirect 301 /home/brand-products/Walther  http://gunlaser.store/walther?
+Redirect 301 /home/brand-products/walther  http://gunlaser.store/walther?
+
+#GTO/FLX
+#gto/flx01 & gtog/flx01
+Redirect 301 /lasers/get-laser-model/1 http://gunlaser.store/kel-tec/pf-9/gto-flx/2001/gto-flx01?
+Redirect 301 /lasers/get-laser-model/2 http://gunlaser.store/kel-tec/pf-9/gto-flx/2002/gtog-flx01?
+#gto/flx02 & gtog/flx02
+Redirect 301 /lasers/get-laser-model/3 http://gunlaser.store/kel-tec/pmr-30/gto-flx/2003/gto-flx02?
+Redirect 301 /lasers/get-laser-model/4 http://gunlaser.store/kel-tec/pmr-30/gto-flx/2004/gtog-flx02?
+#gto/flx03 & gtog/flx03
+Redirect 301 /lasers/get-laser-model/5 http://gunlaser.store/smith-wesson/sw-sd40-ve-std-capacity/gto-flx/2005/gto-flx03?
+Redirect 301 /lasers/get-laser-model/6 http://gunlaser.store/smith-wesson/sw-sd40-ve-std-capacity/gto-flx/2006/gtog-flx03?
+#gto/flx04 & gtog/flx04
+Redirect 301 /lasers/get-laser-model/7 http://gunlaser.store/smith-wesson/mp-35/gto-flx/2007/gto-flx04?
+Redirect 301 /lasers/get-laser-model/8 http://gunlaser.store/smith-wesson/mp-35/gto-flx/2008/gtog-flx04?
+#gto/flx05 & gtog/flx05
+Redirect 301 /lasers/get-laser-model/9  http://gunlaser.store/smith-wesson/mp-50/gto-flx/2009/gto-flx05?
+Redirect 301 /lasers/get-laser-model/10 http://gunlaser.store/smith-wesson/mp-50/gto-flx/2010/gtog-flx05?
+#gto/flx06 & gtog/flx06
+Redirect 301 /lasers/get-laser-model/11 http://gunlaser.store/bersa/thunder-pro-hc-40s-w/gto-flx/2011/gto-flx06?
+Redirect 301 /lasers/get-laser-model/12 http://gunlaser.store/bersa/thunder-pro-hc-40s-w/gto-flx/2012/gtog-flx06?
+#gto/flx07 & gtog/flx07
+Redirect 301 /lasers/get-laser-model/13 http://gunlaser.store/bersa/bp40cc/gto-flx/2013/gto-flx07?
+Redirect 301 /lasers/get-laser-model/14 http://gunlaser.store/bersa/bp40cc/gto-flx/2014/gtog-flx07?
+#gto/flx08 & gtog/flx08
+Redirect 301 /lasers/get-laser-model/15 http://gunlaser.store/springfield/xd-30-sub-compact/gto-flx/2015/gto-flx08?
+Redirect 301 /lasers/get-laser-model/16 http://gunlaser.store/springfield/xd-30-sub-compact/gto-flx/2016/gtog-flx08?
+#gto/flx09 & gtog/flx09
+Redirect 301 /lasers/get-laser-model/17 http://gunlaser.store/springfield/xd-s-40-model/gto-flx/2017/gto-flx09?
+Redirect 301 /lasers/get-laser-model/18 http://gunlaser.store/springfield/xd-s-40-model/gto-flx/2018/gtog-flx09?
+#gto/flx10 & gtog/flx10
+Redirect 301 /lasers/get-laser-model/19 http://gunlaser.store/springfield/xd-tactical-model-9mm/gto-flx/2019/gto-flx10?
+Redirect 301 /lasers/get-laser-model/20 http://gunlaser.store/springfield/xd-tactical-model-9mm/gto-flx/2020/gtog-flx10?
+
+#gto/flx11 & gtog/flx11
+Redirect 301 /lasers/get-laser-model/21 http://gunlaser.store/springfield/xd-m-38-compact-model/gto-flx/2021/gto-flx11?
+Redirect 301 /lasers/get-laser-model/22 http://gunlaser.store/springfield/xd-m-38-compact-model/gto-flx/2022/gtog-flx11?
+#gto/flx12 & gtog/flx12
+Redirect 301 /lasers/get-laser-model/23 http://gunlaser.store/springfield/xd-m-525-competition-model/gto-flx/2023/gto-flx12?
+Redirect 301 /lasers/get-laser-model/24 http://gunlaser.store/springfield/xd-m-525-competition-model/gto-flx/2024/gtog-flx12?
+#gto/flx13 & gtog/flx13
+Redirect 301 /lasers/get-laser-model/25 http://gunlaser.store/hk/hk45-compact/gto-flx/2025/gto-flx13?
+Redirect 301 /lasers/get-laser-model/26 http://gunlaser.store/hk/hk45-compact/gto-flx/2026/gtog-flx13?
+#gto/flx14 & gtog/flx14
+Redirect 301 /lasers/get-laser-model/27 http://gunlaser.store/hk/hk45-tactical/gto-flx/2027/gto-flx14?
+Redirect 301 /lasers/get-laser-model/28 http://gunlaser.store/hk/hk45-tactical/gto-flx/2028/gtog-flx14?
+#gto/flx15 & gtog/flx15
+Redirect 301 /lasers/get-laser-model/29 http://gunlaser.store/hk/p2000-sk/gto-flx/2029/gto-flx15?
+Redirect 301 /lasers/get-laser-model/30 http://gunlaser.store/hk/p2000-sk/gto-flx/2030/gtog-flx15?
+#gto/flx16 & gtog/flx16
+Redirect 301 /lasers/get-laser-model/31 http://gunlaser.store/hk/p2000/gto-flx/2031/gto-flx16?
+Redirect 301 /lasers/get-laser-model/32 http://gunlaser.store/hk/p2000/gto-flx/2032/gtog-flx16?
+#gto/flx17 & gtog/flx17
+Redirect 301 /lasers/get-laser-model/33 http://gunlaser.store/hk/p30l/gto-flx/2033/gto-flx17?
+Redirect 301 /lasers/get-laser-model/34 http://gunlaser.store/hk/p30l/gto-flx/2034/gtog-flx17?
+#gto/flx18 & gtog/flx18
+Redirect 301 /lasers/get-laser-model/35 http://gunlaser.store/sig-sauer/p250-nitron-compact-ap/gto-flx/2035/gto-flx18?
+Redirect 301 /lasers/get-laser-model/36 http://gunlaser.store/sig-sauer/p250-nitron-compact-ap/gto-flx/2036/gtog-flx18?
+#gto/flx19 & gtog/flx19
+Redirect 301 /lasers/get-laser-model/37 http://gunlaser.store/glock/g30/gto-flx/2037/gto-flx19?
+Redirect 301 /lasers/get-laser-model/38 http://gunlaser.store/glock/g30/gto-flx/2038/gtog-flx19?
+#gto/flx20 & gtog/flx20
+Redirect 301 /lasers/get-laser-model/39 http://gunlaser.store/glock/g22/gto-flx/2039/gto-flx20?
+Redirect 301 /lasers/get-laser-model/40 http://gunlaser.store/glock/g32/gto-flx/2040/gtog-flx20?
+
+#gto/flx21 & gtog/flx21
+Redirect 301 /lasers/get-laser-model/41 http://gunlaser.store/taurus/247-325/gto-flx/2041/gto-flx21?
+Redirect 301 /lasers/get-laser-model/42 http://gunlaser.store/taurus/247-325/gto-flx/2042/gtog-flx21?
+#gto/flx22 & gtog/flx22
+Redirect 301 /lasers/get-laser-model/43 http://gunlaser.store/taurus/247-525/gto-flx/2043/gto-flx22?
+Redirect 301 /lasers/get-laser-model/44 http://gunlaser.store/taurus/247-525/gto-flx/2044/gtog-flx22?
+#gto/flx23 & gtog/flx23
+Redirect 301 /lasers/get-laser-model/45 http://gunlaser.store/taurus/pt-140-millennium-g2/gto-flx/2045/gto-flx23?
+Redirect 301 /lasers/get-laser-model/46 http://gunlaser.store/taurus/pt-140-millennium-g2/gto-flx/2046/gtog-flx23?
+#gto/flx24 & gtog/flx24
+Redirect 301 /lasers/get-laser-model/47 http://gunlaser.store/taurus/pt-145-millennium-pro/gto-flx/2047/gto-flx24?
+Redirect 301 /lasers/get-laser-model/48 http://gunlaser.store/taurus/pt-145-millennium-pro/gto-flx/2048/gtog-flx24?
+#gto/flx25 & gtog/flx25
+Redirect 301 /lasers/get-laser-model/89 http://gunlaser.store/taurus/247-g2-35/gto-flx/2049/gto-flx25?
+Redirect 301 /lasers/get-laser-model/50 http://gunlaser.store/taurus/247-g2-35/gto-flx/2050/gtog-flx25?
+#gto/flx26 & gtog/flx26
+Redirect 301 /lasers/get-laser-model/51 http://gunlaser.store/taurus/247-g2-42/gto-flx/2051/gto-flx26?
+Redirect 301 /lasers/get-laser-model/52 http://gunlaser.store/taurus/247-g2-42/gto-flx/2052/gtog-flx26?
+#gto/flx27 & gtog/flx27
+Redirect 301 /lasers/get-laser-model/53 http://gunlaser.store/taurus/840c/gto-flx/2053/gto-flx27?
+Redirect 301 /lasers/get-laser-model/54 http://gunlaser.store/taurus/840c/gto-flx/2054/gtog-flx27?
+#gto/flx28 & gtog/flx28
+Redirect 301 /lasers/get-laser-model/55 http://gunlaser.store/taurus/845/gto-flx/2055/gto-flx28?
+Redirect 301 /lasers/get-laser-model/56 http://gunlaser.store/taurus/845/gto-flx/2056/gtog-flx28?
+#gto/flx29 & gtog/flx29
+Redirect 301 /lasers/get-laser-model/57 http://gunlaser.store/fn/fn-five-seven/gto-flx/2057/gto-flx29?
+Redirect 301 /lasers/get-laser-model/58 http://gunlaser.store/fn/fn-five-seven/gto-flx/2058/gtog-flx29?
+#gto/flx30 & gtog/flx30
+Redirect 301 /lasers/get-laser-model/59 http://gunlaser.store/fn/fns-series/gto-flx/2059/gto-flx30?
+Redirect 301 /lasers/get-laser-model/60 http://gunlaser.store/fn/fns-series/gto-flx/2060/gtog-flx30?
+
+#gto/flx31 & gtog/flx31
+Redirect 301 /lasers/get-laser-model/61 http://gunlaser.store/cz/cz-p-09-9mm-black-polymer-19-rd-mags/gto-flx/2061/gto-flx31?
+Redirect 301 /lasers/get-laser-model/62 http://gunlaser.store/cz/cz-p-09-9mm-black-polymer-19-rd-mags/gto-flx/2062/gtog-flx31?
+#gto/flx32 & gtog/flx32
+Redirect 301 /lasers/get-laser-model/63 http://gunlaser.store/sig-sauer/p250-nitron-sub-compact-ap/gto-flx/2063/gto-flx32?
+Redirect 301 /lasers/get-laser-model/64 http://gunlaser.store/sig-sauer/p250-nitron-sub-compact-ap/gto-flx/2064/gtog-flx32?
+#gto/flx33 & gtog/flx33
+Redirect 301 /lasers/get-laser-model/65 http://gunlaser.store/steyr/s-a1-pistol/gto-flx/2065/gto-flx33?
+Redirect 301 /lasers/get-laser-model/66 http://gunlaser.store/steyr/s-a1-pistol/gto-flx/2066/gtog-flx33?
+#gto/flx34 & gtog/flx34
+Redirect 301 /lasers/get-laser-model/67 http://gunlaser.store/steyr/m-a1-pistol/gto-flx/2067/gto-flx34?
+Redirect 301 /lasers/get-laser-model/68 http://gunlaser.store/steyr/m-a1-pistol/gto-flx/2068/gtog-flx34?
+#gto/flx35 & gtog/flx35 (fits Caracal cp660 & cp661 - discontinued laser)
+#Redirect 301 /lasers/get-laser-model/69 http://gunlaser.store/fn/fns-series/gto-flx/2059/gto-flx35?
+#Redirect 301 /lasers/get-laser-model/70 http://gunlaser.store/fn/fns-series/gto-flx/2060/gtog-flx35?
+#gto/flx36 & gtog/flx36
+Redirect 301 /lasers/get-laser-model/71 http://gunlaser.store/beretta/px4-storm-subcompact/gto-flx/2071/gto-flx36?
+Redirect 301 /lasers/get-laser-model/72 http://gunlaser.store/beretta/px4-storm-subcompact/gto-flx/2072/gtog-flx36?
+#gto/flx37 & gtog/flx37
+Redirect 301 /lasers/get-laser-model/73 http://gunlaser.store/beretta/px4-storm-full/gto-flx/2073/gto-flx37?
+Redirect 301 /lasers/get-laser-model/74 http://gunlaser.store/beretta/px4-storm-full/gto-flx/2074/gtog-flx37?
+#gto/flx38 & gtog/flx38
+Redirect 301 /lasers/get-laser-model/75 http://gunlaser.store/beretta/m9/gto-flx/2075/gto-flx38?
+Redirect 301 /lasers/get-laser-model/76 http://gunlaser.store/beretta/96/gto-flx/2076/gtog-flx38?
+#gto/flx39 & gtog/flx39
+Redirect 301 /lasers/get-laser-model/77 http://gunlaser.store/sig-sauer/p250-nitron-full-size-ap/gto-flx/2077/gto-flx39?
+Redirect 301 /lasers/get-laser-model/78 http://gunlaser.store/sig-sauer/p250-nitron-full-size-ap/gto-flx/2078/gtog-flx39?
+#gto/flx40 & gtog/flx40
+Redirect 301 /lasers/get-laser-model/79 http://gunlaser.store/sig-sauer/sp2022/gto-flx/2079/gto-flx40?
+Redirect 301 /lasers/get-laser-model/80 http://gunlaser.store/sig-sauer/sp2022/gto-flx/2080/gtog-flx40?
+
+#gto/flx41 & gtog/flx41
+Redirect 301 /lasers/get-laser-model/81 http://gunlaser.store/sig-sauer/mosquito/gto-flx/2081/gto-flx41?
+Redirect 301 /lasers/get-laser-model/82 http://gunlaser.store/sig-sauer/mosquito/gto-flx/2082/gtog-flx41?
+#gto/flx42 & gtog/flx42
+Redirect 301 /lasers/get-laser-model/83 http://gunlaser.store/walther/ppq-m2/gto-flx/2083/gto-flx42?
+Redirect 301 /lasers/get-laser-model/84 http://gunlaser.store/walther/ppq-m2/gto-flx/2084/gtog-flx42?
+#gto/flx43 & gtog/flx43
+Redirect 301 /lasers/get-laser-model/85 http://gunlaser.store/walther/ppx/gto-flx/2085/gto-flx43?
+Redirect 301 /lasers/get-laser-model/86 http://gunlaser.store/walther/ppx/gto-flx/2086/gtog-flx43?
+#gto/flx44 & gtog/flx44
+Redirect 301 /lasers/get-laser-model/87 http://gunlaser.store/walther/p99/gto-flx/2087/gto-flx44?
+Redirect 301 /lasers/get-laser-model/88 http://gunlaser.store/walther/p99/gto-flx/2088/gtog-flx44?
+#gto/flx45 & gtog/flx45
+Redirect 301 /lasers/get-laser-model/89 http://gunlaser.store/ruger/sr40/gto-flx/2089/gto-flx45?
+Redirect 301 /lasers/get-laser-model/90 http://gunlaser.store/ruger/sr9c/gto-flx/2090/gtog-flx45?
+#gto/flx46 & gtog/flx46
+Redirect 301 /lasers/get-laser-model/91 http://gunlaser.store/ruger/9e/gto-flx/2091/gto-flx46?
+Redirect 301 /lasers/get-laser-model/92 http://gunlaser.store/ruger/sr9/gto-flx/2092/gtog-flx46?
+#gto/flx47 & gtog/flx47
+Redirect 301 /lasers/get-laser-model/93 http://gunlaser.store/ruger/p95/gto-flx/2093/gto-flx47?
+Redirect 301 /lasers/get-laser-model/94 http://gunlaser.store/ruger/p95/gto-flx/2094/gtog-flx47?
+#gto/flx48 & gtog/flx48
+Redirect 301 /lasers/get-laser-model/95 http://gunlaser.store/ruger/sr22pistol/gto-flx/2095/gto-flx48?
+Redirect 301 /lasers/get-laser-model/96 http://gunlaser.store/ruger/sr22pistol/gto-flx/2096/gtog-flx48?
+#gto/flx49 & gtog/flx49
+Redirect 301 /lasers/get-laser-model/97 http://gunlaser.store/ruger/p345/gto-flx/2097/gto-flx49?
+Redirect 301 /lasers/get-laser-model/98 http://gunlaser.store/ruger/p345/gto-flx/2098/gtog-flx49?
+#gto/flx50 & gtog/flx50
+Redirect 301 /lasers/get-laser-model/99  http://gunlaser.store/eaa/witness-polymer-36/gto-flx/2099/gto-flx50?
+Redirect 301 /lasers/get-laser-model/100 http://gunlaser.store/eaa/witness-polymer-36/gto-flx/2100/gtog-flx50?
+
+#gto/flx51 & gtog/flx51
+Redirect 301 /lasers/get-laser-model/101 http://gunlaser.store/taurus/pt-92-af/gto-flx/2101/gto-flx51?
+Redirect 301 /lasers/get-laser-model/102 http://gunlaser.store/taurus/pt-92-af/gto-flx/2102/gtog-flx51?
+#gto/flx52 & gtog/flx52
+Redirect 301 /lasers/get-laser-model/103 http://gunlaser.store/beretta/px4-storm-compact/gto-flx/2103/gto-flx52?
+Redirect 301 /lasers/get-laser-model/104 http://gunlaser.store/beretta/px4-storm-compact/gto-flx/2104/gtog-flx52?
+#gto/flx53 & gtog/flx53
+Redirect 301 /lasers/get-laser-model/105 http://gunlaser.store/cz/cz-p-01-9mm-black-alloy-14-rd-mags/gto-flx/2105/gto-flx53?
+Redirect 301 /lasers/get-laser-model/106 http://gunlaser.store/cz/cz-p-01-9mm-black-alloy-14-rd-mags/gto-flx/2106/gtog-flx53?
+#gto/flx54 & gtog/flx54
+Redirect 301 /lasers/get-laser-model/107 http://gunlaser.store/springfield/xd-mod-2-33-sub-compact-model/gto-flx/2107/gto-flx54?
+Redirect 301 /lasers/get-laser-model/108 http://gunlaser.store/springfield/xd-mod-2-33-sub-compact-model/gto-flx/2108/gtog-flx54?
+#gto/flx55 & gtog/flx55
+Redirect 301 /lasers/get-laser-model/109 http://gunlaser.store/hk/vp9/gto-flx/2109/gto-flx55?
+Redirect 301 /lasers/get-laser-model/110 http://gunlaser.store/hk/vp9/gto-flx/2110/gtog-flx55?
+#gto/flx56 & gtog/flx56
+Redirect 301 /lasers/get-laser-model/111 http://gunlaser.store/ruger/22-45-threaded-barrel/gto-flx/2111/gto-flx56?
+Redirect 301 /lasers/get-laser-model/112 http://gunlaser.store/ruger/22-45-threaded-barrel/gto-flx/2112/gtog-flx56?
+#gto/flx57 & gtog/flx57 - no gto/flx57
+#gto/flx58 & gtog/flx58
+Redirect 301 /lasers/get-laser-model/115 http://gunlaser.store/taurus/pt-92/gto-flx/2115/gto-flx58?
+Redirect 301 /lasers/get-laser-model/116 http://gunlaser.store/taurus/pt-92/gto-flx/2116/gtog-flx58?
+#gto/flx59 & gtog/flx59
+Redirect 301 /lasers/get-laser-model/117 http://gunlaser.store/walther/ccp/gto-flx/2117/gto-flx59?
+Redirect 301 /lasers/get-laser-model/118 http://gunlaser.store/walther/ccp/gto-flx/2118/gtog-flx59?
+#gto/flx60 & gtog/flx60
+Redirect 301 /lasers/get-laser-model/119 http://gunlaser.store/fn/fnp-late-multiple-notches/gto-flx/2119/gto-flx60?
+Redirect 301 /lasers/get-laser-model/120 http://gunlaser.store/fn/fnp-late-multiple-notches/gto-flx/2120/gtog-flx60?
+
+#gto/flx61 & gtog/flx61
+Redirect 301 /lasers/get-laser-model/121 http://gunlaser.store/century/tp9/gto-flx/2121/gto-flx61?
+Redirect 301 /lasers/get-laser-model/122 http://gunlaser.store/century/tp9/gto-flx/2122/gtog-flx61?
+#gto/flx62 & gtog/flx62
+Redirect 301 /lasers/get-laser-model/123 http://gunlaser.store/fn/fnp-early-single-notch/gto-flx/2123/gto-flx62?
+Redirect 301 /lasers/get-laser-model/124 http://gunlaser.store/fn/fnp-early-single-notch/gto-flx/2124/gtog-flx62?
+#gto/flx63 & gtog/flx63
+Redirect 301 /lasers/get-laser-model/125 http://gunlaser.store/sig-sauer/p320-nitron-compact/gto-flx/2125/gto-flx63?
+Redirect 301 /lasers/get-laser-model/126 http://gunlaser.store/sig-sauer/p320-nitron-compact/gto-flx/2126/gtog-flx63?
+#gto/flx64 & gtog/flx64
+Redirect 301 /lasers/get-laser-model/127 http://gunlaser.store/century/tp9sa/gto-flx/2127/gto-flx64?
+Redirect 301 /lasers/get-laser-model/128 http://gunlaser.store/century/tp9sa/gto-flx/2128/gtog-flx64?
+#gto/flx65 & gtog/flx65
+Redirect 301 /lasers/get-laser-model/129 http://gunlaser.store/sig-sauer/p320-nitron-full-size/gto-flx/2129/gto-flx65?
+Redirect 301 /lasers/get-laser-model/130 http://gunlaser.store/sig-sauer/p320-nitron-full-size/gto-flx/2130/gtog-flx65?
+#gto/flx66 & gtog/flx66
+Redirect 301 /lasers/get-laser-model/131 http://gunlaser.store/taurus/pt-1911/gto-flx/2131/gto-flx66?
+Redirect 301 /lasers/get-laser-model/132 http://gunlaser.store/taurus/pt-1911/gto-flx/2132/gtog-flx66?
+#gto/flx67 & gtog/flx67
+Redirect 301 /lasers/get-laser-model/133 http://gunlaser.store/sig-sauer/p226/gto-flx/2133/gto-flx67?
+Redirect 301 /lasers/get-laser-model/134 http://gunlaser.store/sig-sauer/p226/gto-flx/2134/gtog-flx67?
+#gto/flx68 & gtog/flx68
+Redirect 301 /lasers/get-laser-model/135 http://gunlaser.store/cz/75/gto-flx/2135/gto-flx68?
+Redirect 301 /lasers/get-laser-model/133 http://gunlaser.store/cz/75/gto-flx/2136/gtog-flx68?
+#gto/flx69 & gtog/flx69
+Redirect 301 /lasers/get-laser-model/137 http://gunlaser.store/sig-sauer/p229/gto-flx/2137/gto-flx69?
+Redirect 301 /lasers/get-laser-model/138 http://gunlaser.store/sig-sauer/p229/gto-flx/2138/gtog-flx69?
+#gto/flx70 & gtog/flx70
+Redirect 301 /lasers/get-laser-model/139 http://gunlaser.store/jericho/941pl/gto-flx/2139/gto-flx70?
+Redirect 301 /lasers/get-laser-model/140 http://gunlaser.store/jericho/941pl/gto-flx/2140/gtog-flx70?
+
+#gto/flx71 & gtog/flx71
+Redirect 301 /lasers/get-laser-model/141 http://gunlaser.store/hk/p30sk/gto-flx/2141/gto-flx71?
+Redirect 301 /lasers/get-laser-model/142 http://gunlaser.store/hk/p30sk/gto-flx/2142/gtog-flx71?
+#gto/flx72 & gtog/flx72
+Redirect 301 /lasers/get-laser-model/143 http://gunlaser.store/smith-wesson/mp-22-compact/gto-flx/2143/gto-flx72?
+Redirect 301 /lasers/get-laser-model/144 http://gunlaser.store/smith-wesson/mp-22-compact/gto-flx/2144/gtog-flx72?
+#gto/flx73 & gtog/flx73
+Redirect 301 /lasers/get-laser-model/145 http://gunlaser.store/ruger/rugeramerican-duty/gto-flx/2145/gto-flx73?
+Redirect 301 /lasers/get-laser-model/146 http://gunlaser.store/ruger/rugeramerican-duty/gto-flx/2146/gtog-flx73?
+#gto/flx74 & gtog/flx74
+Redirect 301 /lasers/get-laser-model/147 http://gunlaser.store/fn/fns-9-compact/gto-flx/2147/gto-flx74?
+Redirect 301 /lasers/get-laser-model/148 http://gunlaser.store/fn/fns-9-compact/gto-flx/2148/gtog-flx74?
+#gto/flx75 & gtog/flx75
+Redirect 301 /lasers/get-laser-model/205 http://gunlaser.store/springfield/xd-mod-2-50-tactical-model/gto-flx/2149/gto-flx75?
+Redirect 301 /lasers/get-laser-model/206 http://gunlaser.store/springfield/xd-mod-2-50-tactical-model/gto-flx/2150/gtog-flx75?
+#gto/flx76 & gtog/flx76 (no gto/flx76)
+#gto/flx77 & gtog/flx77 (no gto/flx77)
+#gto/flx78 & gtog/flx78
+Redirect 301 /lasers/get-laser-model/193 http://gunlaser.store/sig-sauer/1911/gto-flx/2155/gto-flx78?
+Redirect 301 /lasers/get-laser-model/194 http://gunlaser.store/sig-sauer/1911/gto-flx/2156/gtog-flx78?
+#gto/flx79 & gtog/flx79 (no gto/flx79)
+#gto/flx80 & gtog/flx80
+Redirect 301 /lasers/get-laser-model/197 http://gunlaser.store/walther/creed/gto-flx/2159/gto-flx80?
+Redirect 301 /lasers/get-laser-model/198 http://gunlaser.store/walther/creed/gto-flx/2160/gtog-flx80?
+#gto/flx81 & gtog/flx81
+Redirect 301 /lasers/get-laser-model/199 http://gunlaser.store/fmk/9c1-g2/gto-flx/2161/gto-flx81?
+Redirect 301 /lasers/get-laser-model/200 http://gunlaser.store/fmk/9c1-g2/gto-flx/2162/gtog-flx81?
+#gto/flx82 & gtog/flx82
+Redirect 301 /lasers/get-laser-model/201 http://gunlaser.store/hk/vp9-sk/gto-flx/2163/gto-flx82?
+Redirect 301 /lasers/get-laser-model/202 http://gunlaser.store/hk/vp9-sk/gto-flx/2164/gtog-flx82?
+#gto/flx83 & gtog/flx83
+Redirect 301 /lasers/get-laser-model/204 http://gunlaser.store/springfield/xd-e-33-single-stack/gto-flx/2165/gto-flx83?
+Redirect 301 /lasers/get-laser-model/205 http://gunlaser.store/springfield/xd-e-33-single-stack/gto-flx/2166/gtog-flx83?
+
+
+
+## Changes below per GTMetrix.com ##
+
+## EXPIRES CACHING ##
+<IfModule mod_expires.c>
+  ExpiresActive On
+  ExpiresByType image/jpg "access plus 1 year"
+  ExpiresByType image/jpeg "access plus 1 year"
+  ExpiresByType image/gif "access plus 1 year"
+  ExpiresByType image/png "access plus 1 year"
+  ExpiresByType text/css "access plus 1 month"
+  ExpiresByType application/pdf "access plus 1 month"
+  ExpiresByType text/x-javascript "access plus 1 month"
+  ExpiresByType application/x-shockwave-flash "access plus 1 month"
+  ExpiresByType image/x-icon "access plus 1 year"
+
+  ExpiresDefault "access plus 2 days"
+
+  # Media: video
+  ExpiresByType video/mp4 "access plus 1 month"
+  ExpiresByType video/ogg "access plus 1 month"
+  ExpiresByType video/webm "access plus 1 month"
+
+  # JavaScript
+  ExpiresByType application/javascript "access plus 1 year"
+</IfModule>
+## // EXPIRES CACHING ##
+
+## Enables gzip compression ##
+<IfModule mod_deflate.c>
+  # Compress HTML, CSS, JavaScript, Text, XML and fonts
+  AddOutputFilterByType DEFLATE application/javascript
+  AddOutputFilterByType DEFLATE application/rss+xml
+  AddOutputFilterByType DEFLATE application/vnd.ms-fontobject
+  AddOutputFilterByType DEFLATE application/x-font
+  AddOutputFilterByType DEFLATE application/x-font-opentype
+  AddOutputFilterByType DEFLATE application/x-font-otf
+  AddOutputFilterByType DEFLATE application/x-font-truetype
+  AddOutputFilterByType DEFLATE application/x-font-ttf
+  AddOutputFilterByType DEFLATE application/x-javascript
+  AddOutputFilterByType DEFLATE application/xhtml+xml
+  AddOutputFilterByType DEFLATE application/xml
+  AddOutputFilterByType DEFLATE font/opentype
+  AddOutputFilterByType DEFLATE font/otf
+  AddOutputFilterByType DEFLATE font/ttf
+  AddOutputFilterByType DEFLATE image/svg+xml
+  AddOutputFilterByType DEFLATE image/x-icon
+  AddOutputFilterByType DEFLATE text/css
+  AddOutputFilterByType DEFLATE text/html
+  AddOutputFilterByType DEFLATE text/javascript
+  AddOutputFilterByType DEFLATE text/plain
+  AddOutputFilterByType DEFLATE text/xml
+
+  # Remove browser bugs (only needed for really old browsers)
+  BrowserMatch ^Mozilla/4 gzip-only-text/html
+  BrowserMatch ^Mozilla/4\.0[678] no-gzip
+  BrowserMatch \bMSIE !no-gzip !gzip-only-text/html
+  Header append Vary User-Agent
+</IfModule>

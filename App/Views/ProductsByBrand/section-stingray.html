@@ -1,0 +1,62 @@
+<!-- - - - - - - - - - - - - - - -  STINGRAY  - - - - - - - - - - - - - - - -->
+<!-- If array is not empty, execute foreach loop and display;  -->
+{% if stingray %}
+  <div id="bg-stingray">
+      <div class="container">
+          <div class="row">
+                  <h2 class="text-left">
+                    <span style="font-size: 130%;">
+                      STINGRAY
+                      <span style="color:#b7b7b7;">
+                        CLASSIC
+                      </span>
+                    </span>
+                    <span style="font-size:16px;padding-left:12px;">
+                      WORLD&#39;S SLIMMEST RAIL MOUNTED LASER &nbsp;&nbsp;
+                      <a href="/stingray-classic-laser">
+                        <span class="italic">
+                          What is STINGRAY CLASSIC?
+                        </span>
+                      </a>
+                    </span>
+                  </h2>
+
+              <div class="col-md-3">
+                  <ul class="products-by-brand">
+                      <li>
+                          <a href="/products/lasers/stingray/{{ stingray.pistolMfr }}/{{ stingray.id }}/{{ stingray.model }}">
+                              <img src="/assets/images/laser-pistol/stingray/sr1_250x150.png" alt="ArmaLaser Stingray Classic laser">
+                          </a>
+                      </li>
+                  </ul>
+              </div>
+
+              <div class="col-md-6">
+
+                  <div style="position:relative;">
+                      <div class="stingray-text-products-by-brand">
+                          <p>
+                            <span class="text-uppercase">
+                              Stingray Classic
+                            </span>
+                            attaches to the Picatinny Rail, and fits the following {% if stingray.pistolMfr == 'smith-wesson' %} Smith &amp; Wesson® {% else %} {{ stingray.pistolMfr|upper }}®{% endif %} models:
+                            <br>
+                            <span style="display:inline-block; padding-left: 13px;">{{ stingray.pistol_models|raw }}</span>
+                          </p>
+                      </div>
+                  </div>
+
+              </div>
+
+          </div><!-- // .row -->
+              <p class="text-size90 m-left30 p2">
+                  <a href="/#top"> Search all brands.</a>
+              </p>
+      </div><!-- // .container -->
+
+  </div><!-- // #bg-stingray  -->
+{% endif %}
+
+{% if stingray is empty and (trseries and gtoseries) %}
+  <!-- <div><hr/></div> -->
+{% endif %}

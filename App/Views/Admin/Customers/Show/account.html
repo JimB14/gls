@@ -1,0 +1,325 @@
+{% extends 'base-admin.html' %}
+
+{% block title %}
+  Customer account | ArmaLaser
+{% endblock %}
+
+{% block css %}
+<style>
+.glyphicon-remove {
+    color: #ff0000;
+}
+.glyphicon-ok {
+    color: #228b22;
+}
+.help-block {
+    color: #ff0000 !important;
+}
+</style>
+{% endblock %}
+
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div id="dashboard-toggle" class="col-md-8" style="margin-top:-20px;margin-left:254px;">
+
+            <h2>
+                {{ customer.billing_firstname }} {{ customer.billing_lastname }}
+            </h2>
+            <p style="margin-left:0px;">
+                <span class="glyphicon glyphicon-menu-left"></span>
+                <a onclick="window.history.go(-1)" style="cursor:pointer;">
+                    Go  Back
+                </a>
+            </p>
+
+            <hr>
+
+            <form method="post" action="/admin/customers/main/update-account?id={{ customer.id }}"
+                class="form-horizontal" name="update-customeraccount-form" id="update-customeraccount-form"
+                enctype="multipart/form-data">
+
+                <div class="form-group">
+                    <label for="customer_first_name" class="control-label col-sm-2">
+                      First name
+                    </label>
+                    <div class="col-sm-8">
+                        <input type="text" class="form-control" name="customer_first_name"
+                            id="customer_first_name" placeholder="First name"
+                            value="{{ customer.billing_firstname }}">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="customer_last_name" class="control-label col-sm-2">
+                      Last name
+                    </label>
+                    <div class="col-sm-8">
+                        <input type="text" class="form-control" name="customer_last_name"
+                            id="customer_last_name" placeholder="Last name"
+                            value="{{ customer.billing_lastname }}">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="customer_company" class="control-label col-sm-2">
+                      Company
+                    </label>
+                    <div class="col-sm-8">
+                        <input type="text" class="form-control" name="customer_company"
+                            id="customer_company" placeholder="Last name"
+                            value="{{ customer.billing_company|raw }}">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="customer_email" class="control-label col-sm-2">
+                      Login email
+                    </label>
+                    <div class="col-sm-8">
+                        <input type="email" class="form-control" name="customer_email"
+                            id="customer_email" placeholder="Email" value="{{ customer.email }}">
+                            <small>
+                                *Login credential and email used by ArmaLaser for
+                                all automated correspondence. If you change your
+                                email, previous orders will not reflect the
+                                change.
+                            </small>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="customer_phone" class="control-label col-sm-2">
+                      Telephone
+                    </label>
+                    <div class="col-sm-8">
+                        <input type="text" class="form-control" name="customer_phone"
+                            id="customer_phone" placeholder="Telephone"
+                            value="{{ customer.billing_phone }}">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="customer_address" class="control-label col-sm-2">
+                      Address
+                    </label>
+                    <div class="col-sm-8">
+                        <input type="text" class="form-control" name="customer_address"
+                            id="customer_address" placeholder="Address"
+                            value="{{ customer.billing_address }}">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="customer_city" class="control-label col-sm-2">
+                      City
+                    </label>
+                    <div class="col-sm-8">
+                        <input type="text" class="form-control" name="customer_city"
+                            id="customer_city" placeholder="City"
+                            value="{{ customer.billing_city }}">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="customer_city" class="control-label col-sm-2">
+                      State
+                    </label>
+                    <div class="col-sm-8">
+                        <select class="form-control required" id="customer_state" name="customer_state">
+                            <option value="{{ customer.billing_state }}">{{ customer.billing_state }}</option>
+                            {% for state in states %}
+                                <option value="{{ state.abbrev}}">{{ state.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="customer_zip" class="control-label col-sm-2">
+                      Zip
+                    </label>
+                    <div class="col-sm-8">
+                        <input type="text" class="form-control" name="customer_zip"
+                            id="customer_zip" placeholder="Zip code"
+                            value="{{ customer.billing_zip }}">
+                    </div>
+                </div>
+
+
+                <div class="form-group">
+                    <label for="security1" class="control-label col-sm-2">
+                      Security answer 1
+                    </label>
+                    <div class="col-sm-8">
+                        <input type="text" class="form-control" name="security1"
+                            id="security1" placeholder="City of birth" value="{{ customer.security1 }}">
+                        <small>*City of birth</small>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="security2" class="control-label col-sm-2">
+                      Security answer 2
+                    </label>
+                    <div class="col-sm-8">
+                        <input type="text" class="form-control" name="security2"
+                            id="security2" placeholder="Mother's maiden name" value="{{ customer.security2 }}">
+                        <small>*Mother&apos;s maiden name</small>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="security3" class="control-label col-sm-2">
+                      Security answer 3
+                    </label>
+                    <div class="col-sm-8">
+                        <select  class="form-control" name="security3" id="security3">
+                            <option value="{{ customer.security3 }}">{{ customer.security3 }}</option>
+                            {% for year in years %}
+                                <option value="{{ year }}">{{ year }}</option>
+                            {% endfor %}
+                        </select>
+                        <small>*Year of high school graduation</small>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="email_optin" class="control-label col-sm-2">
+                      Email marketing
+                    </label>
+                    <div class="col-sm-8">
+                        <select  class="form-control" name="email_optin" id="email_optin">
+                            <option value="{{ customer.email_optin }}">{% if customer.email_optin == 1 %}Yes{% else %}No{% endif %}</option>
+                            {% for value in boolArr %}
+                                <option value="{{ value }}">{% if value == 1 %}Yes{% else %}No{% endif %}</option>
+                            {% endfor %}
+                        </select>
+                        <smal>*Yes = keep me informed about new products, sales and other promotions. No = unsubscribe from all email.</smal>
+                    </div>
+                </div>
+
+                <hr>
+
+                <div class="form-group">
+                    <div class="col-sm-offset-2 col-sm-8">
+                        <button  id="update-user-btn" type="submit"
+                        class="btn btn-primary btn-lg">
+                        Update
+                      </button>
+                    </div>
+                </div>
+            </form>
+
+            <!-- = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = -->
+
+            <h2 class="col-md-offset-2 col-md-10 " style="margin-top:40px;">
+                Change Password
+            </h2>
+
+            <form method="post" action="/admin/customers/main/update-password?id={{ customer.id }}"
+                class="form-horizontal" name="change-customer-password-form"
+                id="change-customer-password-form">
+
+                <div class="form-group has-feedback">
+                    <label for="new_password" class="control-label col-sm-2">
+                      New password
+                    </label>
+                    <div class="col-sm-8">
+                        <input type="text" class="form-control" name="new_password"
+                            id="new_password" placeholder="Minimum 6 characters">
+                        <span class="glyphicon form-control-feedback" id="new_password1"></span>
+                    </div>
+                </div>
+
+                <div class="form-group has-feedback">
+                    <label for="confirm_password" class="control-label col-sm-2">
+                      Confirm password
+                    </label>
+                    <div class="col-sm-8">
+                        <input type="text" class="form-control" name="confirm_password"
+                            id="confirm_password" placeholder="Minimum 6 characters">
+                        <span class="glyphicon form-control-feedback" id="confirm_password1"></span>
+                    </div>
+                </div>
+
+                <hr>
+
+                <div class="form-group">
+                    <div class="col-sm-offset-2 col-sm-8" style="margin-bottom:80px;">
+                        <button id="update-dealer-credentials-btn" type="submit"
+                            class="btn btn-primary btn-lg">
+                            Submit
+                        </button>
+                        <br><br>
+                        <help>
+                            *You will be automatically logged out. You can log in again
+                            with your new login credentials.
+                            <br>
+                            Please note that orders placed with any previous email
+                            address will not be changed.
+                        </help>
+                    </div>
+                </div>
+            </form>
+
+
+          </div><!--  // .col-md-8  -->
+      </div><!--  // .row  -->
+</div><!--  // .container  -->
+{% endblock %}
+
+
+{% block bottomjs %}
+<script>
+$(document).ready(function(){
+
+    $("#change-customer-password-form").validate({
+        rules: {
+            new_passsword: {
+                minlength: 6,
+                maxlength: 10,
+                required: true
+            },
+            confirm_password: {
+                equalTo: "#new_password"
+            }
+        },
+        messages: {
+            new_password: {
+                minlength: "*Please enter at least 6 characters",
+                maxlength: "*Please enter up to 10 characters",
+                required: "*Please enter a password",
+            },
+            confirm_password: {
+                equalTo: "*Please enter the same password"
+            }
+        },
+        highlight: function(element) {
+            var id_attr = "#" + $( element ).attr("id") + "1";
+            $(element).closest('.form-group has-feedback').removeClass('has-success').addClass('has-error');
+            $(id_attr).removeClass('glyphicon-ok').addClass('glyphicon-remove');
+        },
+        unhighlight: function(element) {
+            var id_attr = "#" + $( element ).attr("id") + "1";
+            $(element).closest('.form-group has-feedback').removeClass('has-error').addClass('has-success');
+            $(id_attr).removeClass('glyphicon-remove').addClass('glyphicon-ok');
+        },
+        errorElement: 'span',
+            errorClass: 'help-block',
+            errorPlacement: function(error, element) {
+                if(element.length) {
+                    error.insertAfter(element);
+                } else {
+                error.insertAfter(element);
+                }
+            }
+     });
+
+
+
+});
+
+</script>
+{% endblock %}

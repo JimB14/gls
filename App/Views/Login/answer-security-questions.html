@@ -1,0 +1,85 @@
+{% extends 'base.html' %}
+
+{% block title %}
+  Security Questions
+{% endblock %}
+
+
+{% block content %}
+<div class="container">
+    <div class="row">
+
+        <div class="col-md-12">
+            <h2>Security questions</h2>
+        </div>
+
+        <div class="col-md-8">
+            <div class="panel panel-default" style="margin-bottom: 100px;">
+                <div class="panel-body" style="padding:20px 40px;">
+                        <p style="margin-bottom: 20px;">
+                            {{ instructions }}
+                        </p>
+                        <form method="post" name="security_questions" id="security_questions"
+                            action="{% if user.type == 'partner' %}/admin/partners/security-answers?id={{ user.id }}
+                                {% elseif user.type == 'dealer' %}/admin/dealers/security-answers?id={{ user.id }}
+                                {% elseif user.type == 'customer' %}/admin/customers/security-answers?id={{user.id }}
+                                {% endif %}">
+
+                            <input type="hidden" name="newpassword" value="{{ newpassword }}">
+
+                            <div class="form-group">
+                                <label for="security1" class="control-label">
+                                    What city were you born in?
+                                </label>
+                                <input type="text" name="security1" class="form-control required"
+                                    placeholder="Answer" autofocus>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="security2" class="control-label">
+                                    What is your mother's maiden name?
+                                </label>
+                                <input type="text" name="security2" class="form-control required"
+                                    placeholder="Answer">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="security3" class="control-label">
+                                    What year did you graduate from high school?
+                                </label>
+                                <!-- <input type="text" name="security3" class="form-control required"
+                                    placeholder="YYYY, for example, 1985" maxlength="4"> -->
+
+                                <select  class="form-control" name="security3" id="security3">
+                                    <option value="">Select</option>
+                                    {% for year in years %}
+                                        <option value="{{ year }}">{{ year }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+
+                            <div >
+                                <button class="btn btn-primary" type="submit">
+                                    Submit
+                                </button>
+                          </div>
+
+                        </form>
+                    </div>
+                </div>
+        </div>
+
+    </div>
+</div>
+{% endblock %}
+
+
+{% block bottomjs %}
+<script>
+$(document).ready(function(){
+
+    $("#security_questions").validate();
+
+});
+</script>
+{% endblock %}

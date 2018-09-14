@@ -1,0 +1,114 @@
+<!-- - - - - - - - - - - - - - - - - - - - -  HOLSTERS  - - - - - - - - - - - - - - - - - - - - -->
+<!-- If array is not empty, execute foreach loop and display;  -->
+{% if holsters %}
+   <div id="bg-holsters">
+      <div class="container" id="holsters">
+         <div class="row">
+            <h2 class="text-left">
+                {% if search == true %}
+                    <span style="font-size: 130%;">
+                        {{ model }}® {{ waist|upper }} Holsters for
+                        {{ laser_model|upper }} / {{ laser_model|upper }}G equipped
+                        {% if pistolMfr == 'smith-wesson' %}
+                          S&W®
+                        {% elseif pistolMfr == 'sig-sauer' %}
+                            SIG SAUER®
+                        {% else %}
+                            {{ pistolMfr|upper }}®
+                        {% endif %}
+                    </span>
+                {% else %}
+                    <span style="font-size: 130%;">
+                        {{ holster_title01 }}
+                    </span>
+                    <span style="font-size: 130%; font-style:italic;">
+                        for ArmaLaser-equipped
+                        {% if pistolMfr == 'smith-wesson' %}
+                          S&W®
+                        {% elseif pistolMfr == 'sig-sauer' %}
+                            SIG SAUER®
+                        {% else %}
+                            {{ pistolMfr|upper }}®
+                        {% endif %}
+                        {% if model %}
+                            {% if model|slice(0,1) == 'g' %}
+                                {{ model|replace({'g': ''})|upper }}
+                            {% else %}
+                                {{ model|upper }}
+                            {% endif %}
+                        {% endif %}
+                    </span>
+                {% endif %}
+                <span style="font-size:16px;padding-left:12px;">
+                    <a href="/products/holsters">
+                        <span class="italic">
+                            What is Laser-Fit?
+                        </span>
+                    </a>
+                </span>
+            </h2>
+
+           <div class="col-md-12 col-xs-12">
+
+               {% for holster in holsters %}
+                  <div class="products-by-brand-holsters">
+                     <div class="products-by-brand-holsters-image-caption">
+                        <p>
+                            <a href="/products/holster/{{ holster.holster_id }}/{{ holster.trseries_model }}"
+                                title="See {{ holster.holsterMfr|raw }}® / ArmaLaser {{ holster.holster_model }}">
+                                {{ holster.holsterMfr|raw }}® / ArmaLaser {{ holster.holster_model }}
+                                <br>
+                                {% if holster.waist == 'iwb' %} Inside Waistband {% elseif holster.waist == 'owb' %} Outside Waistband {% else %}{{ holster.waist|capitalize }}{% endif %}
+                                {% if holster.hand == 'right' %} Right-Hand {% elseif holster.hand == 'left' %} Left-Hand{% endif %}
+                            </a>
+                        </p>
+                     </div>
+
+                     <div class="products-by-brand-holsters-image">
+                        <div class="products-by-brand-holsters-image-div">
+                            <a href="/products/holster/{{ holster.holster_id }}/{{ holster.trseries_model }}"
+                                title="See {{ holster.holsterMfr|raw }}® / ArmaLaser {{ holster.holster_model }}">
+                                <img
+                                    src="/assets/images/page/holsters/{{ holster.thumb }}"
+                                    alt="ArmaLaser holster for {{ holster.pistolMfr|upper }} {{ holster.pistol_models }}"
+                                >
+                            </a>
+                        </div>
+                     </div>
+
+                     <div class="products-by-brand-holsters-adtitle">
+                        <p>Fits
+                            <!-- <br>
+                           <span class="blue">{% if holster.pistolMfr == 'smith-wesson' %}S&amp;W® {% else %}{{ holster.pistolMfr }}®{% endif %}</span> -->
+                            <br>
+                           <span class="text-left color787878" style="display:inline-block;font-size:14px;line-height:15px;">
+                               {{ holster.pistol_models|raw }}
+                           </span>
+                           <br>
+                           with
+                           <a href="/{{ holster.pistolMfr }}/{{ holster.slug }}/tr-series/{{ holster.trseries_id }}/{{ holster.trseries_model }}" title="See {{ holster.trseries_model|upper  }} Laser">
+                              {{  holster.trseries_model|upper }}
+                           </a>
+                           &nbsp;/&nbsp;
+                           <a href="/{{ holster.pistolMfr }}/{{ holster.slug }}/tr-series/{{ holster.trseries_id + 1 }}/{{ holster.trseries_model }}g" title="See {{ holster.trseries_model|upper }}G Laser">
+                              {{ holster.trseries_model|upper }}G
+                           </a>
+                        </p>
+                     </div>
+
+                  </div><!-- /products-by-brand-holsters  -->
+               {% endfor %}
+
+            </div><!-- // .col-md-12 -->
+
+         </div><!-- // .row -->
+      </div><!-- // .container -->
+   </div><!-- // #bg-stingray  -->
+{% else %}
+
+   <div>
+      <h3>Currently, no holster for {{ laser_model }}</h3>
+   </div>
+
+  <div class="dividing-line"></div>
+{% endif %}

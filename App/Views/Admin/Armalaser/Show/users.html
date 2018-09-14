@@ -1,0 +1,143 @@
+{% extends 'base-admin.html' %}
+
+{% block title %}
+  Users | ArmaLaser
+{% endblock %}
+
+{% block css %}
+{% endblock %}
+
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div id="dashboard-toggle" class="col-md-10" style="margin-top:-20px;margin-left:254px;">
+
+          <div class="col-md-4">
+                <h2 style="margin-left:-15px;">
+                  Manage users
+                  {% if users|length > 0 %}
+                    <span class="badge" style="margin: -18px 0px 0px 7px;">
+                        {{ users|length }}
+                    </span>
+                  {% endif %}
+          </div>
+          <div  class="col-md-5 col-sm-7 col-xs-12" style="margin:15px 0px 15px -15px;">
+            <form method="get" action="/admin/users/search-users-by-last-name">
+              <div class="input-group">
+                <input style="width:175px;"  type="text" class="form-control" name="last_name" id="last_name"
+                    placeholder="Enter user last name">
+                <span style="display:inline-block;margin-left:0px;"  class="input-group-btn">
+                  <button class="btn btn-secondary btn-default" type="submit">Go</button>
+                </span>
+              </div>
+            </form>
+            {% if searched %}
+              <div>
+                <h3>Search results: "{{ searched }}"</h3>
+              </div>
+            {% endif %}
+          </div>
+
+          {% if users %}
+
+            <table class="table table-bordered table-striped bg-fff display-broker-agents">
+
+              <thead>
+                  <tr>
+                      <th></th>
+                      <th></th>
+                      <th>ID</th>
+                      <th>First</th>
+                      <th>Last</th>
+                      <th>Email</th>
+                      <th>Password</th>
+                      <th>Hash</th>
+                      <th>Temp<br>Pass</th>
+                      <th>Security1</th>
+                      <th>Security2</th>
+                      <th>Security3</th>
+                      <th>Active</th>
+                      <th>1st login</th>
+                      <th>Access<br>level</th>
+                      <th>Created</th>
+                      <th>Updated</th>
+                  </tr>
+              </thead>
+
+              <tbody>
+                  {% for user in users %}
+                  <tr>
+                      <td class="text-center">
+                        <a id="edit-user" title="Edit"
+                            href="/admin/users/edit-user?id={{ user.id }}">
+                            <span class="glyphicon glyphicon-pencil"></span>
+                        </a>
+                      </td>
+                      <td class="text-center">
+                          <a id="delete-user" title="Delete"
+                            href="/admin/users/delete-user?id={{ user.id }}"
+                            onclick="return confirm('TO PERMANENTLY DELETE THIS USER, click OK. \n\n\WARNING! DELETED DATA CANNOT BE RECOVERED.');">
+                            <span class="glyphicon glyphicon-trash red"></span>
+                          </a>
+                      </td>
+                      <td>{{ user.id }}</td>
+                      <td>{{ user.first_name }}</td>
+                      <td>{{ user.last_name }}</td>
+                      <td>{{ user.email }}</td>
+                      <td>{{ user.pass|slice(0,10) }}</td>
+                      <td>{{ user.hash }}</td>
+                      <td>{{ user.tmp_pass }}</td>
+                      <td>{{ user.security1 }}</td>
+                      <td>{{ user.security2 }}</td>
+                      <td>{{ user.security3 }}</td>
+                      <td>{{ user.active }}</td>
+                      <td>{{ user.first_login }}</td>
+                      <td>{{ user.access_level }}</td>
+                      <td>{{ user.created_at }}</td>
+                      <td>{{ user.updated_at }}</td>
+                    </tr>
+                    {% endfor %}
+              </tbody>
+            </table>
+
+            <p style="margin-top: -3px;" class="pull-left"><a href="#top" title="Go to top of page"><i style="margin-top: -15px; color:#ccc;" class="fa fa-arrow-circle-o-up fa-3x" aria-hidden="true"></i></a></p>
+            <p style="margin-top: -3px;" class="pull-right"><a href="#top" title="Go to top of page"><i style="margin-top: -15px; color:#ccc;" class="fa fa-arrow-circle-o-up fa-3x" aria-hidden="true"></i></a></p>
+
+
+            {% else %}
+            <div class="col-md-8" style="margin-left:-15px;">
+                <div class="alert alert-warning" style="margin-top:30px;">
+                    <h4 style="margin-bottom:0px;">
+                      No users to display
+                    </h4>
+                </div>
+            </div>
+            {% endif %}
+
+      </div><!--  // col-md-12  -->
+    </div><!--  // .row  -->
+</div><!-- // .container-fluid  -->
+{% endblock %}
+
+
+{% block bottomjs %}
+<script>
+$(document).ready(function(){
+
+
+    $("#thisID").click(function(){
+        var checked = 1;
+        console.log(checked);
+        if($("#thisID").prop("checked")){
+          $("#lasers_last_name").attr("placeholder", "Enter laser ID");
+        } else {
+          $("#lasers_last_name").attr("placeholder", "Enter agent last name");
+        }
+    });
+
+
+});
+</script>
+
+{% endblock %}

@@ -1,0 +1,50 @@
+<!-- ====  CURRENT SALE HEADER BANNER  ===== -->
+{% if now > '2018-07-18 23:59:59' and now < '2018-07-20 23:59:59' %}
+    {% if model.beam == 'green' %}
+        <div class="col-md-12">
+            <div class="row">
+                <div id="sale-banner">
+                    Christmas in July Sale! Save $20!
+                </div>
+            </div>
+        </div>
+    {% endif %}
+{% endif %}
+
+    <div class="col-md-6">
+        <div style="font-size: 28px; margin: 0px;margin-left: -12px; margin-top: 45px; color:#800020;">
+
+            <!-- ====  CURRENT SALE PRICING  ===== -->
+            {% if now > '2018-07-18 23:59:59' and now < '2018-07-20 23:59:59' %}
+
+                {% if model.beam == 'red' %}
+                    <p style="margin-bottom: -7px;">${{ model.price }}</p>
+                    <p style="font-size:12px;font-weight:normal;color:#000;"><i>(FREE SHIPPING)</i></p>
+                {% elseif model.beam == 'green' %}
+                    <p style="margin-bottom: 0px;"><span style="font-size: 16px;">NOW</span> $128.75</p>
+                    <p style="margin-top: -7px;margin-left: 25px;font-size:12px;font-weight:normal;color:#000;"><i>(FREE SHIPPING)</i></p>
+                {% endif %}
+
+            {% else %}
+                <p style="margin-bottom: -7px;">${{ model.price }}</p>
+                <p style="font-size:12px;font-weight:normal;color:#000;"><i>(FREE SHIPPING)</i></p>
+            {% endif %}
+        </div>
+    </div>
+
+
+    {% if model.review_count > 0 %}
+        <div class="col-md-6" style="margin-top: 20px; margin-bottom: 5px; padding-bottom: 10px;"> <!-- box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19); -->
+            <h5 class="text-right" style="margin: 7px 0px; color: #0000ff;">Read <i>REAL</i> Reviews</h5>
+            <div class="text-right" style="margin-right: -15px;">
+                <a class="newWindow" href="{{ model.review_url }}" rel="0">
+                    <img  style="margin-top: -5px; margin-right:10px;"
+                        src="/assets/images/page/productDetails/amazon_reviews_rnd_thumb.png"
+                        height="50" title="Read Amazon reviews" alt="read Amazon reviews">
+                {% if model.review_count > 0 %}
+                    <span class="badge">{{ model.review_count }}</span>
+                {% endif %}
+                </a>
+            </div>
+        </div>
+    {% endif %}

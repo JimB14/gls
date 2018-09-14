@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+
+{% block title %}
+  Cart | ArmaLaser
+{% endblock %}
+
+{% block metadescription %}
+Shopping Cart
+{% endblock %}
+
+{% block css %}
+<style>
+    .table tbody > tr > td,
+    .table tfoot tr td {
+        vertical-align: middle !important;
+    }
+    table tr:last-child {
+        border-left: 1px solid #fff !important;
+        border-right: 1px solid #fff !important;
+    }
+</style>
+{% endblock %}
+
+{% block outsidecontainer %}
+{% endblock %}
+
+
+{% block content %}
+<div class="container">
+   <div class="row">
+
+       {% include 'Cart/inc.cart.html' %}
+
+    </div>
+</div>
+{% endblock %}
+
+{% block bottomjs %}
+<script>
+$(document).ready(function(){
+
+  $("#ffl-form").validate();
+
+});
+</script>
+{% endblock %}

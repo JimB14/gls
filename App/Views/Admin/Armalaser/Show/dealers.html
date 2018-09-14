@@ -1,0 +1,134 @@
+{% extends 'base-admin.html' %}
+
+{% block title %}
+  Dealers | ArmaLaser
+{% endblock %}
+
+{% block css %}
+{% endblock %}
+
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div id="dashboard-toggle" class="col-md-10" style="margin-top:-20px;margin-left:254px;">
+
+          <div class="col-md-4">
+                <h2 style="margin-left:-15px;">
+                  Manage Dealers
+                  {% if dealers|length > 0 %}
+                    <span class="badge" style="margin: -18px 0px 0px 7px;">
+                        {{ dealers|length }}
+                    </span>
+                  {% endif %}
+                </h2>
+          </div>
+          <div  class="col-md-5 col-sm-7 col-xs-12" style="margin:15px 0px 15px -15px;">
+            <form method="get"
+                action="/admin/dealers/search-dealers-by-state">
+              <div class="input-group">
+                <input style="width:175px;"  type="text" class="form-control" name="state" id="state"
+                    placeholder="Enter dealer state">
+                <span style="display:inline-block;margin-left:0px;"  class="input-group-btn">
+                  <button class="btn btn-secondary btn-default" type="submit">Go</button>
+                </span>
+              </div>
+            </form>
+            {% if searched %}
+              <div>
+                <h3>Search results: "{{ searched }}"</h3>
+              </div>
+            {% endif %}
+          </div>
+
+          {% if dealers %}
+            <table class="table table-bordered table-striped bg-fff display-broker-agents">
+
+              <thead>
+                  <tr>
+                      <th>Edit</th>
+                      <!-- <th>Delete</th> -->
+                      <th>ID</th>
+                      <th>Company</th>
+                      <th>Address</th>
+                      <th>City</th>
+                      <th>State</th>
+                      <th>Zip</th>
+                      <th>Telephone</th>
+                      <th>Website</th>
+                      <th>Map URL</th>
+                      <th>Created</th>
+                      <th>Updated</th>
+                  </tr>
+              </thead>
+
+              <tbody>
+                  {% for dealer in dealers %}
+                  <tr>
+                      <td class="text-center">
+                        <a class="text-center" id="edit-dealer" href="/admin/dealers/edit-dealer?id={{ dealer.id }}">
+                          <span class="glyphicon glyphicon-pencil edit-green"></span>
+                        </a>
+                      </td>
+                      <!-- <td class="text-center" >
+                          <a id="delete-dealer" href="/admin/dealers/delete-dealer?id={# dealer.id #}"
+                            onclick="return confirm('TO PERMANENTLY DELETE THIS DEALER, click OK. \n\n\WARNING! DELETED DATA CANNOT BE RECOVERED.');">
+                            <span class="glyphicon glyphicon-trash red"></span>
+                          </a>
+                      </td> -->
+                      <td><a href="/admin/dealers/get-orders?id={{ dealer.id }}" title="See Orders">{{ dealer.id }}</a></td>
+                      <td>{{ dealer.company|raw }}</td>
+                      <td>{{ dealer.address }}</td>
+                      <td>{{ dealer.city }}</td>
+                      <td>{{ dealer.state }}</td>
+                      <td>{{ dealer.zip }}</td>
+                      <td>{{ dealer.telephone }}</td>
+                      <td>{{ dealer.website }}</td>
+                      <td>{{ dealer.map_url }}</td>
+                      <td>{{ dealer.created_at }}</td>
+                      <td>{{ dealer.updated_at }}</td>
+                    </tr>
+                    {% endfor %}
+              </tbody>
+            </table>
+
+            <p style="margin-top: -3px;" class="pull-left"><a href="#top" title="Go to top of page"><i style="margin-top: -15px; color:#ccc;" class="fa fa-arrow-circle-o-up fa-3x" aria-hidden="true"></i></a></p>
+            <p style="margin-top: -3px;" class="pull-right"><a href="#top" title="Go to top of page"><i style="margin-top: -15px; color:#ccc;" class="fa fa-arrow-circle-o-up fa-3x" aria-hidden="true"></i></a></p>
+
+
+            {% else %}
+            <div class="col-md-8" style="margin-left:-15px;">
+                <div class="alert alert-warning" style="margin-top:30px;">
+                    <h4 style="margin-bottom:0px;">
+                      No dealers to display
+                    </h4>
+                </div>
+            </div>
+            {% endif %}
+
+      </div><!--  // col-md-12  -->
+    </div><!--  // .row  -->
+</div><!-- // .container-fluid  -->
+{% endblock %}
+
+
+{% block bottomjs %}
+<script>
+$(document).ready(function(){
+
+
+    $("#thisID").click(function(){
+        var checked = 1;
+        console.log(checked);
+        if($("#thisID").prop("checked")){
+          $("#lasers_last_name").attr("placeholder", "Enter laser ID");
+        } else {
+          $("#lasers_last_name").attr("placeholder", "Enter agent last name");
+        }
+    });
+
+
+});
+</script>
+
+{% endblock %}

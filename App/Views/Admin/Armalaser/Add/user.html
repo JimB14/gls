@@ -1,0 +1,175 @@
+{% extends 'base-admin.html' %}
+
+{% block title %}
+  Add User | ArmaLaser
+{% endblock %}
+
+{% block css %}
+{% endblock %}
+
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div id="dashboard-toggle" class="col-md-8" style="margin-top:-20px;margin-left:254px;">
+
+          <h2>
+            Add user
+          </h2>
+
+          <hr>
+
+            <form method="post" action="/admin/users/post-user"
+                class="form-horizontal" name="add-user-form" id="add-user-form"
+                enctype="multipart/form-data">
+
+                <div class="form-group">
+                    <label for="first_name" class="control-label col-sm-1">
+                      First name
+                    </label>
+                    <div class="col-sm-6">
+                        <input type="text" class="form-control" name="first_name"
+                        id="first_name" placeholder="First name" autofocus>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="last_name" class="control-label col-sm-1">
+                      Last name
+                    </label>
+                    <div class="col-sm-6">
+                        <input type="text" class="form-control" name="last_name"
+                        id="last_name" placeholder="Last name">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="email" class="control-label col-sm-1">
+                      Login email
+                    </label>
+                    <div class="col-sm-6">
+                        <input type="email" class="form-control" name="email"
+                          id="email" placeholder="Email">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="password" class="control-label col-sm-1">
+                      Password
+                    </label>
+                    <div class="col-sm-6">
+                        <input type="text" class="form-control" name="password"
+                          id="password" placeholder="Password - minimum 6 characters">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="confirm_password" class="control-label col-sm-1">
+                      Confirm password
+                    </label>
+                    <div class="col-sm-6">
+                        <input type="text" class="form-control" name="confirm_password"
+                          id="confirm_password" placeholder="Confirm password">
+                    </div>
+                </div>
+
+                <!-- <div class="form-group">
+                    <label for="security1" class="control-label col-sm-1">
+                      What city were you born in?
+                    </label>
+                    <div class="col-sm-6">
+                        <input type="text" class="form-control" name="security1"
+                        id="security1" placeholder="City of birth">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="security2" class="control-label col-sm-1">
+                      What is your mother&#39;s maiden name?
+                    </label>
+                    <div class="col-sm-6">
+                        <input type="text" class="form-control" name="security2"
+                        id="security2" placeholder="Mother's maiden name">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="security3" class="control-label col-sm-1">
+                      What year did you graduate from high school?
+                    </label>
+                    <div class="col-sm-6">
+                        <input type="text" class="form-control" name="security3"
+                        id="security3" placeholder="Year, e.g. 1990">
+                    </div>
+                </div> -->
+
+                <!-- <div class="form-group">
+                    <label for="active" class="control-label col-sm-1">
+                      Active
+                      <br>
+                      <small>
+                        (1=true, 0=false)
+                      </small>
+                    </label>
+                    <div class="col-sm-6">
+                        <input type="text" class="form-control" name="active"
+                          id="active" placeholder="0 = false, 1 = true" value="1">
+                          <help>
+                            *Should be '1'
+                          </help>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="first_login" class="control-label col-sm-1">
+                      1st login
+                      <br>
+                      <small>
+                        (1=true, 0=false)
+                      </small>
+                    </label>
+                    <div class="col-sm-6">
+                        <input type="text" class="form-control" name="first_login"
+                          id="first_login" placeholder="0 = false, 1 = true" value="0">
+                          <help>
+                            *Should be '0'
+                          </help>
+                    </div>
+                </div> -->
+
+                <div class="form-group">
+                    <label for="access_level" class="control-label col-sm-1">
+                      Access level
+                    </label>
+                    <div class="col-sm-6">
+                        <select class="form-control  required" name="access_level" id="access_level">
+                            <option value="">Assign rights</option>
+                                <option value="2">Admin</option>
+                                <option value="4">Telephone order entry</option>
+                                <option value="5">Supervisor</option>
+                        </select>
+                          <help>
+                            *'Admin' gives access to orders and labels data, 'Supervisor' allows full access
+                          </help>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-sm-offset-1 col-sm-8">
+                        <button  id="update-user-btn" type="submit"
+                        class="btn btn-primary btn-lg">
+                        Add user
+                      </button>
+                    </div>
+                </div>
+
+            </form>
+
+          </div><!--  // .col-md-8  -->
+      </div><!--  // .row  -->
+</div><!--  // .container  -->
+{% endblock %}
+
+
+{% block bottomjs %}
+{% endblock %}

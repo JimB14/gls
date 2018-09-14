@@ -1,0 +1,632 @@
+{% extends 'base-admin.html' %}
+
+{% block title %}
+  Update Gun Show | ArmaLaser
+{% endblock %}
+
+{% block css %}
+<style>
+#new-name-div,
+#new-location-div,
+#new-city-div,
+#new-rep-div,
+#new-show-production-co-div,
+#new-producer-url-div {
+   display: none;
+}
+#start_date_error,
+#end_date_error,
+#new_name_error,
+#new_location_error,
+#new_city_error,
+#new_rep_error,
+#new_show_producer_error,
+#new_producer_url_error {
+   width: 100%;
+   display: none;
+}
+.alert.alert-danger {
+   padding: 5px 10px;
+}
+</style>
+{% endblock %}
+
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div id="dashboard-toggle" class="col-md-8" style="margin-top:-20px;margin-left:254px;">
+
+          <h2>Update Gun Show</h2>
+          <hr>
+
+          <form method="post" action="/admin/shows/update-gun-show?id={{ show.id }}"
+            class="form-horizontal" name="update-gunshow-form" id="update-gunshow-form"
+            enctype="multipart/form-data">
+
+               <div class="form-group">
+                   <label for="display" class="control-label col-sm-3">
+                     Display / Hide
+                     <br>
+                     Status: {%  if show.display == 1 %} <span style="color:red">Display(1)</span>{% else %}<span style="color:red">Hide (0)</span>{% endif %}
+                   </label>
+                   <div class="col-sm-9">
+                     <input type="number" name="display" class="form-control"
+                        min="0" max="1" id="display" placeholder="1=display, 0=hide"
+                        value="{{ show.display }}">
+                       <help>
+                          This show is currently {%  if show.display == 1 %} <span style="color:red">displaying</span>{% else %}<span style="color:red">not displaying</span>{% endif %} on the website.
+                          To {%  if show.display == 1 %} <span style="color:red">hide</span>{% else %}<span style="color:red">display</span>{% endif %} this show, change the value
+                          to {%  if show.display == 1 %} <span style="color:red">0</span>{% else %}<span style="color:red">1</span>{% endif %} and save.
+                          (1 = display; 0 = hide;)
+                       </help>
+                   </div>
+               </div>
+
+                <div class="form-group">
+                    <label for="start_date" class="control-label col-sm-3">
+                      Start
+                    </label>
+                    <div class="col-sm-9">
+                        <input type="text" id="start_date" class="form-control"
+                           name="start" placeholder="2018-03-31" required autofocus
+                           value="{{ show.start }}">
+                        <small>*Must match this pattern: YYYY-MM-DD</small>
+                        <span id="start_date_error" class="alert alert-danger"></span>
+                    </div>
+                </div>
+
+
+                <div class="form-group">
+                    <label for="end_date" class="control-label col-sm-3">
+                      End
+                    </label>
+                    <div class="col-sm-9">
+                        <input type="text" id="end_date" class="form-control"
+                           name="end" placeholder="2018-03-31" required
+                           value="{{ show.end }}">
+                        <small>*If end date is changed, it must match this pattern: YYYY-MM-DD</small>
+                        <span id="end_date_error" class="alert alert-danger"></span>
+                    </div>
+                </div>
+
+
+                <div class="form-group" id="orig-name-div">
+                    <label for="name" class="control-label col-sm-3">
+                      Event name
+                    </label>
+                    <div class="col-sm-9">
+                      <select class="form-control" id="name" name="name">
+                          <option value="{{ show.name }}">{{ show.name }}</option>
+                          {% for name in names %}
+                              <option value="{{ name.name }}">{{ name.name }}</option>
+                          {% endfor %}
+                      </select>
+                      <small>Event name not listed? <span id="add-new-name" style="cursor:pointer;color:#0000ff">Click here.</span></small>
+                    </div>
+                </div>
+
+
+                <div class="form-group" id=new-name-div>
+                    <label for="new_name" class="control-label col-sm-3">
+                      New event name
+                    </label>
+                    <div class="col-sm-9">
+                      <input type="text" name="new_name" class="form-control" id="new_name"
+                        placeholder="New event name">
+                        <span id="new_name_error" class="alert alert-danger"></span>
+                    </div>
+                </div>
+
+
+                <div class="form-group" id="orig-location-div">
+                    <label for="location" class="control-label col-sm-3">
+                      Location
+                    </label>
+                    <div class="col-sm-9">
+                      <select class="form-control" id="location" name="location">
+                          <option value="{{ show.location }}">{{ show.location }}</option>
+                          {% for location in locations %}
+                              <option value="{{ location.location }}">{{ location.state }}, {{ location.city }}:  {{ location.location }}</option>
+                          {% endfor %}
+                      </select>
+                      <small>Location not listed? <span id="add-new-location" style="cursor:pointer;color:#0000ff">Click here.</span></small>
+                    </div>
+                </div>
+
+
+                <div class="form-group" id=new-location-div>
+                    <label for="new_location" class="control-label col-sm-3">
+                      New location
+                    </label>
+                    <div class="col-sm-9">
+                      <input type="text" name="new_location" class="form-control " id="new_location"
+                        placeholder="New location name">
+                        <span id="new_location_error" class="alert alert-danger"></span>
+                    </div>
+                </div>
+
+
+                <div class="form-group" id="orig-city-div">
+                    <label for="city" class="control-label col-sm-3">
+                      City
+                    </label>
+                    <div class="col-sm-9">
+                      <select class="form-control" id="city" name="city">
+                          <option value="{{ show.city }}">{{ show.city }}</option>
+                          {% for city in cities %}
+                              <option value="{{ city.city }}">{{ city.city }}</option>
+                          {% endfor %}
+                      </select>
+                      <small>City not listed? <span id="add-new-city" style="cursor:pointer;color:#0000ff">Click here.</span></small>
+                    </div>
+                </div>
+
+                <div class="form-group" id=new-city-div>
+                    <label for="new_city" class="control-label col-sm-3">
+                      New city
+                    </label>
+                    <div class="col-sm-9">
+                      <input type="text" name="new_city" class="form-control " id="new_city"
+                        placeholder="New city name">
+                        <span id="new_city_error" class="alert alert-danger"></span>
+                    </div>
+                </div>
+
+
+                <div class="form-group">
+                    <label for="state" class="control-label col-sm-3">
+                      State
+                    </label>
+                    <div class="col-sm-9">
+                      <select class="form-control" id="state" name="state">
+                          <option value="{{ show.state }}">{{ show.state }}</option>
+                          {% for state in states %}
+                              <option value="{{ state.abbrev }}">{{ state.name }}</option>
+                          {% endfor %}
+                      </select>
+                    </div>
+                </div>
+
+
+                <div class="form-group" id="orig-rep-div">
+                    <label for="rep" class="control-label col-sm-3">
+                      ArmaLaser Rep
+                    </label>
+                    <div class="col-sm-9">
+                      <select class="form-control" id="rep" name="rep">
+                          <option value="{{ show.rep }}">{{ show.rep }}</option>
+                          {% for rep in reps %}
+                              <option value="{{ rep.rep }}">{{ rep.rep }}</option>
+                          {% endfor %}
+                      </select>
+                      <small>Rep not listed? <span id="add-new-rep" style="cursor:pointer;color:#0000ff">Click here.</span></small>
+                    </div>
+                </div>
+
+
+                <div class="form-group" id="new-rep-div">
+                    <label for="new_rep" class="control-label col-sm-3">
+                      New Rep
+                    </label>
+                    <div class="col-sm-9">
+                       <input type="text" name="new_rep" class="form-control " id="new_rep"
+                        placeholder="New rep name">
+                        <span id="new_rep_error" class="alert alert-danger"></span>
+                    </div>
+                </div>
+
+
+                <div class="form-group">
+                    <label for="show_url" class="control-label col-sm-3">
+                      Show URL
+                    </label>
+                    <div class="col-sm-9">
+                        <input type="url" class="form-control" name="show_url" id="show_url"
+                        placeholder="Full URL required, e.g. http://...  (shorten URL @ https://goo.gl/)"
+                        value="{{ show.show_url }}">
+                        <small>*Shorten URL here <a href="https://goo.gl/" target="_blank">https://goo.gl/</a></small>
+                    </div>
+                </div>
+
+
+                <div class="form-group" id="orig-show-production-co-div">
+                    <label for="show_producer" class="control-label col-sm-3">
+                      Show Producer
+                    </label>
+                    <div class="col-sm-9">
+                      <select class="form-control" id="show_producer" name="show_producer">
+                          <option value="{{ show.show_producer }}">{{ show.show_producer }}</option>
+                          {% for producer in producers %}
+                              <option value="{{ producer.show_producer }}">{{ producer.show_producer }}</option>
+                          {% endfor %}
+                      </select>
+                      <small>Show Producer not listed? <span id="add-new-show-production-co" style="cursor:pointer;color:#0000ff">Click here.</span></small>
+                    </div>
+                </div>
+
+
+                <div class="form-group" id="new-show-production-co-div">
+                    <label for="new_show_producer" class="control-label col-sm-3">
+                      New Show Producer
+                    </label>
+                    <div class="col-sm-9">
+                       <input type="text" name="new_show_producer" class="form-control " id="new_show_producer"
+                        placeholder="New Show Producion Company">
+                        <span id="new_show_producer_error" class="alert alert-danger"></span>
+                    </div>
+                </div>
+
+
+                <div class="form-group" id="orig-producer-url-div">
+                    <label for="producer_url" class="control-label col-sm-3">
+                      Producer's Website
+                    </label>
+                    <div class="col-sm-9">
+                      <select class="form-control" id="producer_url" name="producer_url">
+                          <option value="{{ show.producer_url }}">{{ show.producer_url }}</option>
+                          {% for url in urls %}
+                              <option value="{{ url.producer_url }}">{{ url.show_producer }} - {{ url.producer_url }}</option>
+                          {% endfor %}
+                      </select>
+                    </div>
+                </div>
+
+
+                <div class="form-group" id="new-producer-url-div">
+                    <label for="new_producer_url" class="control-label col-sm-3">
+                      New show producer's website
+                    </label>
+                    <div class="col-sm-9">
+                        <input type="url" class="form-control" name="new_producer_url"
+                        id="new_producer_url" placeholder="Full URL required, e.g. http://domainname.com">
+                        <span id="new_producer_url_error" class="alert alert-danger"></span>
+                    </div>
+                </div>
+
+
+                <div class="form-group">
+                    <label for="map" class="control-label col-sm-3">
+                      Map URL
+                    </label>
+                    <div class="col-sm-9">
+                      <select class="form-control" id="map" name="map">
+                          <option value="{{ show.map }}">{{ show.map }}</option>
+                          {% for url in map_urls %}
+                              <option value="{{ url.map }}">{{ url.state }}, {{ url.city }}: {{ url.location }}</option>
+                          {% endfor %}
+                      </select>
+                   </div>
+                </div>
+
+                <hr>
+
+                <div class="form-group">
+                    <div class="col-sm-offset-3 col-sm-8">
+                        <button  id="submit-listing-btn" type="submit"
+                        class="btn btn-primary btn-lg">
+                        Update Gun Show
+                      </button>
+                    </div>
+                </div>
+
+            </form>
+
+
+          </div><!--  // .col-md-8  -->
+      </div><!--  // .row  -->
+</div><!--  // .container  -->
+{% endblock %}
+
+
+{% block bottomjs %}
+<!-- Datepicker for warranty-registration.php @https://jqueryui.com/datepicker/#default -->
+<script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+<script src="/assets/js/datepicker.js"></script>
+<script>
+$(document).ready(function(){
+
+   $("#thisID").click(function(){
+      var checked = 1;
+      console.log(checked);
+      if($("#thisID").prop("checked")){
+         $("#lasers_last_name").attr("placeholder", "Enter laser ID");
+      } else {
+         $("#lasers_last_name").attr("placeholder", "Enter laser model");
+      }
+   });
+
+   // event and handler
+   $("#start_date").on('blur', function(){
+      var startDate = $(this).val().trim();
+      console.log(startDate);
+      if (startDate != '') {
+         formatDate(startDate);
+      }
+   });
+
+   // event and handler
+   $("#end_date").on('blur', function(){
+      var endDate = $(this).val().trim();
+      console.log(endDate);
+      if(endDate != '') {
+         formatEndDate(endDate);
+      }
+   });
+
+   // event and handler w/ explanation applicable to similar code below
+   $("#add-new-name").on('click', function(){
+      // show new name div
+      $("#new-name-div").show('slow');
+      // hide original name div
+      $("#orig-name-div").hide('slow');
+      // empty content of orig input field
+      $("#name").val('');
+      // put focus on new name input field
+      $("#new_name").focus();
+   });
+
+   // event and handler
+   $("#add-new-location").on('click', function(){
+      $("#new-location-div").show('slow');
+      $("#orig-location-div").hide('slow');
+      $("#location").val('');
+      $("#new_location").focus();
+   });
+
+   // event and handler
+   $("#add-new-city").on('click', function(){
+      $("#new-city-div").show('slow');
+      $("#orig-city-div").hide('slow');
+      $("#city").val('');
+      $("#new_city").focus();
+   });
+
+   // event and handler
+   $("#add-new-rep").on('click', function(){
+      $("#new-rep-div").show('slow');
+      $("#orig-rep-div").hide('slow');
+      $("#rep").val('');
+      $("#new_rep").focus();
+   });
+
+   // event and handler
+   $("#add-new-show-production-co").on('click', function(){
+      $("#new-show-production-co-div").show('slow');
+      $("#orig-show-production-co-div").hide('slow');
+      $("#orig-producer-url-div").hide('slow');
+      $("#new-producer-url-div").show('slow');
+      $("#show_producer").val('');
+      $("#new_show_producer").focus();
+   });
+
+   // event and handler
+   $("#new_name").on('blur', function(){
+      var name = $(this).val();
+      if(name != '') {
+         var newName = capFirstLetter(name);
+         $("#new_name").val(newName);
+         console.log('Inside event and handler: ' + newName);
+         nameExists(newName);
+      }
+      if(name == ''){
+         $("#new_name_error").hide();
+      }
+   });
+
+   // event and handler
+   $("#new_location").on('blur', function(){
+      var location = $(this).val();
+      if(location != '') {
+         var newLocation = capFirstLetter(location);
+         $("#new_location").val(newLocation);
+         console.log('Inside event and handler: ' + newLocation);
+         locationExists(newLocation);
+      }
+      if(location == ''){
+         $("#new_location_error").hide();
+      }
+   });
+
+   // event and handler
+   $("#new_city").on('blur', function(){
+      var city = $(this).val();
+      if(city != '') {
+         var newCity = capFirstLetter(city);
+         $("#new_city").val(newCity);
+         console.log('Inside event and handler: ' + newCity);
+         cityExists(newCity);
+      }
+      if(city == ''){
+         $("#new_city_error").hide();
+      }
+   });
+
+   // event and handler
+   $("#new_rep").on('blur', function(){
+      var rep = $(this).val();
+      if(rep != '') {
+         var newRep = capFirstLetter(rep);
+         $("#new_rep").val(newRep);
+         console.log('Inside event and handler: ' + newRep);
+         repExists(newRep);
+      }
+      if(rep == ''){
+         $("#new_rep_error").hide();
+      }
+   });
+
+   // event and handler
+   $("#new_show_producer").on('blur', function(){
+      var showProducer = $(this).val();
+      if(rep != '') {
+         var newShowProducer = capFirstLetter(showProducer);
+         $("#new_show_producer").val(newShowProducer);
+         console.log('Inside event and handler: ' + newShowProducer);
+         showProducerExists(newShowProducer);
+      }
+      if(showProducer == ''){
+         $("#new_show_producer_error").hide();
+      }
+   });
+
+
+   // event and handler
+   $("#restore-orig-city-div").on('click', function(){
+      console.log('clicked');
+      $("#new-city-div").hide('slow');
+      $("#orig-city-div").show('slow');
+   });
+
+   // makes uppercase, the first letter of each word in string, and makes others lower case
+   function capFirstLetter(city) {
+      var cityArr = city.split(' ');
+      var newCityArr = [];
+      for(var i=0; i < cityArr.length; i++) {
+         newCityArr.push(cityArr[i].charAt(0).toUpperCase()+cityArr[i].slice(1).toLowerCase());
+      }
+      return newCityArr.join(' ');
+   }
+
+   // formats date to MySQL standards
+   function formatDate(str) {
+      var pattern = new RegExp("^\\d{4}-\\d{2}-\\d{2}$");
+      var result = pattern.test(str);
+      console.log(result);
+
+      if(result == false){
+         $("#start_date_error").show('slow');
+         $("#start_date_error").text('Please format the start date correctly.');
+      } else {
+         $("#start_date_error").hide('slow');
+      }
+   }
+
+   // formats date with time to MySQL standards
+   function formatEndDate(str) {
+      // var pattern = new RegExp("\\d{4}-\\d{2}-\\d{2}\\s\\d{2}:\\d{2}:\\d{2}");
+      var pattern = new RegExp("^\\d{4}-\\d{2}-\\d{2}$");
+      var result = pattern.test(str);
+      console.log(result);
+
+      if(result == false){
+         $("#end_date_error").show('slow');
+         $("#end_date_error").text('Please format the end date correctly.');
+      } else {
+         $("#end_date_error").hide('slow');
+      }
+   }
+
+   // checks database to see if name already exists
+   function nameExists(newName) {
+      console.log('Inside nameExists function: ' + newName);
+
+      $.ajax({
+         url: '/admin/shows/doesNameExist',
+         type: 'POST',
+         data: { name: newName },
+         success: function(result) {
+            if(result == true) {
+               $("#new_name_error").show('slow');
+               $("#new_name_error").html('Event name already exists. <a onclick="location.reload()" style="cursor:pointer">Click here to refresh page.</a> You will have to re-enter data.');
+            } else {
+               return false;
+            }
+         },
+         error: function() {
+            alert("Ajax request failed.");
+         }
+      });
+   }
+
+   // checks database to see if location already exists
+   function locationExists(newLocation) {
+      console.log('Inside locationExists function: ' + newLocation);
+
+      $.ajax({
+         url: '/admin/shows/doesLocationExist',
+         type: 'POST',
+         data: { location: newLocation },
+         success: function(result) {
+            if(result == true) {
+               $("#new_location_error").show('slow');
+               $("#new_location_error").html('Location already exists. <a onclick="location.reload()" style="cursor:pointer">Click here to refresh page.</a> You will have to re-enter data.');
+            } else {
+               return false;
+            }
+         },
+         error: function() {
+            alert("Ajax request failed.");
+         }
+      });
+   }
+
+   // checks database to see if city name already exists
+   function cityExists(newCity) {
+      console.log('Inside cityExists function: ' + newCity);
+
+      $.ajax({
+         url: '/admin/shows/doesCityExist',
+         type: 'POST',
+         data: { city: newCity },
+         success: function(result) {
+            if(result == true) {
+               $("#new_city_error").show('slow');
+               $("#new_city_error").html('City already exists. <a onclick="location.reload()" style="cursor:pointer">Click here to refresh page.</a> You will have to re-enter data.');
+            } else {
+               return false;
+            }
+         },
+         error: function() {
+            alert("Ajax request failed.");
+         }
+      });
+   }
+
+   // checks database to see if city name already exists
+   function repExists(newRep) {
+      console.log('Inside cityExists function: ' + newRep);
+
+      $.ajax({
+         url: '/admin/shows/doesRepExist',
+         type: 'POST',
+         data: { rep: newRep },
+         success: function(result) {
+            if(result == true) {
+               $("#new_rep_error").show('slow');
+               $("#new_rep_error").html('Rep already exists. <a onclick="location.reload()" style="cursor:pointer">Click here to refresh page.</a> You will have to re-enter data.');
+            } else {
+               return false;
+            }
+         },
+         error: function() {
+            alert("Ajax request failed.");
+         }
+      });
+   }
+
+   // checks database to see if city name already exists
+   function showProducerExists(newShowProducer) {
+      console.log('Inside showProducerExists function: ' + newShowProducer);
+
+      $.ajax({
+         url: '/admin/shows/doesShowProducerExist',
+         type: 'POST',
+         data: { show_producer: newShowProducer },
+         success: function(result) {
+            if(result == true) {
+               $("#new_show_producer_error").show('slow');
+               $("#new_show_producer_error").html('Show Production Company already exists. <a onclick="location.reload()" style="cursor:pointer">Click here to refresh page.</a> You will have to re-enter data.');
+            } else {
+               return false;
+            }
+         },
+         error: function() {
+            alert("Ajax request failed.");
+         }
+      });
+   }
+
+});
+</script>
+{% endblock %}

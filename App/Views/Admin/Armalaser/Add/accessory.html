@@ -1,0 +1,217 @@
+{% extends 'base-admin.html' %}
+
+{% block title %}
+  Add Accessory | ArmaLaser
+{% endblock %}
+
+{% block css %}
+{% endblock %}
+
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div id="dashboard-toggle" class="col-md-8" style="margin-top:-20px;margin-left:254px;">
+
+          <h2>Add new accessory</h2>
+          <hr>
+
+            <form method="post" action="/admin/accessories/post-new-accessory"
+              class="form-horizontal" name="new-accessory-form" id="new-accessory-form" enctype="multipart/form-data">
+
+                <div class="form-group">
+                    <label for="laser_series" class="control-label col-sm-3">
+                      Series
+                    </label>
+                    <div class="col-sm-9">
+                        <select class="form-control  required"
+                            name="laser_series" id="laser_series">
+                            <option value="">Select laser series</option>
+                            {% for key, value in laser_series %}
+                                <option value="{{ value }} ">
+                                  {{ key }} (= {{ value }})
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+
+
+                <div class="form-group">
+                    <label for="name" class="control-label col-sm-3">
+                      Name
+                    </label>
+                    <div class="col-sm-9">
+                        <input type="text" class="form-control" name="name"
+                        id="name" placeholder="Name">
+                    </div>
+                </div>
+
+
+                <div class="form-group">
+                    <label for="price" class="control-label col-sm-3">
+                      Price
+                    </label>
+                    <div class="col-sm-9">
+                        <input type="number" class="form-control"
+                        name="price" id="price" min="3.99" steps="any"
+                        placeholder="Price">
+                    </div>
+                </div>
+
+
+                <div class="form-group">
+                    <label for="image" class="control-label col-sm-3">
+                      Image
+                    </label>
+                    <div class="col-sm-9">
+                        <input type="text" class="form-control" name="image"
+                        id="image" placeholder="e.g. imageName.png">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="image_full_size" class="control-label col-sm-3">
+                      Image full-size
+                    </label>
+                    <div class="col-sm-9">
+                        <input type="text" class="form-control" name="image_full_size"
+                        id="image_full_size" placeholder="e.g. imageName.png">
+                    </div>
+                </div>
+
+
+                <div class="form-group">
+                    <label for="description" class="control-label col-sm-3">
+                      Description
+                    </label>
+                    <div class="col-sm-9">
+                      <textarea name="description" class="form-control required" id="ad_bludescriptionrb" placeholder="Description" rows="4"></textarea>
+                      <!-- <script>
+                        CKEDITOR.replace( 'description' );
+                      </script> -->
+                    </div>
+                </div>
+
+
+                <div class="form-group">
+                    <label for="ad_blurb" class="control-label col-sm-3">
+                      Ad blurb
+                    </label>
+                    <div class="col-sm-9">
+                      <textarea name="ad_blurb" class="form-control required" id="ad_blurb" placeholder="Marketing blurb" rows="4"></textarea>
+                      <!-- <script>
+                        CKEDITOR.replace( 'ad_blurb' );
+                      </script> -->
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="feature01" class="control-label col-sm-3">
+                      Feature 1
+                    </label>
+                    <div class="col-sm-9">
+                      <textarea name="feature01" class="form-control required" id="feature01" placeholder="Feature position 1" rows="4"></textarea>
+                      <!-- <script>
+                        CKEDITOR.replace( 'feature01' );
+                      </script> -->
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="feature02" class="control-label col-sm-3">
+                      Feature 2
+                    </label>
+                    <div class="col-sm-9">
+                      <textarea name="feature02" class="form-control required" id="feature02" placeholder="Feature position 2" rows="4"></textarea>
+                      <!-- <script>
+                        CKEDITOR.replace( 'feature02' );
+                      </script> -->
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="feature03" class="control-label col-sm-3">
+                      Feature 3
+                    </label>
+                    <div class="col-sm-9">
+                      <textarea name="feature03" class="form-control required" id="feature03" placeholder="Feature position 3" rows="4"></textarea>
+                      <!-- <script>
+                        CKEDITOR.replace( 'feature03' );
+                      </script> -->
+                    </div>
+                </div>
+
+
+                <div class="form-group">
+                    <label for="upc" class="control-label col-sm-3">
+                      UPC
+                    </label>
+                    <div class="col-sm-9">
+                        <input type="text" class="form-control required"
+                        name="upc" id="upc"
+                        placeholder="UPC ID, e.g. 768612094274">
+                    </div>
+                </div>
+
+
+                <div class="form-group">
+                    <label for="buy_link" class="control-label col-sm-3">
+                      Link to 3d Cart
+                    </label>
+                    <div class="col-sm-9">
+                        <input type="text" class="form-control required"
+                        name="buy_link" id="buy_link"
+                        placeholder="Full URL to 3d cart - must include http://">
+                    </div>
+                </div>
+
+
+                <div class="form-group">
+                    <label for="special_message" class="control-label col-sm-3">
+                      Special message
+                    </label>
+                    <div class="col-sm-9">
+                        <input type="text" class="form-control required"
+                        name="special_message" id="special_message"
+                        placeholder="Temporary message, e.g. 'out of inventory until Feb 1'">
+                    </div>
+                </div>
+
+                <hr>
+
+                <div class="form-group">
+                    <div class="col-sm-offset-3 col-sm-8">
+                        <button  id="submit-listing-btn" type="submit"
+                            class="btn btn-primary btn-lg">
+                          Add item
+                      </button>
+                    </div>
+                </div>
+
+            </form>
+
+
+          </div><!--  // .col-md-8  -->
+      </div><!--  // .row  -->
+</div><!--  // .container  -->
+{% endblock %}
+
+
+{% block bottomjs %}
+<script>
+$(document).ready(function(){
+
+    $("#thisID").click(function(){
+        var checked = 1;
+        console.log(checked);
+        if($("#thisID").prop("checked")){
+          $("#lasers_last_name").attr("placeholder", "Enter laser ID");
+        } else {
+          $("#lasers_last_name").attr("placeholder", "Enter laser model");
+        }
+    });
+
+});
+</script>
+{% endblock %}

@@ -1,0 +1,216 @@
+{% extends 'base-admin.html' %}
+
+{% block title %}
+  Update Warranty Registration | ArmaLaser
+{% endblock %}
+
+{% block css %}
+{% endblock %}
+
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div id="dashboard-toggle" class="col-md-8" style="margin-top:-20px;margin-left:254px;">
+
+          <h2>Update Warranty Registration</h2>
+          <hr>
+
+            <form method="post" action="/admin/warrantyregistrations/update-registration?id={{ registration.id }}"
+              class="form-horizontal" name="update-registration-form" id="update-registration-form" enctype="multipart/form-data">
+
+                <div class="form-group">
+                    <label for="name" class="control-label col-sm-3">
+                      First name
+                    </label>
+                    <div class="col-sm-9">
+                        <input type="text" class="form-control" name="first_name"
+                        id="first_name" placeholder="First name"
+                        value="{{ registration.first_name }}">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="last_name" class="control-label col-sm-3">
+                      Last name
+                    </label>
+                    <div class="col-sm-9">
+                        <input type="text" class="form-control" name="last_name"
+                        id="last_name" placeholder="Last name"
+                        value="{{ registration.last_name }}">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="address" class="control-label col-sm-3">
+                      Address
+                    </label>
+                    <div class="col-sm-9">
+                        <input type="text" class="form-control" name="address"
+                          id="address" placeholder="Address" value="{{ registration.address }}">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="city" class="control-label col-sm-3">
+                      City
+                    </label>
+                    <div class="col-sm-9">
+                        <input type="text" class="form-control" name="city"
+                        id="city" placeholder="City" value="{{ registration.city }}">
+                    </div>
+                </div>
+
+
+                <div class="form-group">
+                    <label for="state" class="control-label col-sm-3">
+                      State
+                    </label>
+                    <div class="col-sm-9">
+                      <select class="form-control" id="state" name="state">
+                          <option value="{{ registration.state }}">{{ registration.state }}</option>
+                          {% for state in states %}
+                              <option value="{{ state.name}}">{{ state.name }}</option>
+                          {% endfor %}
+                      </select>
+                    </div>
+                </div>
+
+
+                <div class="form-group">
+                    <label for="zipcode" class="control-label col-sm-3">
+                      Zip
+                    </label>
+                    <div class="col-sm-9">
+                        <input type="text" class="form-control" name="zipcode"
+                          id="zipcode" placeholder="Zip code" value="{{ registration.zipcode }}">
+                    </div>
+                </div>
+
+
+                <div class="form-group">
+                    <label for="telephone" class="control-label col-sm-3">
+                      Email
+                    </label>
+                    <div class="col-sm-9">
+                      <input type="text" class="form-control" name="email"
+                        id="email" placeholder="Email" value="{{ registration.email }}">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="website" class="control-label col-sm-3">
+                      Seller
+                    </label>
+                    <div class="col-sm-9">
+                        <select class="form-control required" id="dealer" name="dealer">
+                            <option value="{{ registration.seller }}">{{ registration.seller }}</option>
+                            {% for dealer in dealers %}
+                                <option value="{{ dealer }}">{{ dealer }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+
+                {% if registration.seller == 'ArmaLaser dealer' or registration.seller == 'Other' %}
+                  <div class="form-group" id="dealer_name_section">
+                      <label for="dealer_name" class="control-label col-sm-3">
+                        Dealer name
+                      </label>
+                      <div class="col-sm-9">
+                          <input type="text" class="form-control" name="dealer_name"
+                            id="dealer_name" placeholder="Dealer name (if applicable)"
+                            value="{{ registration.dealer_name|raw }}">
+                      </div>
+                  </div>
+                {% endif %}
+
+                <div class="form-group">
+                    <label for="purchase_date" class="control-label col-sm-3">
+                      Purchase date
+                    </label>
+                    <div class="col-sm-9">
+                        <input type="text" class="form-control" name="purchase_date"
+                          id="datepicker" placeholder="Purchase date"
+                          value="{{ registration.purchase_date }}">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="model" class="control-label col-sm-3">
+                      Model
+                    </label>
+                    <div class="col-sm-9">
+                        <input type="text" class="form-control" name="model"
+                          id="model" placeholder="Model"
+                          value="{{ registration.model }}">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="serial" class="control-label col-sm-3">
+                      Serial number
+                    </label>
+                    <div class="col-sm-9">
+                        <input type="text" class="form-control" name="serial"
+                          id="serial" placeholder="Serial number"
+                          value="{{ registration.serial }}">
+                    </div>
+                </div>
+
+                <hr>
+
+                <div class="form-group">
+                    <div class="col-sm-offset-3 col-sm-8">
+                        <button  id="submit-dealer-btn" type="submit"
+                        class="btn btn-primary btn-lg">
+                        Update Registration
+                      </button>
+                    </div>
+                </div>
+
+            </form>
+
+          </div><!--  // .col-md-8  -->
+      </div><!--  // .row  -->
+</div><!--  // .container  -->
+{% endblock %}
+
+
+{% block bottomjs %}
+<!-- Datepicker for warranty-registration.php @https://jqueryui.com/datepicker/#default -->
+<script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+<script src="/assets/js/datepicker.js"></script>
+<script>
+$(document).ready(function(){
+    // $("#update-registration-form").validate();
+
+    $("#dealer").blur(function(){
+      var choice = $(this).val();
+      console.log(choice);
+      if(choice == 'ArmaLaser dealer') {
+        // $("#dealer").attr("disabled","true");
+        // $("#dealer_name").css("margin-top", "15px");
+        $("#dealer_name").attr("placeholder", "Enter Authorized Dealer name");
+        $("#dealer_name_section").css("display", "block");
+        $("#dealer_name").show("slow").focus();
+      }
+      if (choice == 'Other') {
+        // $("#dealer").attr("disabled","true");
+        // $("#dealer_name").css("margin-top", "15px");
+        $("#dealer_name").attr("placeholder", "Enter Seller Name & Address");
+        $("#dealer_name_section").css("display", "block");
+        $("#dealer_name").show("slow").focus();
+      }
+      if( (choice == 'ArmaLaser.com') || (choice == 'ArmaLaser representative at Gun Show')
+          || (choice == 'ArmaLaser on Amazon.com') || (choice == 'OpticsPlanet on Amazon.com')
+          || (choice == 'OpticsPlanet.com') ) {
+        $("#dealer_name").css("display", "none");
+        $("#dealer_name_section").css("display", "none");
+        $("#dealer_name").val('');
+      }
+
+    });
+});
+</script>
+{% endblock %}

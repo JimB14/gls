@@ -1,0 +1,291 @@
+{% extends 'base.html' %}
+
+{% block title %}
+  Register | ArmaLaser
+{% endblock %}
+
+
+{% block css %}
+<style>
+#first_name-error,
+#last_name-error,
+#verify_email-error,
+#verify_password-error,
+#agree-error {
+    color: #ff0000;
+}
+.glyphicon-remove {
+    color: #ff0000;
+}
+.glyphicon-ok {
+    color: #228b22;
+}
+</style>
+{% endblock %}
+
+
+{% block outsidecontainer %}
+{% endblock %}
+
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-8">
+          <h2>{{ pagetitle }}</h2>
+            <div class="panel panel-default">
+                <div class="panel-body" style="padding:20px 32px;">
+
+                    <h4 style="color: #838383;">
+                        Please provide the following information to create
+                        your account.
+                    </h4>
+                    <!--  Display results from ajax_processing/  -->
+                    <div id="message"></div>
+
+                    {% if success %}
+                    <div class="alert alert-success alert-padding">{{ success }}</div>
+                    {% endif %}
+
+                    <form name="partnerregistrationform" id="partnerregistrationform"
+                        action="/register/register-new-partner" method="post">
+
+                       <!-- honeypot -->
+                       <input type="hidden" name="honeypot_register" id="honeypot_register">
+                       <input type="hidden" name="type" value="partner">
+
+                        <div class="form-group has-feedback">
+                            <label for="partner_email" class="control-label">
+                              Email
+                            </label>
+                            <input type="email" class="form-control email" name="partner_email"
+                                id="partner_email" placeholder="user@example.com"
+                                value="{{ partner_email }}" autofocus>
+                                <span class="glyphicon form-control-feedback" id="partner_email1"></span>
+                        </div>
+
+                        <div class="form-group has-feedback">
+                            <label for="partner_confirm_email" class="control-label">
+                                Verify email
+                            </label>
+                            <input type="email" class="form-control" name="partner_confirm_email"
+                                id="partner_confirm_email" placeholder="user@example.com" value="{{ partner_confirm_email2 }}">
+                                <span class="glyphicon form-control-feedback" id="partner_confirm_email1"></span>
+                        </div>
+
+                        <div class="form-group has-feedback">
+                            <label for="partner_first_name" class="control-label">
+                                First name
+                            </label>
+                            <input type="text" class="form-control" name="partner_first_name"
+                                id="partner_first_name" placeholder="First name" value="{{ partner_first_name }}">
+                                <span class="glyphicon form-control-feedback" id="partner_first_name1"></span>
+                        </div>
+
+                        <div class="form-group has-feedback">
+                            <label for="partner_last_name" class="control-label">
+                              Last name
+                            </label>
+                            <input type="text" class="form-control" name="partner_last_name"
+                                id="partner_last_name" placeholder="Last name" value="{{ partner_last_name }}">
+                                <span class="glyphicon form-control-feedback" id="partner_last_name1"></span>
+                        </div>
+
+                        <div class="form-group has-feedback">
+                            <label for="partner_company" class="control-label">
+                              Company
+                            </label>
+                            <input type="text" class="form-control" name="partner_company"
+                                id="partner_company" placeholder="Company" value="{{ partner_company }}">
+                                <span class="glyphicon form-control-feedback" id="partner_company1"></span>
+                        </div>
+
+                        <div class="form-group has-feedback">
+                            <label for="partner_password" class="control-label">
+                              Password (<small>Minimum 6 characters</small>)
+                            </label>
+                            <input type="password" class="form-control" name="partner_password"
+                                id="partner_password" placeholder="Password - minimum 6 characters">
+                                <span class="glyphicon form-control-feedback" id="partner_password1"></span>
+                        </div>
+
+                        <div class="form-group has-feedback">
+                            <label for="partner_confirm_password" class="control-label">
+                                Verify password
+                            </label>
+                            <input type="password" class="form-control" name="partner_confirm_password"
+                                id="partner_confirm_password" placeholder="Verify password">
+                                <span class="glyphicon form-control-feedback" id="partner_confirm_password1"></span>
+                        </div>
+
+                        <div class="form-group has-feedback has-feedback">
+                            <div class=" col-sm-8">
+                                <div class="checkbox">
+                                    <label for="agree">
+                                        <input type="checkbox" name="agree" id="agree">
+                                            I agree to the Terms.
+                                        <a href="/terms/terms-of-use">
+                                            Read terms
+                                        </a>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <hr>
+
+                        <div class="form-group has-feedback">
+                            <button id="registerBtn" type="submit" class="btn btn-lg btn-buy btn-block">
+                                Register
+                            </button>
+                        </div>
+                    </form>
+
+                </div><!--  // .panel-body  -->
+            </div><!--  // .panel  -->
+        </div><!-- // .col-md-8  -->
+
+        <div class="col-md-4">
+
+        </div><!-- // .col-md-4  -->
+
+    </div>
+</div>
+{% endblock %}
+
+
+{% block bottomjs %}
+
+<script>
+$(document).ready(function(){
+
+    $("#partnerregistrationform").validate({
+        rules: {
+            partner_email: {
+                required: true,
+                email: true
+            },
+            partner_confirm_email: {
+                equalTo: "#partner_email"
+            },
+            partner_first_name: {
+                minlength: 2,
+                maxlength: 20,
+                required: true
+            },
+            partner_last_name: {
+                minlength: 2,
+                maxlength: 30,
+                required: true
+            },
+            partner_company: {
+                minlength: 5,
+                maxlength: 50,
+                required: true
+            },
+            partner_passsword: {
+                minlength: 6,
+                maxlength: 10,
+                required: true
+            },
+            partner_confirm_password: {
+                equalTo: "#partner_password"
+            },
+            agree: "required"
+        },
+        messages: {
+            partner_email: {
+                required: "Please enter your email address",
+                email: "Please enter a valid email address"
+            },
+            partner_confirm_email: {
+                equalTo: "Please enter the same email address"
+            },
+            partner_first_name: {
+                minlength: "Please enter at least 2 characters",
+                maxlength: "Please enter less than 20 characters",
+                required: "Please enter your first name"
+            },
+            partner_last_name: {
+              minlength: "Please enter at least 2 characters",
+              maxlength: "Please enter less than 30 characters",
+              required: "Please enter your last name"
+            },
+            partner_company: {
+              minlength: "Please enter at least 5 characters",
+              maxlength: "Please enter less than 50 characters",
+              required: "Please enter your company name"
+            },
+            partner_password: {
+                minlength: "Please enter at least 6 characters",
+                maxlength: "Please enter up to 10 characters",
+                required: "Please enter a password",
+            },
+            partner_confirm_password: {
+                equalTo: "Please enter the same password"
+            },
+            agree: "Please accept our terms and conditions"
+        },
+        highlight: function(element) {
+            var id_attr = "#" + $( element ).attr("id") + "1";
+            $(element).closest('.form-group has-feedback').removeClass('has-success').addClass('has-error');
+            $(id_attr).removeClass('glyphicon-ok').addClass('glyphicon-remove');
+        },
+        unhighlight: function(element) {
+            var id_attr = "#" + $( element ).attr("id") + "1";
+            $(element).closest('.form-group has-feedback').removeClass('has-error').addClass('has-success');
+            $(id_attr).removeClass('glyphicon-remove').addClass('glyphicon-ok');
+        },
+        errorElement: 'span',
+            errorClass: 'help-block',
+            errorPlacement: function(error, element) {
+                if(element.length) {
+                    error.insertAfter(element);
+                } else {
+                error.insertAfter(element);
+                }
+            }
+     });
+
+
+  /* - - - - Check if email in db  - - - -  */
+
+    $("#partner_email").blur(function(){
+        var email = $( this ).val();
+        console.log(`email =  ${email}`);
+
+        if (email !== '') {
+            $.ajax({
+                url: "/register/checkIfEmailAvailable",
+                type: 'POST',
+                data: {
+                  email: email,
+                  type: 'partner'
+                },
+                cache: false,
+                success: function(data){
+                    var available = '<div class="alert alert-success alert-padding">';
+                    available += 'Email address is available! Welcome!';
+                    available += '</div>';
+
+                    var not_available = '<div class="alert alert-danger alert-padding">';
+                    not_available += 'Sorry, the email address you entered is not available. If you are already registered, please <a href="/admin/login">log in</a>.';
+                    not_available += '</div>';
+
+                    if( data === 'available' ){
+                        $("#message").html(available);
+                    }
+                    else {
+                        $("#message").html(not_available);
+                    }
+                },
+                error: function(){
+                    alert("An error occurred.");
+                }
+            });
+        }
+    });
+
+});
+</script>
+{% endblock %}

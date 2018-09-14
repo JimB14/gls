@@ -1,0 +1,584 @@
+{% extends 'base.html' %}
+
+{% block title %}
+  Checkout | ArmaLaser
+{% endblock %}
+
+{% block metadescription %}
+Checkout page for ArmaLaser
+{% endblock %}
+
+{% block css %}
+<style>
+    .table tbody > tr > td,
+    .table tfoot tr td {
+        vertical-align: middle !important;
+    }
+    table tr:last-child {
+        border-left: 1px solid #fff !important;
+        border-right: 1px solid #fff !important;
+    }
+    #shippinginfo {
+        display:block:;
+    }
+    form .error {
+        color: #ff0000;
+    }
+    #checkout-first-class-details,
+    #checkout-priority-class-details,
+    #checkout-ups-ground-details,
+    #checkout-three-day-select-details,
+    #checkout-second-day-air-details {
+        display: none;
+    }
+    #next-day-in-fl {
+        display:none;
+    }
+    .checkbox {
+        margin-bottom: 10px !important;
+    }
+    input[type="radio"]:hover {
+        cursor:pointer;
+    }
+    .shipping-radio-label:hover {
+        text-decoration: underline;
+        font-weight: bold;
+    }
+</style>
+{% endblock %}
+
+{% block outsidecontainer %}
+{% endblock %}
+
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            {% include 'Cart/inc.cart.html' %}
+        </div>
+
+        <div class="col-md-8" style="margin-bottom: 60px;">
+            <div style="border: 1px solid #ddd;border-radius: 3px; padding:5px 30px 20px 20px;">
+                <h3 style="margin:10px 0 20px 0;padding: 0px;">Billing / Ship-to information on file</h3>
+                <form method="post" class="form-horizontal" name="bill_ship_info" id="bill_ship_info"
+                    action="/cart/checkout/partner-order-summary">
+                    <div class="form-group has-feedback">
+                        <label for="partner_firstname" class="col-sm-2 control-label">
+                            First name
+                        </label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control required" name="partner_firstname"
+                            id="partner_firstname" placeholder="First name" value="{{ customer.first_name }}">
+                            <span class="glyphicon form-control-feedback" id="partner_firstname1"></span>
+                        </div>
+                    </div>
+                    <div class="form-group has-feedback">
+                        <label for="partner_lastname" class="col-sm-2 control-label">
+                            Last name
+                        </label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control required" name="partner_lastname"
+                            id="partner_lastname" placeholder="Last name" value="{{ customer.last_name }}">
+                            <span class="glyphicon form-control-feedback" id="partner_lastname1"></span>
+                        </div>
+                    </div>
+                    <div class="form-group has-feedback">
+                        <label for="partner_company" class="col-sm-2 control-label">
+                            Company
+                        </label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control required" name="partner_company"
+                            id="partner_company" placeholder="Company" value="{{ customer.company|raw }}">
+                            <span class="glyphicon form-control-feedback" id="partner_company1"></span>
+                        </div>
+                    </div>
+                    <div class="form-group has-feedback">
+                        <label for="partner_phone" class="col-sm-2 control-label">
+                           Telephone
+                        </label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control required" name="partner_phone"
+                            id="partner_phone" placeholder="Telephone" value="{{ customer.telephone }}">
+                            <span class="glyphicon form-control-feedback" id="partner_phone1"></span>
+                        </div>
+                    </div>
+                    <div class="form-group has-feedback">
+                        <label for="partner_address" class="col-sm-2 control-label">
+                            Address
+                        </label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control required" name="partner_address"
+                            id="partner_address" placeholder="Address" value="{{ customer.address }}">
+                            <span class="glyphicon form-control-feedback" id="partner_address1"></span>
+                        </div>
+                    </div>
+                    <!-- address2
+                        <div class="form-group has-feedback">
+                        <label for="partner_address2" class="col-sm-2 control-label">
+                            Unit / Suite
+                        </label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" name="partner_address2"
+                            id="partner_address2" placeholder="Unit / Suite" value="{# customer.address2 #}">
+                            <span class="glyphicon form-control-feedback" id="partner_address21"></span>
+                        </div>
+                    </div> -->
+                    <div class="form-group has-feedback">
+                        <label for="partner_city" class="col-sm-2 control-label">
+                            City
+                        </label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control required" name="partner_city"
+                            id="partner_city" placeholder="City" value="{{ customer.city }}">
+                            <span class="glyphicon form-control-feedback" id="partner_city1"></span>
+                        </div>
+                    </div>
+                    <div class="form-group has-feedback">
+                        <label for="partner_state" class="col-sm-2 control-label">
+                            State
+                        </label>
+                        <div class="col-sm-10">
+                            <select class="form-control required" name="partner_state" id="partner_state">
+                                <option value="{{ customer.state }}">{% if customer.state %}{{ customer.state }}{% else %}Select{% endif %}</option>
+                                {% for state in states %}
+                                    <option value="{{ state.abbrev }}">{{ state.abbrev }}</option>
+                                {% endfor %}
+                            </select>
+                            <span class="glyphicon form-control-feedback" id="partner_state1"></span>
+                        </div>
+                    </div>
+                    <div class="form-group has-feedback">
+                        <label for="partner_zip" class="col-sm-2 control-label">
+                            Zip
+                        </label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control required" name="partner_zip"
+                            id="partner_zip" placeholder="Zip" value="{{ customer.zip }}">
+                            <span class="glyphicon form-control-feedback" id="partner_zip1"></span>
+                        </div>
+                    </div>
+                    <div class="form-group has-feedback">
+                        <label for="partner_email" class="col-sm-2 control-label">
+                            Email
+                        </label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control required" name="partner_email"
+                            id="partner_email" placeholder="Email" value="{{ customer.email }}">
+                            <span class="glyphicon form-control-feedback" id="partner_email1"></span>
+                        </div>
+                    </div>
+
+
+                    <div style="border: .5px solid #eee; margin-top: 40px; margin-bottom: 20px;"></div>
+
+                    <h3 style="margin:20px 0 20px 0;padding: 0px;">
+                        Shipping Information
+                        <label style="margin-left: 30px;font-size:16px;font-weight:normal;cursor:pointer;">
+                            <input type="checkbox" id="sameAsBilling">
+                            <span id="copy-billing-data">
+                                Click if same as billing. Fill in for drop-shipment.
+                            </span>
+                        </label>
+                    </h3>
+                    <div id="shippinginfo">
+                        <div class="form-group has-feedback">
+                            <label for="partner_shipping_firstname" class="col-sm-2 control-label">
+                                First name
+                            </label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control required" name="partner_shipping_firstname"
+                                    id="partner_shipping_firstname" placeholder="First name" value="{{ customer.partner_shipping_firstname }}">
+                                <span class="glyphicon form-control-feedback" id="partner_shipping_firstname1"></span>
+                            </div>
+                        </div>
+                        <div class="form-group has-feedback">
+                            <label for="partner_shipping_lastname" class="col-sm-2 control-label">
+                                Last name
+                            </label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control required" name="partner_shipping_lastname"
+                                    id="partner_shipping_lastname" placeholder="Last name" value="{{ customer.partner_shipping_lastname }}">
+                                <span class="glyphicon form-control-feedback" id="partner_shipping_lastname1"></span>
+                            </div>
+                        </div>
+                        <div class="form-group has-feedback">
+                            <label for="partner_shipping_company" class="col-sm-2 control-label">
+                                Company
+                            </label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" name="partner_shipping_company"
+                                    id="partner_shipping_company" placeholder="Company" value="{{ customer.partner_shipping_company }}">
+                                <span class="glyphicon form-control-feedback" id="partner_shipping_company1"></span>
+                            </div>
+                        </div>
+                        <div class="form-group has-feedback">
+                            <label for="partner_shipping_phone" class="col-sm-2 control-label">
+                                Telephone
+                            </label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control required" name="partner_shipping_phone"
+                                    id="partner_shipping_phone" placeholder="Telephone" value="{{ customer.partner_shipping_phone }}">
+                                <span class="glyphicon form-control-feedback" id="partner_shipping_phone1"></span>
+                            </div>
+                        </div>
+                        <div class="form-group has-feedback">
+                            <label for="partner_shipping_address" class="col-sm-2 control-label">
+                                Address
+                            </label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control required" name="partner_shipping_address"
+                                    id="partner_shipping_address" placeholder="Address" value="{{ customer.partner_shipping_address }}">
+                                <span class="glyphicon form-control-feedback" id="partner_shipping_address1"></span>
+                            </div>
+                        </div>
+                        <!-- <div class="form-group has-feedback">
+                            <label for="partner_shipping_address2" class="col-sm-2 control-label">
+                                Apt / Ste
+                            </label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" name="partner_shipping_address2"
+                                id="partner_shipping_address2" placeholder="Apt / Ste" value="{{ customer.partner_shipping_address2 }}"
+                                autocomplete="off">
+                                <span class="glyphicon form-control-feedback" id="partner_shipping_address21"></span>
+                            </div>
+                        </div> -->
+                        <div class="form-group has-feedback">
+                            <label for="partner_shipping_city" class="col-sm-2 control-label">
+                                City
+                            </label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control required" name="partner_shipping_city"
+                                id="partner_shipping_city" placeholder="City" value="{{ customer.partner_shipping_city }}"
+                                autocomplete="off">
+                                <span class="glyphicon form-control-feedback" id="partner_shipping_city1"></span>
+                            </div>
+                        </div>
+                        <div class="form-group has-feedback">
+                            <label for="partner_shipping_state" class="col-sm-2 control-label">
+                                State
+                            </label>
+                            <div class="col-sm-10">
+                                <select class="form-control required" name="partner_shipping_state"
+                                    id="partner_shipping_state" autocomplete="off">
+                                    <option value="{{ customer.partner_shipping_state }}">{% if customer.partner_shipping_state %}{{ customer.partner_shipping_state }}{% else %}Select{% endif %}</option>
+                                    {% for state in states %}
+                                        <option value="{{ state.abbrev }}">{{ state.abbrev }}</option>
+                                    {% endfor %}
+                                </select>
+                                <span class="glyphicon form-control-feedback" id="partner_shipping_state1"></span>
+                            </div>
+                        </div>
+                        <div class="form-group has-feedback">
+                            <label for="partner_shipping_zip" class="col-sm-2 control-label">
+                                Zip
+                            </label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control required" name="partner_shipping_zip"
+                                id="partner_shipping_zip" placeholder="Zip" value="{{ customer.partner_shipping_zip }}"
+                                autocomplete="off">
+                                <span class="glyphicon form-control-feedback" id="partner_shipping_zip1"></span>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <h3 style="margin:20px 0 0 0;padding: 0px;">
+                        Shipping Options
+                    </h3>
+                    <div class="checkbox">
+                        <label class="col-sm-offset-2 col-sm-8 shipping-radio-label">
+                            <input type="radio" id="free_shipping" name="shipping_method" value="First" checked>
+                            <span><img height="25" src="/assets/images/usps/logo.png"></span>
+                            USPS First Class - <span id="priority-mail-amount" class="checkout-shipping-amount">FREE <a href="https://www.usps.com/ship/first-class-mail.htm" target="_blank">(1-3 days)</a></span>
+                            <input type="hidden" name="free_shipping_cost" id="free_shipping_cost" value="first">
+                        </label>
+                        <div id="checkout-first-class-details" class="col-sm-offset-2 col-sm-10">
+                            <div class="alert alert-info" style="padding: 0; margin: 0; padding-bottom:7px;">
+                                <h4 style="margin:0; padding: 7px 0 5px 7px;">First Class details</h4>
+                                <div id="first-class-rate" style="margin-left:12px;"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="checkbox">
+                        <label class="col-sm-offset-2 col-sm-10 shipping-radio-label">
+                            <input type="radio" id="priority_mail" name="shipping_method" value="Priority">
+                                <span><img height="25" src="/assets/images/usps/logo.png"></span>
+                                USPS Priority Mail <a href="https://www.usps.com/ship/priority-mail.htm" target="_blank">(1-3 days)</a> - <span id="priority-mail-amount" class="checkout-shipping-amount">$7.50</span>
+                                <input type="hidden" name="priority_mail_cost" id="priority_mail_cost" value="7.50">
+                        </label>
+                        <!-- <div id="checkout-priority-class-details" class="col-sm-offset-2 col-sm-10">
+                            <div class="alert alert-info" style="padding: 0; margin: 0; margin: 7px 0px; padding-bottom:7px;">
+                                <h4 style="margin:0; padding: 7px 0 5px 7px;">Priority Mail details <span style="font-size:14px;">(delivery times apply after your order is shipped)</span></h4>
+                                <div id="priority-rate" style="margin-left:12px;"></div>
+                            </div>
+                        </div> -->
+                    </div>
+
+                    <div class="checkbox">
+                        <label class="col-sm-offset-2 col-sm-10 shipping-radio-label">
+                            <input type="radio" id="ups_ground" name="shipping_method" value="UPS Ground">
+                                <span><img height="25" src="/assets/images/ups/logo_small.gif"></span>
+                                UPS Ground - <span id="priority-mail-amount" class="checkout-shipping-amount">$12.50</span> <span id="next-day-in-fl"> (usually next day in Florida)</span>
+                            <input type="hidden" name="ups_ground_cost" id="ups_ground_cost" value="12.50">
+                            <input type="hidden" name="ups_ground_shipment_digest" id="ups_ground_shipment_digest" value="">
+                            <input type="hidden" name="ups_ground_tracking_number" id="ups_ground_tracking_number" value="">
+                        </label>
+                        <div id="checkout-ups-ground-details" class="col-sm-offset-2 col-sm-10">
+                            <div class="alert alert-info" style="padding: 0; margin: 0; margin: 7px 0px; padding-bottom:7px;">
+                                <h4 style="margin:0; padding: 7px 0 5px 7px;">UPS Ground rate: $<span id="ups-ground-rate"></span></h4>
+                                <!-- <div style="margin-left:12px;"><span id="ups-ground-rate"></span></div> -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="checkbox">
+                        <label class="col-sm-offset-2 col-sm-10 shipping-radio-label">
+                            <input type="radio" id="ups_three_day_select" name="shipping_method" value="UPS Three Day Select">
+                                <span><img height="25" src="/assets/images/ups/logo_small.gif"></span>
+                                UPS 3 Day Select - <span id="priority-mail-amount" class="checkout-shipping-amount">$25.00</span>
+                            <input type="hidden" name="ups_three_day_select_cost" id="ups_three_day_select_cost" value="25.00">
+                            <input type="hidden" name="ups_three_day_select_shipment_digest" id="ups_three_day_select_shipment_digest" value="">
+                            <input type="hidden" name="ups_three_day_select_tracking_number" id="ups_three_day_select_tracking_number" value="">
+                        </label>
+                        <div id="checkout-three-day-select-details" class="col-sm-offset-2 col-sm-10">
+                            <div class="alert alert-info" style="padding: 0; margin: 0; margin: 7px 0px; padding-bottom:7px;">
+                                <h4 style="margin:0; padding: 7px 0 5px 7px;">UPS 3 Day Select rate: $<span id="ups-three-day-select-rate"></span></h4>
+                                <!-- <div id="three-day-select-rate" style="margin-left:12px;"></div> -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="checkbox">
+                        <label class="col-sm-offset-2 col-sm-10 shipping-radio-label">
+                            <input type="radio" id="ups_second_day_air" name="shipping_method" value="UPS Second Day Air">
+                                <span><img height="25" src="/assets/images/ups/logo_small.gif"></span>
+                                UPS 2nd Day Air - <span id="priority-mail-amount" class="checkout-shipping-amount">$35.00</span>
+                            <input type="hidden" name="ups_second_day_air_cost" id="ups_second_day_air_cost" value="35.00">
+                            <input type="hidden" name="ups_second_day_air_shipment_digest" id="ups_second_day_air_shipment_digest" value="">
+                            <input type="hidden" name="ups_second_day_air_tracking_number" id="ups_second_day_air_tracking_number" value="">
+                        </label>
+                        <div id="checkout-second-day-air-details" class="col-sm-offset-2 col-sm-10">
+                            <div class="alert alert-info" style="padding: 0; margin: 0; margin: 7px 0px; padding-bottom:7px;">
+                                <h4 style="margin:0; padding: 7px 0 5px 7px;">UPS 2nd Day Air rate: $<span id="ups-second-day-air"></span></h4>
+                                <!-- <div id="second-day-air-rate" style="margin-left:12px;"></div> -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-offset-2 col-sm-10" style="margin-top: 15px;">
+                        <p class="small">
+                            *UPS, the UPS brand mark, and the Color Brown are trademarks of United
+                            Parcel Service of America, Inc. All Rights Reserved.
+                        </p>
+                    </div>
+
+                    <!-- <h3 style="margin:20px 0 20px 0;padding: 0px;">
+                        Shipping Instructions
+                    </h3>
+
+                    <div class="form-group has-feedback">
+                        <div class="col-sm-offset-2 col-sm-10">
+                            <textarea class="form-control" name="shipping_instructions" id="shipping_instructions" placeholder="Special shipping instructions"></textarea>
+                            <span class="glyphicon form-control-feedback" id="notes_from_customer1"></span>
+                        </div>
+                    </div> -->
+
+                    <div style="border: .5px solid #eee; margin-top:20px; margin-bottom: 15px;"></div>
+                    <div class="col-sm-offset-2">
+                        <button id="continue-btn" class="btn btn-buy btn-lg" role="submit">Continue</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block bottomjs %}
+<script>
+$(document).ready(function(){
+
+    $("#bill_ship_info").validate();
+
+
+    $("#checkoutOptBtn").on('click', function(){
+        $("form").submit(function(e){
+            e.preventDefault();
+        });
+        console.log("Clicked!");
+        let register = $("#checkoutOptions1").val();
+        console.log(register);
+        if (register === 'register') {
+            console.log("Match!");
+            window.location.href = "/admin/user/register";
+        }
+    });
+
+
+
+    // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
+
+    // get shipping rate and data from Endicia or UPS APIs
+    $( 'input[name="shipping_method"]' ).on('click', function() {
+        // store
+        var shipping_method = $('input:checked').val();
+        console.log('Shipping method: ', shipping_method);
+
+        // get all radio buttons
+        var checkboxes = $('input[name="shipping_method"]');
+        console.dir(checkboxes);
+
+        var free = checkboxes[0].checked;
+        var priority = checkboxes[1].checked;
+        var upsGround = checkboxes[2].checked;
+        var upsThreeDaySelect = checkboxes[3].checked;
+        var upsSecondDayAir = checkboxes[4].checked;
+
+        console.log('Free: ', free);
+        console.log('Priority: ', priority);
+        console.log('UPS Ground: ', upsGround);
+        console.log('UPS 3 Day Select: ', upsThreeDaySelect);
+        console.log('UPS 2nd Day Air: ', upsSecondDayAir);
+
+        // get values for first-time buyer (not yet in db)
+        // var shipAddress1 = document.getElementById('shipping_address').value;
+        // console.log('shipAddress1: ', shipAddress1);
+
+        // var total_weight = {{ cartMetaData.total_weight }}; // integer: no quotation marks
+        var numberOfItems = {{ cartMetaData.numberOfItems }}; // integer: no quotation marks
+        var company = '{% if customer.shipping_company %}{{ customer.shipping_company }}{% else %}'+ $("#shipping_company").val() +'{% endif %}';
+        var firstName = '{% if customer.shipping_firstname %}{{ customer.shipping_firstname }}{% else %}'+ $("#shipping_firstname").val() +'{% endif %}';
+        var lastName = '{% if customer.shipping_lastname %}{{ customer.shipping_lastname }}{% else %}'+ $("#shipping_lastname").val() +'{% endif %}';
+        var phone = '{% if customer.shipping_phone %}{{ customer.shipping_phone }}{% else %}'+ $("#shipping_phone").val() +'{% endif %}'; // string: quotes required
+        var address1 = '{% if customer.shipping_address %}{{ customer.shipping_address }}{% else %}'+ $("#shipping_address").val() +'{% endif %}'; // string: quotes required
+        var address2 = '{% if customer.shipping_address2 %}{{ customer.shipping_address2 }}{% else %}'+ $("#shipping_address2").val() +'{% endif %}';
+        var city = '{% if customer.shipping_city %}{{ customer.shipping_city }}{% else %}'+ $("#shipping_city").val() +'{% endif %}';
+        var state = '{% if customer.shipping_state%}{{ customer.shipping_state }}{% else %}'+ $("#shipping_state").val() +'{% endif %}';
+        var zip = '{% if customer.shipping_zip %}{{ customer.shipping_zip }}{% else %}'+ $("#shipping_zip").val() +'{% endif %}';
+
+        // test
+        console.log("User chose: " + shipping_method);
+        console.log('Shipping method: ', shipping_method);
+        console.log('Total weight: ', total_weight);
+        console.log('Item count: ', numberOfItems);
+        console.log('Company: ', company);
+        console.log('First name: ', firstName);
+        console.log('Last name: ', lastName);
+        console.log('Phone: ', phone);
+        console.log('Address1: ', address1);
+        console.log('Address2: ', address2);
+        console.log('City: ', city);
+        console.log('State: ', state);
+        console.log('Zip: ', zip);
+
+        if (firstName === '' || lastName === '' || address1 === ''
+            || city === '' || state === '' || zip === '') {
+
+                alert("Shipping information that is required is missing.");
+                return;
+        }
+
+
+        // - - - - - FREE SHIPPING - user selects free shipping - - - - - - - //
+        if (free === true) {
+            // hide other shipping detail divs
+            $("#checkout-priority-class-details").css("display", "none");
+            $("#checkout-ups-ground-details").css("display", "none");
+            $("#checkout-three-day-select-details").css("display", "none");
+            $("#checkout-second-day-air-details").css("display", "none");
+        }
+
+        // - - - -PRIORITY MAIL - user selects priority mail - - - - - - - - //
+        else if (priority === true) {
+            // set standard price per ArmaLaser
+            let price = 7.50;
+
+            // hide other shipping detail divs
+            $("#checkout-ups-ground-details").css("display", "none");
+            $("#checkout-three-day-select-details").css("display", "none");
+            $("#checkout-second-day-air-details").css("display", "none");
+
+        // - - - - UPS GROUND - user selects UPS Ground - - - - - - - - - - - //
+        } else if (upsGround === true) {
+
+            console.log("UPS Ground selected.");
+
+            // store UPS code value in variable
+            var upsGroundCode = '03';
+
+            // hide other shipping detail divs
+            $("#checkout-priority-class-details").css("display", "none");
+            $("#checkout-three-day-select-details").css("display", "none");
+            $("#checkout-second-day-air-details").css("display", "none");
+
+        // - - - - UPS THREE DAY SELECT - user selects UPS 3 Day Select - - - //
+        } else if (upsThreeDaySelect === true) {
+
+            console.log("UPS 3 Day Select selected.");
+
+            // store UPS code value in variable
+            var threeDaySelectCode = '12';
+
+            // hide other shipping detail divs
+            $("#checkout-priority-class-details").css("display", "none");
+            $("#checkout-ups-ground-details").css("display", "none");
+            $("#checkout-second-day-air-details").css("display", "none");
+
+        // - - - - UPS 2ND DAY AIR - user selects UPS 2nd Day Air - - - - - - //
+        } else if (upsSecondDayAir === true) {
+
+            console.log("UPS 2nd Day Air selected.");
+
+            // store UPS code value in variable
+            var secondDayAirCode = '02';
+
+            // hide other shipping detail divs
+            $("#checkout-priority-class-details").css("display", "none");
+            $("#checkout-ups-ground-details").css("display", "none");
+            $("#checkout-three-day-select-details").css("display", "none");
+        }
+    });
+
+
+
+
+    // - - - - - - functions - - - - - - - - - - //
+
+
+
+});
+
+// Vanilla JavaScript
+let ckbox = document.getElementById('sameAsBilling');
+ckbox.addEventListener('change', fillShipToFields);
+
+function fillShipToFields() {
+    let isChecked = ckbox.checked; // true or false
+    console.log(isChecked);
+
+    // checkbox clicked
+    if (isChecked) {
+        document.getElementById('partner_shipping_firstname').value = document.getElementById('partner_firstname').value;
+        document.getElementById('partner_shipping_lastname').value = document.getElementById('partner_lastname').value;
+        document.getElementById('partner_shipping_company').value = document.getElementById('partner_company').value;
+        document.getElementById('partner_shipping_phone').value = document.getElementById('partner_phone').value;
+        document.getElementById('partner_shipping_address').value = document.getElementById('partner_address').value;
+        document.getElementById('partner_shipping_city').value = document.getElementById('partner_city').value;
+        document.getElementById('partner_shipping_state').value = document.getElementById('partner_state').value;
+        document.getElementById('partner_shipping_zip').value = document.getElementById('partner_zip').value;
+    } else {
+        document.getElementById('partner_shipping_firstname').value = '';
+        document.getElementById('partner_shipping_lastname').value = '';
+        document.getElementById('partner_shipping_company').value = '';
+        document.getElementById('partner_shipping_phone').value = '';
+        document.getElementById('partner_shipping_address').value = '';
+        document.getElementById('partner_shipping_city').value = '';
+        document.getElementById('partner_shipping_state').value = '';
+        document.getElementById('partner_shipping_zip').value = '';
+    }
+}
+
+</script>
+{% endblock %}

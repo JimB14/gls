@@ -1,0 +1,137 @@
+{% extends 'base.html' %}
+
+{% block title %}
+   Search {{ mfr|capitalize }} {{ model }}
+{% endblock %}
+
+{% block metadescription %}
+   Find {{ mfr }} {{ model }} price
+{% endblock %}
+
+{% block css %}
+{% endblock %}
+
+{% block outsidecontainer %}
+{% endblock %}
+
+
+{% block content %}
+
+
+    <div class="red-band">
+        <div class="pistol-brand-image">
+            <h1>
+                {{ pistolMfr }}®
+                {% if model %}
+                    {% if model|slice(0,1) == 'g' %}
+                        {{ model|replace({'g': ''})|upper }}
+                    {% else %}
+                        {{ model|upper }}
+                    {% endif %}
+                {% endif %}
+            </h1>
+        </div>
+    </div>
+
+    <div id="bg-trseries">
+        <div class="container">
+            <h1 style="margin: 0;">{{ mfr|upper }} {{ model|upper }}</h1>
+            <h3 style="margin: 0;padding: 0; margin-top: 10px;">
+                <a class="newWindow" title="Search Google" href="https://www.google.com/search?q={{ mfr }}+{{ model }}+{{ param}}">
+                    Search Google: &quot;{{ mfr }} {{ model }} {{ param }}&quot;
+                </a>
+            </h3>
+        </div>
+    </div>
+
+
+
+    <!-- - - - - - - - - - -  TR SERIES  - - - - - - - - - - - - - - - - - - - - -->
+
+    {% if trseries %}
+       {% include 'ProductsByBrand/section-trseries.html' %}
+    {% else %}
+        <div class="white-band"></div>
+    {% endif %}
+
+    <!-- - - - - -  - - - -  /TR SERIES  - - - - - - - - - - - - - - - - - - - - -->
+
+
+
+    <!-- - - - - - - - - -  GTO / FLX  - - - - - - - - - - - - - - - - - - - - - -->
+
+    {% if gtoseries %}
+       {% include 'ProductsByBrand/section-gtoflx.html' %}
+    {% else %}
+        <div class="white-band"></div>
+    {% endif %}
+
+    <!-- - - - - -  - -   /GTO / FLX  - - - - - - - - - - - - - - - - - - - - - -->
+
+
+
+    <!-- - - - - - - - - -  STINGRAY  - - - - - - - - - - - - - - - - - - - - - -->
+    {% if stingray %}
+       {% include 'ProductsByBrand/section-stingray.html' %}
+    {% else %}
+        <div class="white-band"></div>
+    {% endif %}
+
+    <!-- - - - - -  - -   /STINGRAY  - - - - - - - - - - - - - - - - - - - - - -->
+
+
+
+
+    <!-- - - - - - - - - -  HOLSTERS  - - - - - - - - - - - - - - - - - - - - -->
+    {% if holsters %}
+       {% include 'ProductsByBrand/section-holsters.html' %}
+    {% else %}
+    <div class="white-band"></div>
+    {% endif %}
+
+    <!-- - - - - -  - - - /HOLSTERS  - - - - - - - - - - - - - - - - - - - - -->
+
+
+
+    <!-- - - - - - - - - -  BATTERIES & PARTS  - - - - - - - - - - - - - - - -->
+    <!-- {% if batteries %}
+       {% include 'ProductsByBrand/section-batteries-parts.html' %}
+    {% else %}
+    <div class="white-band"></div>
+    {% endif %} -->
+
+    <!-- - - - - -  - - - /BATTERIES & PARTS  - - - - - - - - - - - - - - - - -->
+
+
+
+    <!-- - - - - - - - - -  ACCESSORIES  - - - - - - - - - - - - - - - - - - - - -->
+    <!-- {% if accessories %}
+       {% include 'ProductsByBrand/section-accessories.html' %}
+    {% else %}
+    <div class="white-band"></div>
+    {% endif %} -->
+
+    <!-- - - - - -  - - - /ACCESSORIES  - - - - - - - - - - - - - - - - - - - - -->
+
+
+{% endblock %}
+
+{% block bottomjs %}
+<script>
+// resource:  http://www.codebelt.com/jquery/open-new-browser-window-with-jquery-custom-size/
+//https://www.codeofaninja.com/2011/04/how-to-center-screen-pop-up-window-with.html
+$(".newWindow").click(function(event){
+    event.preventDefault();
+
+    var url = $(this).attr("href");
+    var windowName = "popUp";
+    var windowWidth = 700;
+    var windowHeight = 700;
+    var windowLeft = parseInt((screen.availWidth/2) - (windowWidth/2));
+    var windowTop = parseInt((screen.availHeight/2) - (windowHeight/2));
+    var windowSize = "menubar=no,resizable=yes,width=700,height=700,scrollbars=yes,left=" + windowLeft + ",top=" + windowTop + ",screenX=" + windowLeft + ",screenY=" + windowTop;
+
+    window.open(url, windowName, windowSize);
+});
+</script>
+{% endblock %}

@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Holsters for ArmaLaser-equipped {{ pistolMfr|upper }}® pistols
+{% endblock %}
+
+{% block metadescription %}
+Laser-Fit™ holsters custom-designed to fit {{ pistolMfr|upper }}® pistols equipped with an ArmaLaser {{ laser_model|upper }} laser for concealed carry.
+{% endblock %}
+
+{% block css %}
+{% endblock %}
+
+{% block outsidecontainer %}
+{% endblock %}
+
+
+{% block content %}
+ <div class="container">
+     <div class="row">
+         <div class="col-md-12">
+
+            {% include 'ProductsByBrand/section-holsters.html' %}
+
+         </div>
+     </div>
+ </div>
+{% endblock %}
+
+{% block bottomjs %}
+{% endblock %}

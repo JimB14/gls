@@ -1,0 +1,12 @@
+{% if chatData %}
+   {% for message in chatData %}
+      <div style="border-bottom: 1px solid #eee;">
+         <p style="font-size: 80%; font-style:italic;margin-bottom:0px;">{{ message.created_at }}</p>
+         {% if message.first_name != NULL %}
+            <p style="margin-bottom: 4px;"><strong>{{ message.first_name }}</strong>: {{ message.message|raw }}
+         {% else %}
+            <p style="margin-bottom: 4px;"><strong>{{ message.csr_firstname }}</strong>: {{ message.message|raw }}
+         {% endif %}
+      </div>
+   {% endfor %}
+{% endif %}

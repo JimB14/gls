@@ -1,0 +1,432 @@
+[24-Apr-2017 13:13:20 Europe/Berlin] Uncaught exception: 'Exception' with message 'No route matched'
+Stack trace: #0 C:\xampp\htdocs\armalaser.online\public\index.php(87): Core\Router->dispatch('assets/Calibri....')
+#1 {main}
+Thrown in  'C:\xampp\htdocs\armalaser.online\Core\Router.php' on line 194
+[24-Apr-2017 13:13:24 Europe/Berlin] Uncaught exception: 'Exception' with message 'No route matched'
+Stack trace: #0 C:\xampp\htdocs\armalaser.online\public\index.php(87): Core\Router->dispatch('assets/Calibri....')
+#1 {main}
+Thrown in  'C:\xampp\htdocs\armalaser.online\Core\Router.php' on line 194
+[24-Apr-2017 13:16:16 Europe/Berlin] Uncaught exception: 'Exception' with message 'No route matched'
+Stack trace: #0 C:\xampp\htdocs\armalaser.online\public\index.php(87): Core\Router->dispatch('assets/Calibri....')
+#1 {main}
+Thrown in  'C:\xampp\htdocs\armalaser.online\Core\Router.php' on line 194
+[24-Apr-2017 13:17:26 Europe/Berlin] Uncaught exception: 'Exception' with message 'No route matched'
+Stack trace: #0 C:\xampp\htdocs\armalaser.online\public\index.php(87): Core\Router->dispatch('assets/Calibri....')
+#1 {main}
+Thrown in  'C:\xampp\htdocs\armalaser.online\Core\Router.php' on line 194
+[24-Apr-2017 13:17:58 Europe/Berlin] Uncaught exception: 'Exception' with message 'No route matched'
+Stack trace: #0 C:\xampp\htdocs\armalaser.online\public\index.php(87): Core\Router->dispatch('assets/Calibri....')
+#1 {main}
+Thrown in  'C:\xampp\htdocs\armalaser.online\Core\Router.php' on line 194
+[24-Apr-2017 13:18:34 Europe/Berlin] Uncaught exception: 'Exception' with message 'No route matched'
+Stack trace: #0 C:\xampp\htdocs\armalaser.online\public\index.php(87): Core\Router->dispatch('assets/css/boot...')
+#1 {main}
+Thrown in  'C:\xampp\htdocs\armalaser.online\Core\Router.php' on line 194
+[24-Apr-2017 13:19:59 Europe/Berlin] Uncaught exception: 'Exception' with message 'No route matched'
+Stack trace: #0 C:\xampp\htdocs\armalaser.online\public\index.php(87): Core\Router->dispatch('assets/css/boot...')
+#1 {main}
+Thrown in  'C:\xampp\htdocs\armalaser.online\Core\Router.php' on line 194
+[24-Apr-2017 13:19:59 Europe/Berlin] Uncaught exception: 'Exception' with message 'No route matched'
+Stack trace: #0 C:\xampp\htdocs\armalaser.online\public\index.php(87): Core\Router->dispatch('assets/Calibri....')
+#1 {main}
+Thrown in  'C:\xampp\htdocs\armalaser.online\Core\Router.php' on line 194
+[24-Apr-2017 13:20:59 Europe/Berlin] Uncaught exception: 'Exception' with message 'No route matched'
+Stack trace: #0 C:\xampp\htdocs\armalaser.online\public\index.php(87): Core\Router->dispatch('assets/css/boot...')
+#1 {main}
+Thrown in  'C:\xampp\htdocs\armalaser.online\Core\Router.php' on line 194
+[24-Apr-2017 13:20:59 Europe/Berlin] Uncaught exception: 'Exception' with message 'No route matched'
+Stack trace: #0 C:\xampp\htdocs\armalaser.online\public\index.php(87): Core\Router->dispatch('assets/Calibri....')
+#1 {main}
+Thrown in  'C:\xampp\htdocs\armalaser.online\Core\Router.php' on line 194
+[24-Apr-2017 13:21:22 Europe/Berlin] Uncaught exception: 'Exception' with message 'No route matched'
+Stack trace: #0 C:\xampp\htdocs\armalaser.online\public\index.php(87): Core\Router->dispatch('assets/css/boot...')
+#1 {main}
+Thrown in  'C:\xampp\htdocs\armalaser.online\Core\Router.php' on line 194
+[24-Apr-2017 13:21:22 Europe/Berlin] Uncaught exception: 'Exception' with message 'No route matched'
+Stack trace: #0 C:\xampp\htdocs\armalaser.online\public\index.php(87): Core\Router->dispatch('assets/Calibri....')
+#1 {main}
+Thrown in  'C:\xampp\htdocs\armalaser.online\Core\Router.php' on line 194
+[24-Apr-2017 13:21:40 Europe/Berlin] Uncaught exception: 'Exception' with message 'No route matched'
+Stack trace: #0 C:\xampp\htdocs\armalaser.online\public\index.php(87): Core\Router->dispatch('assets/css/boot...')
+#1 {main}
+Thrown in  'C:\xampp\htdocs\armalaser.online\Core\Router.php' on line 194
+[24-Apr-2017 13:21:40 Europe/Berlin] Uncaught exception: 'Exception' with message 'No route matched'
+Stack trace: #0 C:\xampp\htdocs\armalaser.online\public\index.php(87): Core\Router->dispatch('assets/Calibri....')
+#1 {main}
+Thrown in  'C:\xampp\htdocs\armalaser.online\Core\Router.php' on line 194
+[24-Apr-2017 13:23:55 Europe/Berlin] Uncaught exception: 'Exception' with message 'No route matched'
+Stack trace: #0 C:\xampp\htdocs\armalaser.online\public\index.php(87): Core\Router->dispatch('assets/css/boot...')
+#1 {main}
+Thrown in  'C:\xampp\htdocs\armalaser.online\Core\Router.php' on line 194
+[24-Apr-2017 13:23:55 Europe/Berlin] Uncaught exception: 'Exception' with message 'No route matched'
+Stack trace: #0 C:\xampp\htdocs\armalaser.online\public\index.php(87): Core\Router->dispatch('assets/Calibri....')
+#1 {main}
+Thrown in  'C:\xampp\htdocs\armalaser.online\Core\Router.php' on line 194
+[24-Apr-2017 13:24:50 Europe/Berlin] Uncaught exception: 'Exception' with message 'No route matched'
+Stack trace: #0 C:\xampp\htdocs\armalaser.online\public\index.php(87): Core\Router->dispatch('assets/css/boot...')
+#1 {main}
+Thrown in  'C:\xampp\htdocs\armalaser.online\Core\Router.php' on line 194
+[24-Apr-2017 13:24:50 Europe/Berlin] Uncaught exception: 'Exception' with message 'No route matched'
+Stack trace: #0 C:\xampp\htdocs\armalaser.online\public\index.php(87): Core\Router->dispatch('assets/Calibri....')
+#1 {main}
+Thrown in  'C:\xampp\htdocs\armalaser.online\Core\Router.php' on line 194
+[24-Apr-2017 13:27:01 Europe/Berlin] Uncaught exception: 'Exception' with message 'No route matched'
+Stack trace: #0 C:\xampp\htdocs\armalaser.online\public\index.php(87): Core\Router->dispatch('assets/css/boot...')
+#1 {main}
+Thrown in  'C:\xampp\htdocs\armalaser.online\Core\Router.php' on line 194
+[24-Apr-2017 13:27:02 Europe/Berlin] Uncaught exception: 'Exception' with message 'No route matched'
+Stack trace: #0 C:\xampp\htdocs\armalaser.online\public\index.php(87): Core\Router->dispatch('assets/Calibri....')
+#1 {main}
+Thrown in  'C:\xampp\htdocs\armalaser.online\Core\Router.php' on line 194
+[24-Apr-2017 13:27:18 Europe/Berlin] Uncaught exception: 'Exception' with message 'No route matched'
+Stack trace: #0 C:\xampp\htdocs\armalaser.online\public\index.php(87): Core\Router->dispatch('assets/css/boot...')
+#1 {main}
+Thrown in  'C:\xampp\htdocs\armalaser.online\Core\Router.php' on line 194
+[24-Apr-2017 13:27:19 Europe/Berlin] Uncaught exception: 'Exception' with message 'No route matched'
+Stack trace: #0 C:\xampp\htdocs\armalaser.online\public\index.php(87): Core\Router->dispatch('assets/Calibri....')
+#1 {main}
+Thrown in  'C:\xampp\htdocs\armalaser.online\Core\Router.php' on line 194
+[24-Apr-2017 13:27:51 Europe/Berlin] Uncaught exception: 'Exception' with message 'No route matched'
+Stack trace: #0 C:\xampp\htdocs\armalaser.online\public\index.php(87): Core\Router->dispatch('assets/css/boot...')
+#1 {main}
+Thrown in  'C:\xampp\htdocs\armalaser.online\Core\Router.php' on line 194
+[24-Apr-2017 13:27:52 Europe/Berlin] Uncaught exception: 'Exception' with message 'No route matched'
+Stack trace: #0 C:\xampp\htdocs\armalaser.online\public\index.php(87): Core\Router->dispatch('assets/Calibri....')
+#1 {main}
+Thrown in  'C:\xampp\htdocs\armalaser.online\Core\Router.php' on line 194
+[24-Apr-2017 13:28:21 Europe/Berlin] Uncaught exception: 'Exception' with message 'No route matched'
+Stack trace: #0 C:\xampp\htdocs\armalaser.online\public\index.php(87): Core\Router->dispatch('assets/css/boot...')
+#1 {main}
+Thrown in  'C:\xampp\htdocs\armalaser.online\Core\Router.php' on line 194
+[24-Apr-2017 13:28:21 Europe/Berlin] Uncaught exception: 'Exception' with message 'No route matched'
+Stack trace: #0 C:\xampp\htdocs\armalaser.online\public\index.php(87): Core\Router->dispatch('assets/Calibri....')
+#1 {main}
+Thrown in  'C:\xampp\htdocs\armalaser.online\Core\Router.php' on line 194
+[24-Apr-2017 13:30:15 Europe/Berlin] Uncaught exception: 'Exception' with message 'No route matched'
+Stack trace: #0 C:\xampp\htdocs\armalaser.online\public\index.php(87): Core\Router->dispatch('assets/css/boot...')
+#1 {main}
+Thrown in  'C:\xampp\htdocs\armalaser.online\Core\Router.php' on line 194
+[24-Apr-2017 13:30:15 Europe/Berlin] Uncaught exception: 'Exception' with message 'No route matched'
+Stack trace: #0 C:\xampp\htdocs\armalaser.online\public\index.php(87): Core\Router->dispatch('assets/Calibri....')
+#1 {main}
+Thrown in  'C:\xampp\htdocs\armalaser.online\Core\Router.php' on line 194
+[24-Apr-2017 13:30:57 Europe/Berlin] Uncaught exception: 'Exception' with message 'No route matched'
+Stack trace: #0 C:\xampp\htdocs\armalaser.online\public\index.php(87): Core\Router->dispatch('assets/css/boot...')
+#1 {main}
+Thrown in  'C:\xampp\htdocs\armalaser.online\Core\Router.php' on line 194
+[24-Apr-2017 13:30:58 Europe/Berlin] Uncaught exception: 'Exception' with message 'No route matched'
+Stack trace: #0 C:\xampp\htdocs\armalaser.online\public\index.php(87): Core\Router->dispatch('assets/Calibri....')
+#1 {main}
+Thrown in  'C:\xampp\htdocs\armalaser.online\Core\Router.php' on line 194
+[24-Apr-2017 13:31:27 Europe/Berlin] Uncaught exception: 'Exception' with message 'No route matched'
+Stack trace: #0 C:\xampp\htdocs\armalaser.online\public\index.php(87): Core\Router->dispatch('assets/css/boot...')
+#1 {main}
+Thrown in  'C:\xampp\htdocs\armalaser.online\Core\Router.php' on line 194
+[24-Apr-2017 13:31:28 Europe/Berlin] Uncaught exception: 'Exception' with message 'No route matched'
+Stack trace: #0 C:\xampp\htdocs\armalaser.online\public\index.php(87): Core\Router->dispatch('assets/Calibri....')
+#1 {main}
+Thrown in  'C:\xampp\htdocs\armalaser.online\Core\Router.php' on line 194
+[24-Apr-2017 13:31:37 Europe/Berlin] Uncaught exception: 'Exception' with message 'No route matched'
+Stack trace: #0 C:\xampp\htdocs\armalaser.online\public\index.php(87): Core\Router->dispatch('assets/css/boot...')
+#1 {main}
+Thrown in  'C:\xampp\htdocs\armalaser.online\Core\Router.php' on line 194
+[24-Apr-2017 13:31:37 Europe/Berlin] Uncaught exception: 'Exception' with message 'No route matched'
+Stack trace: #0 C:\xampp\htdocs\armalaser.online\public\index.php(87): Core\Router->dispatch('assets/Calibri....')
+#1 {main}
+Thrown in  'C:\xampp\htdocs\armalaser.online\Core\Router.php' on line 194
+[24-Apr-2017 13:32:34 Europe/Berlin] Uncaught exception: 'Exception' with message 'No route matched'
+Stack trace: #0 C:\xampp\htdocs\armalaser.online\public\index.php(87): Core\Router->dispatch('assets/css/boot...')
+#1 {main}
+Thrown in  'C:\xampp\htdocs\armalaser.online\Core\Router.php' on line 194
+[24-Apr-2017 13:32:34 Europe/Berlin] Uncaught exception: 'Exception' with message 'No route matched'
+Stack trace: #0 C:\xampp\htdocs\armalaser.online\public\index.php(87): Core\Router->dispatch('assets/Calibri....')
+#1 {main}
+Thrown in  'C:\xampp\htdocs\armalaser.online\Core\Router.php' on line 194
+[24-Apr-2017 13:33:07 Europe/Berlin] Uncaught exception: 'Exception' with message 'No route matched'
+Stack trace: #0 C:\xampp\htdocs\armalaser.online\public\index.php(87): Core\Router->dispatch('assets/css/boot...')
+#1 {main}
+Thrown in  'C:\xampp\htdocs\armalaser.online\Core\Router.php' on line 194
+[24-Apr-2017 13:33:07 Europe/Berlin] Uncaught exception: 'Exception' with message 'No route matched'
+Stack trace: #0 C:\xampp\htdocs\armalaser.online\public\index.php(87): Core\Router->dispatch('assets/Calibri....')
+#1 {main}
+Thrown in  'C:\xampp\htdocs\armalaser.online\Core\Router.php' on line 194
+[24-Apr-2017 13:33:37 Europe/Berlin] Uncaught exception: 'Exception' with message 'No route matched'
+Stack trace: #0 C:\xampp\htdocs\armalaser.online\public\index.php(87): Core\Router->dispatch('assets/css/boot...')
+#1 {main}
+Thrown in  'C:\xampp\htdocs\armalaser.online\Core\Router.php' on line 194
+[24-Apr-2017 13:33:38 Europe/Berlin] Uncaught exception: 'Exception' with message 'No route matched'
+Stack trace: #0 C:\xampp\htdocs\armalaser.online\public\index.php(87): Core\Router->dispatch('assets/Calibri....')
+#1 {main}
+Thrown in  'C:\xampp\htdocs\armalaser.online\Core\Router.php' on line 194
+[24-Apr-2017 13:34:04 Europe/Berlin] Uncaught exception: 'Exception' with message 'No route matched'
+Stack trace: #0 C:\xampp\htdocs\armalaser.online\public\index.php(87): Core\Router->dispatch('assets/css/boot...')
+#1 {main}
+Thrown in  'C:\xampp\htdocs\armalaser.online\Core\Router.php' on line 194
+[24-Apr-2017 13:34:05 Europe/Berlin] Uncaught exception: 'Exception' with message 'No route matched'
+Stack trace: #0 C:\xampp\htdocs\armalaser.online\public\index.php(87): Core\Router->dispatch('assets/Calibri....')
+#1 {main}
+Thrown in  'C:\xampp\htdocs\armalaser.online\Core\Router.php' on line 194
+[24-Apr-2017 13:34:38 Europe/Berlin] Uncaught exception: 'Exception' with message 'No route matched'
+Stack trace: #0 C:\xampp\htdocs\armalaser.online\public\index.php(87): Core\Router->dispatch('assets/css/boot...')
+#1 {main}
+Thrown in  'C:\xampp\htdocs\armalaser.online\Core\Router.php' on line 194
+[24-Apr-2017 13:34:38 Europe/Berlin] Uncaught exception: 'Exception' with message 'No route matched'
+Stack trace: #0 C:\xampp\htdocs\armalaser.online\public\index.php(87): Core\Router->dispatch('assets/Calibri....')
+#1 {main}
+Thrown in  'C:\xampp\htdocs\armalaser.online\Core\Router.php' on line 194
+[24-Apr-2017 13:34:42 Europe/Berlin] Uncaught exception: 'Exception' with message 'No route matched'
+Stack trace: #0 C:\xampp\htdocs\armalaser.online\public\index.php(87): Core\Router->dispatch('assets/css/boot...')
+#1 {main}
+Thrown in  'C:\xampp\htdocs\armalaser.online\Core\Router.php' on line 194
+[24-Apr-2017 13:34:42 Europe/Berlin] Uncaught exception: 'Exception' with message 'No route matched'
+Stack trace: #0 C:\xampp\htdocs\armalaser.online\public\index.php(87): Core\Router->dispatch('assets/Calibri....')
+#1 {main}
+Thrown in  'C:\xampp\htdocs\armalaser.online\Core\Router.php' on line 194
+[24-Apr-2017 13:34:46 Europe/Berlin] Uncaught exception: 'Exception' with message 'No route matched'
+Stack trace: #0 C:\xampp\htdocs\armalaser.online\public\index.php(87): Core\Router->dispatch('assets/css/boot...')
+#1 {main}
+Thrown in  'C:\xampp\htdocs\armalaser.online\Core\Router.php' on line 194
+[24-Apr-2017 13:34:46 Europe/Berlin] Uncaught exception: 'Exception' with message 'No route matched'
+Stack trace: #0 C:\xampp\htdocs\armalaser.online\public\index.php(87): Core\Router->dispatch('assets/Calibri....')
+#1 {main}
+Thrown in  'C:\xampp\htdocs\armalaser.online\Core\Router.php' on line 194
+[24-Apr-2017 13:34:49 Europe/Berlin] Uncaught exception: 'Exception' with message 'No route matched'
+Stack trace: #0 C:\xampp\htdocs\armalaser.online\public\index.php(87): Core\Router->dispatch('assets/css/boot...')
+#1 {main}
+Thrown in  'C:\xampp\htdocs\armalaser.online\Core\Router.php' on line 194
+[24-Apr-2017 13:34:50 Europe/Berlin] Uncaught exception: 'Exception' with message 'No route matched'
+Stack trace: #0 C:\xampp\htdocs\armalaser.online\public\index.php(87): Core\Router->dispatch('assets/Calibri....')
+#1 {main}
+Thrown in  'C:\xampp\htdocs\armalaser.online\Core\Router.php' on line 194
+[24-Apr-2017 13:35:18 Europe/Berlin] Uncaught exception: 'Exception' with message 'No route matched'
+Stack trace: #0 C:\xampp\htdocs\armalaser.online\public\index.php(87): Core\Router->dispatch('assets/css/boot...')
+#1 {main}
+Thrown in  'C:\xampp\htdocs\armalaser.online\Core\Router.php' on line 194
+[24-Apr-2017 13:35:18 Europe/Berlin] Uncaught exception: 'Exception' with message 'No route matched'
+Stack trace: #0 C:\xampp\htdocs\armalaser.online\public\index.php(87): Core\Router->dispatch('assets/Calibri....')
+#1 {main}
+Thrown in  'C:\xampp\htdocs\armalaser.online\Core\Router.php' on line 194
+[24-Apr-2017 13:35:59 Europe/Berlin] Uncaught exception: 'Exception' with message 'No route matched'
+Stack trace: #0 C:\xampp\htdocs\armalaser.online\public\index.php(87): Core\Router->dispatch('assets/css/boot...')
+#1 {main}
+Thrown in  'C:\xampp\htdocs\armalaser.online\Core\Router.php' on line 194
+[24-Apr-2017 13:36:00 Europe/Berlin] Uncaught exception: 'Exception' with message 'No route matched'
+Stack trace: #0 C:\xampp\htdocs\armalaser.online\public\index.php(87): Core\Router->dispatch('assets/Calibri....')
+#1 {main}
+Thrown in  'C:\xampp\htdocs\armalaser.online\Core\Router.php' on line 194
+[24-Apr-2017 13:36:06 Europe/Berlin] Uncaught exception: 'Exception' with message 'No route matched'
+Stack trace: #0 C:\xampp\htdocs\armalaser.online\public\index.php(87): Core\Router->dispatch('assets/css/boot...')
+#1 {main}
+Thrown in  'C:\xampp\htdocs\armalaser.online\Core\Router.php' on line 194
+[24-Apr-2017 13:36:07 Europe/Berlin] Uncaught exception: 'Exception' with message 'No route matched'
+Stack trace: #0 C:\xampp\htdocs\armalaser.online\public\index.php(87): Core\Router->dispatch('assets/Calibri....')
+#1 {main}
+Thrown in  'C:\xampp\htdocs\armalaser.online\Core\Router.php' on line 194
+[24-Apr-2017 13:36:14 Europe/Berlin] Uncaught exception: 'Exception' with message 'No route matched'
+Stack trace: #0 C:\xampp\htdocs\armalaser.online\public\index.php(87): Core\Router->dispatch('assets/css/boot...')
+#1 {main}
+Thrown in  'C:\xampp\htdocs\armalaser.online\Core\Router.php' on line 194
+[24-Apr-2017 13:36:14 Europe/Berlin] Uncaught exception: 'Exception' with message 'No route matched'
+Stack trace: #0 C:\xampp\htdocs\armalaser.online\public\index.php(87): Core\Router->dispatch('assets/Calibri....')
+#1 {main}
+Thrown in  'C:\xampp\htdocs\armalaser.online\Core\Router.php' on line 194
+[24-Apr-2017 13:37:33 Europe/Berlin] Uncaught exception: 'Exception' with message 'No route matched'
+Stack trace: #0 C:\xampp\htdocs\armalaser.online\public\index.php(87): Core\Router->dispatch('assets/css/boot...')
+#1 {main}
+Thrown in  'C:\xampp\htdocs\armalaser.online\Core\Router.php' on line 194
+[24-Apr-2017 13:37:33 Europe/Berlin] Uncaught exception: 'Exception' with message 'No route matched'
+Stack trace: #0 C:\xampp\htdocs\armalaser.online\public\index.php(87): Core\Router->dispatch('assets/Calibri....')
+#1 {main}
+Thrown in  'C:\xampp\htdocs\armalaser.online\Core\Router.php' on line 194
+[24-Apr-2017 13:37:40 Europe/Berlin] Uncaught exception: 'Exception' with message 'No route matched'
+Stack trace: #0 C:\xampp\htdocs\armalaser.online\public\index.php(87): Core\Router->dispatch('assets/css/boot...')
+#1 {main}
+Thrown in  'C:\xampp\htdocs\armalaser.online\Core\Router.php' on line 194
+[24-Apr-2017 13:37:40 Europe/Berlin] Uncaught exception: 'Exception' with message 'No route matched'
+Stack trace: #0 C:\xampp\htdocs\armalaser.online\public\index.php(87): Core\Router->dispatch('assets/Calibri....')
+#1 {main}
+Thrown in  'C:\xampp\htdocs\armalaser.online\Core\Router.php' on line 194
+[24-Apr-2017 13:37:42 Europe/Berlin] Uncaught exception: 'Exception' with message 'No route matched'
+Stack trace: #0 C:\xampp\htdocs\armalaser.online\public\index.php(87): Core\Router->dispatch('assets/css/boot...')
+#1 {main}
+Thrown in  'C:\xampp\htdocs\armalaser.online\Core\Router.php' on line 194
+[24-Apr-2017 13:37:42 Europe/Berlin] Uncaught exception: 'Exception' with message 'No route matched'
+Stack trace: #0 C:\xampp\htdocs\armalaser.online\public\index.php(87): Core\Router->dispatch('assets/Calibri....')
+#1 {main}
+Thrown in  'C:\xampp\htdocs\armalaser.online\Core\Router.php' on line 194
+[24-Apr-2017 21:19:32 Europe/Berlin] Uncaught exception: 'Exception' with message 'No route matched'
+Stack trace: #0 C:\xampp\htdocs\armalaser.online\public\index.php(87): Core\Router->dispatch('lgin')
+#1 {main}
+Thrown in  'C:\xampp\htdocs\armalaser.online\Core\Router.php' on line 194
+[24-Apr-2017 21:19:33 Europe/Berlin] Uncaught exception: 'Exception' with message 'No route matched'
+Stack trace: #0 C:\xampp\htdocs\armalaser.online\public\index.php(87): Core\Router->dispatch('assets/Calibri....')
+#1 {main}
+Thrown in  'C:\xampp\htdocs\armalaser.online\Core\Router.php' on line 194
+[24-Apr-2017 21:19:38 Europe/Berlin] Uncaught exception: 'Exception' with message 'No route matched'
+Stack trace: #0 C:\xampp\htdocs\armalaser.online\public\index.php(87): Core\Router->dispatch('assets/Calibri....')
+#1 {main}
+Thrown in  'C:\xampp\htdocs\armalaser.online\Core\Router.php' on line 194
+[24-Apr-2017 21:19:54 Europe/Berlin] Uncaught exception: 'Exception' with message 'No route matched'
+Stack trace: #0 C:\xampp\htdocs\armalaser.online\public\index.php(87): Core\Router->dispatch('assets/Calibri....')
+#1 {main}
+Thrown in  'C:\xampp\htdocs\armalaser.online\Core\Router.php' on line 194
+[24-Apr-2017 21:21:48 Europe/Berlin] Uncaught exception: 'Exception' with message 'No route matched'
+Stack trace: #0 C:\xampp\htdocs\armalaser.online\public\index.php(87): Core\Router->dispatch('assets/css/home...')
+#1 {main}
+Thrown in  'C:\xampp\htdocs\armalaser.online\Core\Router.php' on line 194
+[24-Apr-2017 21:21:49 Europe/Berlin] Uncaught exception: 'Exception' with message 'No route matched'
+Stack trace: #0 C:\xampp\htdocs\armalaser.online\public\index.php(87): Core\Router->dispatch('assets/css/home...')
+#1 {main}
+Thrown in  'C:\xampp\htdocs\armalaser.online\Core\Router.php' on line 194
+[24-Apr-2017 21:21:49 Europe/Berlin] Uncaught exception: 'Exception' with message 'No route matched'
+Stack trace: #0 C:\xampp\htdocs\armalaser.online\public\index.php(87): Core\Router->dispatch('assets/Calibri....')
+#1 {main}
+Thrown in  'C:\xampp\htdocs\armalaser.online\Core\Router.php' on line 194
+[24-Apr-2017 21:44:55 Europe/Berlin] Uncaught exception: 'Exception' with message 'No route matched'
+Stack trace: #0 C:\xampp\htdocs\armalaser.online\public\index.php(87): Core\Router->dispatch('assets/css/home...')
+#1 {main}
+Thrown in  'C:\xampp\htdocs\armalaser.online\Core\Router.php' on line 194
+[24-Apr-2017 21:44:56 Europe/Berlin] Uncaught exception: 'Exception' with message 'No route matched'
+Stack trace: #0 C:\xampp\htdocs\armalaser.online\public\index.php(87): Core\Router->dispatch('assets/Calibri....')
+#1 {main}
+Thrown in  'C:\xampp\htdocs\armalaser.online\Core\Router.php' on line 194
+[24-Apr-2017 21:45:11 Europe/Berlin] Uncaught exception: 'Exception' with message 'No route matched'
+Stack trace: #0 C:\xampp\htdocs\armalaser.online\public\index.php(87): Core\Router->dispatch('assets/css/home...')
+#1 {main}
+Thrown in  'C:\xampp\htdocs\armalaser.online\Core\Router.php' on line 194
+[24-Apr-2017 21:45:11 Europe/Berlin] Uncaught exception: 'Exception' with message 'No route matched'
+Stack trace: #0 C:\xampp\htdocs\armalaser.online\public\index.php(87): Core\Router->dispatch('assets/Calibri....')
+#1 {main}
+Thrown in  'C:\xampp\htdocs\armalaser.online\Core\Router.php' on line 194
+[24-Apr-2017 21:45:15 Europe/Berlin] Uncaught exception: 'Exception' with message 'Controller class App\Controllers\Admin not found'
+Stack trace: #0 C:\xampp\htdocs\armalaser.online\public\index.php(87): Core\Router->dispatch('admin/warrantyr...')
+#1 {main}
+Thrown in  'C:\xampp\htdocs\armalaser.online\Core\Router.php' on line 189
+[24-Apr-2017 21:45:16 Europe/Berlin] Uncaught exception: 'Exception' with message 'No route matched'
+Stack trace: #0 C:\xampp\htdocs\armalaser.online\public\index.php(87): Core\Router->dispatch('assets/Calibri....')
+#1 {main}
+Thrown in  'C:\xampp\htdocs\armalaser.online\Core\Router.php' on line 194
+[24-Apr-2017 21:45:19 Europe/Berlin] Uncaught exception: 'Exception' with message 'No route matched'
+Stack trace: #0 C:\xampp\htdocs\armalaser.online\public\index.php(87): Core\Router->dispatch('assets/css/home...')
+#1 {main}
+Thrown in  'C:\xampp\htdocs\armalaser.online\Core\Router.php' on line 194
+[24-Apr-2017 21:45:19 Europe/Berlin] Uncaught exception: 'Exception' with message 'No route matched'
+Stack trace: #0 C:\xampp\htdocs\armalaser.online\public\index.php(87): Core\Router->dispatch('assets/Calibri....')
+#1 {main}
+Thrown in  'C:\xampp\htdocs\armalaser.online\Core\Router.php' on line 194
+[24-Apr-2017 21:51:21 Europe/Berlin] Uncaught exception: 'Exception' with message 'No route matched'
+Stack trace: #0 C:\xampp\htdocs\armalaser.online\public\index.php(87): Core\Router->dispatch('assets/css/home...')
+#1 {main}
+Thrown in  'C:\xampp\htdocs\armalaser.online\Core\Router.php' on line 194
+[24-Apr-2017 21:51:21 Europe/Berlin] Uncaught exception: 'Exception' with message 'No route matched'
+Stack trace: #0 C:\xampp\htdocs\armalaser.online\public\index.php(87): Core\Router->dispatch('assets/Calibri....')
+#1 {main}
+Thrown in  'C:\xampp\htdocs\armalaser.online\Core\Router.php' on line 194
+[24-Apr-2017 21:51:33 Europe/Berlin] Uncaught exception: 'Exception' with message 'No route matched'
+Stack trace: #0 C:\xampp\htdocs\armalaser.online\public\index.php(87): Core\Router->dispatch('assets/css/home...')
+#1 {main}
+Thrown in  'C:\xampp\htdocs\armalaser.online\Core\Router.php' on line 194
+[24-Apr-2017 21:51:34 Europe/Berlin] Uncaught exception: 'Exception' with message 'No route matched'
+Stack trace: #0 C:\xampp\htdocs\armalaser.online\public\index.php(87): Core\Router->dispatch('assets/Calibri....')
+#1 {main}
+Thrown in  'C:\xampp\htdocs\armalaser.online\Core\Router.php' on line 194
+[24-Apr-2017 21:51:45 Europe/Berlin] Uncaught exception: 'Exception' with message 'Controller class App\Controllers\Admin not found'
+Stack trace: #0 C:\xampp\htdocs\armalaser.online\public\index.php(87): Core\Router->dispatch('admin/warrantyr...')
+#1 {main}
+Thrown in  'C:\xampp\htdocs\armalaser.online\Core\Router.php' on line 189
+[24-Apr-2017 21:51:45 Europe/Berlin] Uncaught exception: 'Exception' with message 'No route matched'
+Stack trace: #0 C:\xampp\htdocs\armalaser.online\public\index.php(87): Core\Router->dispatch('assets/Calibri....')
+#1 {main}
+Thrown in  'C:\xampp\htdocs\armalaser.online\Core\Router.php' on line 194
+[24-Apr-2017 21:51:51 Europe/Berlin] Uncaught exception: 'Exception' with message 'No route matched'
+Stack trace: #0 C:\xampp\htdocs\armalaser.online\public\index.php(87): Core\Router->dispatch('assets/css/home...')
+#1 {main}
+Thrown in  'C:\xampp\htdocs\armalaser.online\Core\Router.php' on line 194
+[24-Apr-2017 21:51:51 Europe/Berlin] Uncaught exception: 'Exception' with message 'No route matched'
+Stack trace: #0 C:\xampp\htdocs\armalaser.online\public\index.php(87): Core\Router->dispatch('assets/Calibri....')
+#1 {main}
+Thrown in  'C:\xampp\htdocs\armalaser.online\Core\Router.php' on line 194
+[24-Apr-2017 21:52:41 Europe/Berlin] Uncaught exception: 'Exception' with message 'No route matched'
+Stack trace: #0 C:\xampp\htdocs\armalaser.online\public\index.php(87): Core\Router->dispatch('assets/css/home...')
+#1 {main}
+Thrown in  'C:\xampp\htdocs\armalaser.online\Core\Router.php' on line 194
+[24-Apr-2017 21:52:42 Europe/Berlin] Uncaught exception: 'Exception' with message 'No route matched'
+Stack trace: #0 C:\xampp\htdocs\armalaser.online\public\index.php(87): Core\Router->dispatch('assets/Calibri....')
+#1 {main}
+Thrown in  'C:\xampp\htdocs\armalaser.online\Core\Router.php' on line 194
+[24-Apr-2017 21:52:44 Europe/Berlin] Uncaught exception: 'Exception' with message 'Controller class App\Controllers\Admin not found'
+Stack trace: #0 C:\xampp\htdocs\armalaser.online\public\index.php(87): Core\Router->dispatch('admin/warrantyr...')
+#1 {main}
+Thrown in  'C:\xampp\htdocs\armalaser.online\Core\Router.php' on line 189
+[24-Apr-2017 21:52:45 Europe/Berlin] Uncaught exception: 'Exception' with message 'No route matched'
+Stack trace: #0 C:\xampp\htdocs\armalaser.online\public\index.php(87): Core\Router->dispatch('assets/Calibri....')
+#1 {main}
+Thrown in  'C:\xampp\htdocs\armalaser.online\Core\Router.php' on line 194
+[24-Apr-2017 21:52:53 Europe/Berlin] Uncaught exception: 'Exception' with message 'No route matched'
+Stack trace: #0 C:\xampp\htdocs\armalaser.online\public\index.php(87): Core\Router->dispatch('assets/css/home...')
+#1 {main}
+Thrown in  'C:\xampp\htdocs\armalaser.online\Core\Router.php' on line 194
+[24-Apr-2017 21:52:53 Europe/Berlin] Uncaught exception: 'Exception' with message 'No route matched'
+Stack trace: #0 C:\xampp\htdocs\armalaser.online\public\index.php(87): Core\Router->dispatch('assets/Calibri....')
+#1 {main}
+Thrown in  'C:\xampp\htdocs\armalaser.online\Core\Router.php' on line 194
+[24-Apr-2017 21:52:57 Europe/Berlin] Uncaught exception: 'Exception' with message 'No route matched'
+Stack trace: #0 C:\xampp\htdocs\armalaser.online\public\index.php(87): Core\Router->dispatch('assets/css/home...')
+#1 {main}
+Thrown in  'C:\xampp\htdocs\armalaser.online\Core\Router.php' on line 194
+[24-Apr-2017 21:52:58 Europe/Berlin] Uncaught exception: 'Exception' with message 'No route matched'
+Stack trace: #0 C:\xampp\htdocs\armalaser.online\public\index.php(87): Core\Router->dispatch('assets/Calibri....')
+#1 {main}
+Thrown in  'C:\xampp\htdocs\armalaser.online\Core\Router.php' on line 194
+[24-Apr-2017 21:53:05 Europe/Berlin] Uncaught exception: 'Exception' with message 'No route matched'
+Stack trace: #0 C:\xampp\htdocs\armalaser.online\public\index.php(87): Core\Router->dispatch('assets/css/home...')
+#1 {main}
+Thrown in  'C:\xampp\htdocs\armalaser.online\Core\Router.php' on line 194
+[24-Apr-2017 21:53:05 Europe/Berlin] Uncaught exception: 'Exception' with message 'No route matched'
+Stack trace: #0 C:\xampp\htdocs\armalaser.online\public\index.php(87): Core\Router->dispatch('assets/Calibri....')
+#1 {main}
+Thrown in  'C:\xampp\htdocs\armalaser.online\Core\Router.php' on line 194
+[24-Apr-2017 21:53:32 Europe/Berlin] Uncaught exception: 'Exception' with message 'No route matched'
+Stack trace: #0 C:\xampp\htdocs\armalaser.online\public\index.php(87): Core\Router->dispatch('assets/css/home...')
+#1 {main}
+Thrown in  'C:\xampp\htdocs\armalaser.online\Core\Router.php' on line 194
+[24-Apr-2017 21:53:32 Europe/Berlin] Uncaught exception: 'Exception' with message 'No route matched'
+Stack trace: #0 C:\xampp\htdocs\armalaser.online\public\index.php(87): Core\Router->dispatch('assets/Calibri....')
+#1 {main}
+Thrown in  'C:\xampp\htdocs\armalaser.online\Core\Router.php' on line 194
+[24-Apr-2017 21:53:34 Europe/Berlin] Uncaught exception: 'Exception' with message 'No route matched'
+Stack trace: #0 C:\xampp\htdocs\armalaser.online\public\index.php(87): Core\Router->dispatch('admin/warrantyr...')
+#1 {main}
+Thrown in  'C:\xampp\htdocs\armalaser.online\Core\Router.php' on line 194
+[24-Apr-2017 21:53:35 Europe/Berlin] Uncaught exception: 'Exception' with message 'No route matched'
+Stack trace: #0 C:\xampp\htdocs\armalaser.online\public\index.php(87): Core\Router->dispatch('assets/Calibri....')
+#1 {main}
+Thrown in  'C:\xampp\htdocs\armalaser.online\Core\Router.php' on line 194
+[24-Apr-2017 21:53:42 Europe/Berlin] Uncaught exception: 'Exception' with message 'No route matched'
+Stack trace: #0 C:\xampp\htdocs\armalaser.online\public\index.php(87): Core\Router->dispatch('assets/css/home...')
+#1 {main}
+Thrown in  'C:\xampp\htdocs\armalaser.online\Core\Router.php' on line 194
+[24-Apr-2017 21:53:43 Europe/Berlin] Uncaught exception: 'Exception' with message 'No route matched'
+Stack trace: #0 C:\xampp\htdocs\armalaser.online\public\index.php(87): Core\Router->dispatch('assets/Calibri....')
+#1 {main}
+Thrown in  'C:\xampp\htdocs\armalaser.online\Core\Router.php' on line 194
+[24-Apr-2017 21:55:03 Europe/Berlin] Uncaught exception: 'Exception' with message 'No route matched'
+Stack trace: #0 C:\xampp\htdocs\armalaser.online\public\index.php(87): Core\Router->dispatch('assets/css/home...')
+#1 {main}
+Thrown in  'C:\xampp\htdocs\armalaser.online\Core\Router.php' on line 194
+[24-Apr-2017 21:55:12 Europe/Berlin] Uncaught exception: 'Exception' with message 'No route matched'
+Stack trace: #0 C:\xampp\htdocs\armalaser.online\public\index.php(87): Core\Router->dispatch('assets/Calibri....')
+#1 {main}
+Thrown in  'C:\xampp\htdocs\armalaser.online\Core\Router.php' on line 194
+[24-Apr-2017 21:55:13 Europe/Berlin] Uncaught exception: 'ErrorException' with message 'Undefined variable: user_id'
+Stack trace: #0 C:\xampp\htdocs\armalaser.online\App\Controllers\Admin\Warrantyregistrations.php(36): Core\Error::errorHandler(8, 'Undefined varia...', 'C:\\xampp\\htdocs...', 36, Array)
+#1 [internal function]: App\Controllers\Admin\Warrantyregistrations->viewAction()
+#2 C:\xampp\htdocs\armalaser.online\Core\Controller.php(57): call_user_func_array(Array, Array)
+#3 C:\xampp\htdocs\armalaser.online\Core\Router.php(179): Core\Controller->__call('view', Array)
+#4 C:\xampp\htdocs\armalaser.online\public\index.php(87): Core\Router->dispatch('admin/warrantyr...')
+#5 {main}
+Thrown in  'C:\xampp\htdocs\armalaser.online\App\Controllers\Admin\Warrantyregistrations.php' on line 36
+[24-Apr-2017 21:55:25 Europe/Berlin] Uncaught exception: 'Exception' with message 'No route matched'
+Stack trace: #0 C:\xampp\htdocs\armalaser.online\public\index.php(87): Core\Router->dispatch('assets/Calibri....')
+#1 {main}
+Thrown in  'C:\xampp\htdocs\armalaser.online\Core\Router.php' on line 194

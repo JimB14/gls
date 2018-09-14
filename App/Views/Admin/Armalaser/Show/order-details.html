@@ -1,0 +1,1806 @@
+{% extends 'base-admin.html' %}
+
+{% block title %}
+  Order Details | ArmaLaser
+{% endblock %}
+
+{% block css %}
+<style>
+#voidUpsLabel,
+#voidUspsLabel,
+#createUpsReturnLabel,
+#issue-refund-toggle {
+    cursor: pointer;
+}
+#form-void-ups-label,
+#form-void-usps-label {
+    display: none;
+    margin-bottom: 60px;
+}
+#new-comment-form,
+#form-create-ups-return-label,
+#modal-order-details-section,
+#issue-refund-section,
+#form-assign-serial-number {
+    display: none;
+}
+#enter-serial-numbers a,
+#show-enter-serial-form a {
+    text-decoration: underline;
+    cursor: pointer;
+}
+.error {
+    color: #ff0000;
+}
+
+.nav-tabs > li a {
+    background-color: #eee;
+    border-radius: 4px 4px 0 0;
+    /* margin-right: 2px; */
+    border: none;
+}
+
+.nav-tabs > li.active > a,
+.nav-tabs > li.active > a:hover,
+.nav-tabs > li.active > a:focus {
+    color: #555 !important;
+    cursor: default;
+    background-color: #fff !important;
+    border: 1px solid #ddd;
+    border-bottom-color: transparent;
+    /* margin-right: -2px; */
+}
+
+.nav-tabs > li > a:hover {
+    border: 1px solid #ddd !important;
+    border-bottom: transparent !important;
+    border-radius: 4px 4px 0 0;
+    color: #fff !important;
+}
+.tab-pane {
+    padding-bottom: 60px !important;
+}
+</style>
+{% endblock %}
+
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div id="dashboard-toggle" class="col-md-10" style="margin-top:-20px;margin-left:254px;">
+
+            <div class="col-md-12" style="margin-bottom: 10px;">
+                {% if pagetitle %}
+                    <h2 style="margin-left:-15px;">
+                        {{ pagetitle }}
+                    </h2>
+                {% else %}
+                    <h2 style="margin-left:-15px;">
+                        Order Details
+                    </h2>
+                {% endif %}
+                <p style="margin-left: -10px;">
+                    <span class="glyphicon glyphicon-menu-left"></span>
+                    <a onclick="window.history.go(-1)" style="cursor:pointer;">
+                        Go Back
+                    </a>
+                </p>
+            </div>
+
+            {% if customer %}
+                {% if order.customerid != 0 and order.guestid == 0 and order.callerid == 0 and order.dealerid == 0 and order.partnerid == 0 %}
+                    <h3>Customer information:</h3>
+                {% elseif order.callerid != 0 and order.customerid == 0 and order.guestid == 0 and order.dealerid == 0 and order.partnerid == 0 %}
+                    <h3>Caller information:</h3>
+                {% elseif order.guestid != 0 and order.customerid == 0 and order.callerid == 0 and order.dealerid == 0 and order.partnerid == 0 %}
+                    <h3>Guest information:</h3>
+                {% elseif order.dealerid != 0 and order.customerid == 0 and order.guestid == 0 and order.callerid == 0 and order.partnerid == 0 %}
+                    <h3>Dealer information - <span style="color:#0000FF;">{{ customer.company|raw }}</span></h3>
+                {% elseif order.partnerid != 0 and order.customerid == 0 and order.guestid == 0 and order.callerid == 0 and order.dealerid == 0 %}
+                    <h3>Partner information - <span style="color:#0000FF;">{{ customer.company|raw }}</span></h3>
+                {% endif %}
+
+                <table class="table table-bordered table-striped bg-fff">
+                    <thead>
+                        <tr>
+                            {% if order.customerid != 0 and order.guestid == 0 and order.callerid == 0 and order.dealerid == 0 and order.partnerid == 0 %}
+                                <th>Customer<br>ID</th>
+                            {% elseif order.callerid != 0 and order.customerid == 0 and order.guestid == 0 and order.dealerid == 0 and order.partnerid == 0 %}
+                                <th>Caller<br>ID</th>
+                            {% elseif order.guestid != 0 and order.customerid == 0 and order.callerid == 0 and order.dealerid == 0 and order.partnerid == 0 %}
+                                <th>Guest<br>ID</th>
+                            {% elseif order.dealerid != 0 and order.customerid == 0 and order.guestid == 0 and order.callerid == 0 and order.partnerid == 0 %}
+                                <th>Dealer<br>ID</th>
+                            {% elseif order.partnerid != 0 and order.customerid == 0 and order.guestid == 0 and order.callerid == 0 and order.dealerid == 0 %}
+                                <th>Partner<br>ID</th>
+                            {% endif %}
+                            <th>First</th>
+                            <th>Last</th>
+                            <th>Address</th>
+                            {% if customer.billing_address2 or customer.address2 %}
+                                <th>Address2</th>
+                            {% endif %}
+                            <th>City</th>
+                            <th>State</th>
+                            <th>Zip</th>
+                            <th>Telephone</th>
+                            <th>Email</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        <tr>
+                            <td>{{ customer.id }}</td>
+                            <td>{% if customer.first_name %}{{customer.first_name }}{% else %}{{ customer.billing_firstname }}{% endif %}</td>
+                            <td>{% if customer.last_name %}{{customer.last_name }}{% else %}{{ customer.billing_lastname }}{% endif %}</td>
+                            <td>{% if customer.address1 %}{{ customer.address1 }}{% elseif customer.address %}{{ customer.address}}{% else %}{{ customer.billing_address }}{% endif %}</td>
+                            {% if customer.address2 or customer.billing_address2 %}
+                                {% if customer.address2 %}
+                                    <td>{{ customer.address2 }}</td>
+                                {% elseif customer.billing_address2 %}
+                                    <td>{{ customer.billing_address2 }}</td>
+                                {% endif %}
+                            {% endif %}
+                            <td>{% if customer.city %}{{ customer.city }}{% else %}{{ customer.billing_city }}{% endif %}</td>
+                            <td>{% if customer.state %}{{ customer.state }}{% else %}{{ customer.billing_state }}{% endif %}</td>
+                            <td>{% if customer.zip %}{{ customer.zip }}{% else %}{{ customer.billing_zip }}{% endif %}</td>
+                            <td>{% if customer.telephone %}{{ customer.telephone }}{% else %}{{ customer.billing_phone }}{% endif %}</td>
+                            <td>{{ customer.email }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            {% endif %}
+
+
+
+            {% if order %}
+                <h3>Order & Shipping information:</h3>
+                <table class="table table-bordered table-striped bg-fff">
+                    <thead>
+                        <tr>
+                            <th>Order<br>ID</th>
+                            <th>Status</th>
+                            <th>PayPal PNREF</th>
+                            {% if order.customerid != 0 and order.guestid == 0 and order.callerid == 0 and order.dealerid == 0 and order.partnerid == 0 %}
+                                <th>Customer<br>ID</th>
+                            {% elseif order.callerid != 0 and order.customerid == 0 and order.guestid == 0 and order.dealerid == 0 and order.partnerid == 0 %}
+                                <th>Caller<br>ID</th>
+                            {% elseif order.guestid != 0 and order.customerid == 0 and order.callerid == 0 and order.dealerid == 0 and order.partnerid == 0 %}
+                                <th>Guest<br>ID</th>
+                            {% elseif order.dealerid != 0 and order.customerid == 0 and order.guestid == 0 and order.callerid == 0 and order.partnerid == 0 %}
+                                <th>Dealer<br>ID</th>
+                            {% elseif order.partnerid != 0 and order.customerid == 0 and order.guestid == 0 and order.callerid == 0 and order.dealerid == 0 %}
+                                <th>Partner<br>ID</th>
+                            {% endif %}
+                            <th>Total</th>
+                            <th>Products</th>
+                            <th>Tax</th>
+                            <th>Shipping</th>
+                            <th>Ship<br>method</th>
+                            <th>Shipped<br>date</th>
+                            {% if order.oshipmethod|slice(0,3) == 'UPS' and order.order_status == 'shipped' %}
+                                <th>Tracking number<br><a  style="text-decoration: underline" href="https://www.ups.com/tracking/tracking.html" target="_blank">Track UPS package</a></th>
+                            {% elseif order.oshipmethod|slice(0,4) == 'USPS' and order.order_status == 'shipped' %}
+                                <th>Tracking number<br><a  style="text-decoration: underline" href="https://tools.usps.com/go/TrackConfirmAction_input" target="_blank">Track USPS package</a></th>
+                            {% else %}
+                                <th>Tracking number</th>
+                            {% endif %}
+                            <th>Transaction ID<br>(USPS only)</th>
+                            {% if order.oshipcompany %}
+                                <th>Company</th>
+                            {% endif %}
+                            <th>Address</th>
+                            {% if order.oshipaddress2 %}
+                                <th>Address2</th>
+                            {% endif %}
+                            <th>City</th>
+                            <th>State</th>
+                            <th>Zip</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        <tr>
+                            <td>{{ order.id }}</td>
+                            {% if order.order_status == 'return-pending' %}
+                                <td class="bold" style="color: #008000">{{ order.order_status }}</td>
+                            {% elseif order.order_status == 'returned' %}
+                                <td class="bold" style="color: #ff0000">{{ order.order_status }}</td>
+                            {% elseif order.order_status == 'pending' %}
+                                <td class="pendingGreen bold">{{ order.order_status }}</td>
+                            {% else %}
+                                <td>{{ order.order_status }}</td>
+                            {% endif %}
+                            <td>{{ order.pnref }}</td>
+                            {% if order.customerid != 0 and order.guestid == 0 and order.callerid == 0 and order.dealerid == 0 and order.partnerid == 0 %}
+                                <td>{{ order.customerid }}</td>
+                            {% elseif order.callerid != 0 and order.customerid == 0 and order.guestid == 0 and order.dealerid == 0 and order.partnerid == 0 %}
+                                <td>{{ order.callerid }}</td>
+                            {% elseif order.guestid != 0 and order.customerid == 0 and order.callerid == 0 and order.dealerid == 0 and order.partnerid == 0 %}
+                                <td>{{ order.guestid }}</td>
+                            {% elseif order.dealerid != 0 and order.customerid == 0 and order.callerid == 0 and order.guestid == 0 and order.partnerid == 0 %}
+                                <td>{{ order.dealerid }}</td>
+                            {% elseif order.partnerid != 0 and order.customerid == 0 and order.callerid == 0 and order.guestid == 0 and order.dealerid == 0 %}
+                                <td>{{ order.partnerid }}</td>
+                            {% endif %}
+                            <td>{{ order.orderamount }}</td>
+                            <td>{{ order.itemamount }}</td>
+                            <td>{{ order.otax_total }}</td>
+                            <td>{{ order.oshipcost }}</td>
+                            <td>{{ order.oshipmethod }}</td>
+                            <td>{% if order.oshippeddate == '' and order.order_status == 'pending' %}<span class="pendingGreen bold">pending{% else %}{{ order.oshippeddate }}{% endif %}</td>
+                            <td>{% if order.oshippeddate == '' and order.order_status == 'pending' %}<span class="pendingGreen bold">pending{% else %}{{ order.trackingcode }}{% endif %}</td>
+                            <td>{% if order.oshippeddate == '' and order.order_status == 'pending' %}<span class="pendingGreen bold">pending{% else %}{{ order.transaction_id }}{% endif %}</td>
+                            {% if order.oshipcompany %}
+                                <td>{{ order.oshipcompany }}</td>
+                            {% endif %}
+                            <td>{{ order.oshipaddress }}</td>
+                            {% if order.oshipaddress2 %}
+                                <td>{{ order.oshipaddress2 }}</td>
+                            {% endif %}
+                            <td>{{ order.oshipcity }}</td>
+                            <td>{{ order.oshipstate }}</td>
+                            <td>{{ order.oshipzip }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            {% else %}
+                <div class="col-md-8" style="margin-left:-15px;">
+                    <div class="alert alert-warning" style="margin-top:30px;">
+                        <h4 style="margin-bottom:0px;">
+                          No order data to display
+                        </h4>
+                    </div>
+                </div>
+            {% endif %}
+
+
+
+            {% if order_content %}
+                <h3>Products purchased:</h3>
+                <table class="table table-bordered table-striped bg-fff">
+                    <thead>
+                        <tr>
+                            <th>Order<br>ID</th>
+                            <th>RMA</th>
+                            {% if order.customerid != 0 and order.guestid == 0 and order.callerid == 0 and order.dealerid == 0 and order.partnerid == 0 %}
+                                <th>Customer<br>ID</th>
+                            {% elseif order.callerid != 0 and order.customerid == 0 and order.guestid == 0 and order.dealerid == 0 and order.partnerid == 0 %}
+                                <th>Caller<br>ID</th>
+                            {% elseif order.guestid != 0 and order.customerid == 0 and order.callerid == 0 and order.dealerid == 0 and order.partnerid == 0 %}
+                                <th>Guest<br>ID</th>
+                            {% elseif order.dealerid != 0 and order.customerid == 0 and order.guestid == 0 and order.callerid == 0 and order.partnerid == 0 %}
+                                <th>Dealer<br>ID</th>
+                            {% elseif order.partnerid != 0 and order.customerid == 0 and order.guestid == 0 and order.callerid == 0 and order.dealerid == 0 %}
+                                <th>Partner<br>ID</th>
+                            {% endif %}
+                            <th>Qty</th>
+                            <th>Item<br>ID</th>
+                            <th>Serial Number</th>
+                            <th>Name</th>
+                            <th>Price</th>
+                            <th>Extended</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        {% for item in order_content %}
+                            <tr>
+                                <td>{{ item.orderid }}</td>
+                                <th class="red bold">{{ item.rma_number }}</th>
+                                <td>{{ item.customerid }}</td>
+                                <td>{{ item.qty }}</td>
+                                <td>{{ item.itemid }}</td>
+                                <td>{{ item.serial_number }}</td>
+                                <td>{{ item.name }}</td>
+                                <td>{{ item.unitprice }}</td>
+                                <td>{{ item.itemtotal }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <div class="col-md-8" style="margin-left:-15px;">
+                    <div class="alert alert-warning" style="margin-top:30px;">
+                        <h4 style="margin-bottom:0px;">
+                          No order data to display
+                        </h4>
+                    </div>
+                </div>
+            {% endif %}
+
+
+            {% if order and order.refund_issued == 1 %}
+                <h3 style="color: #ff0000">Refund Issued:</h3>
+                <table class="table table-bordered table-striped bg-fff">
+                    <thead>
+                        <tr>
+                            <th>Order ID</th>
+                            <th>Date</th>
+                            <th>Amount</th>
+                            <th>PayPal ID (PNREF)</th>
+                            <th>PayPal Reference (PPREF)</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        <tr>
+                            <td>{{ order.id }}</td>
+                            <td>{{ order.refund_transtime }}</td>
+                            <td>{{ order.refund_amt }}</td>
+                            <td>{{ order.refund_pnref }}</td>
+                            <td>{{ order.refund_ppref }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            {% endif %}
+
+
+            <!-- Button trigger modal -->
+            <!-- <button type="button" class="btn btn-success" data-toggle="modal"
+                data-target="#commentModal">
+                Order comments
+            </button> -->
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+            <div>
+                <h2>Order Processing &amp; Management</h2>
+               <!-- Comments -->
+                <ul class="nav nav-tabs" role="tablist">
+                    <li role="presentation" class="active">
+                        <a href="#comments" aria-controls="comments" role="tab" data-toggle="tab">
+                            Comments
+                        </a>
+                    </li>
+
+                    <!-- Create label UPS -->
+                    <li role="presentation">
+                        <a href="#create_label" aria-controls="create_label" role="tab" data-toggle="tab">
+                            Create Shipping Label
+                        </a>
+                    </li>
+
+                    <!-- Enter serial number(s)  -->
+                    <li role="presentation">
+                        <a href="#serial_number" aria-controls="serial_number"
+                            role="tab" data-toggle="tab" id="enter-serial-number-tab">
+                            Enter Serial Number
+                        </a>
+                    </li>
+
+                    <!-- View/Download label USPS -->
+                    <li role="presentation">
+                        <a href="#view_label" aria-controls="view_label" role="tab" data-toggle="tab">
+                            View/Download Label
+                        </a>
+                    </li>
+
+                    <!-- <li role="presentation">
+                        <a href="#shipped" aria-controls="shipped" role="tab" data-toggle="tab">
+                            Update to &quot;shipped&quot;
+                        </a>
+                    </li> -->
+
+
+                    <li role="presentation">
+                        <a href="#void_label" aria-controls="void_label" role="tab" data-toggle="tab">
+                            Void Label
+                        </a>
+                    </li>
+
+                    <li role="presentation">
+                        <a href="#rma" aria-controls="rma" role="tab" data-toggle="tab">
+                            RMA
+                        </a>
+                    </li>
+
+                    {% if order.oshipmethod|slice(0,3) == 'UPS' and order.rma == 1 %}
+                        <li role="presentation">
+                            <a href="#ups_return_label" aria-controls="ups_return_label" role="tab" data-toggle="tab">
+                                UPS Return Label
+                            </a>
+                        </li>
+                    {% endif %}
+
+
+                    <li role="presentation">
+                        <a href="#process_return" aria-controls="process_return" role="tab" data-toggle="tab">
+                            Process return
+                        </a>
+                    </li>
+
+                    <li role="presentation">
+                        <a href="#process_repair" aria-controls="process_repair" role="tab" data-toggle="tab">
+                            Repair
+                        </a>
+                    </li>
+
+                    <li role="presentation">
+                        <a href="#process_replace" aria-controls="process_replace" role="tab" data-toggle="tab">
+                            Replace
+                        </a>
+                    </li>
+
+                    <li role="presentation">
+                        <a href="#process_exchange" aria-controls="process_exchange" role="tab" data-toggle="tab">
+                            Exchange
+                        </a>
+                    </li>
+
+                    <li role="presentation">
+                        <a href="#refund" aria-controls="refund" role="tab" data-toggle="tab">
+                            Refund
+                        </a>
+                    </li>
+
+                </ul>
+            </div>
+
+<!-- = = = = = = = Tab panes  = = = = = = = = = = = = = = = = = = = = = = = -->
+
+            <!-- Comments -->
+            <div class="tab-content" style="margin-bottom: 80px;">
+                <div role="tabpanel" class="tab-pane active" id="comments">
+                    <h3>Manage Comments</h3>
+                    <!-- Button trigger modal -->
+                    <button type="button" class="btn btn-success" data-toggle="modal"
+                        data-target="#commentModal">
+                        Order comments
+                    </button>
+                </div>
+
+                <!-- Create label -->
+                <div role="tabpanel" class="tab-pane" id="create_label">
+                    <!-- display if order status == pending (new order) -->
+                    {% if order.order_status == 'pending' %}
+                        <h3>
+                            Create
+                            {% if order.oshipmethod|slice(0,3) == 'UPS' %}
+                                <span><img height="25" src="/assets/images/ups/logo_small.gif"></span> UPS
+                            {% else %}
+                                <span><img height="25" src="/assets/images/usps/logo.png"></span> USPS
+                            {% endif %}
+                            Shipping Label:
+                        </h3>
+                        <div style="margin-bottom: 80px;">
+                            <a class="btn btn-primary btn-lg" href="/admin/orders/label?id={{ order.id }}">
+                                Continue
+                            </a>
+                            <br><br>
+                            <hr>
+                        </div>
+                    {% else %}
+                        <h3>A label cannot be created for this order.</h3>
+                        <h4>The following error has occurred:</h4>
+                        <ul>
+                            <li>Incorrect order status.</li>
+                        </ul>
+                        <h4>
+                            The status of this order must be &quot;pending&quot;
+                            if you want to create a shipping label.
+                        </h4>
+                        <h4>
+                            The status of this order is &quot;{{ order.order_status }}.&quot;
+                        </h4>
+                            {% if order.order_status == 'shipped' %}
+                                <h4>
+                                    A label might have already been created.
+                                    To assign serial numbers, go to
+                                    &quot;Enter Serial Number&quot; tab.
+                                </h4>
+                                <h4>
+                                    To view or download the shipping label, go to
+                                    &quot;View/Download Label&quot; tab and search
+                                    for the label with the Tracking number of this order ({{ order.trackingcode }}).
+                                </h4>
+                            {% endif %}
+                        </h4>
+                    {% endif %}
+
+                </div>
+
+                <!-- View / download label  -->
+                <div role="tabpanel" class="tab-pane" id="view_label">
+                    <!-- Create label UPS -->
+                    {% if order.oshipmethod|slice(0,3) == 'UPS' and order.order_status == 'label-created' %}
+                        <div style="margin-top: 30px; margin-bottom: 30px;">
+                            <h3>View / Download <span><img height="25" src="/assets/images/ups/logo_small.gif"></span> UPS label:</h3>
+                            <div>
+                                <a href="/admin/labels/get-ups-labels" class="btn btn-primary btn-lg">
+                                    Go to UPS labels
+                                </a>
+                            </div>
+                        </div>
+                        <hr>
+                    <!-- Create label USPS -->
+                    {% elseif order.oshipmethod|slice(0,4) == 'USPS' and order.order_status == 'shipped' %}
+                        <div style="margin-top: 30px; margin-bottom: 30px;">
+                            <h3>View / Download <span><img height="25" src="/assets/images/usps/logo.png"></span> USPS label:</h3>
+                            <div>
+                                <a href="/admin/labels/get-usps-labels" class="btn btn-primary btn-lg">
+                                    Go to USPS labels
+                                </a>
+                            </div>
+                        </div>
+                        {% else %}
+                            <h3>Label cannot be viewed or downloaded.</h3>
+                            <h4>The following error has occurred:</h4>
+                            <ul>
+                                <li>Incorrect order status</li>
+                            </ul>
+                            <h4>
+                                Order status must be &quot;shipped&quot; to
+                                view and/or download a label. The status of this
+                                 order is &quot;{{ order.order_status }}.&quot;
+                            </h4>
+                    {% endif %}
+                </div>
+
+
+                <!-- Enter serial number  -->
+                <div role="tabpanel" class="tab-pane" id="serial_number">
+                    {% if order.order_status == 'shipped' %}
+                        <!-- check if laser is in order -->
+                        {% if lasers != false %}
+                            <h3 id="show-enter-serial-form"><a>Enter serial {% if lasers|length > 1 %}numbers{% else %}number{% endif %}</a></h3>
+
+                            {% if serialNumber %}
+                                <h4>It appears that serial numbers are already assigned.</h4>
+                                {% if order.order_status == 'label-created' %}
+                                    <h4>The order status is &quot;{{ order.order_status }}.&quot; It is ready to ship.</h4>
+                                    <h4>If you need to void the shipping label, go to &quot;Void Label&quot; tab.</h4>
+                                {% endif %}
+                                <h4>If this is an error, please contact the IT dept.</h4>
+                            {% else %}
+                                <div id="form-assign-serial-number">
+                                    <h3>This order includes {{ lasers|length }} {% if lasers|length == 1 %}laser{% else %}lasers{% endif %}.</h3>
+                                    <form action="/admin/orders/assign-serial-number" method="post"
+                                        class="form-horizontal" id="assign-serial-number-form">
+                                        <!-- honeypot -->
+                                        <input type="hidden" name="honeypot" id="honeypot">
+                                        <input type="hidden" name="order_id" value="{{ order.id }}">
+                                        <input type="hidden" name="buyer_type" value="{{ customer.buyer_type }}">
+                                        <input type="hidden" name="customer_id" value="{{ customer.id }}">
+                                        <input type="hidden" name="customer_firstname" value="{{ customer.billing_firstname }}">
+                                        <input type="hidden" name="customer_lastname" value="{{ customer.billing_lastname }}">
+                                        <input type="hidden" name="customer_address" value="{{ customer.billing_address }}">
+                                        <input type="hidden" name="customer_city" value="{{ customer.billing_city }}">
+                                        <input type="hidden" name="customer_state" value="{{ customer.billing_state }}">
+                                        <input type="hidden" name="customer_zip" value="{{ customer.billing_zip }}">
+                                        <input type="hidden" name="customer_email" value="{{ customer.email }}">
+
+                                        <div class="form-group">
+                                            <label for="first_name" class="col-sm-1 control-label">
+                                                First name
+                                            </label>
+                                            <div class="col-sm-3">
+                                                <input type="text" class="form-control required"
+                                                    name="first_name" id="first_name" value="{{ order.oshipfirstname }}" required>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="last_name" class="col-sm-1 control-label">
+                                                Last name
+                                            </label>
+                                            <div class="col-sm-3">
+                                                <input type="text" class="form-control required"
+                                                    name="last_name" id="last_name" value="{{ order.oshiplastname }}" required>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="address" class="col-sm-1 control-label">
+                                                Address
+                                            </label>
+                                            <div class="col-sm-3">
+                                                <input type=text class="form-control required"
+                                                    name="address" id="address" value="{{ order.oshipaddress }}" required>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="city" class="col-sm-1 control-label">
+                                                City
+                                            </label>
+                                            <div class="col-sm-3">
+                                                <input type=text class="form-control required"
+                                                    name="city" id="city" value="{{ order.oshipcity }}" required>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="state" class="col-sm-1 control-label">
+                                                State
+                                            </label>
+                                            <div class="col-sm-3">
+                                                <input type=text class="form-control required"
+                                                    name="state" id="state" value="{{ order.oshipstate }}" required>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="zipcode" class="col-sm-1 control-label">
+                                                Zip code
+                                            </label>
+                                            <div class="col-sm-3">
+                                                <input type=text class="form-control required"
+                                                    name="zipcode" id="zipcode" value="{{ order.oshipzip }}" required>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="dealer" class="col-sm-1 control-label">
+                                                Seller
+                                            </label>
+                                            <div class="col-sm-3">
+                                                <select class="form-control required" id="seller" name="seller">
+                                                    <option value="armalaser">ArmaLaser</option>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="purchase_date" class="col-sm-1 control-label">
+                                                Purchase date
+                                            </label>
+                                            <div class="col-sm-3">
+                                                <input type="text" class="form-control required"
+                                                    name="purchase_date" value="{{ order.odate|date('Y-m-d') }}" required>
+                                            </div>
+                                        </div>
+
+                                        <!-- display inputs based on number of lasers purchased -->
+                                        {% for laser in lasers %}
+                                            <div class="form-group">
+                                                <label for="model" class="col-sm-1 control-label">
+                                                    <!-- resource: https://twig.symfony.com/doc/2.x/tags/for.html -->
+                                                    <!-- check loop iteration (starts at 0 index) & label laser number accordingly -->
+                                                    {% if lasers|length > 1 %}
+                                                        {% if loop.index0 == 0 %}
+                                                            Laser1
+                                                        {% elseif loop.index0 == 1 %}
+                                                            Laser2
+                                                        {% elseif loop.index0 == 2 %}
+                                                            Laser3
+                                                        {% elseif loop.index0 == 3 %}
+                                                            Laser4
+                                                        {% elseif loop.index0 == 4 %}
+                                                            Laser5
+                                                        {% elseif loop.index0 == 5 %}
+                                                            Laser6
+                                                        {% endif %}
+                                                    {% endif %}
+                                                    {% if lasers|length == 1 %}
+                                                        Laser
+                                                    {% endif %}
+                                                </label>
+                                                <div class="col-sm-3">
+                                                    <input type=text class="form-control required"
+                                                        name="lasers[]" value="{{ laser|slice(0,  -8) }}">
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="model" class="col-sm-1 control-label">
+                                                    <!-- resource: https://twig.symfony.com/doc/2.x/tags/for.html -->
+                                                    <!-- check loop iteration (starts at 0 index) & label laser number accordingly -->
+                                                    {% if lasers|length > 1 %}
+                                                        {% if loop.index0 == 0 %}
+                                                            LaserID1
+                                                        {% elseif loop.index0 == 1 %}
+                                                            LaserID2
+                                                        {% elseif loop.index0 == 2 %}
+                                                            LaserID3
+                                                        {% elseif loop.index0 == 3 %}
+                                                            LaserID4
+                                                        {% elseif loop.index0 == 4 %}
+                                                            LaserID5
+                                                        {% elseif loop.index0 == 5 %}
+                                                            LaserID6
+                                                        {% endif %}
+                                                    {% endif %}
+                                                    {% if lasers|length == 1 %}
+                                                        LaserID
+                                                    {% endif %}
+                                                </label>
+                                                <div class="col-sm-3">
+                                                    <input type=text class="form-control required"
+                                                        name="laserids[]" value="{{ laser|slice(-4) }}"
+                                                        placeholder="Enter ID of the above laser">
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="serial_numbers" class="col-sm-1 control-label" >
+                                                    {% if lasers|length > 1 %}
+                                                        {% if loop.index0 == 0 %}
+                                                            Serial1
+                                                        {% elseif loop.index0 == 1 %}
+                                                            Serial2
+                                                        {% elseif loop.index0 == 2 %}
+                                                            Serial3
+                                                        {% elseif loop.index0 == 3 %}
+                                                            Serial4
+                                                        {% elseif loop.index0 == 4 %}
+                                                            Serial5
+                                                        {% elseif loop.index0 == 5 %}
+                                                            Serial6
+                                                        {% endif %}
+                                                    {% endif %}
+                                                    {% if lasers|length == 1 %}
+                                                        Serial#
+                                                    {% endif %}
+                                                </label>
+                                                <div class="col-sm-3">
+                                                    <input type=text class="form-control required"
+                                                        name="serial_numbers[]" id="serial_numbers"
+                                                        placeholder="Enter serial number of the above laser" required>
+                                                </div>
+                                            </div>
+                                        {% endfor %}
+
+                                        <div class="form-group">
+                                            <label for="serial_numbers" class="col-sm-1 control-label">
+                                                &nbsp;
+                                            </label>
+                                            <div class="col-sm-3" id="assign-serial-number-btn">
+                                                <button type="submit" class="btn btn-buy btn-block">
+                                                    Assign serial number now
+                                                </button>
+                                                <help>*Please make sure all fields are filled before clicking button.</help>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-8">&nbsp;</div>
+                                    </form>
+                                </div>
+                            {% endif %}
+                        {% else %}
+                            <h3>It appears that there are no lasers in this order.</h3>
+                        {% endif %}
+                    {% else %}
+                        <h3>Laser serial number(s) cannot be assigned to this order.</h3>
+                        <h4>The following error has occurred:</h4>
+                        <ul>
+                            <li>Incorrect order status</li>
+                        </ul>
+                        <h4>The order status must be &quot;shipped&quot; to assign serial numbers. The status of this order is &quot;{{ order.order_status }}.&quot;</h4>
+                        <br>
+                        <h4>Please create a shipping label before assigning serial numbers.</h4>
+                    {% endif %}
+                </div>
+
+
+                <!-- Update order status to shipped -->
+                <!-- <div role="tabpanel" class="tab-pane" id="shipped">
+                    {% if order.order_status == 'label-created' %}
+                        <h3>Update order status to shipped:</h3>
+                        <form class="form-horizontal" method="post" action="/admin/orders/order-shipped?id={{ order.id }}">
+                            <div class="form-group">
+                                <label class="control-label col-sm-1">
+                                    Date shipped
+                                </label>
+                                <div class="col-sm-2">
+                                    <input type="text" id="datepicker" class="form-control" name="date_shipped" required>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label col-sm-1">
+                                    &nbsp;
+                                </label>
+                                <div class="col-sm-3">
+                                    <button role="submit" class="btn btn-primary btn-lg">
+                                        Update order status to shipped
+                                    </button>
+                                    <br>
+                                    <help>*Be sure to enter serial numbers before updating to &quot;shipped.&quot;</help>
+                                </div>
+                            </div>
+                        </form>
+                    {% else %}
+                        <h3>Order status cannot be updated to &quot;shipped.&quot;</h3>
+                        <h4>The following error has occurred:</h4>
+                        <ul>
+                            <li>Incorrect order status</li>
+                        </ul>
+                        <h4>The order status must be &quot;label-created&quot; to update order status to &quot;shipped.&quot; The status of this order is &quot;{{ order.order_status }}.&quot;</h4>
+                        <h4>The next step for an order with the status of &quot;pending&quot; is to create a shipping label. To create a shipping label, go to "Create Shipping Label" tab.</h4>
+                    {% endif %}
+                </div> -->
+
+
+                <!-- Void Label -->
+                <div role="tabpanel" class="tab-pane" id="void_label">
+                    <!-- Void label: shipper == UPS -->
+                    {% if order.oshipmethod|slice(0,3) == 'UPS' and order.order_status == 'label-created' %}
+                        <h3 id="voidUpsLabel" style="margin-bottom: 60px;"><a style="text-decoration:underline">Void <span><img height="25" src="/assets/images/ups/logo_small.gif"></span> UPS Label</a></h3>
+                        <div id="form-void-ups-label" style="margin-bottom:60px;">
+                            <form method="post" class="form-horizontal" action="/admin/postage/void-ups-label">
+                                <input type="hidden" name="user_id" value="{{ session.user_id }}">
+                                <input type="hidden" name="order_id" value="{{ order.id }}">
+                                <div class="form-group">
+                                    <label for="tracking_number" class="col-md-1 control-label">
+                                        Tracking number
+                                    </label>
+                                    <div class="col-md-3">
+                                        <input type="text" class="form-control" name="tracking_number"
+                                            value="{{ order.trackingcode }}" required>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="comment" class="col-md-1 control-label">
+                                        Reason
+                                    </label>
+                                    <div class="col-md-3">
+                                        <input type="text" class="form-control" name="comment"
+                                            id="comment" placeholder="Enter reason, e.g. order cancelled, internal error"
+                                            required>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-md-offset-1 col-md-4">
+                                        <button class="btn btn-primary btn-lg" type="submit"
+                                            id="void-label-btn">
+                                            Void UPS label now
+                                        </button>
+                                        <br>
+                                        <small>*Must be within 90 days</small>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+
+                    <!-- Void label: shipper == USPS -->
+                    {% elseif  order.oshipmethod|slice(0,3) != 'UPS' and order.order_status == 'shipped' %}
+                        <!-- Void label: shipper == USPS -->
+                        <h3>Void <span><img height="25" src="/assets/images/usps/logo.png"></span> USPS Label</h3>
+
+                        <form method="post" class="form-horizontal" action="/admin/postage/void-usps-label">
+                            <input type="hidden" name="user_id" value="{{ session.user_id }}">
+                            <input type="hidden" name="order_id" value="{{ order.id }}">
+                            <div class="form-group">
+                                <label for="tracking_number" class="col-md-1 control-label">
+                                    Tracking number
+                                </label>
+                                <div class="col-md-3">
+                                    <input type="text" class="form-control" name="tracking_number"
+                                        value="{{ order.trackingcode }}" required>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="transaction_id" class="col-md-1 control-label">
+                                    Transaction ID
+                                </label>
+                                <div class="col-md-3">
+                                    <input type="text" class="form-control" name="transaction_id"
+                                        id="transaction_id" value="{{ order.transaction_id }}">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-offset-1 col-md-4">
+                                    <button class="btn btn-primary btn-lg" type="submit" id="void-label-btn">
+                                        Void USPS label now
+                                    </button>
+                                    <br>
+                                    <small>*Refunds take 1 - 2 weeks</small>
+                                </div>
+                            </div>
+                        </form>
+                        {% else %}
+                            <h3>The shipping label cannot be voided.</h3>
+                            <h4>The following error has occurred:</h4>
+                            <ul>
+                                <li>Incorrect order status</li>
+                            </ul>
+                            <h4>It appears that no shipping label has been created for this order.</h4>
+                            <h4>The order status must be &quot;shipped&quot; to void a label. The status of this order is &quot;{{ order.order_status }}.&quot;</h4>
+                    {% endif %}
+                </div>
+
+
+
+                <!-- UPS return label -->
+                <div role="tabpanel" class="tab-pane" id="ups_return_label">
+                    <!-- Get UPS return label -->
+                    <!-- Return label never created -->
+                    {% if order.return_label_created == 0 and order.order_status == 'return-pending' %}
+                        <!-- Order NOT within 30 days -->
+                        {% if (daysSinceShipped > 30) %}
+                            <h3>Return Label</h3>
+                            <h4>A UPS return label can be created only within 30 days of the shipped date.
+                                <br>This order was shipped {{ daysSinceShipped }} days ago.</h4>
+                        <!-- Order within 30 days -->
+                        {% else %}
+                            <!-- Shippper is UPS & order status == shipped -->
+                            {% if order.oshipmethod|slice(0,3) == 'UPS' and order.order_status == 'return-pending' %}
+                                <h3 id="createUpsReturnLabel" style="margin-bottom: 40px;">
+                                    <a style="text-decoration:underline">
+                                        Create <span><img height="25" src="/assets/images/ups/logo_small.gif"></span>
+                                        UPS Return Label
+                                    </a>
+                                </h3>
+                                <div id="form-create-ups-return-label" style="margin-bottom:60px;">
+                                    <form method="post" class="form-horizontal" action="/admin/postage/create-ups-return-label">
+                                        <input type="hidden" name="user_id" value="{{ session.user_id }}">
+                                        <input type="hidden" name="order_id" value="{{ order.id }}">
+                                        <div class="form-group">
+                                            <label for="tracking_number" class="col-md-1 control-label">
+                                                Tracking number
+                                            </label>
+                                            <div class="col-md-3">
+                                                <input type="text" class="form-control" name="tracking_number"
+                                                    value="{{ order.trackingcode }}" required>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="label_recovery_comment" class="col-md-1 control-label">
+                                                Reason
+                                            </label>
+                                            <div class="col-md-3">
+                                                <input type="text" class="form-control" name="label_recovery_comment"
+                                                    id="label_recovery_comment"
+                                                    placeholder="Enter reason" required>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="col-md-offset-1 col-md-4">
+                                                <button class="btn btn-primary btn-lg" type="submit"
+                                                    id="create-ups-return-label-btn">
+                                                    Create UPS return label now
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                                {% else %}
+                                    <h3>A UPS return label cannot be created for this order.</h3>
+                                    <h4>One or more of the following errors has occurred:</h4>
+                                    <ul>
+                                        <li>The shipping company was <i>not</i> <span><img height="25" src="/assets/images/ups/logo_small.gif"></span></li>
+                                        <li>The order status is not &quot;return-pending&quot;</li>
+                                        <li>A return label has already been created</li>
+                                    </ul>
+                                    <h4>Return labels are not available for orders shipped via USPS.</h4>
+                            {% endif %}
+                        {% endif %}
+                    {% else %}
+                        <h3>A UPS return label cannot be created for this order.</h3>
+                        <h4>One or more of the following errors has occurred:</h4>
+                        <ul>
+                            <li>The shipping company was not UPS</li>
+                            <li>The order status is not &quot;return-pending.&quot; It
+                                is &quot;{{ order.order_status }}.&quot;</li>
+                        </ul>
+                        <p>__________________________________________</p>
+                        <h4 style="margin-bottom: 10px;">Notes:</h4>
+                        <p>Return labels are available <i>only</i> for orders shipped via UPS.</p>
+                    {% endif %}
+                </div>
+
+
+                <!-- Assign RMA to item(s) in order -->
+                <div role="tabpanel" class="tab-pane" id="rma">
+                    {% if session.access_level >= 2 and order.order_status == 'shipped' %}
+                        <h3 id="rma-title">{% if order_content|length == 1 %}Assign RMA{% else %} Assign RMAs{% endif %}</h3>
+                        <div id="rma-section">
+                            <form class="form-horizontal" method="post" action="/admin/orders/assign-rma">
+
+                                <table class="table table-bordered table-striped bg-fff">
+                                    <thead>
+                                        <tr>
+                                            <th></th>
+                                            <th class="text-center">Order ID</th>
+                                            <th class="text-center">Qty</th>
+                                            <th class="text-center">Item ID</th>
+                                            <th>Name</th>
+                                            <th>RMA number</th>
+                                            <th>Reason</th>
+                                        </tr>
+                                    </thead>
+
+                                    <tbody>
+                                        {% for item in order_content %}
+                                            <tr>
+
+                                                <td class="text-center"  style="width: 8%">
+                                                    <button id="assign-rma-btn" role="submit" class="btn btn-primary btn-sm"
+                                                        {% if item.rma_number != '' %} disabled{% endif %}>
+                                                        Assign now
+                                                    </button>
+                                                </td>
+                                                <td class="text-center" style="width: 5%">
+                                                    {{ item.orderid }}
+                                                    <input class="form-control" type="hidden" name="return_orderid" value="{{ item.orderid }}">
+                                                </td>
+                                                {% if item.qty == 1 %}
+                                                    <td class="text-center" style="width: 5%">
+                                                        {{ item.qty }}
+                                                    </td>
+                                                {% else %}
+                                                    <td class="text-center" style="width: 5%">
+                                                        <input class="form-control" type="text" name="return_itemqty" value="{{ item.qty }}">
+                                                    </td>
+                                                {% endif %}
+                                                <td class="text-center" style="width: 5%">
+                                                    {{ item.itemid }}
+                                                    <input class="form-control" type="hidden" name="return_itemid" value="{{ item.itemid }}">
+                                                </td>
+                                                <td  style="width: 20%">
+                                                    {{ item.name }}
+                                                </td>
+                                                <td style="width: 28%">
+                                                    <input class="form-control" type="text" name="rma_numbers[]" placeholder="Enter RMA"
+                                                        value="{% if item.rma_number and item.rma_number != '' %}{{ item.rma_number }}{% endif %}">
+                                                </td>
+                                                <td style="width: 29%">
+                                                    <select class="form-control" name="return_reasons[]">
+
+                                                        <option value="">
+                                                            {% if item.rma_reason and item.rma_reason != '' %}{{ item.rma_reason }}{% else %}Select{% endif %}
+                                                        </option>
+                                                        {% for reason in reasons %}
+                                                            <option value="{{ reason|lower }}">{{ reason|capitalize }}</option>
+                                                        {% endfor %}
+                                                    </select>
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </form>
+                        </div>
+                    {% else %}
+                        <h3>An RMA cannot be assigned.</h3>
+                        <h4>The following error has occurred:</h4>
+                        <ul>
+                            <li>Incorrect order status</li>
+                        </ul>
+                        <h4>
+                            {% if order.order_status != 'shipped' %}
+                                Order status must be &quot;shipped.&quot; Order status
+                                of this order is &quot;{{ order.order_status }}.&quot;
+                                {% if order.order_status == "returned" %}
+                                    <br><br>
+                                    Please take the next step to process the return.
+                                {% endif %}
+                            {% endif %}
+                        </h4>
+                    {% endif %}
+                </div>
+
+
+
+                <!-- Process return -->
+                <div role="tabpanel" class="tab-pane" id="process_return">
+                    {% if order.order_status == 'return-pending' and order.rma == 1 and session.access_level >= 2 %}
+
+                        <h4 style="margin-bottom:15px;">
+                            If item(s) have been returned as agreed, check box to change order status to &quot;returned.&quot;
+                        </h4>
+                        {% if not order.order_status == 'returned' %}
+                            <p>
+                                <a href="/admin/orders/update-to-returned?id={{ order.id }}" class="btn btn-primary">Restore to &quot;return-pending&quot;</a>
+                            </p>
+                        {% else %}
+                            <p>
+                                <a href="/admin/orders/update-to-returned?id={{ order.id }}" class="btn btn-success">Change order status</a>
+                            </p>
+                        {% endif %}
+
+                    {% else %}
+                        <h3>The return process has already been initiated.</h3>
+                        <h4>The following error has occurred:</h4>
+                        <ul>
+                            <li>Incorrect order status</li>
+                        </ul>
+                        <h4>
+                            Order status must be &quot;return-pending&quot; to
+                            process a return for repair, replacement, exchange or
+                            refund.
+                            <br><br>
+                            The status of this order is
+                            &quot;{{ order.order_status }}.&quot;
+                            {% if order.order_status == "returned" %}
+                                <br><br>
+                                Please proceed to the next step.
+                            {% endif %}
+                        </h4>
+                    {% endif %}
+                </div>
+
+
+                <!-- Repair -->
+                <div role="tabpanel" class="tab-pane" id="process_repair">
+                    {% if order.order_status == 'returned' and order.rma == 1 and session.access_level >= 2 %}
+                    <!-- Create label -->
+                    <div role="tabpanel" class="tab-pane" id="create_label">
+                        <!-- display if order status == pending (new order) -->
+                        {% if order.order_status == 'returned' %}
+                            <h3 style="margin-bottom:20px;">Return repaired product to customer</h3>
+                            <h4 style="margin-bottom: 20px;">
+                                Create
+                                {% if order.oshipmethod|slice(0,3) == 'UPS' %}
+                                    <span><img height="25" src="/assets/images/ups/logo_small.gif"></span> UPS
+                                {% else %}
+                                    <span><img height="25" src="/assets/images/usps/logo.png"></span> USPS
+                                {% endif %}
+                                Shipping Label:
+                            </h4>
+                            <div style="margin-bottom: 0px;">
+                                <a class="btn btn-primary btn-lg" href="/admin/orders/label?id={{ order.id }}">
+                                    Continue
+                                </a>
+                            </div>
+                        {% else %}
+                            <h3>A label cannot be created for this order.</h3>
+                            <h4>The following error has occurred:</h4>
+                            <ul>
+                                <li>Incorrect order status.</li>
+                            </ul>
+                            <h4>
+                                The status of this order must be &quot;returned&quot;
+                                if you want to create a shipping label to ship the
+                                returned item.
+                            </h4>
+                            <h4>
+                                The status of this order is &quot;{{ order.order_status }}.&quot;
+                            </h4>
+                        {% endif %}
+                    </div>
+                    {% endif %}
+                </div>
+
+
+                <!-- Replace -->
+                <div role="tabpanel" class="tab-pane" id="process_replace">
+                    {% if order.order_status == 'returned' and order.rma == 1 and session.access_level >= 2 %}
+                        <h3>Create order with replacement parts</h3>
+                        <div style="margin-bottom: 0px;">
+                            <a class="btn btn-primary btn-lg" href="/admin/orders/label?id={{ order.id }}">
+                                Continue
+                            </a>
+                        </div>
+                    {% endif %}
+                </div>
+
+
+                <!-- Exchange -->
+                <div role="tabpanel" class="tab-pane" id="process_exchange">
+                    {% if order.order_status == 'returned' and order.rma == 1 and session.access_level >= 2 %}
+                        Connected to exchange!
+                    {% endif %}
+                </div>
+
+
+                <!-- Issue refund -->
+                <div role="tabpanel" class="tab-pane" id="refund">
+                    <!-- if order status = return-pending (UPS return label created) -->
+                    {% if order.order_status == 'returned' and order.rma == 1 and session.access_level >= 2 %}
+                        <div style="margin-top: 30px; margin-bottom: 30px;">
+                            <h3 id="issue-refund-toggle"><a>Issue refund to customer<a></h3>
+                            <div id="issue-refund-section">
+                                <form class="form-horizontal" method="post" action="/admin/orders/order-returned">
+                                    <input type="hidden" name="id" value="{{ order.id }}">
+                                    <div class="form-group">
+                                        <label class="control-label col-sm-1">
+                                            Amount
+                                        </label>
+                                        <div class="col-sm-2">
+                                            <input type="number" id="return_amount" class="form-control" name="return_amount"
+                                                value="{{ order.orderamount - order.oshipcost }}" required>
+                                                <small>*Order total - shipping</small>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="control-label col-sm-1">
+                                            PayPal ID
+                                        </label>
+                                        <div class="col-sm-2">
+                                            <input type="text" id="return_pnref" class="form-control" name="return_pnref"
+                                                value="{{ order.pnref }}" required>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="control-label col-sm-1">
+                                            &nbsp;
+                                        </label>
+                                        <div class="col-sm-6">
+                                            <button id="issue-refund-btn" role="submit" class="btn btn-primary btn-lg">
+                                                Issue refund now
+                                            </button>
+                                            <br>
+                                            <help>
+                                                *Do <strong><i>not</i></strong> issue a refund unless returned product(s)
+                                                have been received and inspected, according to
+                                                ArmaLaser's return policy guidelines.
+                                                <br><br>
+                                                *Refund only the value of what was returned. For orders with multiple items,
+                                                make certain that the refund is equal to the item or items returned. Do
+                                                <strong><i>not</i></strong> refund the entire order if only part of the order is returned.
+                                                <br><br>
+                                                *A credit will be issued by PayPal against the
+                                                credit card used to make the purchase. Armalaser
+                                                does not store credit card information. All
+                                                website credit card transactions and processed
+                                                by PayPal.
+                                                <br><br>
+                                                *Upon completion, please add a new comment explaining why
+                                                the refund was issued.
+                                            </help>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    {% else %}
+                        <h3>A refund cannot be issued.</h3>
+                        <h4>The following error has occurred:</h4>
+                        <ul>
+                            <li>Incorrect order status</li>
+                        </ul>
+                        <h4>
+                            Order status must be &quot;returned&quot; to
+                            issue a refund. The status of this order is &quot;{{ order.order_status }}.&quot;
+                        </h4>
+                        <br>
+                        <h4>
+                            For UPS, generate a UPS Return label. Doing so also
+                            changes the order status to &quot;return-pending.&quot;
+                        </h4>
+                        <br>
+                        <h4>
+                            For USPS, go to &quot;&apos;RMA.&apos;&quot;
+                        </h4>
+                    {% endif %}
+                </div>
+
+
+            </div>
+
+        </div>
+
+
+
+            <!-- display if order status == pending (new order) -->
+            <!-- {% if order.order_status == 'pending' %}
+                <h3>
+                    Create
+                    {% if order.oshipmethod|slice(0,3) == 'UPS' %}
+                        <span><img height="25" src="/assets/images/ups/logo_small.gif"></span> UPS
+                    {% else %}
+                        <span><img height="25" src="/assets/images/usps/logo.png"></span> USPS
+                    {% endif %}
+                    Shipping Label:
+                </h3>
+                <div style="margin-bottom: 80px;">
+                    <a class="btn btn-primary btn-lg" href="/admin/orders/label?id={{ order.id }}">
+                        Continue
+                    </a>
+                    <br><br>
+                    <hr>
+                </div>
+            {% endif %} -->
+
+            <!-- View/download label UPS -->
+            <!-- {% if order.oshipmethod|slice(0,3) == 'UPS' and order.order_status == 'label-created' %}
+                <div style="margin-top: 30px; margin-bottom: 30px;">
+                    <h3>View / Download <span><img height="25" src="/assets/images/ups/logo_small.gif"></span> UPS label:</h3>
+                    <div>
+                        <a href="/admin/labels/get-ups-labels" class="btn btn-primary btn-lg">
+                            Go to UPS labels
+                        </a>
+                    </div>
+                </div>
+                <hr> -->
+            <!-- View/download label USPS -->
+            <!-- {% elseif order.oshipmethod|slice(0,4) == 'USPS' and order.order_status == 'label-created' %}
+                <div style="margin-top: 30px; margin-bottom: 30px;">
+                    <h3>View / Download <span><img height="25" src="/assets/images/usps/logo.png"></span> USPS label:</h3>
+                    <div>
+                        <a href="/admin/labels/get-usps-labels" class="btn btn-primary btn-lg">
+                            Go to USPS labels
+                        </a>
+                    </div>
+                </div>
+                <hr>
+            {% endif %} -->
+
+            <!-- if order status = label-created (ready to be shipped) -->
+            <!-- {% if order.order_status == 'label-created' %} -->
+
+                <!-- check if laser is in order -->
+                <!-- {% if lasers != false %}
+                    <div class="col-sm-12" style="padding-bottom: 25px; border-bottom: 1px solid #eee;">
+                        <div class="row">
+                            <h3 id="enter-serial-numbers"><a>Enter serial {% if lasers|length > 1 %}numbers{% else %}number{% endif %}</a></h3> -->
+
+                            <!-- <div id="form-assign-serial-number">
+                                <form action="/admin/orders/assign-serial-number" method="post"
+                                    class="form-horizontal" id="assign-serial-number-form"> -->
+                                    <!-- honeypot -->
+                                    <!-- <input type="hidden" name="honeypot" id="honeypot">
+
+                                    <div class="form-group">
+                                        <label for="first_name" class="col-sm-1 control-label">
+                                            First name
+                                        </label>
+                                        <div class="col-sm-3">
+                                            <input type="text" class="form-control required"
+                                                name="first_name" id="first_name" value="{{ order.oshipfirstname }}" required>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="last_name" class="col-sm-1 control-label">
+                                            Last name
+                                        </label>
+                                        <div class="col-sm-3">
+                                            <input type="text" class="form-control required"
+                                                name="last_name" id="last_name" value="{{ order.oshiplastname }}" required>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="address" class="col-sm-1 control-label">
+                                            Address
+                                        </label>
+                                        <div class="col-sm-3">
+                                            <input type=text class="form-control required"
+                                                name="address" id="address" value="{{ order.oshipaddress }}" required>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="city" class="col-sm-1 control-label">
+                                            City
+                                        </label>
+                                        <div class="col-sm-3">
+                                            <input type=text class="form-control required"
+                                                name="city" id="city" value="{{ order.oshipcity }}" required>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="state" class="col-sm-1 control-label">
+                                            State
+                                        </label>
+                                        <div class="col-sm-3">
+                                            <input type=text class="form-control required"
+                                                name="state" id="state" value="{{ order.oshipstate }}" required>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="zipcode" class="col-sm-1 control-label">
+                                            Zip code
+                                        </label>
+                                        <div class="col-sm-3">
+                                            <input type=text class="form-control required"
+                                                name="zipcode" id="zipcode" value="{{ order.oshipzip }}" required>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="dealer" class="col-sm-1 control-label">
+                                            Seller
+                                        </label>
+                                        <div class="col-sm-3">
+                                            <select class="form-control required" id="dealer" name="dealer">
+                                                <option value="">Select</option>
+                                                <option value="armalaser">ArmaLaser</option>
+                                                <option value="opticsplanet">Optics Planet</option>
+                                                <option value="amazon">Amazon</option>
+                                                <option value="midwayusa">Midway USA</option>
+                                                <option value="buds">Bud's Gun Shop</option>
+                                                <option value="cabella">Cabella</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="purchase_date" class="col-sm-1 control-label">
+                                            Purchase date
+                                        </label>
+                                        <div class="col-sm-3">
+                                            <input type="text" class="form-control required"
+                                                name="purchase_date" value="{{ order.odate|date('Y-m-d') }}" required>
+                                        </div>
+                                    </div> -->
+
+                                    <!-- display inputs based on number of lasers purchased -->
+                                    <!-- {% for laser in lasers %}
+                                        <div class="form-group">
+                                            <label for="model" class="col-sm-1 control-label"> -->
+                                                <!-- resource: https://twig.symfony.com/doc/2.x/tags/for.html -->
+                                                <!-- check loop iteration (starts at 0 index) & label laser number accordingly -->
+                                                <!-- {% if lasers|length > 1 %}
+                                                    {% if loop.index0 == 0 %}
+                                                        Laser1
+                                                    {% elseif loop.index0 == 1 %}
+                                                        Laser2
+                                                    {% elseif loop.index0 == 2 %}
+                                                        Laser3
+                                                    {% elseif loop.index0 == 3 %}
+                                                        Laser4
+                                                    {% elseif loop.index0 == 4 %}
+                                                        Laser5
+                                                    {% elseif loop.index0 == 5 %}
+                                                        Laser6
+                                                    {% endif %}
+                                                {% endif %}
+                                                {% if lasers|length == 1 %}
+                                                    Laser
+                                                {% endif %}
+                                            </label>
+                                            <div class="col-sm-3">
+                                                <input type=text class="form-control required"
+                                                    name="lasers[]" value="{{ laser }}">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="serial_numbers" class="col-sm-1 control-label" >
+                                                Serial#
+                                            </label>
+                                            <div class="col-sm-3">
+                                                <input type=text class="form-control required"
+                                                    name="serial_numbers" id="serial_numbers"
+                                                    placeholder="Enter serial number of the above laser" required>
+                                              </div>
+                                        </div>
+                                    {% endfor %}
+
+                                    <div class="form-group">
+                                        <label for="serial_numbers" class="col-sm-1 control-label">
+                                            &nbsp;
+                                        </label>
+                                        <div class="col-sm-3">
+                                            <button id="assign-serial-number-btn" type="submit" class="btn btn-buy btn-block">
+                                                Assign serial number now
+                                            </button>
+                                            <help>*Please make sure all fields are filled before clicking button.</help>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-8">&nbsp;</div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+            {% endif %} -->
+
+                <!-- {% if order.order_status == 'label-created' %}
+                    <div class="col-sm-12 p2" style="padding-bottom: 25px; border-bottom: 1px solid #eee;">
+                        <h3>Update order status to shipped:</h3>
+                        <form class="form-horizontal" method="post" action="/admin/orders/order-shipped?id={{ order.id }}">
+                            <div class="form-group">
+                                <label class="control-label col-sm-1">
+                                    Date shipped
+                                </label>
+                                <div class="col-sm-2">
+                                    <input type="text" id="datepicker" class="form-control" name="date_shipped" required>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label col-sm-1">
+                                    &nbsp;
+                                </label>
+                                <div class="col-sm-3">
+                                    <button role="submit" class="btn btn-primary btn-lg">
+                                        Update order status to shipped
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <hr>
+                {% endif %} -->
+
+            <!-- {% if order.order_status == 'shipped' and order.oshipmethod|slice(0,4) == 'USPS' and session.access_level >= 2 %}
+                <h3 id="rma">Change order status to return pending</h3>
+                <div id="rma-section">
+                    <form class="form-horizontal" method="post" action="/admin/orders/update-to-return-pending?id={{ order.id }}">
+                        <div class="form-group">
+                            <label class="control-label col-sm-12">
+                                &nbsp;
+                            </label>
+                            <div class="col-sm-3">
+                                <button role="submit" class="btn btn-primary btn-lg">
+                                    Update order status to return pending now
+                                </button>
+                                <br>
+                                <small>*This step is required before issuing a refund.</small>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            {% endif %} -->
+
+            <!-- if order status = return-pending (UPS return label created) -->
+            <!-- {% if order.order_status == 'return-pending' and session.access_level >= 2 %}
+                <div style="margin-top: 30px; margin-bottom: 30px;">
+                    <h3 id="issue-refund-toggle"><a>Issue refund to customer<a></h3>
+                    <div id="issue-refund-section">
+                        <form class="form-horizontal" method="post" action="/admin/orders/order-returned">
+                            <input type="hidden" name="id" value="{{ order.id }}">
+                            <div class="form-group">
+                                <label class="control-label col-sm-1">
+                                    Amount
+                                </label>
+                                <div class="col-sm-2">
+                                    <input type="number" id="return_amount" class="form-control" name="return_amount"
+                                        value="{{ order.orderamount - order.oshipcost }}" required>
+                                        <small>*Refund = Total - Shipping</small>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-sm-1">
+                                    PayPal ID
+                                </label>
+                                <div class="col-sm-2">
+                                    <input type="text" id="return_pnref" class="form-control" name="return_pnref"
+                                        value="{{ order.pnref }}" required>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-sm-1">
+                                    &nbsp;
+                                </label>
+                                <div class="col-sm-6">
+                                    <button id="issue-refund-btn" role="submit" class="btn btn-primary btn-lg">
+                                        Issue refund now
+                                    </button>
+                                    <br>
+                                    <help>
+                                        *Do <strong><i>not</i></strong> issue a refund unless returned product(s)
+                                        have been received and inspected, according to
+                                        ArmaLaser's return policy guidelines.
+                                        <br><br>
+                                        *A credit will be issued by PayPal against the
+                                        credit card used to make the purchase. Armalaser
+                                        does not store credit card information. All
+                                        website credit card transactions and processed
+                                        by PayPal.
+                                        <br><br>
+                                        *Upon completion, add a new comment explaining why
+                                        the refund was issued.
+                                    </help>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <hr>
+            {% endif %} -->
+
+
+            <!-- Void label: shipper == UPS -->
+            <!-- {% if order.oshipmethod|slice(0,3) == 'UPS' and order.order_status == 'label-created' %}
+                <h3 id="voidUpsLabel" style="margin-bottom: 60px;"><a style="text-decoration:underline">Void <span><img height="25" src="/assets/images/ups/logo_small.gif"></span> UPS Label</a></h3>
+                <div id="form-void-ups-label" style="margin-bottom:60px;">
+                    <form method="post" class="form-horizontal" action="/admin/postage/void-ups-label">
+                        <input type="hidden" name="user_id" value="{{ session.user_id }}">
+                        <input type="hidden" name="order_id" value="{{ order.id }}">
+                        <div class="form-group">
+                            <label for="tracking_number" class="col-md-1 control-label">
+                                Tracking number
+                            </label>
+                            <div class="col-md-3">
+                                <input type="text" class="form-control" name="tracking_number"
+                                    value="{{ order.trackingcode }}" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="comment" class="col-md-1 control-label">
+                                Reason
+                            </label>
+                            <div class="col-md-3">
+                                <input type="text" class="form-control" name="comment"
+                                    id="comment" placeholder="Enter reason, e.g. order cancelled, internal error"
+                                    required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-offset-1 col-md-4">
+                                <button class="btn btn-primary btn-lg" type="submit"
+                                    id="void-label-btn">
+                                    Void UPS label now
+                                </button>
+                                <br>
+                                <small>*Must be within 90 days</small>
+                            </div>
+                        </div>
+                    </form>
+                </div> -->
+
+            <!-- Void label: shipper == USPS -->
+            <!-- {% elseif  order.oshipmethod|slice(0,3) != 'UPS' and order.order_status == 'label-created' %} -->
+                <!-- Void label: shipper == USPS -->
+                <!-- <h3 id="voidUspsLabel" style="margin-bottom: 60px;"><a style="text-decoration:underline">Void <span><img height="25" src="/assets/images/usps/logo.png"></span> USPS Label</a></h3>
+                <div id="form-void-usps-label" style="margin-bottom:60px;">
+                    <form method="post" class="form-horizontal" action="/admin/postage/void-usps-label">
+                        <input type="hidden" name="user_id" value="{{ session.user_id }}">
+                        <input type="hidden" name="order_id" value="{{ order.id }}">
+                        <div class="form-group">
+                            <label for="tracking_number" class="col-md-1 control-label">
+                                Tracking number
+                            </label>
+                            <div class="col-md-3">
+                                <input type="text" class="form-control" name="tracking_number"
+                                    value="{{ order.trackingcode }}" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="transaction_id" class="col-md-1 control-label">
+                                Transaction ID
+                            </label>
+                            <div class="col-md-3">
+                                <input type="text" class="form-control" name="transaction_id"
+                                    id="transaction_id" value="{{ order.transaction_id }}">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-offset-1 col-md-4">
+                                <button class="btn btn-primary btn-lg" type="submit"
+                                    id="void-label-btn">
+                                    Void  USPS label now
+                                </button>
+                                <br>
+                                <small>*Refunds take 1 - 2 weeks</small>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            {% endif %} -->
+
+
+
+            <!-- Get UPS return label -->
+            <!-- Return label never created -->
+            <!-- {% if order.return_label_created == 0 and order.order_status == 'shipped' %} -->
+                <!-- Order NOT within 30 days -->
+                <!-- {% if (daysSinceShipped > 30) %}
+                    <h3>Return Label</h3>
+                    <h4>A UPS return label can be created only within 30 days of the shipped date.
+                        <br>This order was shipped {{ daysSinceShipped }} days ago.</h4> -->
+                <!-- Order within 30 days -->
+                <!-- {% else %} -->
+                    <!-- Shippper is UPS & order status == shipped -->
+                    <!-- {% if order.oshipmethod|slice(0,3) == 'UPS' and order.order_status == 'shipped' %}
+                        <h3 id="createUpsReturnLabel" style="margin-bottom: 40px;">
+                            <a style="text-decoration:underline">
+                                Create <span><img height="25" src="/assets/images/ups/logo_small.gif"></span>
+                                UPS Return Label
+                            </a>
+                        </h3>
+                        <div id="form-create-ups-return-label" style="margin-bottom:60px;">
+                            <form method="post" class="form-horizontal" action="/admin/postage/create-ups-return-label">
+                                <input type="hidden" name="user_id" value="{{ session.user_id }}">
+                                <input type="hidden" name="order_id" value="{{ order.id }}">
+                                <div class="form-group">
+                                    <label for="tracking_number" class="col-md-1 control-label">
+                                        Tracking number
+                                    </label>
+                                    <div class="col-md-3">
+                                        <input type="text" class="form-control" name="tracking_number"
+                                            value="{{ order.trackingcode }}" required>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="label_recovery_comment" class="col-md-1 control-label">
+                                        Reason
+                                    </label>
+                                    <div class="col-md-3">
+                                        <input type="text" class="form-control" name="label_recovery_comment"
+                                            id="label_recovery_comment"
+                                            placeholder="Enter reason" required>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-md-offset-1 col-md-4">
+                                        <button class="btn btn-primary btn-lg" type="submit"
+                                            id="create-ups-return-label-btn">
+                                            Create UPS return label now
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    {% endif %}
+                {% endif %}
+            {% endif %} -->
+
+
+            <!-- modal code  -->
+            {% include 'Admin/Armalaser/Show/order-details-modal.html' %}
+
+
+
+      </div><!--  // col-md-12  -->
+    </div><!--  // .row  -->
+</div><!-- // .container-fluid  -->
+{% endblock %}
+
+
+{% block bottomjs %}
+<!-- Datepicker for warranty-registration.php @https://jqueryui.com/datepicker/#default -->
+<script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+<script src="/assets/js/datepicker.js"></script>
+<script>
+$(document).ready(function(){
+    $("#assign-serial-number-form").validate();
+
+    // scroll down
+    $("#voidUpsLabel").click(function(){
+        $("#form-void-ups-label").toggle('slow');
+        $('html, body').animate({
+            scrollTop: $("#void-label-btn").offset().top
+        }, 1000);
+    });
+
+    // scroll down
+    $("#voidUspsLabel").click(function(){
+        $("#form-void-usps-label").toggle('slow');
+        $('html, body').animate({
+            scrollTop: $("#void-label-btn").offset().top
+        }, 1000);
+    });
+
+    // scroll down
+    $("#show-enter-serial-form").click(function(){
+        console.log("Enter Serial Number tab clicked");
+        $("#form-assign-serial-number").toggle(1000);
+        $('html, body').animate({
+            scrollTop: $("#assign-serial-number-btn").offset().top
+        }, 1000);
+    });
+
+
+
+    // toggle new comment form & scroll down
+    $("#comment-modal-add-comment").click(function(){
+        $("#new-comment-form").toggle('slow');
+        $('html, body').animate({
+            scrollTop: $("#submit-comment-btn").offset().top
+        }, 1000);
+    });
+
+    // toggle create ups return label
+    $("#createUpsReturnLabel").click(function(){
+        $("#form-create-ups-return-label").toggle('slow');
+        $('html, body').animate({
+            scrollTop: $("#create-ups-return-label-btn").offset().top
+        }, 1000);
+    });
+
+    // toggle modal show order details section
+    $("#modal-show-order-details-btn").click(function(){
+        console.log("show order details button clicked");
+        let text = $("#modal-show-order-details-btn").html().trim();
+        console.log(text);
+        if (text === 'Show order details') {
+            $("#modal-order-details-section").show('slow');
+            $("#modal-show-order-details-btn").html("Hide order details");
+            $("#modal-show-order-details-btn").css({'margin-bottom': '25px'});
+        }
+        if (text === 'Hide order details') {
+            $("#modal-order-details-section").hide('slow');
+            $("#modal-show-order-details-btn").html("Show order details");
+            $("#modal-show-order-details-btn").css({'margin-bottom': '15px'});
+        }
+    });
+
+    // toggle issue refund section
+    $("#issue-refund-toggle").click(function(){
+        $("#issue-refund-section").toggle('slow');
+        $('html, body').animate({
+            scrollTop: $("#issue-refund-btn").offset().top
+        }, 2000);
+    });
+
+
+
+
+});
+</script>
+
+{% endblock %}

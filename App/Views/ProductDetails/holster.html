@@ -1,0 +1,198 @@
+{% extends 'base.html' %}
+
+{% block title %}
+{{ holster.holsterMfr }}® / ArmaLaser holster for {{ holster.trseries_model|upper }}-equipped {{ holster.pistolMfr|upper }} {{ holster.pistol_models }}
+{% endblock %}
+
+
+{% block metadescription %}
+{{ holster.holsterMfr }}® / ArmaLaser {{ holster.holster_model }} {{ holster.waist|upper }} {{ holster.hand|upper }}-HAND holster LASER-FIT™ for ArmaLaser {{ holster.trseries_model|upper }}-equipped {{ holster.pistolMfr|upper }} {{ holster.pistol_models }}. ArmaLaser is the leader in advanced laser sights and pistol laser technology.{% endblock %}
+
+
+{% block css %}
+<style>
+   .ui-dialog .ui-dialog-titlebar {
+      display: block;
+   }
+   .ui-dialog.ui-dialog-content {
+      padding: 0;
+   }
+</style>
+{% endblock %}
+
+
+{% block outsidecontainer %}
+{% endblock %}
+
+
+{% block content %}
+<div id="modal-holster"></div>
+<div id="modal-holster-video"></div>
+
+<div id="overlay"></div>
+
+<div class="col-md-9 col-xs-12" id="frame">
+    <!-- value of src attribute comes from jQuery code below -->
+    <img class="img-responsive"
+    id="main"
+    src=""
+    alt="{{ holster.holsterMfr }} / ArmaLaser holster for {{ holster.pistolMfr|upper }}® {{ holster.pistol_models }} equipped with ArmaLaser {{ holster.trseries_model|upper }}">
+</div>
+
+<div id="overlay2"></div>
+
+<div class="col-md-9 col-xs-12" id="frame2">
+    <img class="img-responsive"
+    id="main2"
+    src=""
+    alt="{{ holster.holsterMfr }} / ArmaLaser holster for {{ holster.pistolMfr|upper }}® {{ holster.pistol_models }} equipped with ArmaLaser {{ holster.trseries_model|upper }}">
+</div>
+
+
+<div class="container">
+    <div id="content"> <!-- to hide content when full size image displays -->
+        <div class="row">
+
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="product-block-title bold ptop20">
+                    <h3>
+                        <span class="text-uppercase" style="color:#ababab">
+                            <span>LASER-FIT­™ HOLSTER</span>
+                        </span>
+                    </h3>
+                </div><!-- // .product-block-title  -->
+            </div><!-- // .col-md-12  -->
+        </div><!-- //.row  -->
+
+        <!-- - - - - - - - -  IMAGE - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+        <div class="row">
+            <div id="laser-features-image">
+                <img src="/assets/images/page/holsters/{{ holster.fullsize }}"
+                    alt="{{ holster.holsterMfr }} / ArmaLaser holster for {{ holster.pistolMfr|upper }}® {{ holster.pistol_models }} equipped with ArmaLaser {{ holster.trseries_model|upper }}">
+            </div>
+
+            <div class="col-md-7 col-sm-6 col-xs-5">
+                <div class="product-image">
+
+                   <!-- store values of full-size images -->
+                    <div id="full-size-image">
+                        <img src="/assets/images/page/holsters/{{ holster.fullsize }}" alt="{{ holster.holsterMfr }} / ArmaLaser holster for {{ holster.pistolMfr|upper }} {{ holster.trseries_model|upper }} combo">
+                    </div>
+
+                     <!-- assign id (displayed-image) for jQuery code below that is necessary to display large image -->
+                    <div id="displayed-image">
+                        <picture>
+                            <source srcset="/assets/images/page/holsters/{{ holster.small }}"
+                                alt="{{ holster.holsterMfr }} / ArmaLaser holster for {{ holster.pistolMfr|upper }}® {{ holster.pistol_models }} equipped with ArmaLaser {{ holster.trseries_model|upper }}"
+                                media="(min-width:1200px)">
+
+                            <source srcset="/assets/images/page/holsters/{{ holster.small }}"
+                                alt="{{ holster.holsterMfr }} / ArmaLaser holster for {{ holster.pistolMfr|upper }}® {{ holster.pistol_models }} equipped with ArmaLaser {{ holster.trseries_model|upper }}"
+                                media="(min-width:760px)">
+
+                            <source srcset="/assets/images/page/holsters/{{ holster.thumb }}"
+                                alt="{{ holster.holsterMfr }} / ArmaLaser holster for {{ holster.pistolMfr|upper }}® {{ holster.pistol_models }} equipped with ArmaLaser {{ holster.trseries_model|upper }}"
+                                media="(min-width:200px)">
+
+                            <img class="img-responsive" style="padding: 30px;"
+                                src="/assets/images/page/holsters/{{ holster.thumb }}"
+                                alt="{{ holster.holsterMfr }} / ArmaLaser holster for {{ holster.pistolMfr|upper }}® {{ holster.pistol_models }} equipped with ArmaLaser {{ holster.trseries_model|upper }}">
+                        </picture>
+
+                        <p class="text-center" style="color:#0000ff;" id="click-to-enlarge">
+                           Click to enlarge
+                        </p>
+                    </div><!-- // #displayed-image -->
+
+                </div><!-- // .product-image -->
+
+            </div><!-- / col  -->
+
+
+            <!-- - - - - - PRODUCT DESCRIPTION - TEXT - - - - - - - - - - - - - - -->
+
+            <div class="col-md-5 col-sm-6 col-xs-7" id="productDetailsHeading">
+                <h1 style="color:#727272;">
+                      {{ holster.holsterMfr }}®/ArmaLaser {{ holster.holster_model }}
+                      <br>
+                      {% if holster.waist == 'iwb' %}Inside Waistband{% elseif holster.waist == 'owb' %}Outside Waistband{% else %}Pocket{% endif %}
+                      {% if holster.hand == 'right' %}Right-Hand{% elseif holster.hand == 'left' %}Left-Hand{% endif %}
+
+                    <div style="margin-top:-20px;">&nbsp;</div>
+
+                    <span style="padding-left:3px;font-style:normal; color:#848484;"
+                      class="text-size70">
+                        Fits
+                        {{ holster.pistolMfr|upper }}®
+                        {{ holster.pistol_models|raw }} with {{ holster.trseries_model|upper }} / {{ holster.trseries_model|upper }}G
+                    </span>
+                </h1>
+
+                <div class="text-justify">
+                    <p style="font-size:14px; color:#ababab; border:none;">
+                        {{ holster.ad_blurb }}
+                    </p>
+
+                    <p class="text-uppercase text-left" style="border:none;">
+                      Features
+                    </p>
+                    <div id="feature-list">
+                        <div class="col-sm-6 col-xs-6" style="margin-bottom: 0px;">
+                            <div style="margin-left: -14px;">
+                                <p>{{ holster.feature01 }}</p>
+                                <p>{{ holster.feature02 }} - {{ holster.weight|number_format(0) }} oz</p>
+                                <p>{{ holster.feature03 }}</p>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-xs-6" style="margin-bottom: 0px;">
+                            <div style="margin-right: -14px;" class="text-right">
+                                  <p>UPC: {{ holster.upc }} </p>
+                                  <p>{{ holster.patent_pend|raw }}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <h3 class="product-details-price">
+                    <span>${{ holster.price }}</span>
+                </h3>
+
+                {% include 'ProductDetails/add-to-cart-button.html' %}
+
+                <!-- <p class="text-center">
+                    <a class="btn btn-buy btn-block btn-lg" href="{{ holster.buy_link }}"
+                        role="button">
+                        Add to Cart <i class="fa fa-shopping-cart fa-lg"></i>
+                    </a>
+                </p> -->
+
+                {% if model.special_message %}
+                    <p class="text-center" style="color: #ff0000;">
+                        *{{ holster.special_message|raw }}
+                    </p>
+                {% endif %}
+
+                <div id="social-media-links">
+                    <div class="sharethis-inline-share-buttons" style="margin-bottom: 15px;"></div>
+                </div><!-- //#social-media-links -->
+            </div><!-- // .col-md-5  -->
+       </div><!-- /row -->
+
+
+        {% if holster %}
+            {% include 'ProductDetails/product_links_holster.html' %}
+        {% endif %}
+
+        {% if specs %}
+            {% include 'ProductDetails/inc.details.specifications.html' %}
+        {% endif %}
+
+
+    </div><!-- // #content -->
+</div><!-- // .container  -->
+{% endblock %}
+
+{% block bottomjs %}
+    {% include 'ProductDetails/inc.details.javascript.html' %}
+{% endblock %}

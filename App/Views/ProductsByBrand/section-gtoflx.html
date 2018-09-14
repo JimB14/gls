@@ -1,0 +1,97 @@
+
+<!-- - - - - - - - - -  GTO / FLX  - - - - - - - - - - - - - - - - - - - - - -->
+<!-- If array is not empty, execute foreach loop and display; -->
+{% if gtoseries %}
+    <div id="bg-gto">
+        <div class="container">
+            <div class="row">
+                <div class="products-by-brand-gto-flx-series-title-text">
+                    <h2 class="text-left">
+                        <span style="font-size: 130%;">
+                            GTO
+                        <span style="color:#b7b7b7;">
+                            FLX
+                        </span>
+                        {% if gtoseries|length > 0 %}
+                            <span class="badge" style="margin: -35px 0px 0px -5px;">
+                                {{ gtoseries|length }}
+                            </span>
+                        {% endif %}
+                        </span>
+
+                        <span style="font-size:16px;padding-left:12px;">
+                            RAIL MOUNTED &nbsp;&nbsp;
+                            <a href="/gto-flx-series-lasers">
+                                <span class="italic">
+                                    What is GTO Series?
+                                </span>
+                            </a>
+                        </span>
+                    </h2>
+                </div>
+
+                <div class="col-md-12 col-sm-12">
+
+                    {% for item in gtoseries %}
+                        <div class="col-md-3 col-sm-6 col-xs-12">
+                            <div class="products-by-brand-gto-flx-series">
+                                <div class="products-by-brand-gto-flx-series-image-box">
+
+                                    <!-- <img class="img-responsive" style="width: 100%;" src="/assets/images/laser-pistol/{{ item.laser_model|slice(-5,5) }}/{{ item.thumb }}"> -->
+
+                                    <a href="/{{ item.pistolMfr }}/{{ item.slug }}/gto-flx/{{ item.gtoflx_id }}/{{ item.laser_model }}">
+                                        <picture>
+                                            <source srcset="/assets/images/laser-pistol/{{ item.laser_model|slice(-5,5) }}/{{ item.thumb }}"
+                                                alt="ArmaLaser {{ item.laser_model|upper }} laser for {{ pistolMfr|upper }}® {{ item.pistol_models }}"
+                                                media="(min-width:400px)">
+
+                                            <img class="img-responsive" style="width: 100%;"
+                                                src="/assets/images/laser-pistol/{{ item.laser_model|slice(-5,5) }}/{{ item.thumb }}"
+                                                alt="ArmaLaser {{ item.laser_model|upper }} laser for {{ pistolMfr|upper }}® {{ item.pistol_models }}">
+                                        </picture>
+                                    </a>
+                                </div>
+
+                                <div class="products-by-brand-gto-flx-series-text-box">
+                                    <div class="products-by-brand-gto-flx-series-text-box-text">
+                                        <p>
+                                            <a href="/{{ item.pistolMfr }}/{{ item.slug }}/gto-flx/{{ item.gtoflx_id }}/{{ item.laser_model }}">
+                                                {% if item.pistolMfr == 'smith-wesson' %}
+                                                    S&amp;W®
+                                                {% elseif item.pistolMfr == 'sig-sauer' %}
+                                                    SIG SAUER®
+                                                {% else %}
+                                                    {{ item.pistolMfr|upper }}®
+                                                {% endif %}
+                                                <br>
+                                                <span style="display:inline-block;font-size:14px;line-height:17px;">
+                                                    {{ item.pistol_models|raw }}
+                                                </span>
+                                            </a>
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <div class="products-by-brand-gto-flx-series-armalaser-model-text-box">
+                                    <div class="products-by-brand-gto-flx-series-armalaser-model-text-box">
+                                        <a href="/{{ item.pistolMfr }}/{{ item.slug }}/gto-flx/{{ item.gtoflx_id }}/{{ item.laser_model }}">
+                                            <!-- resource: https://twig.symfony.com/doc/2.x/filters/replace.html -->
+                                            <p>
+                                                ArmaLaser {{ item.laser_model|replace({ 'gto-flx': 'GTO/FLX', 'gtog-flx' : 'GTOG/FLX' }) }}
+                                            </p>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+
+                    <p class="text-size90 m-left30 p2">
+                        <a href="/#top"> Search all brands.</a>
+                    </p>
+
+                </div><!-- // .col-md-12 -->
+            </div><!-- // .row -->
+        </div><!-- // .container -->
+    </div><!-- // #bg-gto -->
+{% endif %}

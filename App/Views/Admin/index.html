@@ -1,0 +1,45 @@
+{% extends 'base-admin.html' %}
+
+{% block title %}
+  Admin | ArmaLaser
+{% endblock %}
+
+{% block css %}
+<style>
+    body, html {
+        height: 100%;
+        margin: 0
+    }
+    .admin-bg {
+        position: fixed;
+        top: 0;
+        left: 0;
+        min-width: 100%;
+        min-height: 100%;
+        opacity: .25;
+        z-index: -1;
+    }
+</style>
+{% endblock %}
+
+
+{% block content %}
+<img src="/assets/images/laser-pistol/tr1/kel-tec-p-32-kel-tec-p-3at__green_med_tr01_review.png"
+    class="admin-bg">
+
+
+<div id="dashboard-toggle" class="col-md-12"
+    style="margin-top:-20px;margin-left:260px;">
+
+    {% if session.access_level >= 2 %}
+        <h1 style="color:#000">Admin Panel</h1>
+    {% else %}
+        <h1 style="color:#000">Dashboard</h1>
+    {% endif %}
+
+</div>
+{% endblock %}
+
+
+{% block bottomjs %}
+{% endblock %}

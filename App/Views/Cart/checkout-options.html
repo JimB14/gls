@@ -1,0 +1,132 @@
+{% extends 'base.html' %}
+
+{% block title %}
+  Cart | ArmaLaser
+{% endblock %}
+
+{% block metadescription %}
+ArmaLaser products are carried by factory trained dealers committed to ArmaLaser quality and integrity. Interested in becoming an authorized ArmaLaser dealer?
+{% endblock %}
+
+{% block css %}
+<style>
+    .table tbody > tr > td,
+    .table tfoot tr td {
+        vertical-align: middle !important;
+    }
+    table tr:last-child {
+        border-left: 1px solid #fff !important;
+        border-right: 1px solid #fff !important;
+    }
+</style>
+{% endblock %}
+
+{% block outsidecontainer %}
+{% endblock %}
+
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            {% include 'Cart/inc.cart.html' %}
+        </div>
+    </div>
+    {% if session.cart_count > 0 %}
+        <div class="row">
+            <div class="col-md-12">
+                {% if session.access_level != 4 %}
+                    <h2 class="well text-center">Checkout Options</h2>
+                {% else %}
+                    <h2 class="well text-center">Internal Entry of Telephone Order</h2>
+                {% endif %}
+            </div>
+            <div class="col-md-6 col-xs-12">
+                {% if session.access_level == 4 %}
+                    <h2>New Order</h2>
+                {% else %}
+                    <h2>New Customer</h2>
+                    <h4>Checkout options</h4>
+                {% endif %}
+
+                <form>
+                    <!-- telephone order placement via website -->
+                    {% if session.access_level == 4 %}
+                        <div class="radio">
+                            <label for="checkoutOptions3">
+                                <input type="radio" name="checkoutOptions" id="checkoutOptions3" value="internal">
+                                <strong>Telephone order</strong>
+                            </label>
+                        </div>
+                    {% endif %}
+
+                    {% if session.access_level != 4 %}
+                        <div class="radio">
+                            <label for="checkoutOptions1">
+                                <input type="radio" name="checkoutOptions" id="checkoutOptions1" value="register">
+                                <strong>Create Account</strong><small> (recommended)<sup style="font-size:120%;">1</sup></small>
+                            </label>
+                        </div>
+                        <div class="radio">
+                            <label for="checkoutOptions2"><input type="radio" name="checkoutOptions" id="checkoutOptions2" value="guest">
+                                <strong>Checkout as Guest</strong>
+                            </label>
+                        </div>
+                        <br>
+                        <p><sup style="font-size:100%;">1 </sup>By creating an acount you can shop much faster.</p>
+                        <br>
+                    {% endif %}
+
+                    {% if session.access_level == 4 %}
+                        <div style="margin-bottom: 40px;">
+                            <button class="btn btn-buy" id="checkoutOptBtn">Continue</button>
+                        </div>
+                    {% else %}
+                        <button class="btn btn-buy" id="checkoutOptBtn">Continue</button>
+                    {% endif %}
+                </form>
+
+            </div>
+            <div class="col-md-6 col-xs-12">
+                {% if session.access_level != 4 %}
+                    <h2>Returning Customer</h2>
+                    <div class="col-md-6">
+                        {% include 'Login/inc.login.html' %}
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block bottomjs %}
+<script>
+$(document).ready(function(){
+
+    $("#loginform").validate();
+
+    $("input:radio[name=checkoutOptions]").click(function(){
+        let value = $(this).val();
+        console.log(value);
+
+        $("#checkoutOptBtn").on('click', function(){
+            $("form").submit(function(e){
+                e.preventDefault();
+            });
+            console.log("Clicked!");
+            if (value === 'register') {
+                window.location.href = "/admin/register";
+            } else if (value === 'guest') {
+                window.location.href = "/cart/checkout/guest";
+            } else {
+                window.location.href = "/cart/checkout/internal";
+            }
+        });
+    });
+
+
+
+});
+</script>
+{% endblock %}

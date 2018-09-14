@@ -1,0 +1,31 @@
+<!-- - - - - - -  ACCESSORIES  - - - - - - - - - - - - - -->
+<div id="bg-holsters">
+    <div class="container" id="batteries">
+        <div class="row">
+            <h2 class="text-left">
+                <span style="font-size: 130%;">
+                   ACCESSORIES
+                   <span style="font-style:italic;">
+                      for ArmaLaser Products
+                   </span>
+                </span>
+            </h2>
+
+            <div class="col-md-12 col-sm-12 text-left">
+                <div class="products-by-brand">
+                    <ul class="">
+                        {% for item in accessories %}
+                            <li class="text-size90 text-center">
+                                <a href="/laser-accessories/{{item.mvc_model }}/{{ item.id }}/{{ item.slug }}">
+                                   <img src="/assets/images/accessories/{{ item.image_thumb }}" width="125" alt="ArmaLaser {{ item.caption }}"><br>
+                                   <span>{{ item.caption }}</span><br>
+                                </a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div><!-- //  -->
+            </div><!-- // .col-md-12 -->
+
+        </div><!-- // .row -->
+    </div><!-- // .container -->
+</div><!-- // #bg-holsters  -->

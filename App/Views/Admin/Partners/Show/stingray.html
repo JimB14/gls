@@ -1,0 +1,175 @@
+{% extends 'base-admin.html' %}
+
+{% block title %}
+  GTO/FLX | ArmaLaser
+{% endblock %}
+
+{% block css %}
+<style>
+#stingray-pistol-matches-title {
+    cursor: pointer;
+}
+#stingray-pistol-matches-div {
+    display: none;
+}
+#stingray-pistol-matches-title:hover {
+    text-decoration: underline;
+}
+</style>
+{% endblock %}
+
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div id="dashboard-toggle" class="col-md-10" style="margin-top:-20px;margin-left:254px;">
+
+          <div class="col-md-4">
+              {% if pagetitle %}
+                <h2 style="margin-left:-15px;">
+                  {{ pagetitle }}
+                  {% if lasers|length > 0 %}
+                    <span class="badge" style="margin: -18px 0px 0px 7px;">
+                        {{ lasers|length }}
+                    </span>
+                  {% endif %}
+                </h2>
+                {% if searched %}
+                    <p><< <a href="/admin/lasers/partnerpartner-get-gtoflx"> Back to all Stingrays</a></p>
+                {% endif %}
+              {% endif %}
+          </div>
+
+
+          {% if lasers %}
+            <table class="table table-bordered table-striped bg-fff">
+              <thead>
+                  <tr>
+                      <th class="text-center">Add to Cart</th>
+                      <th>Image</th>
+                      <th>Name</th>
+                      <th>Series</th>
+                      <th>Model</th>
+                      <th>Beam</th>
+                      <!-- <th>Pistol match</th> -->
+                      <th>MAP</th>
+                      <th>Price</th>
+                      <th>% off MAP</th>
+                      <th>UPC</th>
+                  </tr>
+              </thead>
+
+              <tbody>
+                  {% for laser in lasers %}
+                  <tr>
+                      <td class="text-center" style="width:7%;">
+                          <a id="add-to-partner-cart-{{ laser.id }}" class='btn btn-success btn-sm'
+                              href="/admin/partner/add-to-cart/{{ laser.mvc_model }}/{{ laser.id }}/{{ laser.pistolMfr }}/{{ laser.model }}"
+                              {% if laser.id in session.ids %} disabled {% endif %}>
+
+                              {% if laser.id in session.ids %} In Cart {% else %} Add{% endif %}
+                          </a>
+                      </td>
+                      <td class="text-center" style="width:8%;">
+                          <a href="/{{ laser.pistolMfr }}/{{ laser.slug }}/gto-flx/{{ laser.id }}/{{ laser.model }}">
+                              <!-- slice(-5, 5) - Start, End; start 5 characters from end and slice 5 characters = last 5 characters of string -->
+                              <img src="/assets/images/laser-pistol/{{ laser.series }}/{{ laser.img_thumb }}"
+                                  height="40px" alt="Need image">
+                          </a>
+                      </td>
+                      <td style="width:14%;"><a title="See model details" href="/products/lasers/stingray/beretta/3001/sr1">{{ laser.name }}</a></td>
+                      <td style="width:7%;"><a title="Learn more about STINGRAY CLASSIC" href="/lasers/stingray-classic">{{ laser.series|upper }}</a></td>
+                      <td style="width:7%;"><a title="Learn more about STINGRAY CLASSIC" href="/lasers/stingray-classic">{{ laser.model|upper }}</a></td>
+                      <td style="width:7%;">{% if laser.beam == 'red' %}<span style="color:#ff0000;">{{ laser.beam|capitalize }}</span>{% else %}<span style="color: #228b22;font-weight:bold;">{{ laser.beam|capitalize}}{% endif %}</td>
+                      <!-- <td style="width: 20%;">{{ laser.pistol_models }}</td> -->
+                      <td>{{ laser.price }}</td>
+                      <td>{{ laser.price_partner }}</td>
+                      <td>{{ (((laser.price - laser.price_partner)/laser.price) * 100)|number_format(1) }}%</td>
+                      <td>{{ laser.upc }}</td>
+                  </tr>
+                  {% endfor %}
+              </tbody>
+            </table>
+
+
+            <h2 id="stingray-pistol-matches-title" style="cursor:pointer">Show pistol matches</h2>
+
+            <div id="stingray-pistol-matches-div" class="col-sm-6">
+                <table class="table table-bordered table-striped bg-fff">
+                    <thead>
+                        <tr>
+                            <th>Pistol Manufacturer</th>
+                            <th>Model</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for match in matches %}
+                            <tr>
+                                <td><a href="/{{ match.pistolMfr }}">{{ match.pistolMfr|upper }}</a></td>
+                                <td>{{ match.pistol_model|upper }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="col-sm-6">&nbsp;</div>
+
+            <div class="col-md-12">
+                <p style="margin-top: 20px;" class="pull-left"><a href="#top" title="Go to top of page"><i style="margin-top: -15px; color:#ccc;" class="fa fa-arrow-circle-o-up fa-3x" aria-hidden="true"></i></a></p>
+                <p style="margin-top: 20px;" class="pull-right"><a href="#top" title="Go to top of page"><i style="margin-top: -15px; color:#ccc;" class="fa fa-arrow-circle-o-up fa-3x" aria-hidden="true"></i></a></p>
+            </div>
+
+
+
+            {% else %}
+            <div class="col-md-8" style="margin-left:-15px;">
+                <div class="alert alert-warning" style="margin-top:30px;">
+                    <h4 style="margin-bottom:0px;">
+                      No lasers to display
+                    </h4>
+                </div>
+            </div>
+            {% endif %}
+
+
+      </div><!--  // col-md-12  -->
+    </div><!--  // .row  -->
+</div><!-- // .container-fluid  -->
+{% endblock %}
+
+
+{% block bottomjs %}
+<script>
+window.addEventListener('load', function(){
+    let matchesDiv = document.querySelector('#stingray-pistol-matches-div');
+    document.querySelector('#stingray-pistol-matches-title').addEventListener('click', function() {
+        console.log("Clicked!");
+        if (matchesDiv.style.display === 'block') {
+            matchesDiv.style.display = 'none';
+            this.textContent = "Show pistol matches";
+        } else {
+            matchesDiv.style.display = 'block';
+            this.textContent = "Hide pistol matches";
+        }
+    }, true);
+}, true);
+
+
+
+$(document).ready(function(){
+
+    $("#thisID").click(function(){
+        var checked = 1;
+        console.log(checked);
+        if($("#thisID").prop("checked")){
+          $("#lasers_last_name").attr("placeholder", "Enter laser ID");
+        } else {
+          $("#lasers_last_name").attr("placeholder", "Enter agent last name");
+        }
+    });
+
+});
+</script>
+
+{% endblock %}

@@ -1,0 +1,417 @@
+{% extends 'base-admin.html' %}
+
+{% block title %}
+  Create Shipping Label | ArmaLaser
+{% endblock %}
+
+{% block css %}
+<style>
+.custom-form-control {
+    /* width: 100%; */
+    height: 34px;
+    padding: 6px 12px;
+    font-size: 14px;
+    line-height: 1.42857143;
+    color: #555;
+    background-color: #fff;
+    background-image: none;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+    -webkit-transition: border-color ease-in-out .15s, -webkit-box-shadow ease-in-out .15s;
+    -o-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+    transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+}
+#create_shipping_label_buttons {
+    display: none;
+}
+input[type='checkbox'] {
+    -webkit-appearance:none;
+    width:20px;
+    height:20px;
+    background:white;
+    border-radius:2px;
+    border:1px solid #286090;
+}
+input[type='checkbox']:checked {
+    background: #008000; /*#abd;*/
+    border:2px solid #008000;
+}
+</style>
+{% endblock %}
+
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div id="dashboard-toggle" class="col-md-10" style="margin-top:-20px;margin-left:254px;">
+
+            <div class="col-md-12" style="margin-bottom: 30px;">
+                <h2 style="margin-left:-15px;">
+                    Create {% if order.oshipmethod|slice(0,3) == 'UPS' %} <span><img height="25" src="/assets/images/ups/logo_small.gif"></span> UPS {% else %} <span><img height="25" src="/assets/images/usps/logo.png"></span> USPS {% endif %} Shipping Label
+                </h2>
+                <p style="margin-left: -10px;">
+                    <span class="glyphicon glyphicon-menu-left"></span>
+                    <a onclick="window.history.go(-1)" style="cursor:pointer;">
+                        Go Back
+                    </a>
+                </p>
+            </div>
+
+
+            <div style="margin-bottom:300px;">
+                <form method="post" action="/admin/orders/get-rate" class="form-horizontal"
+                    name="create_label_data" id="create_label_data">
+
+                    <h3>Ship to:</h3>
+
+                    <div class="form-group">
+                        <label for="name" class="control-label col-sm-1">
+                          Name
+                        </label>
+                        <div class="col-sm-5">
+                            <input type="text" class="form-control" name="name"
+                                value="{{ order.oshipfirstname }} {{ order.oshiplastname }}">
+                        </div>
+                    </div>
+
+                    {% if order.oshipcompany != '' %}
+                        <div class="form-group">
+                            <label for="name" class="control-label col-sm-1">
+                              Company
+                            </label>
+                            <div class="col-sm-5">
+                                <input type="text" class="form-control" name="company"
+                                    value="{{ order.oshipcompany }}">
+                            </div>
+                        </div>
+                    {% endif %}
+
+                    <div class="form-group">
+                        <label for="name" class="control-label col-sm-1">
+                          Address
+                        </label>
+                        <div class="col-sm-5">
+                            <input type="text" class="form-control" name="address"
+                                value="{{ order.oshipaddress }}">
+                        </div>
+                    </div>
+
+                    {% if order.oshipaddress2 != '' %}
+                        <div class="form-group">
+                            <label for="name" class="control-label col-sm-1">
+                              Address2
+                            </label>
+                            <div class="col-sm-5">
+                                <input type="text" class="form-control" name="address2"
+                                    value="{{ order.oshipaddress2 }}">
+                            </div>
+                        </div>
+                    {% endif %}
+
+                    <div class="form-group">
+                        <label for="name" class="control-label col-sm-1">
+                          City
+                        </label>
+                        <div class="col-sm-5">
+                            <input type="text" class="form-control" name="city"
+                                value="{{ order.oshipcity }}">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="name" class="control-label col-sm-1">
+                          State
+                        </label>
+                        <div class="col-sm-5">
+                            <input type="text" class="form-control" name="state"
+                                value="{{ order.oshipstate }}">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="name" class="control-label col-sm-1">
+                          Zip
+                        </label>
+                        <div class="col-sm-5">
+                            <input type="text" class="form-control" name="zip"
+                                value="{{ order.oshipzip }}">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="name" class="control-label col-sm-1">
+                          Phone
+                        </label>
+                        <div class="col-sm-5">
+                            <input type="text" class="form-control" name="phone"
+                                value="{{ order.oshipphone }}">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email" class="control-label col-sm-1">
+                          Email
+                        </label>
+                        <div class="col-sm-5">
+                            <input type="text" class="form-control" name="email"
+                                value="{{ order.oshipemail }}">
+                        </div>
+                    </div>
+
+
+                    <h3>Shipping:</h3>
+
+                    {% if order.oshipmethod|slice(0,3) == 'UPS' %}
+                        <div class="form-group">
+                            <label for="name" class="control-label col-sm-1">
+                              Method
+                            </label>
+                            <div class="col-sm-5">
+                                <select class="form-control required" name="shipping_method">
+                                    <option value="{% if order.oshipmethod == 'UPS Ground'%}03{% elseif order.oshipmethod == 'UPS 3 Day Select' %}12{% else %}02{% endif %}">
+                                        {{ order.oshipmethod }}
+                                    </option>
+                                    <option value="03">UPS Ground</option>
+                                    <option value="12">UPS 3 Day Select</option>
+                                    <option value="02">UPS 2nd Day Air</option>
+                                </select>
+                            </div>
+                        </div>
+                    {% else %}
+                        <div class="form-group">
+                            <label for="name" class="control-label col-sm-1">
+                              Method
+                            </label>
+                            <div class="col-sm-5">
+                                <select class="form-control required" name="shipping_method" id="shipping_method">
+                                    {% if shipping_method %}
+                                        <option value="{{ shipping_method }}">
+                                            {% if shipping_method == 'First' %} USPS First Class {% else %} USPS Priority Mail {% endif %}
+                                        </option>
+                                    {% else %}
+                                        <option value="{% if order.oshipmethod == 'USPS First Class'%}First{% else %}Priority{% endif %}">
+                                            {{ order.oshipmethod }}
+                                        </option>
+                                    {% endif %}
+                                    <option value="First">USPS First Class</option>
+                                    <option value="Priority">USPS Priority Mail</option>
+                                </select>
+                                {% if order.oshipmethod == 'USPS First Class' %}
+                                    <small id="note-first-class-weight-limit">
+                                        *Weight limit for USPS First Class = 15.9 oz.
+                                        If weight exceeds 15.9 oz, change method to Priority Mail.
+                                    </small>
+                                {% endif %}
+                            </div>
+                        </div>
+                    {% endif %}
+
+                    <div class="form-group">
+                        <div class="col-sm-offset-1 col-sm-5">
+                            <div class="checkbox">
+                                <label style="line-height:27px;">
+                                    <input type="checkbox" id="set-custom-to-default">
+                                        <span style="display:inline-block; margin-left:4px;">
+                                            Set default box dimensions & weight value
+                                        </span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="form-group" id="custom-box">
+                        <label for="name" class="control-label col-sm-1">
+                            Box
+                        </label>
+                        <div class="col-sm-5">
+                            <input type="number" class="custom-form-control" name="custom_box_length" id="custom_box_length" value="{{ length }}" placeholder="Length" required> x
+                            <input type="number" class="custom-form-control" name="custom_box_width" id="custom_box_width" value="{{ width }}"  placeholder="Width" required> x
+                            <input type="number" class="custom-form-control" name="custom_box_height" id="custom_box_height" value="{{ height }}"  placeholder="Height" required>
+                            <!-- <br><small><a id="show-std-box">Click here for standard box</a></small> -->
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="weight" class="control-label col-sm-1">
+                            Weight (oz)
+                        </label>
+                        <div class="col-sm-5">
+                            <input type="number" class="form-control" name="weight" id=custom_weight
+                                value="{% if weight %}{{ weight }}{% endif %}"
+                                placeholder="Enter weight in ounces" required>
+                            <small>*Total weight including shipping box</small>
+                            <hr>
+                        </div>
+                    </div>
+
+                    <input type="hidden" class="form-control" name="order_id" value="{{ order.id }}">
+
+                    {% if shipmentDigest %}
+                        <input type="hidden" class="form-control" name="shipment_digest" value="{{ shipmentDigest }}">
+                    {% endif %}
+
+                    <div class="form-group">
+                        <label class="control-label col-sm-1">
+                            &nbsp;
+                        </label>
+                        <div class="col-sm-5">
+                            {% if order.oshipmethod|slice(0,3) == 'UPS' %}
+                                <h3 style="margin-top: 0px;">
+                                    <span><img height="25" src="/assets/images/ups/logo_small.gif"></span>
+                                    Shipping Rate:
+                                </h3>
+                            {% else %}
+                                <h3 style="margin-top: 0px;">
+                                    <span><img height="25" src="/assets/images/usps/logo.png"></span>
+                                    Postage Rate:
+                                </h3>
+                            {% endif %}
+
+                            <button role="submit" class="btn btn-primary btn-lg" id="get-rate-btn">
+                                Get {% if order.oshipmethod|slice(0,3) == 'UPS' %} UPS Shipping Cost{% else %} USPS Postage Rate{% endif %}
+                            </button>
+
+                            {% if postage %}
+                                <span class="btn btn-default btn-lg" >
+                                    {{ service }} cost:  ${{ postage|number_format(2) }}
+                                </span>
+                                <hr>
+
+                                <div class="checkbox" style="margin-bottom: 25px;">
+                                    <label>
+                                        {% if order.oshipmethod|slice(0,3) == 'UPS' %}
+                                            <input type="checkbox" id="show_label_buttons">
+                                            <span style="display:inline-block; padding-left:7px;font-size: 18px;">
+                                                Click to accept UPS shipping amount of ${{ postage|number_format(2) }} and proceed to create shipping label.
+                                            </span>
+                                        {% else %}
+                                            <input type="checkbox" id="show_label_buttons">
+                                            <span style="display:inline-block; padding-left:7px;font-size: 18px;">
+                                                Click to accept USPS postage amount of ${{ postage|number_format(2) }} and proceed to create shipping label.
+                                            </span>
+                                        {% endif %}
+                                    </label>
+                                </div>
+
+                                <div id="create_shipping_label_buttons">
+                                    {% if order.oshipmethod|slice(0,3) == 'UPS' %}
+                                        <h3 style="margin-top: 0px;">
+                                            <span><img height="25" src="/assets/images/ups/logo_small.gif"></span>
+                                            Label:
+                                        </h3>
+                                    {% else %}
+                                        <h3 style="margin-top: 0px;">
+                                            <span><img height="25" src="/assets/images/usps/logo.png"></span>
+                                            Label:
+                                        </h3>
+                                    {% endif %}
+
+                                    <button role="submit" class="btn btn-primary btn-lg">
+                                        Create {% if order.oshipmethod|slice(0,3) == 'UPS' %} UPS{% else %} USPS{% endif %} Shipping Label
+                                    </button>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+
+
+
+
+        </div><!--  // col-md-12  -->
+    </div><!--  // .row  -->
+</div><!-- // .container-fluid  -->
+{% endblock %}
+
+
+{% block bottomjs %}
+<script>
+$(document).ready(function(){
+
+    $("#shipping_method").on('change', function(){
+        let shipMethod = $(this).val();
+        console.log(shipMethod);
+        if (shipMethod === 'Priority') {
+            $("#note-first-class-weight-limit").css("display", "none");
+        }
+        if (shipMethod === 'First') {
+            $("#note-first-class-weight-limit").css("display", "block");
+        }
+    });
+
+
+
+    $("#show_label_buttons").click(function(){
+        let shipper = '{{ order.oshipmethod }}';
+        console.log(shipper);
+
+        // return first three characters (e.g. UPS or USP)
+        shipper = shipper.substring(0, 3);
+        console.log(shipper);
+
+        // set value of shipper
+        if (shipper != 'UPS') {
+            shipper = 'USPS';
+        } else {
+            shipper = shipper;
+        }
+
+        // UPS
+        if (shipper === 'UPS') {
+            let status = $("#show_label_buttons").is(":checked");
+            console.log(status);
+            if (status === true) {
+                $("#create_shipping_label_buttons").show('slow');
+                $("#create_label_data").attr("action", "/admin/orders/get-label?shipper="+shipper);
+                $("#get-rate-btn").attr("disabled", true);
+            } else if (status === false) {
+                $("#create_shipping_label_buttons").hide();
+                $("#create_label_data").attr("action", "/admin/orders/get-rate");
+                $("#get-rate-btn").attr("disabled", false);
+            }
+        }
+        // USPS
+        else {
+            let status = $("#show_label_buttons").is(":checked");
+            console.log(status);
+            if (status === true) {
+                $("#create_shipping_label_buttons").show('slow');
+                $("#create_label_data").attr("action", "/admin/orders/get-label?shipper="+shipper);
+                $("#get-rate-btn").attr("disabled", true);
+            } else if (status === false) {
+                $("#create_shipping_label_buttons").hide();
+                $("#create_label_data").attr("action", "/admin/orders/get-rate");
+                $("#get-rate-btn").attr("disabled", false);
+            }
+        }
+    });
+
+
+    // toggle default box dimensions & weight value
+    $("#create_label_data :checkbox").change(function(){
+        if (this.checked) {
+            console.log("checked");
+            $("#custom_box_length").val(6);
+            $("#custom_box_width").val(4);
+            $("#custom_box_height").val(4);
+            $("#custom_weight").val(10);
+        } else {
+            console.log("unchecked");
+            $("#custom_box_length").val('');
+            $("#custom_box_width").val('');
+            $("#custom_box_height").val('');
+            $("#custom_weight").val('');
+        }
+    });
+
+
+
+});
+</script>
+
+{% endblock %}
