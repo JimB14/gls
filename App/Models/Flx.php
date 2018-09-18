@@ -52,6 +52,50 @@ class Flx extends \Core\Model
 
 
 
+    /**
+     * retrieves all FLX records for replace tab
+     *
+     * @return Object   The FLX records
+     */
+    public static function getAllFlxForAdmin()
+    {
+        try
+        {
+            // establish db connection
+            $db = static::getDB();
+
+            $sql = "SELECT DISTINCT
+                    	pistol_brands.name AS pistolMfr,
+                        pistols.model as pistol_model, pistols.slug,
+                        flx.id AS flx_id, flx.model AS flx_model, flx.mvc_model, flx.name,
+                        flx.price, flx.price_dealer, flx.price_partner, flx.upc,
+                        GROUP_CONCAT(DISTINCT pistols.model ORDER BY pistols.id ASC SEPARATOR ', ') AS pistol_models
+                    FROM flx
+                    INNER JOIN gtoflx
+                    	ON gtoflx.id = flx.gtoflx_id
+                    INNER JOIN pistol_gtoflx_lookup
+                    	ON gtoflx.id = pistol_gtoflx_lookup.gtoflxid
+                    INNER JOIN pistols
+                    	ON pistols.id = pistol_gtoflx_lookup.pistolid
+                    INNER JOIN pistol_brands
+                    	ON pistol_brands.id = pistols.brand_id
+                    GROUP BY flx.id
+                    ORDER BY flx.id";
+            $stmt = $db->query($sql);
+            $flx = $stmt->fetchALL(PDO::FETCH_OBJ);
+
+            // return to Controller
+            return $flx;
+        }
+        catch(PDOException $e)
+        {
+            echo $e->getMessage();
+            exit();
+        }
+    }
+
+
+
 
 
     /**

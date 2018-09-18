@@ -136,19 +136,29 @@
                 </span>
                 <span class="glyphicon glyphicon-user text-size120"></span>
                  &nbsp;
-                 <span>
+                <span>
                    {% if session.user %} {{ session.full_name }} - {{ session.userType }} {% if user.company %} ({{ user.company|raw }}){% endif %}{% endif %}
-                 </span>
+                </span>
                 <span style="padding-left: 15px;"><script>var utc = new Date().toJSON().slice(0,10);document.write(utc);</script></span>
 
                 {% if session.cart_count > 0 %}
-                    <span style="color:#fff;padding-left:30px;">
-                        <a href="/cart/view/shopping-cart" style="color:#fff;" title="View Cart">
-                            CART
-                            <i style="color:#fff;" class="fa fa-shopping-cart fa-lg"></i>
-                            {% if session.cart_count > 0 %}<span class="badge"  style="background-color:#fff;"><span style="color:#000;">{{ session.cart_count }}</span></span>{% endif %}
-                        </a>
-                    </span>
+                    {% if session.userType == 'admin' or session.userType == 'supervisor' %}
+                        <span style="color:#fff;padding-left:30px;">
+                            <a href="/cart/view/admin-shopping-cart?id={{ customer.id }}&type={{ type }}" style="color:#fff;" title="View Cart">
+                                CART
+                                <i style="color:#fff;" class="fa fa-shopping-cart fa-lg"></i>
+                                {% if session.cart_count > 0 %}<span class="badge" style="background-color:#fff;"><span style="color:#000;">{{ session.cart_count }}</span></span>{% endif %}
+                            </a>
+                        </span>
+                    {% else %}
+                        <span style="color:#fff;padding-left:30px;">
+                            <a href="/cart/view/shopping-cart" style="color:#fff;" title="View Cart">
+                                CART
+                                <i style="color:#fff;" class="fa fa-shopping-cart fa-lg"></i>
+                                {% if session.cart_count > 0 %}<span class="badge" style="background-color:#fff;"><span style="color:#000;">{{ session.cart_count }}</span></span>{% endif %}
+                            </a>
+                        </span>
+                    {% endif %}
                 {% endif %}
             </p>
 

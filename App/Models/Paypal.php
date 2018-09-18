@@ -183,15 +183,6 @@ class Paypal extends \Core\Model
         $partner  = Config::PAYPAL_PARTNER;
         $password = Config::PAYPAL_PWD;
 
-        // create new instance of Payflow class/object
-        $payflow = new Payflow();
-
-        // handle errors
-        if ($payflow->get_errors())
-        {
-            echo $payflow->get_errors();
-            exit;
-        }
 
         // retrieve post data from form, sanitize & store in variables
         $email           = (isset($_REQUEST['cc_email'])) ? filter_var($_REQUEST['cc_email'], FILTER_SANITIZE_STRING) : ''; // hidden field
@@ -224,18 +215,16 @@ class Paypal extends \Core\Model
         // echo $EXPDATE.'<br>';
         // echo $CVV2.'<br>';
         // echo $AMT.'<br>';
-        // echo $TAXAMT.'<br>';
         // echo $agree.'<br>';
         // exit();
 
         // check for empty fields - backup for JavaScript failure
-        if( ($FIRSTNAME == '') || ($LASTNAME == '') || ($CARDTYPE == '') || ($AMT == '')
+        if( ($FIRSTNAME == '') || ($LASTNAME == '') || ($CARDTYPE == '') || ($AMT == 0.00)
             || ($ACCT == '') || ($EXPDATE == '') || ($CVV2 == '') || ($agree != 'on') )
         {
-            $payflow->set_errors("All fields required. Please login and try again.");
+            echo "All fields required. Please try again.";
             exit();
         }
-
 
         // Core Credit Card Parameters
         // resource: https://developer.paypal.com/docs/classic/payflow/integration-guide/#core-credit-card-parameters
@@ -285,6 +274,9 @@ class Paypal extends \Core\Model
         // echo '<br><br>';
         // exit();
 
+        // create new instance of Payflow class/object
+        $payflow = new Payflow();
+
         // call sale_transaction() of Payflow object & store results in $response
         $response = $payflow->sale_transaction($email, $ship_to_zip, $vendor, $user, $partner, $password, $parameters);
 
@@ -298,6 +290,140 @@ class Paypal extends \Core\Model
         if (!$payflow->get_errors())
         {
             // return to Cart Controller
+            return $response;
+        }
+        else
+        {
+            echo $payflow->get_errors();
+        }
+    }
+
+
+
+    /**
+     * process payment for Admin user via PayPal's payflow gateway
+     *
+     * @return String       Key/Value pairs from PayPal
+     */
+    public static function processPaymentAdmin()
+    {
+        // test
+        // echo '<h4>Inside PayPal model:</h4>';
+        // echo '<pre>';
+        // print_r($_REQUEST);
+        // echo '</pre>';
+        // exit();
+
+        // store PP credentials in variables
+        $vendor   = Config::PAYPAL_VENDOR;
+        $user     = Config::PAYPAL_USER;
+        $partner  = Config::PAYPAL_PARTNER;
+        $password = Config::PAYPAL_PWD;
+
+        // retrieve post data from form, sanitize & store in variables
+        $email           = (isset($_REQUEST['cc_email'])) ? filter_var($_REQUEST['cc_email'], FILTER_SANITIZE_STRING) : ''; // hidden field
+        $ship_to_zip     = (isset($_REQUEST['ship_to_zip'])) ? filter_var($_REQUEST['ship_to_zip'], FILTER_SANITIZE_STRING) : ''; // hidden field
+        $ship_to_zip     = substr($ship_to_zip, 0, 5);
+        $FIRSTNAME       = (isset($_REQUEST['first_name'])) ? filter_var($_REQUEST['first_name'], FILTER_SANITIZE_STRING) : '';
+        $LASTNAME        = (isset($_REQUEST['last_name'])) ? filter_var($_REQUEST['last_name'], FILTER_SANITIZE_STRING) : '';
+        $CARDTYPE        = (isset($_REQUEST['cardtype'])) ? filter_var($_REQUEST['cardtype'], FILTER_SANITIZE_STRING) : '';
+        $AMT             = (isset($_REQUEST['amt'])) ? number_format($_REQUEST['amt'], 2, '.', '') : '';
+        $ACCT            = (isset($_REQUEST['acct'])) ? filter_var($_REQUEST['acct'], FILTER_SANITIZE_STRING) : '';
+        $ACCT            = preg_replace('/[^0-9]/', '', $ACCT); // remove all characters except numbers
+        $exp_month       = (isset($_REQUEST['exp_month'])) ? filter_var($_REQUEST['exp_month'], FILTER_SANITIZE_STRING) : '';
+        $exp_year        = (isset($_REQUEST['exp_year'])) ? filter_var($_REQUEST['exp_year'], FILTER_SANITIZE_STRING) : '';
+        $EXPDATE         = $exp_month.$exp_year; // PP format
+        $CVV2            = (isset($_REQUEST['cvv2'])) ? filter_var($_REQUEST['cvv2'], FILTER_SANITIZE_STRING) : '';
+        $discount_coupon = (isset($_REQUEST['discount_coupon'])) ? filter_var($_REQUEST['discount_coupon'], FILTER_SANITIZE_STRING) : '';
+        $agree           = (isset($_REQUEST['agree'])) ? filter_var($_REQUEST['agree'], FILTER_SANITIZE_STRING) : '';
+
+        // test
+        // echo '<pre>';
+        // print_r($_REQUEST);
+        // echo '</pre>';
+        // echo $FIRSTNAME.'<br>';
+        // echo $LASTNAME.'<br>';
+        // echo $CARDTYPE.'<br>';
+        // echo $ACCT.'<br>';
+        // echo $EXPDATE.'<br>';
+        // echo $CVV2.'<br>';
+        // echo $AMT.'<br>';
+        // echo $TAXAMT.'<br>';
+        // echo $agree.'<br>';
+        // exit();
+
+        // check for empty fields - backup for JavaScript failure
+        if( ($FIRSTNAME == '') || ($LASTNAME == '') || ($CARDTYPE == '') || ($AMT == 0.00)
+            || ($ACCT == '') || ($EXPDATE == '') || ($CVV2 == '') || ($agree != 'on') )
+        {
+            echo "All fields required. Please try again.";
+            exit();
+        }
+
+        // Core Credit Card Parameters
+        // resource: https://developer.paypal.com/docs/classic/payflow/integration-guide/#core-credit-card-parameters
+
+        // PP CC Transaction Request Parameters
+        // resource: https://developer.paypal.com/docs/classic/payflow/integration-guide/#paypal-credit-card-transaction-request-parameters
+
+        // PayPal TRXTYPEs:
+        // Authorization (TRXTYPE=A)
+        // Credit (TRXTYPE=C)
+        // Delayed Capture (TRXTYPE=D)
+        // Sale (TRXTYPE=S)
+        // Void (TRXTYPE=V)
+
+        // parameters to pass to PP
+        $parameters = [
+            'TRXTYPE'           => 'S',
+            'TENDER'            => 'C',
+            'ACCT'              => $ACCT,
+            'AMT'               => $AMT,
+            'EXPDATE'           => $EXPDATE,
+            'BILLTOFIRSTNAME'   => $FIRSTNAME,
+            'BILLTOLASTNAME'    => $LASTNAME,
+            'CVV2'              => $CVV2, // for cvv validation response
+            'CURRENCY'          => 'USD',
+            // 'TAXAMT'            => $TAXAMT,
+            // 'FREIGHTAMT'        => $FREIGHTAMT,
+            'IPADDRESS'         => $_SERVER['REMOTE_ADDR']
+        ];
+
+        // test
+        // echo 'VENDOR: ' . $vendor . '<br>';
+        // echo 'USER: ' . $user . '<br>';
+        // echo 'PARTNER: ' . $partner . '<br>';
+        // echo 'PWD: ' . $password . '<br><br>';
+        // echo '$_REQUEST<br>';
+        // echo '<pre>';
+        // print_r($_REQUEST);
+        // echo '</pre>';
+        // echo '<br><br>';
+        // echo 'Parameters<br>';
+        // echo '<pre>';
+        // print_r($parameters);
+        // echo '</pre>';
+        // echo 'End inside PayPal method';
+        // echo '<br><br>';
+        // exit();
+
+        // create new instance of Payflow class/object
+        $payflow = new Payflow();
+
+        // call sale_transaction() of Payflow object & store results in $response
+        // $results = $payflow->sale_transaction($email, $vendor, $user, $partner, $password, $parameters, $shipping_method);
+        $response = $payflow->sale_transaction($email, $ship_to_zip, $vendor, $user, $partner, $password, $parameters);
+
+        // test
+        // echo 'API response array returned from Payflow model to Paypal model:<br>';
+        // echo '<pre>';
+        // print_r($response);
+        // echo '</pre>';
+        // exit();
+
+        if (!$payflow->get_errors())
+        {
+            // return array
             return $response;
         }
         else

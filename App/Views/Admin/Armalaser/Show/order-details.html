@@ -1155,9 +1155,32 @@
                     {% if order.order_status == 'returned' and order.rma == 1 and session.access_level >= 2 %}
                         <h3>Create order with replacement parts</h3>
                         <div style="margin-bottom: 0px;">
-                            <a class="btn btn-primary btn-lg" href="/admin/orders/label?id={{ order.id }}">
-                                Continue
-                            </a>
+                            <!-- Customer -->
+                            {% if order.customerid != 0 and order.guestid == 0 and order.callerid == 0 and order.dealerid == 0 and order.partnerid == 0 %}
+                                <a class="btn btn-primary btn-lg" href="/admin/orders/new-order?id={{ customer.id }}&type=customer">
+                                    Continue
+                                </a>
+                            <!-- Caller -->
+                            {% elseif order.callerid != 0 and order.customerid == 0 and order.guestid == 0 and order.dealerid == 0 and order.partnerid == 0 %}
+                                <a class="btn btn-primary btn-lg" href="/admin/orders/new-order?id={{ customer.id }}&type=caller">
+                                    Continue
+                                </a>
+                            <!-- Guest -->
+                            {% elseif order.guestid != 0 and order.customerid == 0 and order.callerid == 0 and order.dealerid == 0 and order.partnerid == 0 %}
+                                <a class="btn btn-primary btn-lg" href="/admin/orders/new-order?id={{ customer.id }}&type=guest">
+                                    Continue
+                                </a>
+                            <!-- Dealer -->
+                            {% elseif order.dealerid != 0 and order.customerid == 0 and order.guestid == 0 and order.callerid == 0 and order.partnerid == 0 %}
+                                <a class="btn btn-primary btn-lg" href="/admin/orders/new-order?id={{ customer.id }}&type=dealer">
+                                    Continue
+                                </a>
+                            <!-- Partner -->
+                            {% elseif order.partnerid != 0 and order.customerid == 0 and order.guestid == 0 and order.callerid == 0 and order.dealerid == 0 %}
+                                <a class="btn btn-primary btn-lg" href="/admin/orders/new-order?id={{ customer.id }}&type=partner">
+                                    Continue
+                                </a>
+                            {% endif %}
                         </div>
                     {% endif %}
                 </div>

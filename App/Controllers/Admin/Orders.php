@@ -17,6 +17,15 @@ use \App\Models\Warrantyregistration;
 use \App\Models\Paypal;
 use \App\Models\Dealer;
 use \App\Models\Partner;
+use \App\Models\Part;
+use \App\Models\Trseries;
+use \App\Models\Gtoflx;
+use \App\Models\Stingray;
+use \App\Models\Holster;
+use \App\Models\Accessory;
+use \App\Models\Battery;
+use \App\Models\Toolkit;
+use \App\Models\Flx;
 
 class Orders extends \Core\Controller
 {
@@ -1345,7 +1354,7 @@ class Orders extends \Core\Controller
 
     /**
      * Updates order status to "returned"
-     * 
+     *
      * @return View
      */
     public function updateToReturned()
@@ -1550,6 +1559,184 @@ class Orders extends \Core\Controller
             // email webmaster
             exit();
         }
+    }
+
+
+
+
+    /**
+     * returns view with form for parts and products to create new order
+     *
+     * @return View
+     */
+    public function newOrderAction()
+    {
+        // echo "Connected!"; exit();
+
+        // get order ID from query string
+        $id   = ( isset($_REQUEST['id'])  ) ? filter_var($_REQUEST['id'], FILTER_SANITIZE_NUMBER_INT): ''; // customer ID
+        $type = ( isset($_REQUEST['type'])  ) ? filter_var($_REQUEST['type'], FILTER_SANITIZE_STRING): ''; // buyer type
+
+        if ($type == 'customer')
+        {
+            $customer = Customer::getCustomer($id);
+
+            // test
+            // echo '<h4>Customer:</h4>';
+            // echo '<pre>';
+            // print_r($customer);
+            // echo '</pre>';
+            // exit();
+        }
+        if ($type == 'guest')
+        {
+            $customer = Guest::getGuest($id);
+
+            // test
+            // echo '<h4>Customer:</h4>';
+            // echo '<pre>';
+            // print_r($customer);
+            // echo '</pre>';
+            // exit();
+        }
+        else if ($type == 'caller')
+        {
+            $customer = Caller::getCaller($id);
+
+            // test
+            // echo '<h4>Customer:</h4>';
+            // echo '<pre>';
+            // print_r($customer);
+            // echo '</pre>';
+            // exit();
+        }
+        else if ($type == 'dealer')
+        {
+            $customer = Dealer::getDealer($id);
+
+            // test
+            // echo '<h4>Dealer:</h4>';
+            // echo '<pre>';
+            // print_r($customer);
+            // echo '</pre>';
+            // exit();
+        }
+        else if ($type == 'partner')
+        {
+            $customer = Partner::getPartner($id);
+
+            // test
+            // echo '<h4>Partner:</h4>';
+            // echo '<pre>';
+            // print_r($customer);
+            // echo '</pre>';
+            // exit();
+        }
+
+        // get parts
+        $parts = Part::getParts();
+
+        // test
+        // echo '<h4>Parts:</h4>';
+        // echo '<pre>';
+        // print_r($parts);
+        // echo '</pre>';
+        // exit();
+
+        // get trseries
+        $trseries = Trseries::getLasers();
+
+        // test
+        // echo '<h4>TR Series:</h4>';
+        // echo '<pre>';
+        // print_r($trseries);
+        // echo '</pre>';
+        // exit();
+
+        // get gto/flx
+        $gtoflx = Gtoflx::getLasersForAdmin();
+
+        // test
+        // echo '<h4>GTO/FLX:</h4>';
+        // echo '<pre>';
+        // print_r($gtoflx);
+        // echo '</pre>';
+        // exit();
+
+        // get stingray
+        $stingrays = Stingray::getLasers();
+
+        // test
+        // echo '<h4>Stingray:</h4>';
+        // echo '<pre>';
+        // print_r($stingrays);
+        // echo '</pre>';
+        // exit();
+
+        // get holsters
+        $holsters = Holster::getHolstersForAdmin();
+
+        // test
+        // echo '<h4>Holsters:</h4>';
+        // echo '<pre>';
+        // print_r($holsters);
+        // echo '</pre>';
+        // exit();
+
+        // get accessories
+        $accessories = Accessory::getAccessories();
+
+        // test
+        // echo '<h4>Accessories:</h4>';
+        // echo '<pre>';
+        // print_r($accessories);
+        // echo '</pre>';
+        // exit();
+
+        // get batteries
+        $batteries = Battery::getBatteries();
+
+        // test
+        // echo '<h4>Batteries:</h4>';
+        // echo '<pre>';
+        // print_r($batteries);
+        // echo '</pre>';
+        // exit();
+
+        // get toolkits
+        $toolkits = Toolkit::getToolkits();
+
+        // test
+        // echo '<h4>Toolkits:</h4>';
+        // echo '<pre>';
+        // print_r($toolkits);
+        // echo '</pre>';
+        // exit();
+
+        // get flx
+        $flxs = Flx::getAllFlxForAdmin();
+
+        // test
+        // echo '<h4>FLX:</h4>';
+        // echo '<pre>';
+        // print_r($flxs);
+        // echo '</pre>';
+        // exit();
+
+        View::renderTemplate('Admin/Armalaser/Show/replacement-parts-products.html', [
+            'pagetitle'   => 'Create order for replacement parts',
+            'type'        => $type,
+            'customer'    => $customer,
+            'parts'       => $parts,
+            'trseries'    => $trseries,
+            'gtoflx'      => $gtoflx,
+            'stingrays'   => $stingrays,
+            'holsters'    => $holsters,
+            'accessories' => $accessories,
+            'batteries'   => $batteries,
+            'toolkits'    => $toolkits,
+            'flxs'        => $flxs
+        ]);
     }
 
 

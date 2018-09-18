@@ -151,9 +151,11 @@ $router->add('products/lasers/stingray/{pistolMfr:[A-za-z -]+}/{laserId:[0-9 -]+
 $router->add('add-to-cart/{mvcModel:[a-z -]+}/{id:[0-9 -]+}/{pistolMfr:[a-z0-9 -]+}/{laserModel:[a-z0-9 -]+}', ['controller' => 'Cart', 'action' => 'addToCart']);
 $router->add('admin/dealer/add-to-cart/{mvcModel:[a-z -]+}/{id:[0-9 -]+}/{pistolMfr:[a-z0-9 -]+}/{laserModel:[a-z0-9 -]+}', ['controller' => 'Admin\Dealercart', 'action' => 'addToCart']);
 $router->add('admin/partner/add-to-cart/{mvcModel:[a-z -]+}/{id:[0-9 -]+}/{pistolMfr:[a-z0-9 -]+}/{laserModel:[a-z0-9 -]+}', ['controller' => 'Admin\Partnercart', 'action' => 'addToCart']);
+$router->add('admin/armalaser/add-to-cart/{mvcModel:[a-z -]+}/{id:[0-9 -]+}/{pistolMfr:[a-z0-9 -]+}/{laserModel:[a-z0-9 -]+}', ['controller' => 'Admin\Admincart', 'action' => 'addToCart']);
 
 // view shopping cart
 $router->add('cart/view/shopping-cart', ['controller' => 'Cart', 'action' => 'viewCart']);
+$router->add('cart/view/admin-shopping-cart', ['controller' => 'Cart', 'action' => 'viewAdminCart']);
 
 // click checkout button
 $router->add('cart/checkout', ['controller' => 'Cart', 'action' => 'checkoutOptions']);
@@ -163,8 +165,10 @@ $router->add('cart/checkout/internal', ['controller' => 'Cart', 'action' => 'int
 $router->add('cart/checkout/order-summary', ['controller' => 'Cart', 'action' => 'checkoutCalculate']);
 $router->add('cart/checkout/dealer-order-summary', ['controller' => 'Cart', 'action' => 'checkoutDealerCalculate']);
 $router->add('cart/checkout/partner-order-summary', ['controller' => 'Cart', 'action' => 'checkoutPartnerCalculate']);
+$router->add('cart/checkout/admin-order-summary', ['controller' => 'Cart', 'action' => 'checkoutAdminCalculate']);
 $router->add('cart/checkout/process-discount', ['controller'=>'Cart', 'action'=> 'processDiscount']);
 $router->add('cart/checkout/process-payment', ['controller'=>'Cart', 'action'=> 'processPayment']);
+$router->add('cart/checkout/process-no-payment', ['controller'=>'Cart', 'action'=> 'processNoPayment']);
 
 
 

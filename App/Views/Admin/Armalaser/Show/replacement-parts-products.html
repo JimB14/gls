@@ -1,0 +1,842 @@
+{% extends 'base-admin.html' %}
+
+{% block title %}
+  Parts &amp; Products | ArmaLaser
+{% endblock %}
+
+{% block css %}
+<style>
+.isInvisible {
+    display: none;
+}
+.isVisible {
+    display: block;
+}
+
+#replace-expand,
+#replace-collapse,
+#replace-show-hide-parts,
+#replace-show-hide-trseries,
+#replace-show-hide-gtoflx,
+#replace-show-hide-stingrays,
+#replace-show-hide-holsters,
+#replace-show-hide-accessories,
+#replace-show-hide-batteries,
+#replace-show-hide-toolkits,
+#replace-show-hide-flx {
+    cursor: pointer;
+}
+#replace-parts-div,
+#replace-trseries-div,
+#replace-gtoflx-div,
+#replace-stingrays-div,
+#replace-holsters-div,
+#replace-accessories-div,
+#replace-batteries-div,
+#replace-toolkits-div,
+#replace-flx-div {
+    display: none;
+}
+</style>
+{% endblock %}
+
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div id="dashboard-toggle" class="col-md-10" style="margin-top:-20px;margin-left:254px;">
+
+            <div class="col-md-4">
+                {% if pagetitle %}
+                    <h2 style="margin-left:-15px;">
+                      {{ pagetitle }}
+                    </h2>
+                    {% if searched %}
+                        <p style="margin-left: -10px;">
+                            <span class="glyphicon glyphicon-menu-left"></span>
+                            <a onclick="window.history.go(-1)" style="cursor:pointer;">
+                                Go  Back
+                            </a>
+                        </p>
+                    {% endif %}
+                {% endif %}
+            </div>
+
+            <!-- Customer information -->
+            <div class="col-md-12">
+                {% if customer %}
+                    {% if type == 'customer' %}
+                        <h3>Customer information:</h3>
+                    {% elseif type == 'caller' %}
+                        <h3>Caller information:</h3>
+                    {% elseif type == 'guest' %}
+                        <h3>Guest information:</h3>
+                    {% elseif type == 'dealer' %}
+                        <h3>Dealer information - <span style="color:#0000FF;">{{ customer.company|raw }}</span></h3>
+                    {% elseif type == 'partner' %}
+                        <h3>Partner information - <span style="color:#0000FF;">{{ customer.company|raw }}</span></h3>
+                    {% endif %}
+
+                    <table class="table table-bordered table-striped bg-fff">
+                        <thead>
+                            <tr>
+                                {% if type == 'customer' %}
+                                    <th>Customer<br>ID</th>
+                                {% elseif type == 'caller' %}
+                                    <th>Caller<br>ID</th>
+                                {% elseif type == 'guest' %}
+                                    <th>Guest<br>ID</th>
+                                {% elseif type == 'dealer' %}
+                                    <th>Dealer<br>ID</th>
+                                {% elseif type == 'partner' %}
+                                    <th>Partner<br>ID</th>
+                                {% endif %}
+                                <th>First</th>
+                                <th>Last</th>
+                                <th>Address</th>
+                                {% if customer.billing_address2 or customer.address2 %}
+                                    <th>Address2</th>
+                                {% endif %}
+                                <th>City</th>
+                                <th>State</th>
+                                <th>Zip</th>
+                                <th>Telephone</th>
+                                <th>Email</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            <tr>
+                                <td>{{ customer.id }}</td>
+                                <td>{% if customer.first_name %}{{customer.first_name }}{% else %}{{ customer.billing_firstname }}{% endif %}</td>
+                                <td>{% if customer.last_name %}{{customer.last_name }}{% else %}{{ customer.billing_lastname }}{% endif %}</td>
+                                <td>{% if customer.address1 %}{{ customer.address1 }}{% elseif customer.address %}{{ customer.address}}{% else %}{{ customer.billing_address }}{% endif %}</td>
+                                {% if customer.address2 or customer.billing_address2 %}
+                                    {% if customer.address2 %}
+                                        <td>{{ customer.address2 }}</td>
+                                    {% elseif customer.billing_address2 %}
+                                        <td>{{ customer.billing_address2 }}</td>
+                                    {% endif %}
+                                {% endif %}
+                                <td>{% if customer.city %}{{ customer.city }}{% else %}{{ customer.billing_city }}{% endif %}</td>
+                                <td>{% if customer.state %}{{ customer.state }}{% else %}{{ customer.billing_state }}{% endif %}</td>
+                                <td>{% if customer.zip %}{{ customer.zip }}{% else %}{{ customer.billing_zip }}{% endif %}</td>
+                                <td>{% if customer.telephone %}{{ customer.telephone }}{% else %}{{ customer.billing_phone }}{% endif %}</td>
+                                <td>{{ customer.email }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                {% endif %}
+            </div>
+
+            <!-- = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = -->
+
+            <div class="col-md-12">
+                <h4 id="replace-expand"><a>Expand all</a></h4>
+                <h4 id="replace-collapse" class="isInvisible"><a>Collapse all</a></h4>
+            </div>
+
+            <!-- Parts -->
+            <div class="col-md-12">
+                {% if parts %}
+                    <h3><a id="replace-show-hide-parts">Show Parts</a></h3>
+                    <div id="replace-parts-div">
+                        <table class="table table-bordered table-striped bg-fff">
+                            <thead>
+                                <tr>
+                                    <th class="text-center">Add to Cart</th>
+                                    <th>Name</th>
+                                    <th>Price</th>
+                                    <th>UPC</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                {% for item in parts %}
+                                    <tr>
+                                        <td class="text-center" style="width:7%;">
+                                            <a id="add-to-dealer-cart-{{ item.id }}" class='btn btn-success btn-sm'
+                                                href="/admin/armalaser/add-to-cart/{{ item.mvc_model }}/{{ item.id }}/{{ item.slug }}/param"
+                                                {% if item.id in session.ids %} disabled {% endif %}>
+
+                                                {% if item.id in session.ids %} In Cart {% else %} Add{% endif %}
+                                            </a>
+                                        </td>
+                                        <td>{{ item.name }}</td>
+                                        <td>{{ item.price }}</td>
+                                        <td>{{ item.upc }}</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                        <p style="margin-top: 30px;" class="pull-left"><a href="#top" title="Go to top of page"><i style="margin-top: -15px; color:#ccc;" class="fa fa-arrow-circle-o-up fa-3x" aria-hidden="true"></i></a></p>
+                        <p style="margin-top: 30px;" class="pull-right"><a href="#top" title="Go to top of page"><i style="margin-top: -15px; color:#ccc;" class="fa fa-arrow-circle-o-up fa-3x" aria-hidden="true"></i></a></p>
+                    </div>
+                {% else %}
+                    <div class="col-md-8" style="margin-left:-15px;">
+                        <div class="alert alert-warning" style="margin-top:30px;">
+                            <h4 style="margin-bottom:0px;">
+                                No parts to display
+                            </h4>
+                        </div>
+                    </div>
+               {% endif %}
+            </div>
+
+            <!-- TR Series lasers  -->
+            <div class="col-md-12">
+                {% if trseries %}
+                    <h3><a id="replace-show-hide-trseries">Show TR Series Lasers</a></h3>
+                    <div id="replace-trseries-div">
+                        <table class="table table-bordered table-striped bg-fff">
+                          <thead>
+                              <tr>
+                                  <th class="text-center">Add to Cart</th>
+                                  <th>Image</th>
+                                  <th>Name</th>
+                                  <th>Series</th>
+                                  <th>Model</th>
+                                  <th>Beam</th>
+                                  <th>Pistol match</th>
+                                  <th>Price</th>
+                                  <th>UPC</th>
+                              </tr>
+                          </thead>
+
+                          <tbody>
+                              {% for laser in trseries %}
+                              <tr>
+                                  <td class="text-center" style="width:7%;">
+                                      <a id="add-to-dealer-cart-{{ laser.id }}" class='btn btn-success btn-sm'
+                                          href="/admin/armalaser/add-to-cart/{{ laser.mvc_model }}/{{ laser.id }}/{{ laser.pistolMfr }}/{{ laser.model }}"
+                                          {% if laser.id in session.ids %} disabled {% endif %}>
+
+                                          {% if laser.id in session.ids %} In Cart {% else %} Add{% endif %}
+                                      </a>
+                                  </td>
+                                  <td class="text-center" style="width:8%;">
+                                      <a href="/{{ laser.pistolMfr }}/{{ laser.slug }}/tr-series/{{ laser.id }}/{{ laser.model }}">
+                                          <img src="/assets/images/laser-pistol/{{ laser.model|replace({'g': ''}) }}/{{ laser.img_thumb }}"
+                                              height="40px" alt="Need image">
+                                      </a>
+                                  </td>
+                                  <td style="width:14%;"><a title="See model details" href="/{{ laser.pistolMfr }}/{{ laser.slug }}/tr-series/{{ laser.id }}/{{ laser.model }}">{{ laser.name }}</a></td>
+                                  <td style="width:7%;"><a title="Learn more about TR Series" href="/lasers/tr-series">{{ laser.series|upper }}</a></td>
+                                  <td style="width:7%;"><a title="See model details" href="/{{ laser.pistolMfr }}/{{ laser.slug }}/tr-series/{{ laser.id }}/{{ laser.model }}">{{ laser.model|upper }}</a></td>
+                                  <td style="width:7%;">{% if laser.beam == 'red' %}<span style="color:#ff0000;">{{ laser.beam|capitalize }}</span>{% else %}<span style="color: #228b22;font-weight:bold;">{{ laser.beam|capitalize}}{% endif %}</td>
+                                  <td style="width: 20%;"><a title="See all products for {% if laser.pistolMfr == 'smith-wesson' %} SMITH & WESSON{% elseif laser.pistolMfr == 'sig-sauer' %} SIG SAUER{% else %}{{ laser.pistolMfr|upper }}{% endif %}" href="/{{ laser.pistolMfr }}">{% if laser.pistolMfr == 'smith-wesson' %} SMITH & WESSON{% elseif laser.pistolMfr == 'sig-sauer' %} SIG SAUER{% else %}{{ laser.pistolMfr|upper }}{% endif %}</a>: {% if laser.pistolMfr == 'glock' %}{{ laser.pistol_models|upper }}{% else %}{{ laser.pistol_models }}{% endif %}</td>
+                                  <td>{{ laser.price }}</td>
+                                  <td>{{ laser.upc }}</td>
+                              </tr>
+                              {% endfor %}
+                          </tbody>
+                        </table>
+                        <p style="margin-top: 30px;" class="pull-left"><a href="#top" title="Go to top of page"><i style="margin-top: -15px; color:#ccc;" class="fa fa-arrow-circle-o-up fa-3x" aria-hidden="true"></i></a></p>
+                        <p style="margin-top: 30px;" class="pull-right"><a href="#top" title="Go to top of page"><i style="margin-top: -15px; color:#ccc;" class="fa fa-arrow-circle-o-up fa-3x" aria-hidden="true"></i></a></p>
+                    </div>
+                {% else %}
+                    <div class="col-md-8" style="margin-left:-15px;">
+                        <div class="alert alert-warning" style="margin-top:30px;">
+                            <h4 style="margin-bottom:0px;">
+                              No TR Series lasers to display
+                            </h4>
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+
+            <!-- GTO/FLX lasers  -->
+            <div class="col-md-12">
+                {% if gtoflx %}
+                    <h3><a id="replace-show-hide-gtoflx">Show GTO/FLX Lasers</a></h3>
+                    <div id="replace-gtoflx-div">
+                        <table class="table table-bordered table-striped bg-fff">
+                          <thead>
+                              <tr>
+                                  <th class="text-center">Add to Cart</th>
+                                  <th>Image</th>
+                                  <th>Name</th>
+                                  <th>Series</th>
+                                  <th>Model</th>
+                                  <th>Beam</th>
+                                  <th>Pistol match</th>
+                                  <th>Price</th>
+                                  <th>UPC</th>
+                              </tr>
+                          </thead>
+
+                          <tbody>
+                              {% for laser in gtoflx %}
+                              <tr>
+                                  <td class="text-center" style="width:7%;">
+                                      <a id="add-to-dealer-cart-{{ laser.id }}" class='btn btn-success btn-sm'
+                                          href="/admin/armalaser/add-to-cart/{{ laser.mvc_model }}/{{ laser.id }}/{{ laser.pistolMfr }}/{{ laser.model }}"
+                                          {% if laser.id in session.ids %} disabled {% endif %}>
+
+                                          {% if laser.id in session.ids %} In Cart {% else %} Add{% endif %}
+                                      </a>
+                                  </td>
+                                  <td class="text-center" style="width:8%;">
+                                      <a href="/{{ laser.pistolMfr }}/{{ laser.slug }}/gtoflx/{{ laser.id }}/{{ laser.model }}">
+                                          <img src="/assets/images/laser-pistol/{{ laser.model|slice(-5, 5) }}/{{ laser.img_thumb }}"
+                                              height="40px" alt="Need image">
+                                      </a>
+                                  </td>
+                                  <td style="width:14%;"><a title="See model details" href="/{{ laser.pistolMfr }}/{{ laser.slug }}/tr-series/{{ laser.id }}/{{ laser.model }}">{{ laser.name }}</a></td>
+                                  <td style="width:7%;"><a title="Learn more about TR Series" href="/lasers/tr-series">{{ laser.series|upper }}</a></td>
+                                  <td style="width:7%;"><a title="See model details" href="/{{ laser.pistolMfr }}/{{ laser.slug }}/tr-series/{{ laser.id }}/{{ laser.model }}">{{ laser.model|upper }}</a></td>
+                                  <td style="width:7%;">{% if laser.beam == 'red' %}<span style="color:#ff0000;">{{ laser.beam|capitalize }}</span>{% else %}<span style="color: #228b22;font-weight:bold;">{{ laser.beam|capitalize}}{% endif %}</td>
+                                  <td style="width: 20%;"><a title="See all products for {% if laser.pistolMfr == 'smith-wesson' %} SMITH & WESSON{% elseif laser.pistolMfr == 'sig-sauer' %} SIG SAUER{% else %}{{ laser.pistolMfr|upper }}{% endif %}" href="/{{ laser.pistolMfr }}">{% if laser.pistolMfr == 'smith-wesson' %} SMITH & WESSON{% elseif laser.pistolMfr == 'sig-sauer' %} SIG SAUER{% else %}{{ laser.pistolMfr|upper }}{% endif %}</a>: {% if laser.pistolMfr == 'glock' %}{{ laser.pistol_models|upper }}{% else %}{{ laser.pistol_models }}{% endif %}</td>
+                                  <td>{{ laser.price }}</td>
+                                  <td>{{ laser.upc }}</td>
+                              </tr>
+                              {% endfor %}
+                          </tbody>
+                        </table>
+                        <p style="margin-top: 30px;" class="pull-left"><a href="#top" title="Go to top of page"><i style="margin-top: -15px; color:#ccc;" class="fa fa-arrow-circle-o-up fa-3x" aria-hidden="true"></i></a></p>
+                        <p style="margin-top: 30px;" class="pull-right"><a href="#top" title="Go to top of page"><i style="margin-top: -15px; color:#ccc;" class="fa fa-arrow-circle-o-up fa-3x" aria-hidden="true"></i></a></p>
+                    </div>
+                {% else %}
+                    <div class="col-md-8" style="margin-left:-15px;">
+                        <div class="alert alert-warning" style="margin-top:30px;">
+                            <h4 style="margin-bottom:0px;">
+                              No GTO/FLX lasers to display
+                            </h4>
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+
+
+            <!-- Stingray lasers  -->
+            <div class="col-md-12">
+                {% if stingrays %}
+                    <h3><a id="replace-show-hide-stingrays">Show Stingray Lasers</a></h3>
+                    <div id="replace-stingrays-div">
+                        <table class="table table-bordered table-striped bg-fff">
+                            <thead>
+                                <tr>
+                                    <th class="text-center">Add to Cart</th>
+                                    <th>Image</th>
+                                    <th>Name</th>
+                                    <th>Series</th>
+                                    <th>Model</th>
+                                    <th>Beam</th>
+                                    <!-- <th>Pistol match</th> -->
+                                    <th>Price</th>
+                                    <th>UPC</th>
+                                </tr>
+                            </thead>
+
+                          <tbody>
+                                {% for laser in stingrays %}
+                                    <tr>
+                                        <td class="text-center" style="width:7%;">
+                                            <a id="add-to-dealer-cart-{{ laser.id }}" class='btn btn-success btn-sm'
+                                                href="/admin/armalaser/add-to-cart/{{ laser.mvc_model }}/{{ laser.id }}/{{ laser.pistolMfr }}/{{ laser.model }}"
+                                                {% if laser.id in session.ids %} disabled {% endif %}>
+
+                                                {% if laser.id in session.ids %} In Cart {% else %} Add{% endif %}
+                                            </a>
+                                        </td>
+                                        <td class="text-center" style="width:8%;">
+                                            <a href="/{{ laser.pistolMfr }}/{{ laser.slug }}/stingray/{{ laser.id }}/{{ laser.model }}">
+                                                <img src="/assets/images/laser-pistol/{{ laser.series }}/{{ laser.img_thumb }}"
+                                                    height="40px" alt="Need image">
+                                            </a>
+                                        </td>
+                                        <td style="width:14%;"><a title="See model details" href="/{{ laser.pistolMfr }}/{{ laser.slug }}/tr-series/{{ laser.id }}/{{ laser.model }}">{{ laser.name }}</a></td>
+                                        <td style="width:7%;"><a title="Learn more about TR Series" href="/lasers/tr-series">{{ laser.series|upper }}</a></td>
+                                        <td style="width:7%;"><a title="See model details" href="/{{ laser.pistolMfr }}/{{ laser.slug }}/tr-series/{{ laser.id }}/{{ laser.model }}">{{ laser.model|upper }}</a></td>
+                                        <td style="width:7%;">{% if laser.beam == 'red' %}<span style="color:#ff0000;">{{ laser.beam|capitalize }}</span>{% else %}<span style="color: #228b22;font-weight:bold;">{{ laser.beam|capitalize}}{% endif %}</td>
+                                        <!-- <td style="width: 20%;"><a title="See all products for {% if laser.pistolMfr == 'smith-wesson' %} SMITH & WESSON{% elseif laser.pistolMfr == 'sig-sauer' %} SIG SAUER{% else %}{{ laser.pistolMfr|upper }}{% endif %}" href="/{{ laser.pistolMfr }}">{% if laser.pistolMfr == 'smith-wesson' %} SMITH & WESSON{% elseif laser.pistolMfr == 'sig-sauer' %} SIG SAUER{% else %}{{ laser.pistolMfr|upper }}{% endif %}</a>: {% if laser.pistolMfr == 'glock' %}{{ laser.pistol_models|upper }}{% else %}{{ laser.pistol_models }}{% endif %}</td> -->
+                                        <td>{{ laser.price }}</td>
+                                        <td>{{ laser.upc }}</td>
+                                    </tr>
+                                {% endfor %}
+                          </tbody>
+                        </table>
+                    </div>
+                {% else %}
+                    <div class="col-md-8" style="margin-left:-15px;">
+                        <div class="alert alert-warning" style="margin-top:30px;">
+                            <h4 style="margin-bottom:0px;">
+                              No Stingray lasers to display
+                            </h4>
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+
+            <!-- Holsters  -->
+            <div class="col-md-12">
+                {% if holsters %}
+                    <h3><a id="replace-show-hide-holsters">Show Holsters</a></h3>
+                    <div id="replace-holsters-div">
+                        <table class="table table-bordered table-striped bg-fff">
+                            <thead>
+                                <tr>
+                                    <th class="text-center">Add to Cart</th>
+                                    <th>Image</th>
+                                    <th>Name</th>
+                                    <th>Model</th>
+                                    <th>Waist</th>
+                                    <th>Hand</th>
+                                    <th>Laser Series</th>
+                                    <th>Laser Model</th>
+                                    <th>Pistol match</th>
+                                    <th>Price</th>
+                                    <th>UPC</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                {% for holster in holsters %}
+                                    <tr>
+                                        <td class="text-center" style="width:5%;">
+                                            <a id="add-to-dealer-cart-{{ holster.holster_id }}" class='btn btn-success btn-sm'
+                                                href="/admin/armalaser/add-to-cart/{{ holster.mvc_model }}/{{ holster.holster_id }}/{{ holster.pistolMfr }}/{{ holster.holster_model }}"
+                                                {% if holster.holster_id in session.ids %} disabled {% endif %}>
+
+                                                {% if holster.holster_id in session.ids %} In Cart {% else %} Add{% endif %}
+                                            </a>
+                                        </td>
+                                        <td class="text-center" style="width:5%;">
+                                            <a href="/{{ holster.pistolMfr }}/{{ holster.slug }}/tr-series/{{ holster.id }}/{{ holster.model }}">
+                                                <img src="/assets/images/page/holsters/{{ holster.thumb }}"
+                                                    height="40px" alt="Need image">
+                                            </a>
+                                        </td>
+                                        <td style="width:14%;">
+                                            <a title="See holster details"
+                                                  href="/products/holster/{{ holster.holster_id}}/{{ holster.trseries_model }}">
+                                                  {{ holster.name }}
+                                            </a>
+                                        </td>
+                                        <td style="width:7%;">{{ holster.holster_model }}</td>
+                                        <td style="width:5%;">{{ holster.waist|upper }}</td>
+                                        <td style="width:5%;">{{ holster.hand|upper }}</td>
+                                        <td style="width:7%;"><a title="Learn more about TR Series" href="/lasers/tr-series">TR SERIES</a></td>
+                                        <td style="width:7%;">{{ holster.trseries_model|upper }} / {{ holster.trseries_model|upper }}G</td>
+                                        <td style="width:15%;"><a title="See all products for {{ holster.pistolMfr|upper }}" href="/{{ holster.pistolMfr }}">{{ holster.pistolMfr|upper }}</a>:<br>{{ holster. pistol_models }}</td>
+                                        <td style="width:5%;">{{ holster.price }}</td>
+                                        <td style="width:7%;">{{ holster.upc }}</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                        <p style="margin-top: 30px;" class="pull-left"><a href="#top" title="Go to top of page"><i style="margin-top: -15px; color:#ccc;" class="fa fa-arrow-circle-o-up fa-3x" aria-hidden="true"></i></a></p>
+                        <p style="margin-top: 30px;" class="pull-right"><a href="#top" title="Go to top of page"><i style="margin-top: -15px; color:#ccc;" class="fa fa-arrow-circle-o-up fa-3x" aria-hidden="true"></i></a></p>
+                    </div>
+                {% else %}
+                    <div class="col-md-8" style="margin-left:-15px;">
+                        <div class="alert alert-warning" style="margin-top:30px;">
+                            <h4 style="margin-bottom:0px;">
+                                No holsters to display
+                            </h4>
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+
+            <!-- Accessories -->
+            <div class="col-md-12">
+                {% if accessories %}
+                    <h3><a id="replace-show-hide-accessories">Show Accessories</a></h3>
+                    <div id="replace-accessories-div">
+                        <table class="table table-bordered table-striped bg-fff">
+                            <thead>
+                                <tr>
+                                    <th class="text-center">Add to Cart</th>
+                                    <th>Image</th>
+                                    <th>Name</th>
+                                    <th>Price</th>
+                                    <th>UPC</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                {% for item in accessories %}
+                                <tr>
+                                    <td class="text-center">
+                                        <a id="add-to-dealer-cart-{{ item.id }}" class='btn btn-success btn-sm'
+                                            href="/admin/armalaser/add-to-cart/{{ item.mvc_model }}/{{ item.id }}/{{ item.slug }}/{{ item.slug }}"
+                                            {% if item.id in session.ids %} disabled {% endif %}>
+
+                                            {% if item.id in session.ids %} In Cart {% else %} Add{% endif %}
+                                        </a>
+                                    </td>
+                                    <td class="text-center">
+                                        <a href="/laser-accessories/{{ item.mvc_model }}/{{ item.id }}/{{ item.slug }}">
+                                            <img src="/assets/images/accessories/{{ item.image_thumb }}"
+                                                height="40px" alt="Need image">
+                                        </a>
+                                    </td>
+                                    <td><a title="See item details"  href="/laser-accessories/{{ item.mvc_model }}/{{ item.id }}/{{ item.slug }}">{{ item.name|title|replace({'X':'x'}) }}</a></td>
+                                    <td>{{ item.price }}</td>
+                                    <td>{{ item.upc }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% else %}
+                    <div class="col-md-8" style="margin-left:-15px;">
+                        <div class="alert alert-warning" style="margin-top:30px;">
+                            <h4 style="margin-bottom:0px;">
+                                No accessories to display
+                            </h4>
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+
+            <!-- Batteries -->
+            <div class="col-md-12">
+                {% if batteries %}
+                    <h3><a id="replace-show-hide-batteries">Show Batteries</a></h3>
+                    <div id="replace-batteries-div">
+                        <table class="table table-bordered table-striped bg-fff">
+                            <thead>
+                                <tr>
+                                    <th class="text-center">Add to Cart</th>
+                                    <th>Image</th>
+                                    <th>Name</th>
+                                    <th>Laser Series</th>
+                                    <th>Price</th>
+                                    <th>UPC</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                {% for item in batteries %}
+                                    <tr>
+                                        <td class="text-center">
+                                            <a id="add-to-dealer-cart-{{ item.id }}" class='btn btn-success btn-sm'
+                                                href="/admin/armalaser/add-to-cart/{{ item.mvc_model }}/{{ item.id }}/{{ item.slug }}/{{ item.laser_series }}"
+                                                {% if item.id in session.ids %} disabled {% endif %}>
+
+                                                {% if item.id in session.ids %} In Cart {% else %} Add{% endif %}
+                                            </a>
+                                        </td>
+                                        <td class="text-center">
+                                            <a href="/laser-accessories/{{ item.mvc_model }}/{{ item.id }}/{{ item.slug }}">
+                                                <img src="/assets/images/batteries/{{ item.image_thumb }}"
+                                                    height="40px" alt="Need image">
+                                            </a>
+                                        </td>
+                                        <td><a title="See item details"  href="/laser-accessories/{{ item.mvc_model }}/{{ item.id }}/{{ item.slug }}">{{ item.name }}</a></td>
+                                        <td>{% if item.laser_series == 'tr-series-gto-flx' %}TR SERIES &amp; GTO/FLX {% else %}{{ item.laser_series|upper }}{% endif %}</td>
+                                        <td>{{ item.price }}</td>
+                                        <td>{{ item.upc }}</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% else %}
+                    <div class="col-md-8" style="margin-left:-15px;">
+                        <div class="alert alert-warning" style="margin-top:30px;">
+                            <h4 style="margin-bottom:0px;">
+                                No batteries to display
+                            </h4>
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+
+
+            <!-- Toolkits -->
+            <div class="col-md-12">
+                {% if toolkits %}
+                    <h3><a id="replace-show-hide-toolkits">Show Toolkits</a></h3>
+                    <div id="replace-toolkits-div">
+                        <table class="table table-bordered table-striped bg-fff">
+                            <thead>
+                                <tr>
+                                    <th class="text-center">Add to Cart</th>
+                                    <th>Image</th>
+                                    <th>Name</th>
+                                    <th>Laser Series</th>
+                                    <th>Price</th>
+                                    <th>UPC</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                {% for item in toolkits %}
+                                    <tr>
+                                        <td class="text-center">
+                                            <a id="add-to-dealer-cart-{{ item.id }}" class='btn btn-success btn-sm'
+                                                href="/admin/armalaser/add-to-cart/{{ item.mvc_model }}/{{ item.id }}/{{ item.slug }}/{{ item.laser_series }}"
+                                                {% if item.id in session.ids %} disabled {% endif %}>
+
+                                                {% if item.id in session.ids %} In Cart {% else %} Add{% endif %}
+                                            </a>
+                                        </td>
+                                        <td class="text-center">
+                                            <a href="/laser-accessories/{{ item.mvc_model }}/{{ item.id }}/{{ item.slug }}">
+                                                <img src="/assets/images/toolkits/{{ item.image_thumb }}"
+                                                    height="40px" alt="Need image">
+                                            </a>
+                                        </td>
+                                        <td><a title="See item details"  href="/laser-accessories/{{ item.mvc_model }}/{{ item.id }}/{{ item.slug }}">{{ item.name }}</a></td>
+                                        <td>{% if item.laser_series == 'tr-series-gto-flx' %}TR SERIES &amp; GTO/FLX {% else %}{{ item.laser_series|upper }}{% endif %}</td>
+                                        <td>{{ item.price }}</td>
+                                        <td>{{ item.upc }}</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                 {% else %}
+                    <div class="col-md-8" style="margin-left:-15px;">
+                        <div class="alert alert-warning" style="margin-top:30px;">
+                            <h4 style="margin-bottom:0px;">
+                                No tool kits to display
+                            </h4>
+                        </div>
+                    </div>
+               {% endif %}
+            </div>
+
+
+            <!-- FLX -->
+            <div class="col-md-12">
+                {% if flxs %}
+                    <h3><a id="replace-show-hide-flx">Show FLX</a></h3>
+                    <div id="replace-flx-div">
+                       <table class="table table-bordered table-striped bg-fff">
+                            <thead>
+                                <tr>
+                                    <th class="text-center">Add to Cart</th>
+                                    <th>Image</th>
+                                    <th>Name</th>
+                                    <th>Pistol Manufacturer / Model</th>
+                                    <th>Price</th>
+                                    <th>UPC</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                {% for item in flxs %}
+                                    <tr>
+                                        <td class="text-center">
+                                            <a id="add-to-dealer-cart-{{ item.id }}" class='btn btn-success btn-sm'
+                                                href="/admin/armalaser/add-to-cart/{{ item.mvc_model }}/{{ item.flx_id }}/{{ item.flx_model }}/{{ item.flx_model }}"
+                                                {% if item.id in session.ids %} disabled {% endif %}>
+
+                                                {% if item.id in session.ids %} In Cart {% else %} Add{% endif %}
+                                            </a>
+                                        </td>
+                                        <td class="text-center">
+                                            <a href="/laser-accessories/{{ item.mvc_model }}/{{ item.id }}/{{ item.slug }}">
+                                                <img src="/assets/images/page/gtoflx/flexpic_100x92.png"
+                                                    height="40px" alt="Need image">
+                                            </a>
+                                        </td>
+                                        <td><a title="See item details"  href="/laser-accessories/{{ item.mvc_model }}/{{ item.id }}/{{ item.slug }}">{{ item.name|upper }}</a></td>
+                                        <td><a title="See all products for {{ item.pistolMfr|upper }}" href="/{{ item.pistolMfr }}">{% if item.pistolMfr == 'smith-wesson' %}SMITH &amp; WESSON{% elseif item.pistolMfr == 'sig-sauer' %}SIG SAUER{% else %}{{ item.pistolMfr|upper }}{% endif %}</a><br>{{ item.pistol_models }}</td>
+                                        <td>{{ item.price }}</td>
+                                        <td>{{ item.upc }}</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                       </table>
+                    </div>
+                  {% else %}
+                    <div class="col-md-8" style="margin-left:-15px;">
+                        <div class="alert alert-warning" style="margin-top:30px;">
+                            <h4 style="margin-bottom:0px;">
+                                No FLXs to display
+                            </h4>
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+
+            <p style="margin-top: 30px;" class="pull-left"><a href="#top" title="Go to top of page"><i style="margin-top: -15px; color:#ccc;" class="fa fa-arrow-circle-o-up fa-3x" aria-hidden="true"></i></a></p>
+            <p style="margin-top: 30px;" class="pull-right"><a href="#top" title="Go to top of page"><i style="margin-top: -15px; color:#ccc;" class="fa fa-arrow-circle-o-up fa-3x" aria-hidden="true"></i></a></p>
+
+
+      </div><!--  // col-md-10  -->
+    </div><!--  // .row  -->
+</div><!-- // .container-fluid  -->
+{% endblock %}
+
+
+{% block bottomjs %}
+<script>
+// Parts
+document.getElementById('replace-show-hide-parts').addEventListener('click', function() {
+    var targetDiv = document.getElementById('replace-parts-div');
+    var toggle = document.getElementById('replace-show-hide-parts');
+    if (targetDiv.style.display === 'block') {
+        targetDiv.style.display = 'none';
+        toggle.textContent = 'Show Parts';
+    } else {
+        targetDiv.style.display = 'block';
+        toggle.textContent = 'Hide Parts';
+    }
+});
+// TR Series
+document.getElementById('replace-show-hide-trseries').addEventListener('click', function() {
+    var targetDiv = document.getElementById('replace-trseries-div');
+    var toggle = document.getElementById('replace-show-hide-trseries');
+    if (targetDiv.style.display === 'block') {
+        targetDiv.style.display = 'none';
+        toggle.textContent = 'Show TR Series Lasers';
+    } else {
+        targetDiv.style.display = 'block';
+        toggle.textContent = 'Hide TR Series Lasers';
+    }
+});
+// GTO/FLX
+document.getElementById('replace-show-hide-gtoflx').addEventListener('click', function() {
+    var targetDiv = document.getElementById('replace-gtoflx-div');
+    var toggle = document.getElementById('replace-show-hide-gtoflx');
+    if (targetDiv.style.display === 'block') {
+        targetDiv.style.display = 'none';
+        toggle.textContent = 'Show GTO/FLX Lasers';
+    } else {
+        targetDiv.style.display = 'block';
+        toggle.textContent = 'Hide GTO/FLX Lasers';
+    }
+});
+// Stingrays
+document.getElementById('replace-show-hide-stingrays').addEventListener('click', function() {
+    var targetDiv = document.getElementById('replace-stingrays-div');
+    var toggle = document.getElementById('replace-show-hide-stingrays');
+    if (targetDiv.style.display === 'block') {
+        targetDiv.style.display = 'none';
+        toggle.textContent = 'Show Stingray Lasers';
+    } else {
+        targetDiv.style.display = 'block';
+        toggle.textContent = 'Hide Stingray Lasers';
+    }
+});
+// Holsters
+document.getElementById('replace-show-hide-holsters').addEventListener('click', function() {
+    var targetDiv = document.getElementById('replace-holsters-div');
+    var toggle = document.getElementById('replace-show-hide-holsters');
+    if (targetDiv.style.display === 'block') {
+        targetDiv.style.display = 'none';
+        toggle.textContent = 'Show Holsters';
+    } else {
+        targetDiv.style.display = 'block';
+        toggle.textContent = 'Hide Holsters';
+    }
+});
+// Accessories
+document.getElementById('replace-show-hide-accessories').addEventListener('click', function() {
+    var targetDiv = document.getElementById('replace-accessories-div');
+    var toggle = document.getElementById('replace-show-hide-accessories');
+    if (targetDiv.style.display === 'block') {
+        targetDiv.style.display = 'none';
+        toggle.textContent = 'Show Accessories';
+    } else {
+        targetDiv.style.display = 'block';
+        toggle.textContent = 'Hide Accessories';
+    }
+});
+// Batteries
+document.getElementById('replace-show-hide-batteries').addEventListener('click', function() {
+    var targetDiv = document.getElementById('replace-batteries-div');
+    var toggle = document.getElementById('replace-show-hide-batteries');
+    if (targetDiv.style.display === 'block') {
+        targetDiv.style.display = 'none';
+        toggle.textContent = 'Show Batteries';
+    } else {
+        targetDiv.style.display = 'block';
+        toggle.textContent = 'Hide Batteries';
+    }
+});
+// Toolkits
+document.getElementById('replace-show-hide-toolkits').addEventListener('click', function() {
+    var targetDiv = document.getElementById('replace-toolkits-div');
+    var toggle = document.getElementById('replace-show-hide-toolkits');
+    if (targetDiv.style.display === 'block') {
+        targetDiv.style.display = 'none';
+        toggle.textContent = 'Show Toolkits';
+    } else {
+        targetDiv.style.display = 'block';
+        toggle.textContent = 'Hide Toolkits';
+    }
+});
+// FLX
+document.getElementById('replace-show-hide-flx').addEventListener('click', function() {
+    var targetDiv = document.getElementById('replace-flx-div');
+    var toggle = document.getElementById('replace-show-hide-flx');
+    if (targetDiv.style.display === 'block') {
+        targetDiv.style.display = 'none';
+        toggle.textContent = 'Show FLX';
+    } else {
+        targetDiv.style.display = 'block';
+        toggle.textContent = 'Hide FLX';
+    }
+});
+
+// expand collapse
+document.getElementById('replace-expand').addEventListener('click', expand);
+document.getElementById('replace-collapse').addEventListener('click', collapse);
+
+function expand() {
+    document.getElementById('replace-parts-div').style.display = 'block';
+    document.getElementById('replace-trseries-div').style.display = 'block';
+    document.getElementById('replace-gtoflx-div').style.display = 'block';
+    document.getElementById('replace-stingrays-div').style.display = 'block';
+    document.getElementById('replace-holsters-div').style.display = 'block';
+    document.getElementById('replace-accessories-div').style.display = 'block';
+    document.getElementById('replace-batteries-div').style.display = 'block';
+    document.getElementById('replace-toolkits-div').style.display = 'block';
+    document.getElementById('replace-flx-div').style.display = 'block';
+
+    document.getElementById('replace-show-hide-parts').textContent = 'Hide Parts';
+    document.getElementById('replace-show-hide-trseries').textContent = 'Hide TR Series lasers';
+    document.getElementById('replace-show-hide-gtoflx').textContent = 'Hide GTO/FLX lasers';
+    document.getElementById('replace-show-hide-stingrays').textContent = 'Hide Stingray';
+    document.getElementById('replace-show-hide-holsters').textContent = 'Hide Holsters';
+    document.getElementById('replace-show-hide-accessories').textContent = 'Hide Accessories';
+    document.getElementById('replace-show-hide-batteries').textContent = 'Hide Batteries';
+    document.getElementById('replace-show-hide-toolkits').textContent = 'Hide Toolkits';
+    document.getElementById('replace-show-hide-flx').textContent = 'Hide FLX';
+
+    document.getElementById('replace-expand').classList.add('isInvisible');
+    document.getElementById('replace-collapse').classList.remove('isInvisible');
+
+}
+function collapse() {
+    document.getElementById('replace-parts-div').style.display = 'none';
+    document.getElementById('replace-trseries-div').style.display = 'none';
+    document.getElementById('replace-gtoflx-div').style.display = 'none';
+    document.getElementById('replace-stingrays-div').style.display = 'none';
+    document.getElementById('replace-holsters-div').style.display = 'none';
+    document.getElementById('replace-accessories-div').style.display = 'none';
+    document.getElementById('replace-batteries-div').style.display = 'none';
+    document.getElementById('replace-toolkits-div').style.display = 'none';
+    document.getElementById('replace-flx-div').style.display = 'none';
+
+    document.getElementById('replace-show-hide-parts').textContent = 'Show Parts';
+    document.getElementById('replace-show-hide-trseries').textContent = 'Show TR Series lasers';
+    document.getElementById('replace-show-hide-gtoflx').textContent = 'Show GTO/FLX lasers';
+    document.getElementById('replace-show-hide-stingrays').textContent = 'Show Stingray';
+    document.getElementById('replace-show-hide-holsters').textContent = 'Show Holsters';
+    document.getElementById('replace-show-hide-accessories').textContent = 'Show Accessories';
+    document.getElementById('replace-show-hide-batteries').textContent = 'Show Batteries';
+    document.getElementById('replace-show-hide-toolkits').textContent = 'Show Toolkits';
+    document.getElementById('replace-show-hide-flx').textContent = 'Show FLX';
+
+    document.getElementById('replace-expand').classList.remove('isInvisible');
+    document.getElementById('replace-collapse').classList.add('isInvisible');
+}
+</script>
+
+<script>
+$(document).ready(function(){
+
+
+
+});
+</script>
+
+{% endblock %}

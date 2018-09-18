@@ -216,6 +216,58 @@ class Gtoflx extends \Core\Model
 
 
 
+
+    /**
+     * retrieves gto-flx lasers for replace tab in Admin
+     *
+     * @param  String  $laserId     The laser model ID
+     *
+     * @return Object               The laser record
+     */
+    public static function getLasersForAdmin()
+    {
+        try
+        {
+            // establish db connection
+            $db = static::getDB();
+
+            $sql = "SELECT DISTINCT
+                        gtoflx.id, gtoflx.mvc_model, gtoflx.name, gtoflx.series,
+                        gtoflx.model, gtoflx.beam, gtoflx.price, gtoflx.price_dealer,
+                        gtoflx.price_partner, gtoflx_images.thumb AS img_thumb,
+                        gtoflx.upc,
+                        pistols.id AS pistol_id, pistols.slug,
+                        pistol_brands.name AS pistolMfr,
+                    	GROUP_CONCAT(DISTINCT pistols.model ORDER BY pistols.model ASC SEPARATOR ', ') AS pistol_models,
+                        GROUP_CONCAT(DISTINCT pistols.model ORDER BY pistols.model ASC SEPARATOR '-') AS pistol_models_hrefs
+                    FROM gtoflx
+                    INNER JOIN pistol_gtoflx_lookup
+                    	ON gtoflx.id = pistol_gtoflx_lookup.gtoflxid
+                    INNER JOIN pistols
+                    	ON pistol_gtoflx_lookup.pistolid = pistols.id
+                    INNER JOIN pistol_brands
+                    	ON pistol_brands.id = pistols.brand_id
+                    INNER JOIN gtoflx_images
+                    	ON gtoflx_images.gtoflx_id = gtoflx.id
+                    GROUP BY gtoflx.model
+                    ORDER BY gtoflx.id";
+            $stmt = $db->prepare($sql);
+            $stmt->execute();
+
+            $gtoflxs = $stmt->fetchALL(PDO::FETCH_OBJ);
+
+            // return to Controller
+            return $gtoflxs;
+        }
+        catch(PDOException $e)
+        {
+            echo $e->getMessage();
+            exit();
+        }
+    }
+
+
+
     /**
      * retrieves product links by ID
      *

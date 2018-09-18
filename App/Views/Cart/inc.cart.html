@@ -49,8 +49,12 @@
                     </td>
                     <td>
                         <!-- description -->
+                        <!-- Part  -->
+                        {% if item.mvc_model == 'part' %}
+                            {{ item.name }}.
+
                         <!-- TR Series -->
-                        {% if item.mvc_model == 'trseries'%}
+                        {% elseif item.mvc_model == 'trseries'%}
                             {{ item.series|upper }}
                             {{ item.model|upper }} Laser
                             with {{ item.beam }} beam.
@@ -167,9 +171,17 @@
                         <small>*Firearm shown for display purposes only. Firearm not included.</small>
                     </td>
                     {% if checkout_btn == 'show' %}
-                        <td colspan="3" style="border-left: 0px solid; border-right: 0px solid; border-bottom: 0px solid;">
-                            <a href="/cart/checkout" style="vertical-align:middle" class="btn btn-primary btn-block">Checkout</a>
-                        </td>
+                        <!-- admin or supervisor checking out  -->
+                        {% if session.userType == 'admin' or session.userType == 'supervisor' %}
+                            <td colspan="3" style="border-left: 0px solid; border-right: 0px solid; border-bottom: 0px solid;">
+                                <a href="/cart/checkout-admin?id={{ customer.id }}&type={{ customer.type }}" style="vertical-align:middle" class="btn btn-primary btn-block">Checkout</a>
+                            </td>
+                        {% else %}
+                            <!--  normal user checkout  -->
+                            <td colspan="3" style="border-left: 0px solid; border-right: 0px solid; border-bottom: 0px solid;">
+                                <a href="/cart/checkout" style="vertical-align:middle" class="btn btn-primary btn-block">Checkout</a>
+                            </td>
+                        {% endif %}
                     {% endif %}
                 </tr>
             </tr>

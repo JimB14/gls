@@ -332,6 +332,73 @@ class Cart extends \Core\Controller
 
 
 
+
+    /**
+     * Displays content of $_SESSION['cart'] in view
+     *
+     * @return View
+     */
+    public function viewAdminCart()
+    {
+        // get query string data
+        $id = (isset($_REQUEST['id']) ? filter_var($_REQUEST['id'], FILTER_SANITIZE_NUMBER_INT) : '');
+        $type = (isset($_REQUEST['type']) ? filter_var($_REQUEST['type'], FILTER_SANITIZE_STRING) : '');
+
+        // get customer data by type
+        switch($type)
+        {
+            CASE 'customer':
+                $customer = Customer::getCustomer($id);
+                break;
+            CASE 'caller':
+                $customer = Caller::getCaller($id);
+                break;
+            CASE 'guest':
+                $customer = Guest::getGuest($id);
+                break;
+            CASE 'dealer':
+                $customer = Dealer::getDealer($id);
+                break;
+            CASE 'partner':
+                $customer = Partner::getPartner($id);
+                break;
+        }
+
+        // test
+        // echo 'SESSION cart array:';
+        // echo '<pre>';
+        // print_r($_SESSION['cart']);
+        // echo '</pre>';
+        // exit();
+
+        // test
+        // echo 'Customer:';
+        // echo '<pre>';
+        // print_r($customer);
+        // echo '</pre>';
+        // exit();
+
+        // get cart meta data
+        $cartMetaData = $this->getCartMetaData();
+
+        // test
+        // echo 'Cart meta data: ';
+        // echo '<pre>';
+        // print_r($cartMetaData);
+        // echo '</pre>';
+        // exit();
+
+        View::renderTemplate('Cart/index.html', [
+            'cartContent'  => $_SESSION['cart'],
+            'cartMetaData' => $cartMetaData,
+            'page_title'   => 'Shopping Cart',
+            'customer'     => $customer,
+            'checkout_btn' => 'show'
+        ]);
+    }
+
+
+
     /**
      * Updates item quantity in $_SESSION['cart']
      *
@@ -634,6 +701,7 @@ class Cart extends \Core\Controller
             exit();
         }
     }
+
 
 
 
@@ -1867,21 +1935,419 @@ class Cart extends \Core\Controller
 
 
     /**
+     * displays checkout page for entering orders internally to ship replacement parts and/or items
+     *
+     * @return View
+     */
+    public function checkoutAdmin()
+    {
+        // get query string data
+        $id = (isset($_REQUEST['id']) ? filter_var($_REQUEST['id'], FILTER_SANITIZE_NUMBER_INT) : '');
+        $type = (isset($_REQUEST['type']) ? filter_var($_REQUEST['type'], FILTER_SANITIZE_STRING) : '');
+
+        // get customer data by type
+        switch($type)
+        {
+            CASE 'customer':
+                $customer = Customer::getCustomer($id);
+                break;
+            CASE 'caller':
+                $customer = Caller::getCaller($id);
+                break;
+            CASE 'guest':
+                $customer = Guest::getGuest($id);
+                break;
+            CASE 'dealer':
+                $customer = Dealer::getDealer($id);
+                break;
+            CASE 'partner':
+                $customer = Partner::getPartner($id);
+                break;
+        }
+
+        // cart has content
+        if ($_SESSION['cart'])
+        {
+            // get cart meta data
+            $cartMetaData= $this->getCartMetaData();
+
+            // get states
+            $states = State::getStates();
+
+            // checkout page (for guest)
+            View::renderTemplate('Cart/checkout-admin.html', [
+                'states'        => $states,
+                'cartContent'   => $_SESSION['cart'],
+                'cartMetaData'  => $cartMetaData,
+                'customer'      => $customer,
+                'type'          => $type,
+                'page_title'    => 'Replacement Parts Checkout'
+            ]);
+        }
+        // cart empty
+        else
+        {
+            header("Location: /cart/view/shopping-cart");
+            exit();
+        }
+    }
+
+
+
+
+    /**
+     * retrieves form data and returns final cost summary view
+     *
+     * @return  View   The cart content and cart metadata
+     */
+    public function checkoutAdminCalculate()
+    {
+        // echo "Connected to checkoutAdminCalculate()!"; exit();
+
+        // retrieve form data
+        $customer_firstname = (isset($_REQUEST['customer_firstname'])) ? filter_var($_REQUEST['customer_firstname'], FILTER_SANITIZE_STRING) : '';
+        $customer_lastname = (isset($_REQUEST['customer_lastname'])) ? filter_var($_REQUEST['customer_lastname'], FILTER_SANITIZE_STRING) : '';
+        $customer_company = (isset($_REQUEST['customer_company'])) ? filter_var($_REQUEST['customer_company'], FILTER_SANITIZE_STRING) : '';
+        $customer_phone = (isset($_REQUEST['customer_phone'])) ? filter_var($_REQUEST['customer_phone'], FILTER_SANITIZE_STRING) : '';
+        $customer_address = (isset($_REQUEST['customer_address'])) ? filter_var($_REQUEST['customer_address'], FILTER_SANITIZE_STRING) : '';
+        $customer_address2 = (isset($_REQUEST['customer_address2'])) ? filter_var($_REQUEST['customer_address2'], FILTER_SANITIZE_STRING) : '';
+        $customer_city = (isset($_REQUEST['customer_city'])) ? filter_var($_REQUEST['customer_city'], FILTER_SANITIZE_STRING) : '';
+        $customer_state = (isset($_REQUEST['customer_state'])) ? filter_var($_REQUEST['customer_state'], FILTER_SANITIZE_STRING) : '';
+        $customer_zip = (isset($_REQUEST['customer_zip'])) ? filter_var($_REQUEST['customer_zip'], FILTER_SANITIZE_STRING) : '';
+
+        // customer data from hidden input
+        $customer_id = (isset($_REQUEST['customer_id'])) ? filter_var($_REQUEST['customer_id'], FILTER_SANITIZE_NUMBER_INT) : '';
+        $customer_type = (isset($_REQUEST['customer_type'])) ? filter_var($_REQUEST['customer_type'], FILTER_SANITIZE_STRING) : '';
+
+        $email = (isset($_REQUEST['email'])) ? filter_var($_REQUEST['email'], FILTER_SANITIZE_STRING) : '';
+
+        $shipping_method = (isset($_REQUEST['shipping_method'])) ? filter_var($_REQUEST['shipping_method'], FILTER_SANITIZE_STRING) : '';
+        $shipping_instructions = (isset($_REQUEST['shipping_instructions'])) ? filter_var($_REQUEST['shipping_instructions'], FILTER_SANITIZE_STRING) : '';
+
+        // shipping cost from hidden fields
+        $free_shipping_cost = $_REQUEST['free_shipping_cost'];
+        $priority_mail_cost = $_REQUEST['priority_mail_cost'];
+        $ups_ground_cost = $_REQUEST['ups_ground_cost'];
+        $ups_three_day_select_cost = $_REQUEST['ups_three_day_select_cost'];
+        $ups_second_day_air_cost = $_REQUEST['ups_second_day_air_cost'];
+
+        $ups_ground_shipment_digest           = (isset($_REQUEST['ups_ground_shipment_digest'])) ? $_REQUEST['ups_ground_shipment_digest'] : '';
+        $ups_three_day_select_shipment_digest = (isset($_REQUEST['ups_three_day_select_shipment_digest'])) ? $_REQUEST['ups_three_day_select_shipment_digest'] : '';
+        $ups_second_day_air_shipment_digest   = (isset($_REQUEST['ups_second_day_air_shipment_digest'])) ? $_REQUEST['ups_second_day_air_shipment_digest'] : '';
+
+        // tracking numbers
+        $upsGroundTrackingNumber = (isset($_REQUEST['ups_ground_tracking_number'])) ? $_REQUEST['ups_ground_tracking_number'] : '';
+        $upsThreeDaySelectTrackingNumber = (isset($_REQUEST['ups_three_day_select_tracking_number'])) ? $_REQUEST['ups_three_day_select_tracking_number'] : '';
+        $upsSecondDayAirTrackingNumber = (isset($_REQUEST['ups_second_day_air_tracking_number'])) ? $_REQUEST['ups_second_day_air_tracking_number'] : '';
+
+        // test - display form data
+        // echo 'Shipping method: ' . $shipping_method . '<br>';
+        // echo '<h4>REQUEST array form data:</h4>';
+        // echo '<pre>';
+        // print_r($_REQUEST);
+        // echo '</pre>';
+        // exit();
+
+        // store UPS shipment digests in array
+        $shipDigestsArray = [
+            'ground'         => $ups_ground_shipment_digest,
+            'threeDaySelect' => $ups_three_day_select_shipment_digest,
+            'twoDayAir'      => $ups_second_day_air_shipment_digest
+        ];
+
+        // test - display $shipDigestArray
+        // echo '<h4>shipDigestArray:</h4>';
+        // echo '<pre>';
+        // print_r($shipDigestArray);
+        // echo '</pre>';
+        // exit();
+
+        // identify which UPS service was selected & store shipmentDigest
+        if (!empty($shipDigestsArray))
+        {
+            foreach ($shipDigestsArray as $key => $value)
+            {
+                if ($value != '')
+                {
+                    $service = $key;
+
+                    if ($service == 'ground')
+                    {
+                        $shipmentDigest = $value;
+                    }
+                    else if ($service == 'threeDaySelect')
+                    {
+                        $shipmentDigest = $value;
+                    }
+                    else if ($service == 'twoDayAir')
+                    {
+                        $shipmentDigest = $value;
+                    }
+                }
+            }
+
+            // store UPS shipmentDigest in global variable
+            if (isset($shipmentDigest))
+            {
+                $_SESSION['shipment_digest'] = $shipmentDigest;
+            }
+        }
+
+        // store tracking numbers in array
+        $trackingNumbersArray = [
+            'upsGroundTrackingNumber'         => $upsGroundTrackingNumber,
+            'upsThreeDaySelectTrackingNumber' => $upsThreeDaySelectTrackingNumber,
+            'upsSecondDayAirTrackingNumber'   => $upsSecondDayAirTrackingNumber
+        ];
+
+        // create variable to store tracking number for UPS (null for USPS - no ID supplied until label created)
+        $trackingNumber = '';
+
+        // identify UPS service selected and store tracking number in variable
+        if (!empty($trackingNumbersArray))
+        {
+            foreach ($trackingNumbersArray as $key => $value)
+            {
+                if ($value != '')
+                {
+                    $service = $key;
+
+                    if ($service == 'upsGroundTrackingNumber')
+                    {
+                        $trackingNumber = $value;
+                    }
+                    else if ($service == 'upsThreeDaySelectTrackingNumber')
+                    {
+                        $trackingNumber = $value;
+                    }
+                    else if ($service == 'upsSecondDayAirTrackingNumber')
+                    {
+                        $trackingNumber = $value;
+                    }
+                }
+            }
+
+            // store UPS tracking number in global variable
+            if (isset($trackingNumber))
+            {
+                $_SESSION['trackingNumber'] = $trackingNumber;
+            }
+        }
+
+        // create "pretty" shipping method desription for view
+        switch ($shipping_method)
+        {
+            CASE 'First':
+                $shipping_method = 'USPS First Class';
+                $shipping_cost = 0;
+                break;
+            CASE 'Priority':
+                $shipping_method = 'USPS Priority Mail';
+                $shipping_cost = $this->priorityMailRetail;
+                break;
+            CASE 'UPS Ground':
+                $shipping_method = 'UPS Ground';
+                $shipping_cost = $this->upsGroundRetail;
+                break;
+            CASE 'UPS Three Day Select':
+                $shipping_method = 'UPS 3 Day Select';
+                $shipping_cost = $this->upsThreeDaySelectRetail;
+                break;
+            CASE 'UPS Second Day Air':
+                $shipping_method = 'UPS 2nd Day Air';
+                $shipping_cost = $this->upsSecondDayAirRetail;
+                break;
+            default:
+            $shipping_method = 'error';
+        }
+
+        // test - review collected data
+        // echo '<h4>Review collected data:</h4>';
+        // echo 'Shipping method: ' . $shipping_method . '<br>';
+        // echo 'Shipping cost: ' . $shipping_cost . '<br>';
+        // echo '<pre>';
+        // print_r($_REQUEST);
+        // echo '</pre>';
+        // echo $customer_firstname . '<br>';
+        // echo $customer_lastname . '<br>';
+        // echo $customer_company . '<br>';
+        // echo $customer_phone . '<br>';
+        // echo $customer_address . '<br>';
+        // echo $customer_address2 . '<br>';
+        // echo $customer_city . '<br>';
+        // echo $customer_state . '<br>';
+        // echo $customer_zip . '<br>';
+        // echo $email . '<br>';
+        // echo $shipping_method . '<br>';
+        // echo  '==================<br>';
+        // exit();
+
+        // store shipping method in global variable
+        $_SESSION['shipping_method'] = $shipping_method;
+
+        // get cart meta data (do not call more than once in a function -- it doubles the values!)
+        $cartMetaData = $this->getCartMetaData();
+
+        // test
+        // echo '<h4>Cart metadata:</h4>';
+        // echo '<pre>';
+        // print_r($cartMetaData);
+        // echo '</pre>';
+        // exit();
+
+        // store pretax total in SESSION array
+        $_SESSION['pretaxTotal'] = $cartMetaData['pretax_total'];
+
+        // - - - - - Resellers are exempt from sales tax - - - - - - //
+
+        // store sales tax data for order in SESSION array
+        $_SESSION['sales_tax_data']['otax_total']      = number_format(0, 2, '.', ''); // PayPal format - no comma
+        $_SESSION['sales_tax_data']['otax_state']      = number_format(0, 2, '.', ''); // PayPal format - no comma
+        $_SESSION['sales_tax_data']['otax_state_amt']  = number_format(0, 2, '.', ''); // PayPal format - no comma
+        $_SESSION['sales_tax_data']['otax_county']     = number_format(0, 2, '.', ''); // PayPal format - no comma
+        $_SESSION['sales_tax_data']['otax_county_amt'] = number_format(0, 2, '.', ''); // PayPal format - no comma
+
+        // store billing data in array
+        $billing_data = [
+            'billing_firstname' => $customer_firstname,
+            'billing_lastname'  => $customer_lastname,
+            'billing_company'   => $customer_company,
+            'billing_phone'     => $customer_phone,
+            'billing_address'   => $customer_address,
+            'billing_address2'  => $customer_address2,
+            'billing_city'      => $customer_city,
+            'billing_state'     => $customer_state,
+            'billing_zip'       => $customer_zip
+        ];
+
+        // store shipping data in array
+        $shipping_data = [
+            'shipping_firstname'    => $customer_firstname,
+            'shipping_lastname'     => $customer_lastname,
+            'shipping_company'      => $customer_company,
+            'shipping_phone'        => $customer_phone,
+            'shipping_address'      => $customer_address,
+            'shipping_address2'     => $customer_address2,
+            'shipping_city'         => $customer_city,
+            'shipping_state'        => $customer_state,
+            'shipping_zip'          => $customer_zip,
+            'shipping_instructions' => $shipping_instructions,
+            'shipping_method'       => $shipping_method,
+            'shipping_cost'         => number_format($shipping_cost, 2, '.', ''),
+            'tracking_number'       => $trackingNumber
+        ];
+
+        // test
+        // echo '<h4>Billing data array</h4>';
+        // echo '<pre>';
+        // print_r($billing_data);
+        // echo '</pre>';
+        // echo '<h4>Shipping data array</h4>';
+        // echo '<pre>';
+        // print_r($shipping_data);
+        // echo '</pre>';
+        // exit();
+
+        // Cart is empty
+        if ( $_SESSION['cart_count'] < 1)
+        {
+            {
+                // display empty cart
+                header("Location: /cart/view/shopping-cart");
+                exit();
+            }
+        }
+        // Cart has content
+        else
+        {
+            // get customer data based on type
+            switch($customer_type) {
+                CASE 'customer':
+                    $customer = Customer::getCustomer($customer_id);
+                    break;
+                CASE 'guest':
+                    $customer = Guest::getGuest($customer_id);
+                    break;
+                CASE 'caller':
+                    $customer = Caller::getCaller($customer_id);
+                    break;
+                CASE 'dealer':
+                    $customer = Dealer::getDealer($customer_id);
+                    break;
+                CASE 'partner':
+                    $customer = Partner::getPartner($customer_id);
+                    break;
+            }
+
+            // test - customer data
+            // echo '<h4>Customer: </h4>';
+            // echo '<pre>';
+            // print_r($customer);
+            // echo '</pre>';
+            // exit();
+
+            // test - display cart &
+            // echo '<h4>Cart: </h4>';
+            // echo '<pre>';
+            // print_r($_SESSION['cart']);
+            // echo '</pre>';
+            // echo '<h4>Shipping data: </h4>';
+            // echo '<pre>';
+            // print_r($shipping_data);
+            // echo '</pre>';
+            // echo '<h4>Cart metadata: </h4>';
+            // echo '<pre>';
+            // print_r($cartMetaData);
+            // echo '</pre>';
+            // exit();
+
+            // set variable as numeric
+            $grandTotal = 0;
+
+            // store grand total in variable for view
+            $grandTotal = $cartMetaData['pretax_total'] + $shipping_cost + $_SESSION['sales_tax_data']['otax_total'];
+
+            // render order summary view
+            View::renderTemplate('Cart/order-summary-admin.html', [
+                'page_title'      => 'Checkout: replacement parts',
+                'cartContent'     => $_SESSION['cart'],
+                'cartMetaData'    => $cartMetaData,
+                'billing_data'    => $billing_data,
+                'shipping_data'   => $shipping_data,
+                'salesTax'        => $_SESSION['sales_tax_data']['otax_total'],
+                'grandTotal'      => $grandTotal,
+                'adminCheckout'   => 'true',
+                'customer'        => $customer
+            ]);
+        }
+    }
+
+
+
+
+    /**
      * processes payment using PayPal Pro & executes other functions
      *
      * @return boolean   The success view or error
      */
     public function processPayment()
     {
+        // retrieve query string data
+        $customer_id   = (isset($_REQUEST['id']) ? filter_var($_REQUEST['id'], FILTER_SANITIZE_NUMBER_INT) : '');
+        $customer_type = (isset($_REQUEST['type']) ? filter_var($_REQUEST['type'], FILTER_SANITIZE_STRING) : '');
+
         // test
+        // echo '<h4>REQUEST DATA:</h4>';
         // echo '<pre>';
         // print_r($_REQUEST);
         // echo '</pre>';
+        // echo $customer_id . '<br>';
+        // echo $customer_type . '<br>';
         // exit();
 
-    // - - logged in user but not internal phone order payment processing - - //
+        // - - - - -  customer, dealer, partner payment processing - - - - - //
 
-        if(isset($_SESSION['user_id']) && $_SESSION['access_level'] != 4)
+        if(isset($_SESSION['user_id']) && ($_SESSION['userType'] == 'customer' || $_SESSION['userType'] == 'dealer' || $_SESSION['userType'] == 'partner')) // not telephone order
         {
             // process the payment through PayPal API
             $ppResults = Paypal::processPayment($_SESSION['user_id']);
@@ -1893,7 +2359,6 @@ class Cart extends \Core\Controller
             // print_r($ppResults);
             // echo '</pre>';
             // exit();
-
 
             // = = = =  Customer checking out  = = = = = = =  //
             if (isset($_SESSION['userType']) && $_SESSION['userType'] == 'customer')
@@ -2532,7 +2997,7 @@ class Cart extends \Core\Controller
                     }
                 }
             }
-        } // end access_level != 4 (internal telephone order user)
+        }
 
         // - - - - - - - caller payment processing - - - - - - - - //
         else if (isset($_SESSION['user_id']) && $_SESSION['access_level'] == 4)
@@ -2708,6 +3173,269 @@ class Cart extends \Core\Controller
                                 'purchase'   => 'true'
                             ]);
                             exit();
+                        }
+                        else
+                        {
+                            // error view
+                            View::renderTemplate('Error/index.html', [
+                                'errorMessage' => 'An error occurred unsetting session variables.'
+                            ]);
+                            exit();
+                        }
+                    }
+                    // mail failure
+                    else
+                    {
+                        // unset session variables
+                        $x = $this->unsetSessionVariables();
+
+                        // success
+                        if ($x == true)
+                        {
+                            // error view
+                            View::renderTemplate('Error/index.html', [
+                                'errorMessage'   => 'Your order was placed but an error occurred
+                                    sending your confirmation email.'
+                            ]);
+                            exit();
+                        }
+                        // unset session variables function failure
+                        else
+                        {
+                            // error view
+                            View::renderTemplate('Error/index.html', [
+                                'errorMessage' => 'An error occurred unsetting session variables.'
+                            ]);
+                            exit();
+                        }
+                    }
+                }
+            }
+        }
+
+        //  - - - - admin/supervisor payment processing - - - - - //
+        else if (isset($_SESSION['userType']) && ($_SESSION['userType'] == 'supervisor' || $_SESSION['userType'] == 'admin'))
+        {
+            // echo "Connected!"; exit();
+
+            // process the payment & store response in variable
+            $ppResults = Paypal::processPaymentAdmin();
+
+            // test
+            // echo '<h4>Admin checkout PayPal response:</h4>';
+            // echo '<pre>';
+            // print_r($ppResults);
+            // echo '</pre>';
+            // exit();
+
+            // get customer data based on type
+            switch($customer_type) {
+                CASE 'customer':
+                    $customer = Customer::getCustomer($customer_id);
+                    break;
+                CASE 'guest':
+                    $customer = Guest::getGuest($customer_id);
+                    break;
+                CASE 'caller':
+                    $customer = Caller::getCaller($customer_id);
+                    break;
+                CASE 'dealer':
+                    $customer = Dealer::getDealer($customer_id);
+                    break;
+                CASE 'partner':
+                    $customer = Partner::getPartner($customer_id);
+                    break;
+            }
+
+            // test
+            // echo 'Customer data:<br>';
+            // echo '<pre>';
+            // print_r($customer);
+            // echo '</pre>';
+            // exit();
+
+            // failure -- order amt exceeds total purchase price ceiling (set in PayPal Manager)
+            if (isset($ppResults['response']) && $ppResults['response']['RESULT'] == 126)
+            {
+
+                // mail office and client re: alert
+                $result = Mail::fpsAlertDealer($dealer);
+
+                // mail successful
+                if ($result)
+                {
+                    // unset SESSION variables
+                    $x = $this->unsetSessionVariables();
+                    // success
+                    if ($x == true)
+                    {
+                        // store purchase total in variable
+                        $amount = $results['response']['AMT'];
+
+                        View::renderTemplate('Error/index.html', [
+                            'errorMessage' => 'Purchase amount of
+                            $' . number_format($amount, 2) . ' exceeds
+                            website purchase limit. You should receive an automated
+                            email shortly with instructions how to complete your
+                            purchase.'
+                        ]);
+                    }
+                    // failure to unset SESSION variables
+                    else
+                    {
+                        View::renderTemplate('Error/index.html', [
+                            'errorMessage' => 'An error occurred unsetting session
+                                variables.'
+                        ]);
+                        exit();
+                    }
+                }
+                // mail failure
+                else
+                {
+                    View::renderTemplate('Error/index.html', [
+                        'errorMessage' => 'Error occurred sending email.'
+                    ]);
+                    exit();
+                }
+            }
+
+            // - - successful purchase under "purchase price ceiling limit" setting in PayPal Manager - - //
+            else
+            {
+                // get cart meta data
+                $cartMetaData = $this->getCartMetaData();
+
+                // test
+                // echo '<h4>Payflow results:</h4>';
+                // echo '<pre>';
+                // print_r($ppResults);
+                // echo '</pre>';
+                // echo '<h4>Shopping cart:</h4>';
+                // echo '<pre>';
+                // print_r($_SESSION['cart']);
+                // echo '</pre>';
+                // echo '<h4>Cart meta data:</h4>';
+                // echo '<pre>';
+                // print_r($cartMetaData);
+                // echo '</pre>';
+                // exit();
+
+                // store number of items in SESSION array
+                $_SESSION['numberOfItems'] = $cartMetaData['numberOfItems'];
+
+
+                // store PayPal transaction ID & total amount of order
+                $pnref = $ppResults['response']['PNREF'];
+                $totalAmt = $ppResults['response']['AMT'];
+
+                // store cart in variable
+                $cart = $_SESSION['cart'];
+
+                // store sales tax data in variable
+                $sales_tax_data = $_SESSION['sales_tax_data'];
+
+                // - - - store order in `orders` table - - - - - - - - //
+                $order = new Order();
+
+                $results = $order->insertOrder($buyer = $customer_type, $customer, $cart, $totalAmt, $pnref, $sales_tax_data);
+
+                // test
+                // echo '<h4>Results []:</h4>';
+                // echo '<pre>';
+                // print_r($results);
+                // echo '</pre>';
+                // exit();
+
+                // db insertion failure
+                if ($results['result'] == false)
+                {
+                    echo 'Error inserting order data into database';
+                    // send email to webmaster
+                    exit();
+                }
+                // db insertion success
+                else
+                {
+                    // store shipping method in variable
+                    $shipping_method = $_SESSION['shipping_method'];
+
+                    // store $updatedCart array in variable
+                    $updatedCart = $results['updatedCart'];
+
+                    // test
+                    // echo '<<h4>Updated cart:</h4>';
+                    // echo '<pre>';
+                    // print_r($updatedCart);
+                    // echo '</pre>';
+                    // exit();
+                    // test - display table
+                    // echo '<table>';
+                    // echo '<tr>';
+                    // echo '<th>qty</th>';
+                    // echo '<th>Product</th>';
+                    // echo '<th>Unit price</th>';
+                    // echo '<th>Extended price</th>';
+                    // echo '</tr>';
+                    //     foreach ($updatedCart as    $value)
+                    //     {
+                    //         echo '<tr>';
+                    //         echo '<td>'. $value['qty'] . '</td>';
+                    //         echo '<td>'. $value['name'] . '</td>';
+                    //         echo '<td>'. $value['unitprice'] . '</td>';
+                    //         echo '<td>'. $value['itemtotal'] . '</td>';
+                    //         echo '</tr>';
+                    //     }
+                    // echo '</table>';
+                    // exit();
+
+                    if ($customer_type == 'customer' || $customer_type == 'guest' || $customer_type == 'caller')
+                    {
+                        // send email
+                        $mailResult = Mail::sendOrderData($customer, $updatedCart, $shipping_method, $ppResults);
+                    }
+                    else if ($customer_type == 'dealer' || $customer_type == 'partner')
+                    {
+                        // send email
+                        $mailResult = Mail::sendOrderDataToDealer($customer, $updatedCart, $shipping_method, $ppResults);
+                    }
+
+                    // mail success
+                    if ($mailResult)
+                    {
+                        // test - display SESSION array
+                        // echo '<h4>SESSION variable:</h4>';
+                        // echo '<pre>';
+                        // print_r($_SESSION);
+                        // echo '</pre>';
+                        // exit();
+
+                        // unset session variables
+                        $x = $this->unsetSessionVariables();
+
+                        // success
+                        if ($x == true)
+                        {
+                            if ($customer_type == 'customer' || $customer_type == 'guest' || $customer_type == 'caller')
+                            {
+                                // success view
+                                View::renderTemplate('Success/index.html', [
+                                    'first_name' => $customer->billing_firstname,
+                                    'last_name'  => $customer->billing_lastname,
+                                    'purchase'   => 'true'
+                                ]);
+                                exit();
+                            }
+                            else if ($customer_type == 'dealer' || $customer_type == 'partner')
+                            {
+                                // success view
+                                View::renderTemplate('Success/index.html', [
+                                    'first_name' => $customer->first_name,
+                                    'last_name'  => $customer->last_name,
+                                    'purchase'   => 'true'
+                                ]);
+                                exit();
+                            }
                         }
                         else
                         {
@@ -2966,6 +3694,228 @@ class Cart extends \Core\Controller
         }
     }
 
+
+
+
+    /**
+     * processes order where total due = $0, so it bypasses PayPal
+     *
+     * @return boolean   The success view or error
+     */
+    public function processNoPayment()
+    {
+        // retrieve query string data
+        $customer_id   = (isset($_REQUEST['id']) ? filter_var($_REQUEST['id'], FILTER_SANITIZE_NUMBER_INT) : '');
+        $customer_type = (isset($_REQUEST['type']) ? filter_var($_REQUEST['type'], FILTER_SANITIZE_STRING) : '');
+
+        // test
+        // echo '<h4>REQUEST DATA:</h4>';
+        // echo '<pre>';
+        // print_r($_REQUEST);
+        // echo '</pre>';
+        // echo $customer_id . '<br>';
+        // echo $customer_type . '<br>';
+        // exit();
+
+        // get customer data based on type
+        switch($customer_type) {
+            CASE 'customer':
+                $customer = Customer::getCustomer($customer_id);
+                break;
+            CASE 'guest':
+                $customer = Guest::getGuest($customer_id);
+                break;
+            CASE 'caller':
+                $customer = Caller::getCaller($customer_id);
+                break;
+            CASE 'dealer':
+                $customer = Dealer::getDealer($customer_id);
+                break;
+            CASE 'partner':
+                $customer = Partner::getPartner($customer_id);
+                break;
+        }
+
+        // test
+        // echo 'Customer data:<br>';
+        // echo '<pre>';
+        // print_r($customer);
+        // echo '</pre>';
+        // exit();
+
+        // get cart meta data
+        $cartMetaData = $this->getCartMetaData();
+
+        // test
+        // echo '<h4>Shopping cart:</h4>';
+        // echo '<pre>';
+        // print_r($_SESSION['cart']);
+        // echo '</pre>';
+        // echo '<h4>Cart meta data:</h4>';
+        // echo '<pre>';
+        // print_r($cartMetaData);
+        // echo '</pre>';
+        // exit();
+
+        // store number of items in SESSION array
+        $_SESSION['numberOfItems'] = $cartMetaData['numberOfItems'];
+
+        // store Unix timestamp as transaction ID & total amount of order
+        $pnref = time();
+        $totalAmt = 0;
+
+        // build array
+        $ppResults = ['response' => [
+            'PNREF' => $pnref,
+            'AMT'   => 0
+        ]];
+
+        // store cart in variable
+        $cart = $_SESSION['cart'];
+
+        // store sales tax data in variable
+        $sales_tax_data = $_SESSION['sales_tax_data'];
+
+        // - - - store order in `orders` table - - - - - - - - //
+        $order = new Order();
+
+        // insert order into `orders` table
+        $results = $order->insertOrder($buyer = $customer_type, $customer, $cart, $totalAmt, $pnref, $sales_tax_data);
+
+        // test
+        // echo '<h4>Results []:</h4>';
+        // echo '<pre>';
+        // print_r($results);
+        // echo '</pre>';
+        // exit();
+
+        // db insertion failure
+        if ($results['result'] == false)
+        {
+            echo 'Error inserting order data into database';
+            // send email to webmaster
+            exit();
+        }
+        // db insertion success
+        else
+        {
+            // store shipping method in variable
+            $shipping_method = $_SESSION['shipping_method'];
+
+            // store $updatedCart array in variable
+            $updatedCart = $results['updatedCart'];
+
+            // test
+            // echo '<<h4>Updated cart:</h4>';
+            // echo '<pre>';
+            // print_r($updatedCart);
+            // echo '</pre>';
+            // exit();
+            // test - display table
+            // echo '<table>';
+            // echo '<tr>';
+            // echo '<th>qty</th>';
+            // echo '<th>Product</th>';
+            // echo '<th>Unit price</th>';
+            // echo '<th>Extended price</th>';
+            // echo '</tr>';
+            //     foreach ($updatedCart as    $value)
+            //     {
+            //         echo '<tr>';
+            //         echo '<td>'. $value['qty'] . '</td>';
+            //         echo '<td>'. $value['name'] . '</td>';
+            //         echo '<td>'. $value['unitprice'] . '</td>';
+            //         echo '<td>'. $value['itemtotal'] . '</td>';
+            //         echo '</tr>';
+            //     }
+            // echo '</table>';
+            // exit();
+
+            if ($customer_type == 'customer' || $customer_type == 'guest' || $customer_type == 'caller')
+            {
+                // send email
+                $mailResult = Mail::sendOrderData($customer, $updatedCart, $shipping_method, $ppResults);
+            }
+            else if ($customer_type == 'dealer' || $customer_type == 'partner')
+            {
+                // send email
+                $mailResult = Mail::sendOrderDataToDealer($customer, $updatedCart, $shipping_method, $ppResults);
+            }
+
+            // mail success
+            if ($mailResult)
+            {
+                // test - display SESSION array
+                // echo '<h4>SESSION variable:</h4>';
+                // echo '<pre>';
+                // print_r($_SESSION);
+                // echo '</pre>';
+                // exit();
+
+                // unset session variables
+                $x = $this->unsetSessionVariables();
+
+                // success
+                if ($x == true)
+                {
+                    if ($customer_type == 'customer' || $customer_type == 'guest' || $customer_type == 'caller')
+                    {
+                        // success view
+                        View::renderTemplate('Success/index.html', [
+                            'first_name' => $customer->billing_firstname,
+                            'last_name'  => $customer->billing_lastname,
+                            'purchase'   => 'true'
+                        ]);
+                        exit();
+                    }
+                    else if ($customer_type == 'dealer' || $customer_type == 'partner')
+                    {
+                        // success view
+                        View::renderTemplate('Success/index.html', [
+                            'first_name' => $customer->first_name,
+                            'last_name'  => $customer->last_name,
+                            'purchase'   => 'true'
+                        ]);
+                        exit();
+                    }
+                }
+                else
+                {
+                    // error view
+                    View::renderTemplate('Error/index.html', [
+                        'errorMessage' => 'An error occurred unsetting session variables.'
+                    ]);
+                    exit();
+                }
+            }
+            // mail failure
+            else
+            {
+                // unset session variables
+                $x = $this->unsetSessionVariables();
+
+                // success
+                if ($x == true)
+                {
+                    // error view
+                    View::renderTemplate('Error/index.html', [
+                        'errorMessage'   => 'Your order was placed but an error occurred
+                            sending your confirmation email.'
+                    ]);
+                    exit();
+                }
+                // unset session variables function failure
+                else
+                {
+                    // error view
+                    View::renderTemplate('Error/index.html', [
+                        'errorMessage' => 'An error occurred unsetting session variables.'
+                    ]);
+                    exit();
+                }
+            }
+        }
+    }
 
 
 

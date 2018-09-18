@@ -404,6 +404,121 @@ class Holster extends \Core\Model
 
 
     /**
+     * retrieves holsters for new order (replace tab)
+     *
+     * @param  Int  $id     The laser ID
+     *
+     * @return Object  The holsters
+     */
+    public static function getHolstersForAdmin()
+    {
+        try
+        {
+            $db = static::getDB();
+
+            // retrieve data
+            $sql = "SELECT DISTINCT
+                        holster_brands.name as holsterMfr,
+                        holsters.id as holster_id, holsters.mvc_model, holsters.name,
+                        holsters.model as holster_model, holsters.waist, holsters.hand,
+                        holsters.price, holsters.price_dealer, holster_images.thumb,
+                        holsters.upc,
+                        pistol_brands.name as pistolMfr,
+                        trseries.id as trseries_id, trseries.model as trseries_model,
+                        GROUP_CONCAT(DISTINCT pistols.model SEPARATOR ', ') as pistol_models
+                    FROM holsters
+                    INNER JOIN holster_trseries_pistol_lookup
+                        ON holster_trseries_pistol_lookup.holsterid = holsters.id
+                    INNER JOIN trseries
+                        ON trseries.id = holster_trseries_pistol_lookup.trseriesid
+                    INNER JOIN pistols
+                        ON pistols.id = holster_trseries_pistol_lookup.pistolid
+                    INNER JOIN holster_brands
+                        ON holster_brands.id = holsters.holster_brand_id
+                    INNER JOIN pistol_brands
+                        ON pistol_brands.id = pistols.brand_id
+                    INNER JOIN holster_images
+                        ON holster_images.holster_id = holsters.id
+                    GROUP BY holsters.id
+                    ORDER BY trseries.id";
+            $stmt = $db->prepare($sql);
+            $stmt->execute();
+            $holsters = $stmt->fetchAll(PDO::FETCH_OBJ);
+
+            // return to Controller
+            return $holsters;
+        }
+        catch(PDOException $e)
+        {
+            echo $e->getMessage();
+            exit();
+        }
+    }
+
+
+
+
+    /**
+     * retrieves holster field items for Admin shopping cart by ID
+     *
+     * @param  string  $laserId     The laser model ID
+     *
+     * @return object               The laser record
+     */
+    public static function getHolsterDetailsForAdminCart($id)
+    {
+        try
+        {
+            // establish db connection
+            $db = static::getDB();
+
+            $sql = "SELECT DISTINCT
+                        holster_brands.name as holsterMfr,
+                        holsters.id, holsters.mvc_model, holsters.name,
+                        holsters.model as holster_model, holsters.waist, holsters.hand,
+                        holsters.price, holsters.price_dealer, holsters.price_partner,
+                        holsters.upc,
+                        holster_images.thumb,
+                        pistol_brands.name as pistolMfr,
+                        trseries.id as trseries_id, trseries.model as trseries_model,
+                        GROUP_CONCAT(DISTINCT pistols.model SEPARATOR ', ') as pistol_models
+                    FROM holsters
+                    INNER JOIN holster_trseries_pistol_lookup
+                        ON holster_trseries_pistol_lookup.holsterid = holsters.id
+                    INNER JOIN trseries
+                        ON trseries.id = holster_trseries_pistol_lookup.trseriesid
+                    INNER JOIN pistols
+                        ON pistols.id = holster_trseries_pistol_lookup.pistolid
+                    INNER JOIN holster_brands
+                        ON holster_brands.id = holsters.holster_brand_id
+                    INNER JOIN pistol_brands
+                        ON pistol_brands.id = pistols.brand_id
+                    INNER JOIN holster_images
+                        ON holster_images.holster_id = holsters.id
+                    WHERE holsters.id = :id
+                    GROUP BY holsters.id
+                    ORDER BY pistol_brands.name";
+            $stmt = $db->prepare($sql);
+            $parameters = [
+                ':id' => $id
+            ];
+            $stmt->execute($parameters);
+
+            $item = $stmt->fetch(PDO::FETCH_OBJ);
+
+            return $item;
+        }
+        catch(PDOException $e)
+        {
+            echo $e->getMessage();
+            exit();
+        }
+    }
+
+
+
+
+    /**
      * retrieves holster by TR Series ID
      *
      * @param  Int  $id     The laser ID
@@ -421,7 +536,7 @@ class Holster extends \Core\Model
                         holster_brands.name as holsterMfr,
                         holsters.id as holster_id, holsters.mvc_model, holsters.name,
                         holsters.model as holster_model, holsters.waist, holsters.hand,
-                        holsters.price, holsters.price_dealer,holster_images.thumb,
+                        holsters.price, holsters.price_dealer, holster_images.thumb,
                         holsters.upc,
                         pistol_brands.name as pistolMfr,
                         trseries.id as trseries_id, trseries.model as trseries_model,

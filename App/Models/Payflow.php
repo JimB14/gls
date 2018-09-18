@@ -48,7 +48,7 @@ class Payflow extends \Core\Model
     private $user;
     private $partner;
     private $password;
-    private $errors   = '';
+    private $errors = '';
     private $currencies_allowed = ['USD'];
     private $results = [];
     private $shipping_method;
@@ -186,7 +186,7 @@ class Payflow extends \Core\Model
         // validate AMT
         if (!is_numeric($parameters['AMT']) || $parameters['AMT'] <= 0)
         {
-            $this->set_errors('Amount is not valid');
+            $this->set_errors('Jim, Amount is not valid');
             return;
         }
         // validate currency (if currency drop-down used)

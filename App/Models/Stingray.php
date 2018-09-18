@@ -357,6 +357,57 @@ class Stingray extends \Core\Model
 
 
 
+    /**
+     * retrieves laser field items for Admin shopping cart by ID
+     *
+     * @param  string  $laserId     The laser model ID
+     *
+     * @return object               The laser record
+     */
+    public static function getStingrayDetailsForAdminCart($id)
+    {
+        try
+        {
+            // establish db connection
+            $db = static::getDB();
+
+            $sql = "SELECT DISTINCT
+                        stingrays.id, stingrays.name, stingrays.series, stingrays.model,
+                        stingrays.beam, stingrays.price, stingrays.price_dealer,
+                        stingrays.price_partner, stingrays.weight, stingray_images.thumb,
+                        pistol_brands.name AS pistolMfr,
+                    	GROUP_CONCAT(DISTINCT pistols.model ORDER BY pistols.model ASC SEPARATOR ', ') AS pistol_models
+                    FROM pistols
+                    INNER JOIN pistol_stingray_lookup
+                    	ON pistol_stingray_lookup.pistolid = pistols.id
+                    INNER JOIN stingrays
+                    	ON stingrays.id = pistol_stingray_lookup.stingrayid
+                    INNER JOIN stingray_images
+                    	ON stingray_images.stingray_id = stingrays.id
+                    INNER JOIN pistol_brands
+                    	ON pistol_brands.id = pistols.brand_id
+                    WHERE stingrays.id = :id
+                    GROUP BY stingrays.model";
+            $stmt = $db->prepare($sql);
+            $parameters = [
+                ':id' => $id
+            ];
+            $stmt->execute($parameters);
+
+            $item = $stmt->fetch(PDO::FETCH_OBJ);
+
+            // return to Controller
+            return $item;
+        }
+        catch(PDOException $e)
+        {
+            echo $e->getMessage();
+            exit();
+        }
+    }
+
+
+
 
     public static function getLasersForWarrantyRegistrationDropdown()
     {
