@@ -463,6 +463,105 @@ class Cart extends \Core\Controller
 
 
 
+    /**
+     * Updates item quantity in $_SESSION['cart']
+     *
+     * @return View
+     */
+    public function updateUnitPrice()
+    {
+        // retrieve form data
+        $newPrice = (isset($_REQUEST['new_price']) ? filter_var($_REQUEST['new_price']) : ''); 
+        $id = (isset($_REQUEST['id']) ? filter_var($_REQUEST['id'], FILTER_SANITIZE_NUMBER_INT) : '');
+
+        $customerid = (isset($_REQUEST['customer_id']) ? filter_var($_REQUEST['customer_id'], FILTER_SANITIZE_NUMBER_INT) : ''); 
+        $type = (isset($_REQUEST['customer_type']) ? filter_var($_REQUEST['customer_type'], FILTER_SANITIZE_STRING) : '');  
+
+        // format price
+        $newPrice = number_format($newPrice, 2, '.', '');
+
+        // get customer data by type
+        switch($type)
+        {
+            CASE 'customer':
+                $customer = Customer::getCustomer($customerid);
+                break;
+            CASE 'caller':
+                $customer = Caller::getCaller($customerid);
+                break;
+            CASE 'guest':
+                $customer = Guest::getGuest($customerid);
+                break;
+            CASE 'dealer':
+                $customer = Dealer::getDealer($customerid);
+                break;
+            CASE 'partner':
+                $customer = Partner::getPartner($customerid);
+                break;
+        }
+
+        // test
+        // echo '<h4>Price change:</h4>';
+        // echo '<pre>';
+        // print_r($_REQUEST);
+        // echo '</pre>';
+        // echo $newPrice . '<br>';
+        // echo $customerid . '<br>';
+        // echo $type . '<br>';
+        // exit();
+
+        // test
+        // echo '<h4>SESSION cart array before change.</h4>';
+        // echo '<pre>';
+        // print_r($_SESSION['cart']);
+        // echo '</pre>';
+        // exit();
+
+        // loop thru array to find item being updated
+        foreach($_SESSION['cart'] as $item)
+        {
+            if ($item['id'] == $id) {
+                // update price
+                $_SESSION['cart'][$id]['price'] = $newPrice;
+            }
+        }
+
+        // test
+        // echo '<h4>Updated SESSION cart array.</h4>';
+        // echo '<pre>';
+        // print_r($_SESSION['cart']);
+        // echo '</pre>';
+        // exit();
+
+        // get updated cart meta data
+        $cartMetaData = $this->getCartMetaData();
+
+        // test
+        // echo '<h4>Updated cart meta data: </h4>';
+        // echo '<pre>';
+        // print_r($cartMetaData);
+        // echo '</pre>';
+        // exit();
+
+        // test
+        // echo '<h4>Customer: </h4>';
+        // echo '<pre>';
+        // print_r($customer);
+        // echo '</pre>';
+        // exit();
+
+        // render view
+        View::renderTemplate('Cart/index.html', [
+            'cartContent'  => $_SESSION['cart'],
+            'cartMetaData' => $cartMetaData,
+            'page_title'   => 'Shopping Cart',
+            'checkout_btn' => 'show',
+            'customer'     => $customer
+        ]);
+    }
+
+
+
 
     /**
      * Deletes item from $_SESSION['cart']
@@ -1965,6 +2064,11 @@ class Cart extends \Core\Controller
                 break;
         }
 
+        // echo '<pre>';
+        // print_r($customer);
+        // echo '</pre>';
+        // exit();
+
         // cart has content
         if ($_SESSION['cart'])
         {
@@ -2198,14 +2302,45 @@ class Cart extends \Core\Controller
         // store pretax total in SESSION array
         $_SESSION['pretaxTotal'] = $cartMetaData['pretax_total'];
 
-        // - - - - - Resellers are exempt from sales tax - - - - - - //
 
-        // store sales tax data for order in SESSION array
-        $_SESSION['sales_tax_data']['otax_total']      = number_format(0, 2, '.', ''); // PayPal format - no comma
-        $_SESSION['sales_tax_data']['otax_state']      = number_format(0, 2, '.', ''); // PayPal format - no comma
-        $_SESSION['sales_tax_data']['otax_state_amt']  = number_format(0, 2, '.', ''); // PayPal format - no comma
-        $_SESSION['sales_tax_data']['otax_county']     = number_format(0, 2, '.', ''); // PayPal format - no comma
-        $_SESSION['sales_tax_data']['otax_county_amt'] = number_format(0, 2, '.', ''); // PayPal format - no comma
+       // calculate FL sales tax for shipments to Florida
+       if ($customer_state or $shipping_state == 'FL')
+       {
+           // get sales tax rate
+           $salesTaxArr = $this->getFloridaSalesTaxByZipcode($customer_zip);
+
+            // test
+            // echo '<pre>';
+            // print_r($salesTaxArr);
+            // echo '</pre>';
+            // exit();
+
+           // store sales tax details in variables
+           $sales_tax_state = strtolower($salesTaxArr['state']);
+           $sales_tax_county = strtolower(str_replace('.', '', $salesTaxArr['county']));
+           $sales_tax_county_rate = number_format($salesTaxArr['county_rate'], 3);
+           $sales_tax_state_rate = number_format($salesTaxArr['state_rate'], 2);
+           $sales_tax_combined_rate = number_format($salesTaxArr['combined_rate'], 3);
+
+           // store sales tax data for order in SESSION array
+           $_SESSION['sales_tax_data']['otax_total'] = number_format($cartMetaData['pretax_total'] * $sales_tax_combined_rate, 2, '.', ''); // PayPal format - no comma
+           $_SESSION['sales_tax_data']['otax_state'] = $sales_tax_state;
+           $_SESSION['sales_tax_data']['otax_state_amt'] = number_format($cartMetaData['pretax_total'] * $sales_tax_state_rate, 2);
+           $_SESSION['sales_tax_data']['otax_county'] = $sales_tax_county;
+           $_SESSION['sales_tax_data']['otax_county_amt']  = number_format($cartMetaData['pretax_total'] * $sales_tax_county_rate, 2);
+
+            // test
+            // echo '<h4>SESSION["sales_tax_data"]:</h4>';
+            // echo '<pre>';
+            // print_r($_SESSION['sales_tax_data']);
+            // echo '</pre>';
+            // exit();
+       }
+       // non-florida ship to
+       else
+       {
+           $_SESSION['sales_tax_data']['otax_total'] = number_format(0, 2, '.', ''); // PayPal format - no comma
+       }
 
         // store billing data in array
         $billing_data = [
@@ -4159,7 +4294,7 @@ class Cart extends \Core\Controller
         // loop thru cart & store sums for subtotal & tax
         foreach($_SESSION['cart'] as $item)
         {
-            $this->subtotal += $item['price'] * $item['quantity'];
+            $this->subtotal += number_format($item['price'], 2, '.', '') * $item['quantity'];
             $this->numberOfItems += $item['quantity'];
             // $this->total_weight += $item['quantity'] * $item['weight'];
         }

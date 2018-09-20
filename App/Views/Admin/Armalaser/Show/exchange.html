@@ -1,0 +1,255 @@
+{% extends 'base-admin.html' %}
+
+{% block title %}
+  Exchange | ArmaLaser
+{% endblock %}
+
+{% block css %}
+<style>
+.isInvisible {
+    display: none;
+}
+.isVisible {
+    display: block;
+}
+
+#replace-expand,
+#replace-collapse,
+#replace-show-hide-parts,
+#replace-show-hide-trseries,
+#replace-show-hide-gtoflx,
+#replace-show-hide-stingrays,
+#replace-show-hide-holsters,
+#replace-show-hide-accessories,
+#replace-show-hide-batteries,
+#replace-show-hide-toolkits,
+#replace-show-hide-flx {
+    cursor: pointer;
+}
+#replace-parts-div,
+#replace-trseries-div,
+#replace-gtoflx-div,
+#replace-stingrays-div,
+#replace-holsters-div,
+#replace-accessories-div,
+#replace-batteries-div,
+#replace-toolkits-div,
+#replace-flx-div {
+    display: none;
+}
+</style>
+{% endblock %}
+
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div id="dashboard-toggle" class="col-md-10" style="margin-top:-20px;margin-left:254px;">
+
+            <div class="col-md-4">
+                {% if pagetitle %}
+                    <h2 style="margin-left:-15px;">
+                      {{ pagetitle }}
+                    </h2>
+                {% endif %}
+                <p style="margin-left: -10px;">
+                        <span class="glyphicon glyphicon-menu-left"></span>
+                        <a onclick="window.history.go(-1)" style="cursor:pointer;">
+                            Go Back
+                        </a>
+                    </p>
+            </div>
+
+            <div class="col-md-12">
+                    {% include 'Admin/Armalaser/Show/order-details-section.html' %}
+            </div>    
+            
+            <!-- = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = -->
+
+            {% include 'Admin/Armalaser/Show/products-section.html' %}
+
+            <p style="margin-top: 30px;" class="pull-left"><a href="#top" title="Go to top of page"><i style="margin-top: -15px; color:#ccc;" class="fa fa-arrow-circle-o-up fa-3x" aria-hidden="true"></i></a></p>
+            <p style="margin-top: 30px;" class="pull-right"><a href="#top" title="Go to top of page"><i style="margin-top: -15px; color:#ccc;" class="fa fa-arrow-circle-o-up fa-3x" aria-hidden="true"></i></a></p>
+
+
+      </div><!--  // col-md-10  -->
+    </div><!--  // .row  -->
+</div><!-- // .container-fluid  -->
+{% endblock %}
+
+
+{% block bottomjs %}
+<script>
+// Parts
+document.getElementById('replace-show-hide-parts').addEventListener('click', function() {
+    var targetDiv = document.getElementById('replace-parts-div');
+    var toggle = document.getElementById('replace-show-hide-parts');
+    if (targetDiv.style.display === 'block') {
+        targetDiv.style.display = 'none';
+        toggle.textContent = 'Show Parts';
+    } else {
+        targetDiv.style.display = 'block';
+        toggle.textContent = 'Hide Parts';
+    }
+});
+// TR Series
+document.getElementById('replace-show-hide-trseries').addEventListener('click', function() {
+    var targetDiv = document.getElementById('replace-trseries-div');
+    var toggle = document.getElementById('replace-show-hide-trseries');
+    if (targetDiv.style.display === 'block') {
+        targetDiv.style.display = 'none';
+        toggle.textContent = 'Show TR Series Lasers';
+    } else {
+        targetDiv.style.display = 'block';
+        toggle.textContent = 'Hide TR Series Lasers';
+    }
+});
+// GTO/FLX
+document.getElementById('replace-show-hide-gtoflx').addEventListener('click', function() {
+    var targetDiv = document.getElementById('replace-gtoflx-div');
+    var toggle = document.getElementById('replace-show-hide-gtoflx');
+    if (targetDiv.style.display === 'block') {
+        targetDiv.style.display = 'none';
+        toggle.textContent = 'Show GTO/FLX Lasers';
+    } else {
+        targetDiv.style.display = 'block';
+        toggle.textContent = 'Hide GTO/FLX Lasers';
+    }
+});
+// Stingrays
+document.getElementById('replace-show-hide-stingrays').addEventListener('click', function() {
+    var targetDiv = document.getElementById('replace-stingrays-div');
+    var toggle = document.getElementById('replace-show-hide-stingrays');
+    if (targetDiv.style.display === 'block') {
+        targetDiv.style.display = 'none';
+        toggle.textContent = 'Show Stingray Lasers';
+    } else {
+        targetDiv.style.display = 'block';
+        toggle.textContent = 'Hide Stingray Lasers';
+    }
+});
+// Holsters
+document.getElementById('replace-show-hide-holsters').addEventListener('click', function() {
+    var targetDiv = document.getElementById('replace-holsters-div');
+    var toggle = document.getElementById('replace-show-hide-holsters');
+    if (targetDiv.style.display === 'block') {
+        targetDiv.style.display = 'none';
+        toggle.textContent = 'Show Holsters';
+    } else {
+        targetDiv.style.display = 'block';
+        toggle.textContent = 'Hide Holsters';
+    }
+});
+// Accessories
+document.getElementById('replace-show-hide-accessories').addEventListener('click', function() {
+    var targetDiv = document.getElementById('replace-accessories-div');
+    var toggle = document.getElementById('replace-show-hide-accessories');
+    if (targetDiv.style.display === 'block') {
+        targetDiv.style.display = 'none';
+        toggle.textContent = 'Show Accessories';
+    } else {
+        targetDiv.style.display = 'block';
+        toggle.textContent = 'Hide Accessories';
+    }
+});
+// Batteries
+document.getElementById('replace-show-hide-batteries').addEventListener('click', function() {
+    var targetDiv = document.getElementById('replace-batteries-div');
+    var toggle = document.getElementById('replace-show-hide-batteries');
+    if (targetDiv.style.display === 'block') {
+        targetDiv.style.display = 'none';
+        toggle.textContent = 'Show Batteries';
+    } else {
+        targetDiv.style.display = 'block';
+        toggle.textContent = 'Hide Batteries';
+    }
+});
+// Toolkits
+document.getElementById('replace-show-hide-toolkits').addEventListener('click', function() {
+    var targetDiv = document.getElementById('replace-toolkits-div');
+    var toggle = document.getElementById('replace-show-hide-toolkits');
+    if (targetDiv.style.display === 'block') {
+        targetDiv.style.display = 'none';
+        toggle.textContent = 'Show Toolkits';
+    } else {
+        targetDiv.style.display = 'block';
+        toggle.textContent = 'Hide Toolkits';
+    }
+});
+// FLX
+document.getElementById('replace-show-hide-flx').addEventListener('click', function() {
+    var targetDiv = document.getElementById('replace-flx-div');
+    var toggle = document.getElementById('replace-show-hide-flx');
+    if (targetDiv.style.display === 'block') {
+        targetDiv.style.display = 'none';
+        toggle.textContent = 'Show FLX';
+    } else {
+        targetDiv.style.display = 'block';
+        toggle.textContent = 'Hide FLX';
+    }
+});
+
+// expand collapse
+document.getElementById('replace-expand').addEventListener('click', expand);
+document.getElementById('replace-collapse').addEventListener('click', collapse);
+
+function expand() {
+    document.getElementById('replace-parts-div').style.display = 'block';
+    document.getElementById('replace-trseries-div').style.display = 'block';
+    document.getElementById('replace-gtoflx-div').style.display = 'block';
+    document.getElementById('replace-stingrays-div').style.display = 'block';
+    document.getElementById('replace-holsters-div').style.display = 'block';
+    document.getElementById('replace-accessories-div').style.display = 'block';
+    document.getElementById('replace-batteries-div').style.display = 'block';
+    document.getElementById('replace-toolkits-div').style.display = 'block';
+    document.getElementById('replace-flx-div').style.display = 'block';
+
+    document.getElementById('replace-show-hide-parts').textContent = 'Hide Parts';
+    document.getElementById('replace-show-hide-trseries').textContent = 'Hide TR Series lasers';
+    document.getElementById('replace-show-hide-gtoflx').textContent = 'Hide GTO/FLX lasers';
+    document.getElementById('replace-show-hide-stingrays').textContent = 'Hide Stingray';
+    document.getElementById('replace-show-hide-holsters').textContent = 'Hide Holsters';
+    document.getElementById('replace-show-hide-accessories').textContent = 'Hide Accessories';
+    document.getElementById('replace-show-hide-batteries').textContent = 'Hide Batteries';
+    document.getElementById('replace-show-hide-toolkits').textContent = 'Hide Toolkits';
+    document.getElementById('replace-show-hide-flx').textContent = 'Hide FLX';
+
+    document.getElementById('replace-expand').classList.add('isInvisible');
+    document.getElementById('replace-collapse').classList.remove('isInvisible');
+
+}
+function collapse() {
+    document.getElementById('replace-parts-div').style.display = 'none';
+    document.getElementById('replace-trseries-div').style.display = 'none';
+    document.getElementById('replace-gtoflx-div').style.display = 'none';
+    document.getElementById('replace-stingrays-div').style.display = 'none';
+    document.getElementById('replace-holsters-div').style.display = 'none';
+    document.getElementById('replace-accessories-div').style.display = 'none';
+    document.getElementById('replace-batteries-div').style.display = 'none';
+    document.getElementById('replace-toolkits-div').style.display = 'none';
+    document.getElementById('replace-flx-div').style.display = 'none';
+
+    document.getElementById('replace-show-hide-parts').textContent = 'Show Parts';
+    document.getElementById('replace-show-hide-trseries').textContent = 'Show TR Series lasers';
+    document.getElementById('replace-show-hide-gtoflx').textContent = 'Show GTO/FLX lasers';
+    document.getElementById('replace-show-hide-stingrays').textContent = 'Show Stingray';
+    document.getElementById('replace-show-hide-holsters').textContent = 'Show Holsters';
+    document.getElementById('replace-show-hide-accessories').textContent = 'Show Accessories';
+    document.getElementById('replace-show-hide-batteries').textContent = 'Show Batteries';
+    document.getElementById('replace-show-hide-toolkits').textContent = 'Show Toolkits';
+    document.getElementById('replace-show-hide-flx').textContent = 'Show FLX';
+
+    document.getElementById('replace-expand').classList.remove('isInvisible');
+    document.getElementById('replace-collapse').classList.add('isInvisible');
+}
+</script>
+
+<script>
+$(document).ready(function(){
+
+
+
+});
+</script>
+
+{% endblock %}

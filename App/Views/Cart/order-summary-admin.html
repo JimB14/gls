@@ -104,7 +104,11 @@ Order summary
                     <tr>
                         <td>Company:</td>
                         <td class="text-right">
-                            {{ billing_data.billing_company|raw }}
+                            {% if billing_data.billing_company %}
+                                {{ billing_data.billing_company|raw }}
+                            {% else %}
+                                -
+                            {% endif %}
                         </td>
                     </tr>
                 <tr>
@@ -156,7 +160,11 @@ Order summary
                 <tr>
                     <td>Company:</td>
                     <td class="text-right">
-                        {{ shipping_data.shipping_company|raw }}
+                            {% if shipping_data.shipping_company %}
+                            {{ shipping_data.shipping_company|raw }}
+                        {% else %}
+                            -
+                        {% endif %}
                     </td>
                 </tr>
                 <tr>

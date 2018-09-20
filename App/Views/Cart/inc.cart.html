@@ -5,7 +5,11 @@
         </div>
     </div>
 {% else %}
-    <h1>{{ page_title }}</h1>
+    {% if session.user and session.access_level != 4 and (session.userType == 'admin' or session.userType == 'supervisor') %}
+        <h1>Shopping Cart - Admin only</h1>
+    {% else %}
+        <h1>{{ page_title }}</h1>
+    {% endif %}    
 
     <table class="table table-responsive table-bordered table-condensed"  style="background-color:#fff; border-bottom: 0px solid;">
 
@@ -131,7 +135,29 @@
 
                         {% endif %}
                     </td>
-                    <td>{{ item.price|number_format(2) }}</td>
+
+                    <!-- admin or supervisor only -->
+                    {% if session.user and session.access_level != 4 and (session.userType == 'admin' or session.userType == 'supervisor') %}
+                        <td style="width:12em;">
+                            <form action="/cart/update-unit-price" method="post">
+                                <div class="input-group">
+                                    <input type="number" class="form-control" name="new_price" id="new_price" min="0.00" step=".01" value="{{ item.price }}">
+                                    <span class="input-group-btn">
+                                        <input type="hidden" name="id" value="{{ item.id }}">
+                                        <input type="hidden" name="customer_id" value="{{ customer.id }}">
+                                        <input type="hidden" name="customer_type" value="{{ customer.type }}">
+                                        <button class="btn btn-default"  type="submit">
+                                            Update
+                                        </button>
+                                    </span>
+                                </div>
+                            </form>
+                        </td>
+
+                    <!-- default  -->
+                    {% else %}
+                        <td>{{ item.price|number_format(2) }}</td>
+                    {% endif %}    
                     <td style="width:10em;">
                         <form method="post" action="/cart/update-quantity">
                             <div class="input-group">
@@ -174,7 +200,8 @@
                         <!-- admin or supervisor checking out  -->
                         {% if session.userType == 'admin' or session.userType == 'supervisor' %}
                             <td colspan="3" style="border-left: 0px solid; border-right: 0px solid; border-bottom: 0px solid;">
-                                <a href="/cart/checkout-admin?id={{ customer.id }}&type={{ customer.type }}" style="vertical-align:middle" class="btn btn-primary btn-block">Checkout</a>
+                                <a href="/cart/checkout-admin?id={{ customer.id }}&type={{ customer.type }}" style="vertical-align:middle" 
+                                class="btn btn-primary btn-block">Checkout</a>
                             </td>
                         {% else %}
                             <!--  normal user checkout  -->

@@ -39,7 +39,13 @@ Shopping Cart
 <script>
 $(document).ready(function(){
 
-  $("#ffl-form").validate();
+
+$("#new_price").blur(function(){
+    console.log('focus moved');
+    console.log(parseFloat($(this).val()).toFixed(2));
+
+    parseFloat($(this).val()).toFixed(2);
+});
 
 });
 </script>

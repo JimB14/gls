@@ -603,7 +603,7 @@ $(document).ready(function(){
     // = = = = =  end Logged In Partner section  = = = = = = = = = = = = = //
 
 
-   // = = = = =  Logged In Admin section  = = = = = = = = = = = = = //
+   // = = = = =  Logged In Admin & Supervisor section  = = = = = = = = = = = = = //
 
     // tr series section
     $("#base-admin-tr-series-title").click(function(){
@@ -987,13 +987,36 @@ $(document).ready(function(){
             $("#base-admin-orders-returned").css({'background-color':'#fff'});
     }
     if (
+        url === 'http://localhost/admin/orders/get-orders?status=refunded'
+        || url === 'http://gunlaser.store/admin/orders/get-orders?status=refunded') {
+
+            $("#base-admin-orders-section").show();
+            $("#base-admin-orders-refunded").css({'background-color':'#fff'});
+    }
+    if (
         url.substring(0,39) === 'http://localhost/admin/orders/get-order'
         || url.substring(0,44) === 'http://gunlaser.store/admin/orders/get-order') {
 
             $("#base-admin-orders-section").show();
     }
+    if (
+        url.substring(0,39) === 'http://localhost/admin/orders/new-order'
+        || url.substring(0,44) === 'http://gunlaser.store/admin/orders/new-order') {
 
+            $("#base-admin-orders-section").show();
+    }
+    if (
+        url.substring(0,38) === 'http://localhost/admin/orders/exchange'
+        || url.substring(0,43) === 'http://gunlaser.store/admin/orders/exchange') {
 
+            $("#base-admin-orders-section").show();
+    }
+    if (
+        url.substring(0,40) === 'http://localhost/admin/orders/assign-rma'
+        || url.substring(0,45) === 'http://gunlaser.store/admin/orders/assign-rma') {
+
+            $("#base-admin-orders-section").show();
+    }
 
 
     // labels section
@@ -1039,7 +1062,7 @@ $(document).ready(function(){
             $("#base-admin-warranty-search").css({'background-color':'#fff'});
     }
 
-    // = = = = =  end Logged In Customers section  = = = = = = = = = = = = = //
+    // = = = = =  end Logged In Admin section  = = = = = = = = = = = = = //
 
 
  });

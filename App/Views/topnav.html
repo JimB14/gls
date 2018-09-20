@@ -90,11 +90,19 @@
 
                     {% if session.cart_count > 0 %}
                         <li style="color:#fff;" class="{% if activemenu == '' %}active{% endif %}">
-                            <a href="/cart/view/shopping-cart" style="color:#fff;" title="View Cart">
-                                CART
-                                <i style="color:#fff;" class="fa fa-shopping-cart fa-lg"></i>
-                                {% if session.cart_count > 0 %}<span class="badge"  style="background-color:#fff;"><span style="color:#000;">{{ session.cart_count }}</span></span>{% endif %}
-                            </a>
+                            {% if session.user and session.access_level != 4 and (session.userType == 'admin' or session.userType == 'supervisor') %}
+                                <!-- <a href="/cart/view/admin-shopping-cart?id={{ customer.id }}&type={{ customer.type }}" style="color:#fff;" title="View Cart">
+                                    CART
+                                    <i style="color:#fff;" class="fa fa-shopping-cart fa-lg"></i>
+                                    {% if session.cart_count > 0 %}<span class="badge"  style="background-color:#fff;"><span style="color:#000;">{{ session.cart_count }}</span></span>{% endif %}
+                                </a> -->
+                            {% else %}
+                                <a href="/cart/view/shopping-cart" style="color:#fff;" title="View Cart">
+                                    CART
+                                    <i style="color:#fff;" class="fa fa-shopping-cart fa-lg"></i>
+                                    {% if session.cart_count > 0 %}<span class="badge"  style="background-color:#fff;"><span style="color:#000;">{{ session.cart_count }}</span></span>{% endif %}
+                                </a>
+                            {% endif %}    
                         </li>
                     {% endif %}
 

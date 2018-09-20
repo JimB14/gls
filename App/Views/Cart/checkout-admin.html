@@ -71,7 +71,8 @@ Checkout page for ArmaLaser
                         </label>
                         <div class="col-sm-10">
                             <input type="text" class="form-control required" name="customer_firstname"
-                            id="customer_firstname" placeholder="First name" value="{{ customer.billing_firstname }}">
+                            id="customer_firstname" placeholder="First name" 
+                            value="{% if customer.billing_firstname %}{{ customer.billing_firstname }}{% else %}{{customer.first_name }}{% endif %}">
                             <span class="glyphicon form-control-feedback" id="customer_firstname1"></span>
                         </div>
                     </div>
@@ -80,19 +81,21 @@ Checkout page for ArmaLaser
                             Last name
                         </label>
                         <div class="col-sm-10">
-                            <input type="text" class="form-control required" name="customer_billing_lastname"
-                            id="customer_lastname" placeholder="Last name" value="{{ customer.billing_lastname }}">
+                            <input type="text" class="form-control required" name="customer_lastname"
+                            id="customer_lastname" placeholder="Last name" 
+                            value="{% if customer.billing_lastname %}{{ customer.billing_lastname }}{% else %}{{customer.last_name }}{% endif %}">
                             <span class="glyphicon form-control-feedback" id="customer_lastname1"></span>
                         </div>
                     </div>
-                    {% if customer.billing_company %}
+                    {% if customer.billing_company or customer.company %}
                         <div class="form-group has-feedback">
                             <label for="customer_company" class="col-sm-2 control-label">
                                 Company
                             </label>
                             <div class="col-sm-10">
                                 <input type="text" class="form-control required" name="customer_company"
-                                id="customer_company" placeholder="Company" value="{{ customer.billing_company|raw }}">
+                                id="customer_company" placeholder="Company" 
+                                value="{% if customer.billing_company %}{{ customer.billing_company|raw }}{% else %}{{ customer.company|raw }}{% endif %}">
                                 <span class="glyphicon form-control-feedback" id="customer_company1"></span>
                             </div>
                         </div>
@@ -103,7 +106,8 @@ Checkout page for ArmaLaser
                         </label>
                         <div class="col-sm-10">
                             <input type="text" class="form-control required" name="customer_phone"
-                            id="customer_phone" placeholder="Telephone" value="{{ customer.billing_phone }}">
+                            id="customer_phone" placeholder="Telephone" 
+                            value="{% if customer.billing_phone %}{{ customer.billing_phone }}{% else %}{{ customer.telephone }}{% endif %}">
                             <span class="glyphicon form-control-feedback" id="customer_phone1"></span>
                         </div>
                     </div>
@@ -113,7 +117,8 @@ Checkout page for ArmaLaser
                         </label>
                         <div class="col-sm-10">
                             <input type="text" class="form-control required" name="customer_address"
-                            id="customer_address" placeholder="Address" value="{{ customer.billing_address }}">
+                            id="customer_address" placeholder="Address" 
+                            value="{% if customer.billing_address %}{{ customer.billing_address }}{% else %}{{ customer.address }}{% endif %}">
                             <span class="glyphicon form-control-feedback" id="customer_address1"></span>
                         </div>
                     </div>
@@ -123,7 +128,8 @@ Checkout page for ArmaLaser
                         </label>
                         <div class="col-sm-10">
                             <input type="text" class="form-control required" name="customer_city"
-                            id="customer_city" placeholder="City" value="{{ customer.billing_city }}">
+                            id="customer_city" placeholder="City" 
+                            value="{% if customer.billing_city %}{{ customer.billing_city }}{% else %}{{ customer.city }}{% endif %}">
                             <span class="glyphicon form-control-feedback" id="customer_city1"></span>
                         </div>
                     </div>
@@ -133,10 +139,12 @@ Checkout page for ArmaLaser
                         </label>
                         <div class="col-sm-10">
                             <select class="form-control required" name="customer_state" id="customer_state">
-                                <option value="{{ customer.billing_state }}">{% if customer.billing_state %}{{ customer.billing_state }}{% else %}Select{% endif %}</option>
-                                {% for state in states %}
+                                <option value="{% if customer.billing_state %}{{ customer.billing_state }}{% else %}{{ customer.state }}{% endif %}">
+                                        {% if customer.billing_state %}{{ customer.billing_state }}{% else %}{{ customer.state }}{% endif %}
+                                </option>
+                                <!-- {# for state in states #}
                                     <option value="{{ state.abbrev }}">{{ state.abbrev }}</option>
-                                {% endfor %}
+                                {# endfor #} -->
                             </select>
                             <span class="glyphicon form-control-feedback" id="customer_state1"></span>
                         </div>
@@ -147,7 +155,8 @@ Checkout page for ArmaLaser
                         </label>
                         <div class="col-sm-10">
                             <input type="text" class="form-control required" name="customer_zip"
-                            id="customer_zip" placeholder="Zip" value="{{ customer.billing_zip }}">
+                            id="customer_zip" placeholder="Zip" 
+                            value="{% if customer.billing_zip %}{{ customer.billing_zip }}{% else %}{{ customer.zip }}{% endif %}">
                             <span class="glyphicon form-control-feedback" id="customer_zip1"></span>
                         </div>
                     </div>

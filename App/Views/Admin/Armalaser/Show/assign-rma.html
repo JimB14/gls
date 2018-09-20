@@ -1,0 +1,110 @@
+{% extends 'base-admin.html' %}
+
+{% block title %}
+  Assign RMA | ArmaLaser
+{% endblock %}
+
+{% block css %}
+<style>
+    input[type="text"] {
+        background-color: #fff!important;
+    }
+</style>
+{% endblock %}
+
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div id="dashboard-toggle" class="col-md-6" style="margin-top:-20px;margin-left:254px;">
+    
+            <div class="col-md-12" style="margin-bottom: 10px;">
+                {% if pagetitle %}
+                    <h2 style="margin-left:-15px;">
+                        {{ pagetitle }}
+                    </h2>
+                {% endif %}
+                <p style="margin-left: -10px;">
+                    <span class="glyphicon glyphicon-menu-left"></span>
+                    <a onclick="window.history.go(-1)" style="cursor:pointer;">
+                        Go Back
+                    </a>
+                </p>
+            </div>
+
+            <form method="post" action="/admin/orders/set-rma" class="form-horizontal">
+
+                <div class="form-group">
+                    <label for="return_orderid" class="control-label col-sm-1">
+                        Order ID
+                    </label>
+                    <div class="col-sm-9">
+                        <input type="text" class="form-control" name="return_orderid"
+                        value="{{ order_content.orderid}}" readonly>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="return_itemid" class="control-label col-sm-1">
+                        Item ID
+                    </label>
+                    <div class="col-sm-9">
+                        <input type="text" class="form-control" name="return_itemid"
+                            value="{{ order_content.itemid}}" readonly>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="name" class="control-label col-sm-1">
+                        Name
+                    </label>
+                    <div class="col-sm-9">
+                        <input type="text" class="form-control" name="name"
+                            value="{{ order_content.name }}" readonly>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="rma_number" class="control-label col-sm-1">
+                        RMA
+                    </label>
+                    <div class="col-sm-9">
+                        <input type="text" class="form-control" name="rma_number"
+                        value="{{ order_content.rma_number }}">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="return_reason" class="control-label col-sm-1">
+                        Reason
+                    </label>
+                    <div class="col-sm-9">
+                        <select class="form-control" name="return_reason">
+                            <option value="">
+                                {% if order_content.rma_reason and order_content.rma_reason != '' %}{{ order_content.rma_reason }}{% else %}Select{% endif %}
+                            </option>
+                            {% for reason in reasons %}
+                                <option value="{{ reason|lower }}">{{ reason|capitalize }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-sm-offset-1 col-sm-11">
+                        <button  id="submit-listing-btn" type="submit" class="btn btn-primary btn-lg">
+                            Submit
+                        </button>
+                    </div>
+                </div>
+
+            </form>  
+
+        </div><!--  // col-md-12  -->
+    </div><!--  // .row  -->
+</div><!-- // .container-fluid  -->
+{% endblock %}
+
+
+{% block bottomjs %}
+{% endblock %}

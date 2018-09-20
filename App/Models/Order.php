@@ -149,6 +149,10 @@ class Order extends \Core\Model
                 $WHERE = 'WHERE orders.order_status = "returned"';
                 $LIMIT = '';
                 break;
+            CASE 'refunded':
+                $WHERE = 'WHERE orders.refund_issued = 1';
+                $LIMIT = '';
+                break;
             default :
                 $WHERE = 'error';
         }
@@ -412,7 +416,6 @@ class Order extends \Core\Model
     {
         try
         {
-            // establish db connection
             $db = static::getDB();
 
             $sql = "SELECT orders.customerid, orders.guestid, orders.callerid,
@@ -483,6 +486,44 @@ class Order extends \Core\Model
             $order_content = $stmt->fetchAll(PDO::FETCH_OBJ);
 
             // return to Controller
+            return $order_content;
+        }
+        catch(PDOException $e)
+        {
+            echo $e->getMessage();
+            exit();
+        }
+    }
+
+
+
+    /**
+     * Retrieves item record by the order ID and item ID
+     *
+     * @param  Integer  $order     The order ID
+     * @param  Integer  $itemid    The item ID
+     * @return Object              The item record
+     */
+    public static function getOrderItem($orderid, $itemid)
+    {
+        try
+        {
+            // establish db connection
+            $db = static::getDB();
+
+            $sql = "SELECT * FROM orders_content
+                    WHERE orderid = :orderid 
+                    AND itemid = :itemid";
+            $stmt  = $db->prepare($sql);
+            $parameters = [
+                ':orderid' => $orderid,
+                ':itemid'  => $itemid
+            ];
+            $stmt->execute($parameters);
+
+            // fetch single row
+            $order_content = $stmt->fetch(PDO::FETCH_OBJ);
+
             return $order_content;
         }
         catch(PDOException $e)
@@ -707,6 +748,76 @@ class Order extends \Core\Model
         catch(PDOException $e)
         {
             echo $e->getMessage();
+            exit();
+        }
+    }
+
+
+
+    /**
+     * Store RMA data in orders_content table
+     */
+    public static function setRMA() 
+    {
+        // form data
+        $id = ( isset($_REQUEST['return_orderid'])  ) ? filter_var($_REQUEST['return_orderid'], FILTER_SANITIZE_NUMBER_INT): '';
+        $itemid = ( isset($_REQUEST['return_itemid'])  ) ? filter_var($_REQUEST['return_itemid'], FILTER_SANITIZE_NUMBER_INT): '';
+        $rma = ( isset($_REQUEST['rma_number'])  ) ? $_REQUEST['rma_number'] : '';
+        $reason = ( isset($_REQUEST['return_reason'])  ) ? $_REQUEST['return_reason'] : '';
+
+        // test
+        echo '<pre>';
+        print_r($_REQUEST);
+        echo '</pre>';
+        echo '$id: ' . $id . '<br>';
+        echo '$itemid: ' . $itemid . '<br>';
+        echo '$rma: ' . $rma . '<br>';
+        echo '$reason: ' . $reason;
+        exit();
+
+        // validate
+        if ($rma == '' || $reason == '')
+        {
+            $this->setError("<h3>Data missing: RMA and Reason are required fields.</h3>");
+            exit();
+        }
+
+        // update record in `orders_content`
+        $result = Order_content::updateAddRma($id, $itemid, $rma, $reason);
+
+        // success
+        if ($result)
+        {
+            // update order status in `orders`
+            $result = Order::updateAsReturnPending($id);
+
+            // success
+            if ($result)
+            {
+                // success message
+                echo '<script>';
+                echo 'alert("RMA added. Order status updated to return-pending")';
+                echo '</script>';
+
+                //  set URL for current window
+                echo '<script>';
+                echo 'window.location.href="/admin/orders/get-order?id='.$id.'"';
+                echo '</script>';
+                exit();
+            }
+            // failure
+            else
+            {
+                echo "Error updating order status in orders table.";
+                // email webmaster
+                exit();
+            }
+        }
+        // failure
+        else
+        {
+            echo "Error updating Orders content table.";
+            // email webmaster
             exit();
         }
     }

@@ -27,8 +27,17 @@ use \App\Models\Battery;
 use \App\Models\Toolkit;
 use \App\Models\Flx;
 
+/**
+ * Orders Class
+ */
 class Orders extends \Core\Controller
 {
+    
+    // properties
+    private $errors = '';
+
+    
+    
     /**
      * Before filter
      *
@@ -90,6 +99,9 @@ class Orders extends \Core\Controller
                 break;
             CASE 'returned' :
                 $title = 'Returned orders';
+                break;
+            CASE 'refunded' :
+                $title = 'Refunds';
                 break;
             default :
                $title = 'error';
@@ -1216,17 +1228,67 @@ class Orders extends \Core\Controller
 
 
     /**
-     * Updates record in orders_content with RMA data
+     * Displays view with form to assign RMA
      *
      * @return Boolean
      */
     public function assignRmaAction()
     {
+        // retrieve query string
+        $orderid = ( isset($_REQUEST['orderid'])  ) ? filter_var($_REQUEST['orderid'], FILTER_SANITIZE_NUMBER_INT): '';
+        $itemid  = ( isset($_REQUEST['itemid'])  ) ? filter_var($_REQUEST['itemid'], FILTER_SANITIZE_STRING): '';
+        
+        $order_content = Order::getOrderItem($orderid, $itemid);
+
+        // echo '<pre>';
+        // print_r($order_content);
+        // echo '</pre>';
+
+        // build RMA return reasons array
+        $reasons = [
+            "battery",
+            "beam",
+            "broken housing",
+            "changed mind",
+            "dimming",
+            "flex damage",
+            "installation",
+            "intermitten",
+            "lost part(s)",
+            "missing part(s)",
+            "no activation",
+            "over adjusted",
+            "programming",
+            "shutting off",
+            "stripped screws",
+            "switch",
+            "windage-elevation loose",
+            "windage-elevation stuck",
+            "wrong model"
+        ];
+
+        View::renderTemplate('Admin/Armalaser/Show/assign-rma.html', [
+            'pagetitle'     => 'Assign RMA',
+            'order_content' => $order_content,
+            'reasons'       => $reasons
+        ]);
+    }
+
+
+
+
+    /**
+     * Updates record in orders_content with RMA data
+     *
+     * @return Boolean
+     */
+    public function setRmaAction()
+    {
         // form data
         $id = ( isset($_REQUEST['return_orderid'])  ) ? filter_var($_REQUEST['return_orderid'], FILTER_SANITIZE_NUMBER_INT): '';
         $itemid = ( isset($_REQUEST['return_itemid'])  ) ? filter_var($_REQUEST['return_itemid'], FILTER_SANITIZE_NUMBER_INT): '';
-        $rma = ( isset($_REQUEST['rma_numbers'][0])  ) ? $_REQUEST['rma_numbers'][0] : '';
-        $reason = ( isset($_REQUEST['return_reasons'][0])  ) ? $_REQUEST['return_reasons'][0] : '';
+        $rma = ( isset($_REQUEST['rma_number'])  ) ? $_REQUEST['rma_number'] : '';
+        $reason = ( isset($_REQUEST['return_reason']) ) ? $_REQUEST['return_reason'] : '';
 
         // test
         // echo '<pre>';
@@ -1241,12 +1303,12 @@ class Orders extends \Core\Controller
         // validate
         if ($rma == '' || $reason == '')
         {
-            echo "<h3>Data missing: RMA and Reason are required fields.</h3>";
+            $this-setError("<h3>Data missing: RMA and Reason are required fields.</h3>");
             exit();
         }
 
         // update record in `orders_content`
-        $result = Order_content::updateAddRma($id, $itemid, $rma, $reason);
+        $result = Order_content::updateAddRma($id, $itemid, $rma, $reason, 'return-pending');
 
         // success
         if ($result)
@@ -1383,6 +1445,39 @@ class Orders extends \Core\Controller
         else
         {
             echo "Error updating Orders table. Contact IT Dept.";
+            exit();
+        }
+    }
+
+
+
+    /**
+     * Updates the status by ID
+     */
+    public function updateItemStatus() 
+    {
+        // retrieve query string value
+        $orderid = ( isset($_REQUEST['orderid'])  ) ? filter_var($_REQUEST['orderid'], FILTER_SANITIZE_STRING): '';
+        $itemid  = ( isset($_REQUEST['itemid'])  ) ? filter_var($_REQUEST['itemid'], FILTER_SANITIZE_STRING): '';
+
+        $result = Order_content::updateItemStatus($orderid, $itemid, 'returned');
+
+        if ($result) 
+        {
+            // success message
+            echo '<script>';
+            echo 'alert("Item status changed!")';
+            echo '</script>';
+
+            //  set URL for current window
+            echo '<script>';
+            echo 'window.location.href="/admin/orders/get-order?id='.$orderid.'"';
+            echo '</script>';
+            exit();
+        }
+        else 
+        {
+            $this->setError('Error updating item status.');
             exit();
         }
     }
@@ -1723,7 +1818,7 @@ class Orders extends \Core\Controller
         // echo '</pre>';
         // exit();
 
-        View::renderTemplate('Admin/Armalaser/Show/replacement-parts-products.html', [
+        View::renderTemplate('Admin/Armalaser/Show/replace.html', [
             'pagetitle'   => 'Create order for replacement parts',
             'type'        => $type,
             'customer'    => $customer,
@@ -1736,6 +1831,214 @@ class Orders extends \Core\Controller
             'batteries'   => $batteries,
             'toolkits'    => $toolkits,
             'flxs'        => $flxs
+        ]);
+    }
+
+
+
+
+    /**
+     * returns view with form for parts and products to create new order
+     *
+     * @return View
+     */
+    public function exchangeAction()
+    {
+        // echo "Connected!"; exit();
+
+        // get order ID from query string
+        $id       = ( isset($_REQUEST['id'])  ) ? filter_var($_REQUEST['id'], FILTER_SANITIZE_NUMBER_INT): ''; // customer ID
+        $type     = ( isset($_REQUEST['type'])  ) ? filter_var($_REQUEST['type'], FILTER_SANITIZE_STRING): ''; // buyer type
+        $order_id = ( isset($_REQUEST['orderid'])  ) ? filter_var($_REQUEST['orderid'], FILTER_SANITIZE_NUMBER_INT): ''; // order ID
+        
+        // get customer
+        if ($type == 'customer')
+        {
+            $customer = Customer::getCustomer($id);
+
+            // test
+            // echo '<h4>Customer:</h4>';
+            // echo '<pre>';
+            // print_r($customer);
+            // echo '</pre>';
+            // exit();
+        }
+        // get guest
+        if ($type == 'guest')
+        {
+            $customer = Guest::getGuest($id);
+
+            // test
+            // echo '<h4>Customer:</h4>';
+            // echo '<pre>';
+            // print_r($customer);
+            // echo '</pre>';
+            // exit();
+        }
+        // get caller
+        else if ($type == 'caller')
+        {
+            $customer = Caller::getCaller($id);
+
+            // test
+            // echo '<h4>Customer:</h4>';
+            // echo '<pre>';
+            // print_r($customer);
+            // echo '</pre>';
+            // exit();
+        }
+        // get dealer
+        else if ($type == 'dealer')
+        {
+            $customer = Dealer::getDealer($id);
+
+            // test
+            // echo '<h4>Dealer:</h4>';
+            // echo '<pre>';
+            // print_r($customer);
+            // echo '</pre>';
+            // exit();
+        }
+        // get partner
+        else if ($type == 'partner')
+        {
+            $customer = Partner::getPartner($id);
+
+            // test
+            // echo '<h4>Partner:</h4>';
+            // echo '<pre>';
+            // print_r($customer);
+            // echo '</pre>';
+            // exit();
+        }
+
+         // get order 
+         $order = Order::getOrderData($order_id);
+
+            // test
+            // echo '<h4>Order content:</h4>';
+            // echo '<pre>';
+            // print_r($order);
+            // echo '</pre>';
+            // exit();
+
+        // get order content 
+        $order_content = Order::getOrderContent($order_id);
+
+            // test
+            // echo '<h4>Order content:</h4>';
+            // echo '<pre>';
+            // print_r($order_content);
+            // echo '</pre>';
+            // exit();
+        
+    
+        // get parts
+        $parts = Part::getParts();
+
+            // test
+            // echo '<h4>Parts:</h4>';
+            // echo '<pre>';
+            // print_r($parts);
+            // echo '</pre>';
+            // exit();
+
+        // get trseries
+        $trseries = Trseries::getLasers();
+
+            // test
+            // echo '<h4>TR Series:</h4>';
+            // echo '<pre>';
+            // print_r($trseries);
+            // echo '</pre>';
+            // exit();
+
+        // get gto/flx
+        $gtoflx = Gtoflx::getLasersForAdmin();
+
+            // test
+            // echo '<h4>GTO/FLX:</h4>';
+            // echo '<pre>';
+            // print_r($gtoflx);
+            // echo '</pre>';
+            // exit();
+
+        // get stingray
+        $stingrays = Stingray::getLasers();
+
+            // test
+            // echo '<h4>Stingray:</h4>';
+            // echo '<pre>';
+            // print_r($stingrays);
+            // echo '</pre>';
+            // exit();
+
+        // get holsters
+        $holsters = Holster::getHolstersForAdmin();
+
+            // test
+            // echo '<h4>Holsters:</h4>';
+            // echo '<pre>';
+            // print_r($holsters);
+            // echo '</pre>';
+            // exit();
+
+        // get accessories
+        $accessories = Accessory::getAccessories();
+
+            // test
+            // echo '<h4>Accessories:</h4>';
+            // echo '<pre>';
+            // print_r($accessories);
+            // echo '</pre>';
+            // exit();
+
+        // get batteries
+        $batteries = Battery::getBatteries();
+
+            // test
+            // echo '<h4>Batteries:</h4>';
+            // echo '<pre>';
+            // print_r($batteries);
+            // echo '</pre>';
+            // exit();
+
+        // get toolkits
+        $toolkits = Toolkit::getToolkits();
+
+            // test
+            // echo '<h4>Toolkits:</h4>';
+            // echo '<pre>';
+            // print_r($toolkits);
+            // echo '</pre>';
+            // exit();
+
+        // get flx
+        $flxs = Flx::getAllFlxForAdmin();
+
+            // test
+            // echo '<h4>FLX:</h4>';
+            // echo '<pre>';
+            // print_r($flxs);
+            // echo '</pre>';
+            // exit();
+        
+        // display view
+        View::renderTemplate('Admin/Armalaser/Show/exchange.html', [
+            'pagetitle'     => 'Exchange order',
+            'type'          => $type,
+            'customer'      => $customer,
+            'parts'         => $parts,
+            'trseries'      => $trseries,
+            'gtoflx'        => $gtoflx,
+            'stingrays'     => $stingrays,
+            'holsters'      => $holsters,
+            'accessories'   => $accessories,
+            'batteries'     => $batteries,
+            'toolkits'      => $toolkits,
+            'flxs'          => $flxs,
+            'order'         => $order,
+            'order_content' => $order_content
         ]);
     }
 
@@ -1804,6 +2107,13 @@ class Orders extends \Core\Controller
         {
             return $lasers;
         }
+    }
+
+
+
+    function setError($string) 
+    {
+        echo $string;
     }
 
 

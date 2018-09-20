@@ -21,9 +21,10 @@ class Order_content extends \Core\Model
      * @param  Array   $rma         The RMA number
      * @param  Decimal $itemid      The item ID
      * @param  String  $reason      Reason for return
+     * @param  String  $status      New status
      * @return Boolean
      */
-    public static function updateAddRma($id, $itemid, $rma, $reason)
+    public static function updateAddRma($id, $itemid, $rma, $reason, $status)
     {
 
         try
@@ -34,7 +35,8 @@ class Order_content extends \Core\Model
             $sql = "UPDATE orders_content SET
                     rma_number    = :rma_number,
                     rma_reason    = :rma_reason,
-                    rma_date      = :rma_date
+                    rma_date      = :rma_date,
+                    status        = :status
                     WHERE orderid = :orderid
                     AND itemid    = :itemid";
             $stmt  = $db->prepare($sql);
@@ -43,16 +45,45 @@ class Order_content extends \Core\Model
                 ':rma_reason' => $reason,
                 ':rma_date'   => date("Y-m-d"),
                 ':orderid'    => $id,
-                ':itemid'     => $itemid
+                ':itemid'     => $itemid,
+                ':status'     => $status
             ];
             $result = $stmt->execute($parameters);
 
-            // return to Controller
             return $result;
         }
         catch(PDOException $e)
         {
             echo $e->getMessage();
+            exit();
+        }
+    }
+
+
+
+    public static function updateItemStatus($orderid, $itemid, $status) 
+    {
+        try
+        {
+            $db = static::getDB();
+
+            $sql = "UPDATE orders_content SET
+                    status = :status
+                    WHERE orderid = :orderid
+                    AND itemid = :itemid"; 
+            $stmt = $db->prepare($sql);
+            $parameters = [
+                ':status'  => $status,
+                ':orderid' => $orderid,
+                ':itemid'  => $itemid
+            ]; 
+            $result = $stmt->execute($parameters);
+
+            return $result;
+        }
+        catch(PDOException $e)
+        {
+            echo 'Error updating item status: ' . $e->getMessage();
             exit();
         }
     }
