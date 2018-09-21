@@ -4,3 +4,4 @@ twig-templates/
 vendor/
 Config.php
 Mail.php
+public/assets/shipping_labels/
