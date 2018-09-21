@@ -199,7 +199,7 @@ class Postage extends \Core\Controller
         // get user
         $user = User::getUserById($user_id);
 
-        // get timestamp
+        // get UNIX timestamp
         $timestamp = time();
 
         // create instance of Endicia Class / model
@@ -211,6 +211,7 @@ class Postage extends \Core\Controller
         // cancel label / refund successful
         if ($result)
         {
+            
             // update record in `orders`
             $result = Order::updateAfterLabelVoid($order_id);
 
@@ -383,5 +384,12 @@ class Postage extends \Core\Controller
             exit();
         }
     }
+
+
+
+
+    // = = = = = = = = = class functions  = = = = = = = = = = = //
+
+
 
 }

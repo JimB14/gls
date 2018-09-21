@@ -60,6 +60,10 @@
 .tab-pane {
     padding-bottom: 60px !important;
 }
+input[type="text"],
+input[type="number"] {
+    background-color: #fff !important;
+} 
 </style>
 {% endblock %}
 
@@ -573,7 +577,7 @@
                                 </label>
                                 <div class="col-md-3">
                                     <input type="text" class="form-control" name="tracking_number"
-                                        value="{{ order.trackingcode }}" required>
+                                        value="{{ order.trackingcode }}" required readonly>
                                 </div>
                             </div>
                             <div class="form-group">
@@ -582,7 +586,7 @@
                                 </label>
                                 <div class="col-md-3">
                                     <input type="text" class="form-control" name="transaction_id"
-                                        id="transaction_id" value="{{ order.transaction_id }}">
+                                        id="transaction_id" value="{{ order.transaction_id }}" readonly>
                                 </div>
                             </div>
                             <div class="form-group">

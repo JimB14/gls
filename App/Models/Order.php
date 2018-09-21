@@ -2507,7 +2507,7 @@ class Order extends \Core\Model
 
             // itemid range: TR Series 1000-1999, GTO/FLX 2000-2999, Stingray 3000-3999
             $sql = "SELECT * FROM orders_content
-                    WHERE serial_number IN ($serialNumbersString)
+                    WHERE serial_number IN ('$serialNumbersString')
                     AND itemid BETWEEN 1000 AND 3999";
             $stmt  = $db->prepare($sql);
             $stmt->execute();

@@ -52,6 +52,12 @@
                         {% endif %}
                     </h2>
                 {% endif %}
+                <p style="margin-left: -10px;">
+                    <span class="glyphicon glyphicon-menu-left"></span>
+                    <a onclick="window.history.go(-1)" style="cursor:pointer;">
+                        Go Back
+                    </a>
+                </p>
             </div>
 
             {% if images %}
@@ -70,7 +76,7 @@
                     <tbody>
                         {% for image in images %}
                             <tr>
-                                <td style="width: 35%;"><a href="/admin/labels/download?file={{ image|url_encode }}&amp;shipper={% if pagetitle == 'USPS Labels' %}usps{% else %}ups{% endif %}">{{ image|slice(0, -4) }}</a></td>
+                                <td style="width: 35%;"><a title="Click to download" href="/admin/labels/download?file={{ image|url_encode }}&amp;shipper={% if pagetitle == 'USPS Labels' %}usps{% else %}ups{% endif %}">{{ image|slice(0, -4) }}</a></td>
                                 {% if shipper == 'USPS' %}
                                     <td style="width:15%; text-align:center;"><img style="display: inline-block; overflow: visible;" class="grow_usps" src="/assets/shipping_labels/usps/{{ image }}" height="50px"></td>
                                 {% else %}

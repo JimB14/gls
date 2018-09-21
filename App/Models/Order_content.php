@@ -90,4 +90,35 @@ class Order_content extends \Core\Model
 
 
 
+    /**
+     * updates the status of each item in order to shipped (called if shipping label 
+     * is successfully created)
+     */
+    public static function updateStatusOfAllItems($orderid, $status) 
+    {
+        try
+        {
+            $db = static::getDB();
+
+            $sql = "UPDATE orders_content SET
+                    status = :status
+                    WHERE orderid = :orderid"; 
+            $stmt = $db->prepare($sql);
+            $parameters = [
+                ':status'  => $status,
+                ':orderid' => $orderid
+            ]; 
+            $result = $stmt->execute($parameters);
+
+            return $result;
+        }
+        catch(PDOException $e)
+        {
+            echo 'Error updating item status: ' . $e->getMessage();
+            exit();
+        }
+    }
+
+
+
 }

@@ -52,6 +52,12 @@
                         {% endif %}
                     </h2>
                 {% endif %}
+                <p style="margin-left: -10px;">
+                    <span class="glyphicon glyphicon-menu-left"></span>
+                    <a onclick="window.history.go(-1)" style="cursor:pointer;">
+                        Go Back
+                    </a>
+                </p>
             </div>
 
             {% if labels %}
@@ -70,7 +76,7 @@
                     <tbody>
                         {% for label in labels %}
                             <tr>
-                                <td style="width: 35%;"><a href="/admin/labels/download?file={{ label.image|url_encode }}&amp;shipper=ups">{{ label.image }}</a></td>
+                                <td style="width: 35%;"><a title="Click to download" href="/admin/labels/download?file={{ label.image|url_encode }}&amp;shipper=ups">{{ label.image }}</a></td>
                                 <td style="width:15%; text-align:center;"><a href="{{ label.url }}" target="_blank">UPS link to return label</a></td>
                                 <td style="width: 50%;"><a href="/admin/orders/get-order-by-tracking-number?trackingcode={{ label.image }}">View this order</a></td>
                             </tr>

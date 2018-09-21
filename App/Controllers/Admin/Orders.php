@@ -802,7 +802,7 @@ class Orders extends \Core\Controller
      */
     public function labelAction()
     {
-        // get ID
+        // get Order ID
         $id = ( isset($_REQUEST['id'])  ) ? filter_var($_REQUEST['id'], FILTER_SANITIZE_NUMBER_INT): '';
 
         // get order content
@@ -829,7 +829,7 @@ class Orders extends \Core\Controller
         View::renderTemplate('Admin/Armalaser/Show/order-create-label.html', [
             'pagetitle' => 'Create Shipping Label',
             'order_content' => $order_content,
-            'order'  => $order
+            'order' => $order
         ]);
     }
 
@@ -843,21 +843,21 @@ class Orders extends \Core\Controller
     public function getRateAction()
     {
         // retrieve & validate form data
-        $name = ( isset($_REQUEST['name'])  ) ? filter_var($_REQUEST['name'], FILTER_SANITIZE_STRING): '';
-        $company = ( isset($_REQUEST['company'])  ) ? filter_var($_REQUEST['company'], FILTER_SANITIZE_STRING): '';
-        $address = ( isset($_REQUEST['address'])  ) ? filter_var($_REQUEST['address'], FILTER_SANITIZE_STRING): '';
+        $name     = ( isset($_REQUEST['name'])  ) ? filter_var($_REQUEST['name'], FILTER_SANITIZE_STRING): '';
+        $company  = ( isset($_REQUEST['company'])  ) ? filter_var($_REQUEST['company'], FILTER_SANITIZE_STRING): '';
+        $address  = ( isset($_REQUEST['address'])  ) ? filter_var($_REQUEST['address'], FILTER_SANITIZE_STRING): '';
         $address2 = ( isset($_REQUEST['address2'])  ) ? filter_var($_REQUEST['address2'], FILTER_SANITIZE_STRING): '';
-        $city = ( isset($_REQUEST['city'])  ) ? filter_var($_REQUEST['city'], FILTER_SANITIZE_STRING): '';
-        $state = ( isset($_REQUEST['state'])  ) ? filter_var($_REQUEST['state'], FILTER_SANITIZE_STRING): '';
-        $zip = ( isset($_REQUEST['zip'])  ) ? filter_var($_REQUEST['zip'], FILTER_SANITIZE_STRING): '';
-        $phone = ( isset($_REQUEST['phone'])  ) ? filter_var($_REQUEST['phone'], FILTER_SANITIZE_STRING): '';
-        $email = ( isset($_REQUEST['email'])  ) ? filter_var($_REQUEST['email'], FILTER_SANITIZE_STRING): '';
+        $city     = ( isset($_REQUEST['city'])  ) ? filter_var($_REQUEST['city'], FILTER_SANITIZE_STRING): '';
+        $state    = ( isset($_REQUEST['state'])  ) ? filter_var($_REQUEST['state'], FILTER_SANITIZE_STRING): '';
+        $zip      = ( isset($_REQUEST['zip'])  ) ? filter_var($_REQUEST['zip'], FILTER_SANITIZE_STRING): '';
+        $phone    = ( isset($_REQUEST['phone'])  ) ? filter_var($_REQUEST['phone'], FILTER_SANITIZE_STRING): '';
+        $email    = ( isset($_REQUEST['email'])  ) ? filter_var($_REQUEST['email'], FILTER_SANITIZE_STRING): '';
         $shipping_method = ( isset($_REQUEST['shipping_method'])  ) ? filter_var($_REQUEST['shipping_method'], FILTER_SANITIZE_STRING): '';
-        $length = ( isset($_REQUEST['custom_box_length'])  ) ? filter_var($_REQUEST['custom_box_length'], FILTER_SANITIZE_NUMBER_INT): '';
-        $width = ( isset($_REQUEST['custom_box_width'])  ) ? filter_var($_REQUEST['custom_box_width'], FILTER_SANITIZE_NUMBER_INT): '';
-        $height = ( isset($_REQUEST['custom_box_height'])  ) ? filter_var($_REQUEST['custom_box_height'], FILTER_SANITIZE_NUMBER_INT): '';
-        $weight = ( isset($_REQUEST['weight'])  ) ? filter_var($_REQUEST['weight'], FILTER_SANITIZE_NUMBER_INT): '';
-        $id = ( isset($_REQUEST['order_id'])  ) ? filter_var($_REQUEST['order_id'], FILTER_SANITIZE_NUMBER_INT): '';
+        $length   = ( isset($_REQUEST['custom_box_length'])  ) ? filter_var($_REQUEST['custom_box_length'], FILTER_SANITIZE_NUMBER_INT): '';
+        $width    = ( isset($_REQUEST['custom_box_width'])  ) ? filter_var($_REQUEST['custom_box_width'], FILTER_SANITIZE_NUMBER_INT): '';
+        $height   = ( isset($_REQUEST['custom_box_height'])  ) ? filter_var($_REQUEST['custom_box_height'], FILTER_SANITIZE_NUMBER_INT): '';
+        $weight   = ( isset($_REQUEST['weight'])  ) ? filter_var($_REQUEST['weight'], FILTER_SANITIZE_NUMBER_INT): '';
+        $id       = ( isset($_REQUEST['order_id'])  ) ? filter_var($_REQUEST['order_id'], FILTER_SANITIZE_NUMBER_INT): '';
 
         // UPS API: ShipmentConfirmRequest() Zip Code has five character max
         $zip = trim(substr($zip, 0, 5));
@@ -1164,16 +1164,30 @@ class Orders extends \Core\Controller
             // success - `orders` updated
             if ($result)
             {
-                // success message
-                echo '<script>';
-                echo 'alert("The label was successfully created!")';
-                echo '</script>';
+                // update item status in orders_content for this order
+                $result = Order_content::updateStatusOfAllItems($id, 'shipped');
 
-                //  set URL for current window
-                echo '<script>';
-                echo 'window.location.href="/admin/orders/get-order?id='.$id.'"';
-                echo '</script>';
-                exit();
+                // success - ordered items status changed    
+                if ($result) 
+                {
+                    // success message
+                    echo '<script>';
+                    echo 'alert("The label was successfully created!")';
+                    echo '</script>';
+
+                    //  set URL for current window
+                    echo '<script>';
+                    echo 'window.location.href="/admin/orders/get-order?id='.$id.'"';
+                    echo '</script>';
+                    exit();
+                }
+                // failure
+                else 
+                {
+                    echo "Error updating status of items in orders_content.";
+                    // email webmaster
+                    exit();
+                }
             }
             else
             {
@@ -1206,16 +1220,30 @@ class Orders extends \Core\Controller
             // success - `orders` updated
             if ($result)
             {
-                // success message
-                echo '<script>';
-                echo 'alert("The label was successfully created!")';
-                echo '</script>';
+                // update item status in orders_content for this order
+                $result = Orders_content::updateStatusOfAllItems($id, 'shipped');
 
-                //  set URL for current window
-                echo '<script>';
-                echo 'window.location.href="/admin/orders/get-order?id='.$id.'"';
-                echo '</script>';
-                exit();
+                // success - ordered items status changed    
+                if ($result) 
+                {
+                    // success message
+                    echo '<script>';
+                    echo 'alert("The label was successfully created!")';
+                    echo '</script>';
+
+                    //  set URL for current window
+                    echo '<script>';
+                    echo 'window.location.href="/admin/orders/get-order?id='.$id.'"';
+                    echo '</script>';
+                    exit();
+                }
+                // failure
+                else 
+                {
+                    echo "Error updating status of items in orders_content.";
+                    // email webmaster
+                    exit();
+                }
             }
             else
             {
