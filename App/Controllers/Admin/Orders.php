@@ -1458,16 +1458,29 @@ class Orders extends \Core\Controller
         // success
         if ($result)
         {
-            // success message
-            echo '<script>';
-            echo 'alert("Order status changed!")';
-            echo '</script>';
+            // update item status
+            $result = Order_content::updateReturnedItemStatus($id, 'returned');
 
-            //  set URL for current window
-            echo '<script>';
-            echo 'window.location.href="/admin/orders/get-order?id='.$id.'"';
-            echo '</script>';
-            exit();
+            // success   
+            if ($result) 
+            {
+                // success message
+                echo '<script>';
+                echo 'alert("Order status changed!")';
+                echo '</script>';
+
+                //  set URL for current window
+                echo '<script>';
+                echo 'window.location.href="/admin/orders/get-order?id='.$id.'"';
+                echo '</script>';
+                exit();
+            }
+            // failure
+            else 
+            {
+                $this->setError('Error updating item status to "returned."');
+                exit();
+            }
         }
         // failure
         else

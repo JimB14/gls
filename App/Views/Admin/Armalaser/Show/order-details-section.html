@@ -201,9 +201,9 @@
         {% for item in order_content %}
             <tr>
                 <td>{{ item.orderid }}</td>
-                <td {% if item.status == "pending" %}class="pendingGreen bold"{% elseif item.status == "returned" %}class="red"{% else %}class="blue italic"{% endif %}>
+                <td {% if item.status == "pending" %}class="pendingGreen bold"{% elseif item.status == "returned" %}class="red"{% else %}class="blue"{% endif %}>
                     {% if item.rma_number != '' and item.status != 'returned' %}
-                        <a {% if item.status == "pending" %}class="pendingGreen bold"{% elseif item.status == "returned" %}class="red"{% else %}class="blue italic"{% endif %} href="/admin/orders/update-item-status?orderid={{ item.orderid }}&itemid={{ item.itemid }}" title="Click to change to &quot;returned&quot;">
+                        <a {% if item.status == "pending" %}class="pendingGreen bold"{% elseif item.status == "returned" %}class="red"{% else %}class="blue"{% endif %} href="/admin/orders/update-item-status?orderid={{ item.orderid }}&itemid={{ item.itemid }}" title="Click to change to &quot;returned&quot;">
                             {{ item.status }}
                         </a>
                     {% else %}

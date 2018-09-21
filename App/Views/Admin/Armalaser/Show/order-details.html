@@ -693,7 +693,7 @@ input[type="number"] {
 
                 <!-- Assign RMA to item(s) in order -->
                 <div role="tabpanel" class="tab-pane" id="rma">
-                    {% if session.access_level >= 2 and order.order_status == 'return-pending' %}
+                    {% if session.access_level >= 2 and order.order_status == 'shipped' or order.order_status == 'return-pending' %}
                         <h3 id="rma-title">{% if order_content|length == 1 %}Assign RMA{% else %} Assign RMAs{% endif %}</h3>
                         <p>
                             *After receipt of the returned item(s), manually change each item&apos;s status to 
@@ -770,23 +770,23 @@ input[type="number"] {
                 <!-- Process return -->
                 <div role="tabpanel" class="tab-pane" id="process_return">
                     {% if order.order_status == 'return-pending' and order.rma == 1 and order.refund_issued == 0 and session.access_level >= 2 %}
-                        <h3>Change order status to &quot;Returned&quot;</h3>
-                        <h4 style="margin-bottom:15px;width:700px;">
-                            (A) If item(s) have been returned as agreed, and a RMA number has been assigned, you can change the &quot;status&quot; for each 
-                            item in the &quot;Products purchased&quot; table above to "returned" by clicking "return-pending" for each item returned.
-                            <br><br>
-                            (B) Then, click the button "Change order status" to change order status of order {{ order.id }} to &quot;returned.&quot;
+                        <h3>Change order status and item status to &quot;returned&quot;</h3>
+                        <h4 style="margin:10px 0px 15px 20px;width:700px;line-height: 1.2em;"> Order status: item or items have been returned.</h4>
+                        <h4 style="margin-bottom:15px;width:700px;line-height: 1.2em;">
+                            <ol>
+                                <li style="margin-bottom:1em;">Click "Change order status" to change the order status of order #{{ order.id }} to &quot;returned.&quot;
+                                This also changes the status of the item or items that were returned (in &quot;Products purchased&quot; table above).</li>
+                                <li style="margin-bottom:1em;">You can also manually change the &quot;Status&quot; of a returned item in the &quot;Products purchased&quot; 
+                                    table by clicking "return-pending."</li>
+                            </ol>
                         </h4>
-                        {% if not order.order_status == 'returned' %}
-                            <p>
-                                <a href="/admin/orders/update-to-returned?id={{ order.id }}" class="btn btn-primary">Restore to &quot;return-pending&quot;</a>
-                            </p>
-                        {% else %}
-                            <p>
-                                <a href="/admin/orders/update-to-returned?id={{ order.id }}" class="btn btn-success">Change order status</a>
-                            </p>
-                        {% endif %}
-
+                        <div style="margin-left: 20px;">
+                            {% if order.order_status == 'return-pending' %}
+                                <p>
+                                    <a href="/admin/orders/update-to-returned?id={{ order.id }}" class="btn btn-success">Change order status</a>
+                                </p>
+                            {% endif %}
+                        </div>    
                     {% else %}
                         <h3>The return process cannot be initiated or has already been initiated.</h3>
                         <h4>One or more of the following errors has occurred:</h4>
