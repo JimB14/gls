@@ -65,7 +65,7 @@ class Orders extends \Core\Controller
 
 
     /**
-     * display all records from orders and orders_content tables
+     * displays all records from `orders` and `orders_content` tables
      *
      * @return Object  All Orders records
      */
@@ -77,11 +77,11 @@ class Orders extends \Core\Controller
         // get orders data
         $orders = Order::getOrders($status);
 
-        // test
-        // echo '<pre>';
-        // print_r($orders);
-        // echo '</pre>';
-        // exit();
+            // test
+            // echo '<pre>';
+            // print_r($orders);
+            // echo '</pre>';
+            // exit();
 
         switch($status)
         {
@@ -117,49 +117,29 @@ class Orders extends \Core\Controller
 
 
     /**
-     * returns a single order record by ID
+     * returns a single order record by ID based on buyer type
      *
      * @return Object  The order record
      */
     public function getOrderAction()
     {
-        // get ID from query string
+        // get order ID from query string
         $id = ( isset($_REQUEST['id'])  ) ? filter_var($_REQUEST['id'], FILTER_SANITIZE_NUMBER_INT): '';
 
         // get buyer type
         $results = Order::getOrderBuyerTypeAndId($id);
 
-        // test
-        // echo '<h4>$results</h4>';
-        // echo '<pre>';
-        // print_r($results);
-        // echo '</pre>';
-        // exit();
+            // test
+            // echo '<h4>$results</h4>';
+            // echo '<pre>';
+            // print_r($results);
+            // echo '</pre>';
+            // exit();
 
-        // build RMA return reasons array
-        $reasons = [
-            "battery",
-            "beam",
-            "broken housing",
-            "changed mind",
-            "dimming",
-            "flex damage",
-            "installation",
-            "intermitten",
-            "lost part(s)",
-            "missing part(s)",
-            "no activation",
-            "over adjusted",
-            "programming",
-            "shutting off",
-            "stripped screws",
-            "switch",
-            "windage-elevation loose",
-            "windage-elevation stuck",
-            "wrong model"
-        ];
-
-        // get order details for Customer
+        // get RMA return reasons 
+        $reasons = $this->getRmaReasons();
+        
+        // = = = = = =  get order details for Customer  = = = = = = = = = = = = = //
         if ($results['type'] == 'customerid' )
         {
             // get customer data
@@ -168,22 +148,23 @@ class Orders extends \Core\Controller
             // add buyer type to $customer object; delete 'id' at end of string
             $customer->buyer_type = substr($results['type'], 0, -2);
 
-            // test
-            // echo '<h4>Customer:</h4>';
-            // echo '<pre>';
-            // print_r($customer);
-            // echo '</pre>';
-            // exit();
+                // test
+                // echo '<h4>Customer:</h4>';
+                // echo '<pre>';
+                // print_r($customer);
+                // echo '</pre>';
+                // exit();
+
 
             // get order content
             $order_content = Order::getOrderContent($id);
 
-            // test
-            // echo '<h4>Customer order content:</h4>';
-            // echo '<pre>';
-            // print_r($order_content);
-            // echo '</pre>';
-            // exit();
+                // test
+                // echo '<h4>Customer order content:</h4>';
+                // echo '<pre>';
+                // print_r($order_content);
+                // echo '</pre>';
+                // exit();
 
             // store min & max for laser IDs
             $min = 1000;
@@ -202,32 +183,32 @@ class Orders extends \Core\Controller
             // get lasers in order
             $lasers = $this->getLasersInOrder($order_content);
 
-            // test
-            // echo '<h4>Order content:</h4>';
-            // echo '<pre>';
-            // print_r($lasers);
-            // echo '</pre>';
-            // exit();
+                // test
+                // echo '<h4>Order content:</h4>';
+                // echo '<pre>';
+                // print_r($lasers);
+                // echo '</pre>';
+                // exit();
 
             // get order data
             $order = Order::getOrderData($id);
 
-            // test
-            // echo '<h4>Customer order:</h4>';
-            // echo '<pre>';
-            // print_r($order);
-            // echo '</pre>';
-            // exit();
+                // test
+                // echo '<h4>Customer order:</h4>';
+                // echo '<pre>';
+                // print_r($order);
+                // echo '</pre>';
+                // exit();
 
             // get comments
             $comments = Comment::getComments($id);
 
-            // test
-            // echo '<h4>Order comments:</h4>';
-            // echo '<pre>';
-            // print_r($comments);
-            // echo '</pre>';
-            // exit();
+                // test
+                // echo '<h4>Order comments:</h4>';
+                // echo '<pre>';
+                // print_r($comments);
+                // echo '</pre>';
+                // exit();
 
             // get days between today and shipped date
             $daysSinceShipped = $this->getDaysBetweenDates($order->oshippeddate);
@@ -247,7 +228,7 @@ class Orders extends \Core\Controller
             exit();
         }
 
-        // get order details for Caller
+        // = = = = = =  get order details for Caller  = = = = = = = = = = = = = //
         if ($results['type'] == 'callerid' )
         {
             // get customer data
@@ -256,22 +237,22 @@ class Orders extends \Core\Controller
             // add buyer type to $customer object; delete 'id' at end of string
             $customer->buyer_type = substr($results['type'], 0, -2);
 
-            // test
-            // echo '<h4>Caller:</h4>';
-            // echo '<pre>';
-            // print_r($customer);
-            // echo '</pre>';
-            // exit();
+                // test
+                // echo '<h4>Caller:</h4>';
+                // echo '<pre>';
+                // print_r($customer);
+                // echo '</pre>';
+                // exit();
 
             // get order content
             $order_content = Order::getOrderContent($id);
 
-            // test
-            // echo '<h4>Customer order content:</h4>';
-            // echo '<pre>';
-            // print_r($order_content);
-            // echo '</pre>';
-            // exit();
+                // test
+                // echo '<h4>Customer order content:</h4>';
+                // echo '<pre>';
+                // print_r($order_content);
+                // echo '</pre>';
+                // exit();
 
             // store min & max for laser IDs
             $min = 1000;
@@ -290,32 +271,32 @@ class Orders extends \Core\Controller
             // get lasers in order
             $lasers = $this->getLasersInOrder($order_content);
 
-            // test
-            // echo '<h4>Order content:</h4>';
-            // echo '<pre>';
-            // print_r($lasers);
-            // echo '</pre>';
-            // exit();
+                // test
+                // echo '<h4>Order content:</h4>';
+                // echo '<pre>';
+                // print_r($lasers);
+                // echo '</pre>';
+                // exit();
 
             // get order data
             $order = Order::getOrderData($id);
 
-            // test
-            // echo '<h4>Customer order:</h4>';
-            // echo '<pre>';
-            // print_r($order);
-            // echo '</pre>';
-            // exit();
+                // test
+                // echo '<h4>Customer order:</h4>';
+                // echo '<pre>';
+                // print_r($order);
+                // echo '</pre>';
+                // exit();
 
             // get comments
             $comments = Comment::getComments($id);
 
-            // test
-            // echo '<h4>Order comments:</h4>';
-            // echo '<pre>';
-            // print_r($comments);
-            // echo '</pre>';
-            // exit();
+                // test
+                // echo '<h4>Order comments:</h4>';
+                // echo '<pre>';
+                // print_r($comments);
+                // echo '</pre>';
+                // exit();
 
             // get days between today and shipped date
             $daysSinceShipped = $this->getDaysBetweenDates($order->oshippeddate);
@@ -335,7 +316,7 @@ class Orders extends \Core\Controller
             exit();
         }
 
-        //  get order details for Guest
+        // = = = = = =  get order details for Guest  = = = = = = = = = = = = = //
         if ($results['type'] == 'guestid' )
         {
             // get guest data
@@ -344,22 +325,22 @@ class Orders extends \Core\Controller
             // add buyer type to $customer array; delete 'id' at end of string
             $customer->buyer_type = substr($results['type'], 0, -2);
 
-            // test
-            // echo '<h4>Guest:</h4>';
-            // echo '<pre>';
-            // print_r($customer);
-            // echo '</pre>';
-            // exit();
+                // test
+                // echo '<h4>Guest:</h4>';
+                // echo '<pre>';
+                // print_r($customer);
+                // echo '</pre>';
+                // exit();
 
             // get order content
             $order_content = Order::getOrderContent($id);
 
-            // test
-            // echo '<h4>Guest order content:</h4>';
-            // echo '<pre>';
-            // print_r($order_content);
-            // echo '</pre>';
-            // exit();
+                // test
+                // echo '<h4>Guest order content:</h4>';
+                // echo '<pre>';
+                // print_r($order_content);
+                // echo '</pre>';
+                // exit();
 
             // store min & max for laser IDs
             $min = 1000;
@@ -378,32 +359,32 @@ class Orders extends \Core\Controller
             // get lasers in order
             $lasers = $this->getLasersInOrder($order_content);
 
-            // test
-            // echo '<h4>Order content:</h4>';
-            // echo '<pre>';
-            // print_r($lasers);
-            // echo '</pre>';
-            // exit();
+                // test
+                // echo '<h4>Order content:</h4>';
+                // echo '<pre>';
+                // print_r($lasers);
+                // echo '</pre>';
+                // exit();
 
             // get data from `orders`
             $order = Order::getOrderData($id);
 
-            // test
-            // echo '<h4>Guest order:</h4>';
-            // echo '<pre>';
-            // print_r($order);
-            // echo '</pre>';
-            // exit();
+                // test
+                // echo '<h4>Guest order:</h4>';
+                // echo '<pre>';
+                // print_r($order);
+                // echo '</pre>';
+                // exit();
 
             // get comments
             $comments = Comment::getComments($id);
 
-            // test
-            // echo '<h4>Order comments:</h4>';
-            // echo '<pre>';
-            // print_r($comments);
-            // echo '</pre>';
-            // exit();
+                // test
+                // echo '<h4>Order comments:</h4>';
+                // echo '<pre>';
+                // print_r($comments);
+                // echo '</pre>';
+                // exit();
 
             // get days between today and shipped date
             $daysSinceShipped = $this->getDaysBetweenDates($order->oshippeddate);
@@ -421,7 +402,7 @@ class Orders extends \Core\Controller
             ]);
         }
 
-        // get order details for Dealer
+        // = = = = = =  get order details for Dealer  = = = = = = = = = = = = = //
         else if ($results['type'] == 'dealerid' )
         {
             // get dealer data
@@ -430,22 +411,22 @@ class Orders extends \Core\Controller
             // add buyer type to $customer object; delete 'id' at end of string
             $customer->buyer_type = substr($results['type'], 0, -2);
 
-            // test
-            // echo '<h4>Dealer:</h4>';
-            // echo '<pre>';
-            // print_r($customer);
-            // echo '</pre>';
-            // exit();
+                // test
+                // echo '<h4>Dealer:</h4>';
+                // echo '<pre>';
+                // print_r($customer);
+                // echo '</pre>';
+                // exit();
 
             // get order content
             $order_content = Order::getOrderContent($id);
 
-            // test
-            // echo '<h4>Customer order content:</h4>';
-            // echo '<pre>';
-            // print_r($order_content);
-            // echo '</pre>';
-            // exit();
+                // test
+                // echo '<h4>Customer order content:</h4>';
+                // echo '<pre>';
+                // print_r($order_content);
+                // echo '</pre>';
+                // exit();
 
             // store min & max for laser IDs
             $min = 1000;
@@ -464,32 +445,32 @@ class Orders extends \Core\Controller
             // get lasers in order
             $lasers = $this->getLasersInOrder($order_content);
 
-            // test
-            // echo '<h4>Order content:</h4>';
-            // echo '<pre>';
-            // print_r($lasers);
-            // echo '</pre>';
-            // exit();
+                // test
+                // echo '<h4>Order content:</h4>';
+                // echo '<pre>';
+                // print_r($lasers);
+                // echo '</pre>';
+                // exit();
 
             // get order data
             $order = Order::getOrderData($id);
 
-            // test
-            // echo '<h4>Dealer order:</h4>';
-            // echo '<pre>';
-            // print_r($order);
-            // echo '</pre>';
-            // exit();
+                // test
+                // echo '<h4>Dealer order:</h4>';
+                // echo '<pre>';
+                // print_r($order);
+                // echo '</pre>';
+                // exit();
 
             // get comments
             $comments = Comment::getComments($id);
 
-            // test
-            // echo '<h4>Order comments:</h4>';
-            // echo '<pre>';
-            // print_r($comments);
-            // echo '</pre>';
-            // exit();
+                // test
+                // echo '<h4>Order comments:</h4>';
+                // echo '<pre>';
+                // print_r($comments);
+                // echo '</pre>';
+                // exit();
 
             // get days between today and shipped date
             $daysSinceShipped = $this->getDaysBetweenDates($order->oshippeddate);
@@ -509,38 +490,38 @@ class Orders extends \Core\Controller
             exit();
         }
 
-        // get order details for Partner
+        // = = = = = =  get order details for Partner  = = = = = = = = = = = = = // 
         else if ($results['type'] == 'partnerid' )
         {
             // get partner data
             $customer = Partner::getPartner($results['customerid']);
 
-            // test
-            // echo '<h4>Partner:</h4>';
-            // echo '<pre>';
-            // print_r($customer);
-            // echo '</pre>';
-            // exit();
+                // test
+                // echo '<h4>Partner:</h4>';
+                // echo '<pre>';
+                // print_r($customer);
+                // echo '</pre>';
+                // exit();
 
             // add buyer type to $customer object; delete 'id' at end of string
             $customer->buyer_type = substr($results['type'], 0, -2);
 
-            // test
-            // echo '<h4>Partner:</h4>';
-            // echo '<pre>';
-            // print_r($customer);
-            // echo '</pre>';
-            // exit();
+                // test
+                // echo '<h4>Partner:</h4>';
+                // echo '<pre>';
+                // print_r($customer);
+                // echo '</pre>';
+                // exit();
 
             // get order content
             $order_content = Order::getOrderContent($id);
 
-            // test
-            // echo '<h4>Partner order content:</h4>';
-            // echo '<pre>';
-            // print_r($order_content);
-            // echo '</pre>';
-            // exit();
+                // test
+                // echo '<h4>Partner order content:</h4>';
+                // echo '<pre>';
+                // print_r($order_content);
+                // echo '</pre>';
+                // exit();
 
             // store min & max for laser IDs
             $min = 1000;
@@ -559,32 +540,32 @@ class Orders extends \Core\Controller
             // get lasers in order
             $lasers = $this->getLasersInOrder($order_content);
 
-            // test
-            // echo '<h4>Order content:</h4>';
-            // echo '<pre>';
-            // print_r($lasers);
-            // echo '</pre>';
-            // exit();
+                // test
+                // echo '<h4>Order content:</h4>';
+                // echo '<pre>';
+                // print_r($lasers);
+                // echo '</pre>';
+                // exit();
 
             // get order data
             $order = Order::getOrderData($id);
 
-            // test
-            // echo '<h4>Partner order:</h4>';
-            // echo '<pre>';
-            // print_r($order);
-            // echo '</pre>';
-            // exit();
+                // test
+                // echo '<h4>Partner order:</h4>';
+                // echo '<pre>';
+                // print_r($order);
+                // echo '</pre>';
+                // exit();
 
             // get comments
             $comments = Comment::getComments($id);
 
-            // test
-            // echo '<h4>Order comments:</h4>';
-            // echo '<pre>';
-            // print_r($comments);
-            // echo '</pre>';
-            // exit();
+                // test
+                // echo '<h4>Order comments:</h4>';
+                // echo '<pre>';
+                // print_r($comments);
+                // echo '</pre>';
+                // exit();
 
             // get days between today and shipped date
             $daysSinceShipped = $this->getDaysBetweenDates($order->oshippeddate);
@@ -609,9 +590,9 @@ class Orders extends \Core\Controller
 
 
     /**
-     * returns a single order record by ID
+     * returns a single order record by ID based on user type
      *
-     * @return Object  The order record
+     * @return View  The order record and content
      */
     public function getMyOrderAction()
     {
@@ -620,60 +601,65 @@ class Orders extends \Core\Controller
         $customerid = ( isset($_REQUEST['buyerid'])  ) ? filter_var($_REQUEST['buyerid'], FILTER_SANITIZE_NUMBER_INT): '';
         $type = ( isset($_REQUEST['type'])  ) ? filter_var($_REQUEST['type'], FILTER_SANITIZE_STRING): '';
 
+        // Customer
         if ($type == 'customer')
         {
             $customer = Customer::getCustomer($customerid);
 
-            // test
-            // echo '<h4>Customer:</h4>';
-            // echo '<pre>';
-            // print_r($customer);
-            // echo '</pre>';
-            // exit();
+                // test
+                // echo '<h4>Customer:</h4>';
+                // echo '<pre>';
+                // print_r($customer);
+                // echo '</pre>';
+                // exit();
         }
+
+        // Dealer
         else if ($type == 'dealer')
         {
             $customer = Dealer::getDealer($customerid);
 
-            // test
-            // echo '<h4>Dealer:</h4>';
-            // echo '<pre>';
-            // print_r($customer);
-            // echo '</pre>';
-            // exit();
+                // test
+                // echo '<h4>Dealer:</h4>';
+                // echo '<pre>';
+                // print_r($customer);
+                // echo '</pre>';
+                // exit();
         }
+
+        // Partner
         else if ($type == 'partner')
         {
             $customer = Partner::getPartner($customerid);
 
-            // test
-            // echo '<h4>Partner:</h4>';
-            // echo '<pre>';
-            // print_r($customer);
-            // echo '</pre>';
-            // exit();
+                // test
+                // echo '<h4>Partner:</h4>';
+                // echo '<pre>';
+                // print_r($customer);
+                // echo '</pre>';
+                // exit();
         }
 
         // get order content
         $order_content = Order::getOrderContent($id);
 
-        // test
-        // echo '<h4>Order content:</h4>';
-        // echo '<pre>';
-        // print_r($order_content);
-        // echo '</pre>';
-        // exit();
+            // test
+            // echo '<h4>Order content:</h4>';
+            // echo '<pre>';
+            // print_r($order_content);
+            // echo '</pre>';
+            // exit();
 
         // get order data
         $order = Order::getOrderData($id);
 
-        // test
-        // echo '<h4>Customer order:</h4>';
-        // echo '<pre>';
-        // print_r($order);
-        // echo '</pre>';
-        // exit();
-
+            // test
+            // echo '<h4>Customer order:</h4>';
+            // echo '<pre>';
+            // print_r($order);
+            // echo '</pre>';
+            // exit();
+        
         View::renderTemplate('Admin/Armalaser/Show/account-order-details.html', [
             'pagetitle'     => 'Order Details',
             'customer'      => $customer,
@@ -685,32 +671,32 @@ class Orders extends \Core\Controller
 
 
     /**
-     * returns a single order record by ID
+     * returns a single order record by ID based on tracking number
      *
-     * @return Object  The order record
+     * @return View  The order record and order content
      */
     public function getOrderByTrackingNumberAction()
     {
-        // get ID
+        // get tracking code from query string
         $trackingNumber = ( isset($_REQUEST['trackingcode'])  ) ? filter_var($_REQUEST['trackingcode'], FILTER_SANITIZE_STRING): '';
 
         // get order
         $order = Order::getOrderByTrackingNumber($trackingNumber);
 
-        // test
-        // echo '<pre>';
-        // print_r($order);
-        // echo '</pre>';
-        // exit();
+            // test
+            // echo '<pre>';
+            // print_r($order);
+            // echo '</pre>';
+            // exit();
 
         // get buyer type
         $results = Order::getOrderBuyerTypeAndId($order->id);
 
-        // test
-        // echo '<pre>';
-        // print_r($results);
-        // echo '</pre>';
-        // exit();
+            // test
+            // echo '<pre>';
+            // print_r($results);
+            // echo '</pre>';
+            // exit();
 
         // get order details
         if ($results['type'] == 'customerid' )
@@ -718,32 +704,32 @@ class Orders extends \Core\Controller
             // get customer data
             $customer = Customer::getCustomer($results['customerid']);
 
-            // test
-            // echo '<h4>Customer:</h4>';
-            // echo '<pre>';
-            // print_r($customer);
-            // echo '</pre>';
-            // exit();
+                // test
+                // echo '<h4>Customer:</h4>';
+                // echo '<pre>';
+                // print_r($customer);
+                // echo '</pre>';
+                // exit();
 
             // get order content
             $order_content = Order::getOrderContent($order->id);
 
-            // test
-            // echo '<h4>Order content:</h4>';
-            // echo '<pre>';
-            // print_r($order_content);
-            // echo '</pre>';
-            // exit();
+                // test
+                // echo '<h4>Order content:</h4>';
+                // echo '<pre>';
+                // print_r($order_content);
+                // echo '</pre>';
+                // exit();
 
             // get order data
             $order = Order::getOrderData($order->id);
 
-            // test
-            // echo '<h4>Customer order:</h4>';
-            // echo '<pre>';
-            // print_r($order);
-            // echo '</pre>';
-            // exit();
+                // test
+                // echo '<h4>Customer order:</h4>';
+                // echo '<pre>';
+                // print_r($order);
+                // echo '</pre>';
+                // exit();
 
             View::renderTemplate('Admin/Armalaser/Show/order-details.html', [
                 'pagetitle' => 'Order Details',
@@ -752,37 +738,38 @@ class Orders extends \Core\Controller
                 'order' => $order
             ]);
         }
+
         //  guest
         else
         {
             // get customer data
             $customer = Guest::getGuest($results['customerid']);
 
-            // test
-            // echo '<h4>Guest:</h4>';
-            // echo '<pre>';
-            // print_r($customer);
-            // echo '</pre>';
-            // exit();
+                // test
+                // echo '<h4>Guest:</h4>';
+                // echo '<pre>';
+                // print_r($customer);
+                // echo '</pre>';
+                // exit();
 
             // get order content
             $order_content = Order::getOrderContent($order->id);
 
-            // test
-            // echo '<h4>Order content:</h4>';
-            // echo '<pre>';
-            // print_r($order_content);
-            // echo '</pre>';
-            // exit();
+                // test
+                // echo '<h4>Order content:</h4>';
+                // echo '<pre>';
+                // print_r($order_content);
+                // echo '</pre>';
+                // exit();
 
             $order = Order::getOrderData($order->id);
 
-            // test
-            // echo '<h4>Guest order:</h4>';
-            // echo '<pre>';
-            // print_r($order);
-            // echo '</pre>';
-            // exit();
+                // test
+                // echo '<h4>Guest order:</h4>';
+                // echo '<pre>';
+                // print_r($order);
+                // echo '</pre>';
+                // exit();
 
             View::renderTemplate('Admin/Armalaser/Show/order-details.html', [
                 'pagetitle' => 'Order Details',
@@ -796,7 +783,7 @@ class Orders extends \Core\Controller
 
 
     /**
-     * retrieves order data & displays view
+     * retrieves order data & content & displays view
      *
      * @return View
      */
@@ -805,25 +792,25 @@ class Orders extends \Core\Controller
         // get Order ID
         $id = ( isset($_REQUEST['id'])  ) ? filter_var($_REQUEST['id'], FILTER_SANITIZE_NUMBER_INT): '';
 
-        // get order content
+        // get order content for `orders_content`
         $order_content = Order::getOrderContent($id);
 
-        // test
-        // echo '<h4>Order content ($order_content):</h4>';
-        // echo '<pre>';
-        // print_r($order_content);
-        // echo '</pre>';
-        // exit();
+            // test
+            // echo '<h4>Order content ($order_content):</h4>';
+            // echo '<pre>';
+            // print_r($order_content);
+            // echo '</pre>';
+            // exit();
 
         // get order data
         $order = Order::getOrderData($id);
 
-        // test
-        // echo '<h4>Customer order ($order):</h4>';
-        // echo '<pre>';
-        // print_r($order);
-        // echo '</pre>';
-        // exit();
+            // test
+            // echo '<h4>Customer order ($order):</h4>';
+            // echo '<pre>';
+            // print_r($order);
+            // echo '</pre>';
+            // exit();
 
         // render view
         View::renderTemplate('Admin/Armalaser/Show/order-create-label.html', [
@@ -903,68 +890,68 @@ class Orders extends \Core\Controller
                 $service = 'error';
         }
 
-        // test
-        // echo '<pre>';
-        // print_r($_REQUEST);
-        // echo '</pre>';
-        // echo $name . '<br>';
-        // echo $company . '<br>';
-        // echo $address . '<br>';
-        // echo $address2 . '<br>';
-        // echo $city . '<br>';
-        // echo $state . '<br>';
-        // echo $zip . '<br>';
-        // echo $phone . '<br>';
-        // echo $email . '<br>';
-        // echo $shipping_method . '<br>';
-        // echo $length . '<br>';
-        // echo $width . '<br>';
-        // echo $height . '<br>';
-        // echo $weight . '<br>';
-        // echo $shipper . '<br>';
-        // echo $service_code . '<br>';
-        // exit();
+            // test
+            // echo '<pre>';
+            // print_r($_REQUEST);
+            // echo '</pre>';
+            // echo $name . '<br>';
+            // echo $company . '<br>';
+            // echo $address . '<br>';
+            // echo $address2 . '<br>';
+            // echo $city . '<br>';
+            // echo $state . '<br>';
+            // echo $zip . '<br>';
+            // echo $phone . '<br>';
+            // echo $email . '<br>';
+            // echo $shipping_method . '<br>';
+            // echo $length . '<br>';
+            // echo $width . '<br>';
+            // echo $height . '<br>';
+            // echo $weight . '<br>';
+            // echo $shipper . '<br>';
+            // echo $service_code . '<br>';
+            // exit();
 
-        // shipper is USPS
+       
+        // = = = = shipper is USPS  = = = = //
         if ($shipper == 'USPS')
         {
-            // create instance of Endicia class / model
+            // create instance of Endicia class
             $endicia = new Endicia();
 
             // get response from Endicia API
             $response = $endicia->calculatePostageRate($length, $width, $height, $shipping_method, $weight, $zip);
 
-            // test
-            // echo '<h4>Endicia Response for calculatePostageRate:</h4>';
-            // echo '<pre>';
-            // print_r($response);
-            // echo '</pre>';
+                // test
+                // echo '<h4>Endicia Response for calculatePostageRate:</h4>';
+                // echo '<pre>';
+                // print_r($response);
+                // echo '</pre>';
 
             // store postage in variable
             $postage = $response->CalculatePostageRateResponse->PostageRateResponse->PostagePrice[0]['TotalAmount'];
             $service = $response->CalculatePostageRateResponse->PostageRateResponse->PostagePrice->Postage->MailService;
-            // echo '<br>' . $postage;
-            // exit();
+
 
             // get order content
             $order_content = Order::getOrderContent($id);
 
-            // test
-            // echo '<h4>Order content ($order_content):</h4>';
-            // echo '<pre>';
-            // print_r($order_content);
-            // echo '</pre>';
-            // exit();
+                // test
+                // echo '<h4>Order content ($order_content):</h4>';
+                // echo '<pre>';
+                // print_r($order_content);
+                // echo '</pre>';
+                // exit();
 
             // get order data
             $order = Order::getOrderData($id);
 
-            // test
-            // echo '<h4>Customer order ($order):</h4>';
-            // echo '<pre>';
-            // print_r($order);
-            // echo '</pre>';
-            // exit();
+                // test
+                // echo '<h4>Customer order ($order):</h4>';
+                // echo '<pre>';
+                // print_r($order);
+                // echo '</pre>';
+                // exit();
 
             // render view
             View::renderTemplate('Admin/Armalaser/Show/order-create-label.html', [
@@ -979,10 +966,10 @@ class Orders extends \Core\Controller
                 'shipping_method' => $shipping_method
             ]);
         }
-        // shipper is UPS
+        // = = = = shipper is UPS = = = = //
         else
         {
-            // create instance of Endicia class / model
+            // create instance of UPS class
             $ups = new Ups();
 
             // create array to pass shipping data
@@ -1006,12 +993,12 @@ class Orders extends \Core\Controller
             // get response from Endicia API
             $response = $ups->shipmentConfirmRequest($data);
 
-            // test
-            // echo '<h4>UPS Response for shipmentConfirmRequest:</h4>';
-            // echo '<pre>';
-            // print_r($response);
-            // echo '</pre>';
-            // exit();
+                // test
+                // echo '<h4>UPS Response for shipmentConfirmRequest:</h4>';
+                // echo '<pre>';
+                // print_r($response);
+                // echo '</pre>';
+                // exit();
 
             // store shipping cost in variable
             $postage = $response->ShipmentCharges->TotalCharges->MonetaryValue;
@@ -1019,31 +1006,31 @@ class Orders extends \Core\Controller
             $trackingNumber = $response->ShipmentIdentificationNumber;
             $shipmentDigest = $response->ShipmentDigest;
 
-            // test
-            // echo '<br>' . $postage;
-            // echo '<br>' . $trackingNumber;
-            // echo '<br>' . substr($shipmentDigest, 0, 50);
-            // exit();
+                // test
+                // echo '<br>' . $postage;
+                // echo '<br>' . $trackingNumber;
+                // echo '<br>' . substr($shipmentDigest, 0, 50);
+                // exit();
 
             // get order content
             $order_content = Order::getOrderContent($id);
 
-            // test
-            // echo '<h4>Order content ($order_content):</h4>';
-            // echo '<pre>';
-            // print_r($order_content);
-            // echo '</pre>';
-            // exit();
+                // test
+                // echo '<h4>Order content ($order_content):</h4>';
+                // echo '<pre>';
+                // print_r($order_content);
+                // echo '</pre>';
+                // exit();
 
             // get order data
             $order = Order::getOrderData($id);
 
-            // test
-            // echo '<h4>Customer order ($order):</h4>';
-            // echo '<pre>';
-            // print_r($order);
-            // echo '</pre>';
-            // exit();
+                // test
+                // echo '<h4>Customer order ($order):</h4>';
+                // echo '<pre>';
+                // print_r($order);
+                // echo '</pre>';
+                // exit();
 
             // render view
             View::renderTemplate('Admin/Armalaser/Show/order-create-label.html', [
@@ -1067,7 +1054,7 @@ class Orders extends \Core\Controller
     /**
      * Creates shipping label
      *
-     * @return [type] [description]
+     * @return 
      */
     public function getLabelAction()
     {
@@ -1092,7 +1079,7 @@ class Orders extends \Core\Controller
         $id = ( isset($_REQUEST['order_id'])  ) ? filter_var($_REQUEST['order_id'], FILTER_SANITIZE_NUMBER_INT): ''; // hidden
         $shipmentDigest = ( isset($_REQUEST['shipment_digest'])  ) ? filter_var($_REQUEST['shipment_digest'], FILTER_SANITIZE_STRING): ''; // hidden
 
-        // USPS
+        // = = = = USPS = = = = //
         if ($shipper == 'USPS')
         {
             // create customer array to pass to Endicia
@@ -1108,32 +1095,32 @@ class Orders extends \Core\Controller
                 'email'    => $email
             ];
 
-            // test
-            // echo '<h4>Customer:</h4>';
-            // echo '<pre>';
-            // print_r($customer);
-            // echo '</pre>';
-            // exit();
-            // echo '<h4>REQUEST:</h4>';
-            // echo '<pre>';
-            // print_r($_REQUEST);
-            // echo '</pre>';
-            // exit();
-            // echo $name . '<br>';
-            // echo $company . '<br>';
-            // echo $address . '<br>';
-            // echo $address2 . '<br>';
-            // echo $city . '<br>';
-            // echo $state . '<br>';
-            // echo $zip . '<br>';
-            // echo $phone . '<br>';
-            // echo $email . '<br>';
-            // echo $shipping_method . '<br>';
-            // echo $length . '<br>';
-            // echo $width . '<br>';
-            // echo $height . '<br>';
-            // echo $weight . '<br>';
-            // exit();
+                // test
+                // echo '<h4>Customer:</h4>';
+                // echo '<pre>';
+                // print_r($customer);
+                // echo '</pre>';
+                // exit();
+                // echo '<h4>REQUEST:</h4>';
+                // echo '<pre>';
+                // print_r($_REQUEST);
+                // echo '</pre>';
+                // exit();
+                // echo $name . '<br>';
+                // echo $company . '<br>';
+                // echo $address . '<br>';
+                // echo $address2 . '<br>';
+                // echo $city . '<br>';
+                // echo $state . '<br>';
+                // echo $zip . '<br>';
+                // echo $phone . '<br>';
+                // echo $email . '<br>';
+                // echo $shipping_method . '<br>';
+                // echo $length . '<br>';
+                // echo $width . '<br>';
+                // echo $height . '<br>';
+                // echo $weight . '<br>';
+                // exit();
 
             // create instance of Endicia class / model
             $endicia = new Endicia();
@@ -1141,12 +1128,12 @@ class Orders extends \Core\Controller
             // get response from Endicia API
             $response = $endicia->getPostageLabel($customer, $length, $width, $height, $shipping_method, $weight, $zip);
 
-            // test
-            // echo '<h4>Endicia Response for GetPostageLabel:</h4>';
-            // echo '<pre>';
-            // print_r($response);
-            // echo '</pre>';
-            // exit();
+                // test
+                // echo '<h4>Endicia Response for GetPostageLabel:</h4>';
+                // echo '<pre>';
+                // print_r($response);
+                // echo '</pre>';
+                // exit();
 
             // store data in variables
             $trackingNumber = $response->GetPostageLabelResponse->LabelRequestResponse->TrackingNumber;
@@ -1195,7 +1182,8 @@ class Orders extends \Core\Controller
                 exit();
             }
         }
-        // UPS
+
+        // = = = = UPS = = = = //
         else
         {
             // create instance of Ups class
@@ -1204,12 +1192,12 @@ class Orders extends \Core\Controller
             // make request to UPS API to accept
             $acceptResponse = $ups->shipmentAcceptRequest($shipmentDigest);
 
-            // test
-            // echo '<h4>UPS Shipment Accept Response:</h4>';
-            // echo '<pre>';
-            // print_r($acceptResponse);
-            // echo '</pre>';
-            // exit();
+                // test
+                // echo '<h4>UPS Shipment Accept Response:</h4>';
+                // echo '<pre>';
+                // print_r($acceptResponse);
+                // echo '</pre>';
+                // exit();
 
             $trackingNumber = $acceptResponse->trackingNumber;
             $finalPostage = $acceptResponse->totalCharges;
@@ -1268,32 +1256,13 @@ class Orders extends \Core\Controller
         
         $order_content = Order::getOrderItem($orderid, $itemid);
 
-        // echo '<pre>';
-        // print_r($order_content);
-        // echo '</pre>';
+            // test
+            // echo '<pre>';
+            // print_r($order_content);
+            // echo '</pre>';
 
-        // build RMA return reasons array
-        $reasons = [
-            "battery",
-            "beam",
-            "broken housing",
-            "changed mind",
-            "dimming",
-            "flex damage",
-            "installation",
-            "intermitten",
-            "lost part(s)",
-            "missing part(s)",
-            "no activation",
-            "over adjusted",
-            "programming",
-            "shutting off",
-            "stripped screws",
-            "switch",
-            "windage-elevation loose",
-            "windage-elevation stuck",
-            "wrong model"
-        ];
+        // get RMA reasons 
+        $reasons = $this->getRmaReasons();
 
         View::renderTemplate('Admin/Armalaser/Show/assign-rma.html', [
             'pagetitle'     => 'Assign RMA',
@@ -1306,7 +1275,7 @@ class Orders extends \Core\Controller
 
 
     /**
-     * Updates record in orders_content with RMA data
+     * Updates record in `orders_content` with RMA data
      *
      * @return Boolean
      */
@@ -1318,15 +1287,15 @@ class Orders extends \Core\Controller
         $rma = ( isset($_REQUEST['rma_number'])  ) ? $_REQUEST['rma_number'] : '';
         $reason = ( isset($_REQUEST['return_reason']) ) ? $_REQUEST['return_reason'] : '';
 
-        // test
-        // echo '<pre>';
-        // print_r($_REQUEST);
-        // echo '</pre>';
-        // echo $id . '<br>';
-        // echo $itemid . '<br>';
-        // echo $rma . '<br>';
-        // echo $reason . '<br>';
-        // exit();
+            // test
+            // echo '<pre>';
+            // print_r($_REQUEST);
+            // echo '</pre>';
+            // echo $id . '<br>';
+            // echo $itemid . '<br>';
+            // echo $rma . '<br>';
+            // echo $reason . '<br>';
+            // exit();
 
         // validate
         if ($rma == '' || $reason == '')
@@ -1389,25 +1358,25 @@ class Orders extends \Core\Controller
         // retrieve form data
         $id = ( isset($_REQUEST['id'])  ) ? filter_var($_REQUEST['id'], FILTER_SANITIZE_NUMBER_INT): '';
         $pnref = ( isset($_REQUEST['return_pnref'])  ) ? filter_var($_REQUEST['return_pnref'], FILTER_SANITIZE_STRING): '';
-        $amount = ( isset($_REQUEST['return_amount'])  ) ? filter_var($_REQUEST['return_amount'], FILTER_SANITIZE_STRING): '';
+        $returnAmount = ( isset($_REQUEST['return_amount'])  ) ? filter_var($_REQUEST['return_amount'], FILTER_SANITIZE_STRING): '';
 
-        // format for PayPal
-        $amount = number_format($amount, 2, '.', ''); // decimal, no comma
+        // format amount for PayPal = decimal, no comma
+        $amount = $this->formatNumberForPayPal($returnAmount);
 
         // call to PayPal API to issue refund
         $response = PayPal::issueRefund($pnref, $amount);
 
-        // test
-        // echo 'PayPal API response:<br>';
-        // echo '<pre>';
-        // print_r($response);
-        // echo '</pre>';
-        // exit();
+            // test
+            // echo 'PayPal API response:<br>';
+            // echo '<pre>';
+            // print_r($response);
+            // echo '</pre>';
+            // exit();
 
         // failure
         if (isset($response['RESULT']) && $response['RESULT'] != 0)
         {
-            echo 'Error ' . $response['RESULT'] . ': ' . $response['RESPMSG'];
+            $this->setError('Error ' . $response['RESULT'] . ': ' . $response['RESPMSG']);
             // email webmaster
             exit();
         }
@@ -1493,7 +1462,7 @@ class Orders extends \Core\Controller
 
 
     /**
-     * Updates the status by ID
+     * Updates the status by ID in `orders_content`
      */
     public function updateItemStatus() 
     {
@@ -1528,7 +1497,8 @@ class Orders extends \Core\Controller
 
     /**
      * Retrieves order records by client last name
-     * @return Object   The order record
+     * 
+     * @return View   The order record wth order content
      */
     public function searchByLastNameAction()
     {
@@ -1538,13 +1508,14 @@ class Orders extends \Core\Controller
 
         $orders = Order::getOrderByLastName($last_name, $order_status);
 
-        // test
-        // echo '<pre>';
-        // print_r($orders);
-        // echo '</pre>';
-        // exit();
+            // test
+            // echo '<pre>';
+            // print_r($orders);
+            // echo '</pre>';
+            // exit();
 
-        // render view
+         
+
         View::renderTemplate('Admin/Armalaser/Show/orders.html', [
             'pagetitle'      => 'Orders: search results',
             'orders'         => $orders,
@@ -1566,10 +1537,10 @@ class Orders extends \Core\Controller
         $order_id = ( isset($_REQUEST['order_id'])  ) ? filter_var($_REQUEST['order_id'], FILTER_SANITIZE_NUMBER_INT): '';
         $user_id = ( isset($_REQUEST['user_id'])  ) ? filter_var($_REQUEST['user_id'], FILTER_SANITIZE_NUMBER_INT): '';
 
-        // test
-        // echo '<pre>';
-        // print_r($_REQUEST);
-        // exit();
+            // test
+            // echo '<pre>';
+            // print_r($_REQUEST);
+            // exit();
 
         // get user data
         $user = User::getUserById($user_id);
@@ -1577,11 +1548,11 @@ class Orders extends \Core\Controller
         // get order
         $order = Order::getOrderData($order_id);
 
-        // test
-        // echo '<pre>';
-        // print_r($order);
-        // echo '</pre>';
-        // exit();
+            // test
+            // echo '<pre>';
+            // print_r($order);
+            // echo '</pre>';
+            // exit();
 
         // identify client as customer or guest
         if  ($order->customerid == 0)
@@ -1707,15 +1678,28 @@ class Orders extends \Core\Controller
      */
     public function newOrderAction()
     {
-        // echo "Connected!"; exit();
-
         // get order ID from query string
         $id   = ( isset($_REQUEST['id'])  ) ? filter_var($_REQUEST['id'], FILTER_SANITIZE_NUMBER_INT): ''; // customer ID
         $type = ( isset($_REQUEST['type'])  ) ? filter_var($_REQUEST['type'], FILTER_SANITIZE_STRING): ''; // buyer type
 
-        if ($type == 'customer')
+        switch($type) 
         {
-            $customer = Customer::getCustomer($id);
+            CASE 'customer':
+                $customer = Customer::getCustomer($id);
+                break;
+            CASE 'guest':
+                $customer = Guest::getGuest($id);
+                break;
+            CASE 'caller':
+                $customer = Caller::getCaller($id);
+                break;
+            CASE 'dealer':
+                $customer = Dealer::getDealer($id);
+                break;
+            CASE 'partner':
+                $customer = Partner::getPartner($id);
+                break;
+        }
 
             // test
             // echo '<h4>Customer:</h4>';
@@ -1723,141 +1707,96 @@ class Orders extends \Core\Controller
             // print_r($customer);
             // echo '</pre>';
             // exit();
-        }
-        if ($type == 'guest')
-        {
-            $customer = Guest::getGuest($id);
-
-            // test
-            // echo '<h4>Customer:</h4>';
-            // echo '<pre>';
-            // print_r($customer);
-            // echo '</pre>';
-            // exit();
-        }
-        else if ($type == 'caller')
-        {
-            $customer = Caller::getCaller($id);
-
-            // test
-            // echo '<h4>Customer:</h4>';
-            // echo '<pre>';
-            // print_r($customer);
-            // echo '</pre>';
-            // exit();
-        }
-        else if ($type == 'dealer')
-        {
-            $customer = Dealer::getDealer($id);
-
-            // test
-            // echo '<h4>Dealer:</h4>';
-            // echo '<pre>';
-            // print_r($customer);
-            // echo '</pre>';
-            // exit();
-        }
-        else if ($type == 'partner')
-        {
-            $customer = Partner::getPartner($id);
-
-            // test
-            // echo '<h4>Partner:</h4>';
-            // echo '<pre>';
-            // print_r($customer);
-            // echo '</pre>';
-            // exit();
-        }
 
         // get parts
         $parts = Part::getParts();
 
-        // test
-        // echo '<h4>Parts:</h4>';
-        // echo '<pre>';
-        // print_r($parts);
-        // echo '</pre>';
-        // exit();
+            // test
+            // echo '<h4>Parts:</h4>';
+            // echo '<pre>';
+            // print_r($parts);
+            // echo '</pre>';
+            // exit();
 
         // get trseries
         $trseries = Trseries::getLasers();
 
-        // test
-        // echo '<h4>TR Series:</h4>';
-        // echo '<pre>';
-        // print_r($trseries);
-        // echo '</pre>';
-        // exit();
+            // test
+            // echo '<h4>TR Series:</h4>';
+            // echo '<pre>';
+            // print_r($trseries);
+            // echo '</pre>';
+            // exit();
 
         // get gto/flx
         $gtoflx = Gtoflx::getLasersForAdmin();
 
-        // test
-        // echo '<h4>GTO/FLX:</h4>';
-        // echo '<pre>';
-        // print_r($gtoflx);
-        // echo '</pre>';
-        // exit();
+            // test
+            // echo '<h4>GTO/FLX:</h4>';
+            // echo '<pre>';
+            // print_r($gtoflx);
+            // echo '</pre>';
+            // exit();
 
         // get stingray
         $stingrays = Stingray::getLasers();
 
-        // test
-        // echo '<h4>Stingray:</h4>';
-        // echo '<pre>';
-        // print_r($stingrays);
-        // echo '</pre>';
-        // exit();
+            // test
+            // echo '<h4>Stingray:</h4>';
+            // echo '<pre>';
+            // print_r($stingrays);
+            // echo '</pre>';
+            // exit();
 
         // get holsters
         $holsters = Holster::getHolstersForAdmin();
 
-        // test
-        // echo '<h4>Holsters:</h4>';
-        // echo '<pre>';
-        // print_r($holsters);
-        // echo '</pre>';
-        // exit();
+            // test
+            // echo '<h4>Holsters:</h4>';
+            // echo '<pre>';
+            // print_r($holsters);
+            // echo '</pre>';
+            // exit();
 
         // get accessories
         $accessories = Accessory::getAccessories();
 
-        // test
-        // echo '<h4>Accessories:</h4>';
-        // echo '<pre>';
-        // print_r($accessories);
-        // echo '</pre>';
-        // exit();
+            // test
+            // echo '<h4>Accessories:</h4>';
+            // echo '<pre>';
+            // print_r($accessories);
+            // echo '</pre>';
+            // exit();
 
         // get batteries
         $batteries = Battery::getBatteries();
 
-        // test
-        // echo '<h4>Batteries:</h4>';
-        // echo '<pre>';
-        // print_r($batteries);
-        // echo '</pre>';
-        // exit();
+            // test
+            // echo '<h4>Batteries:</h4>';
+            // echo '<pre>';
+            // print_r($batteries);
+            // echo '</pre>';
+            // exit();
 
         // get toolkits
         $toolkits = Toolkit::getToolkits();
 
-        // test
-        // echo '<h4>Toolkits:</h4>';
-        // echo '<pre>';
-        // print_r($toolkits);
-        // echo '</pre>';
-        // exit();
+            // test
+            // echo '<h4>Toolkits:</h4>';
+            // echo '<pre>';
+            // print_r($toolkits);
+            // echo '</pre>';
+            // exit();
 
         // get flx
         $flxs = Flx::getAllFlxForAdmin();
 
-        // test
-        // echo '<h4>FLX:</h4>';
-        // echo '<pre>';
-        // print_r($flxs);
-        // echo '</pre>';
-        // exit();
+            // test
+            // echo '<h4>FLX:</h4>';
+            // echo '<pre>';
+            // print_r($flxs);
+            // echo '</pre>';
+            // exit();
 
         View::renderTemplate('Admin/Armalaser/Show/replace.html', [
             'pagetitle'   => 'Create order for replacement parts',
@@ -1885,17 +1824,29 @@ class Orders extends \Core\Controller
      */
     public function exchangeAction()
     {
-        // echo "Connected!"; exit();
-
         // get order ID from query string
         $id       = ( isset($_REQUEST['id'])  ) ? filter_var($_REQUEST['id'], FILTER_SANITIZE_NUMBER_INT): ''; // customer ID
         $type     = ( isset($_REQUEST['type'])  ) ? filter_var($_REQUEST['type'], FILTER_SANITIZE_STRING): ''; // buyer type
         $order_id = ( isset($_REQUEST['orderid'])  ) ? filter_var($_REQUEST['orderid'], FILTER_SANITIZE_NUMBER_INT): ''; // order ID
         
-        // get customer
-        if ($type == 'customer')
+        switch($type) 
         {
-            $customer = Customer::getCustomer($id);
+            CASE 'customer':
+                $customer = Customer::getCustomer($id);
+                break;
+            CASE 'guest':
+                $customer = Guest::getGuest($id);
+                break;
+            CASE 'caller':
+                $customer = Caller::getCaller($id);
+                break;
+            CASE 'dealer':
+                $customer = Dealer::getDealer($id);
+                break;
+            CASE 'partner':
+                $customer = Partner::getPartner($id);
+                break;
+        }
 
             // test
             // echo '<h4>Customer:</h4>';
@@ -1903,55 +1854,6 @@ class Orders extends \Core\Controller
             // print_r($customer);
             // echo '</pre>';
             // exit();
-        }
-        // get guest
-        if ($type == 'guest')
-        {
-            $customer = Guest::getGuest($id);
-
-            // test
-            // echo '<h4>Customer:</h4>';
-            // echo '<pre>';
-            // print_r($customer);
-            // echo '</pre>';
-            // exit();
-        }
-        // get caller
-        else if ($type == 'caller')
-        {
-            $customer = Caller::getCaller($id);
-
-            // test
-            // echo '<h4>Customer:</h4>';
-            // echo '<pre>';
-            // print_r($customer);
-            // echo '</pre>';
-            // exit();
-        }
-        // get dealer
-        else if ($type == 'dealer')
-        {
-            $customer = Dealer::getDealer($id);
-
-            // test
-            // echo '<h4>Dealer:</h4>';
-            // echo '<pre>';
-            // print_r($customer);
-            // echo '</pre>';
-            // exit();
-        }
-        // get partner
-        else if ($type == 'partner')
-        {
-            $customer = Partner::getPartner($id);
-
-            // test
-            // echo '<h4>Partner:</h4>';
-            // echo '<pre>';
-            // print_r($customer);
-            // echo '</pre>';
-            // exit();
-        }
 
          // get order 
          $order = Order::getOrderData($order_id);
@@ -2124,20 +2026,20 @@ class Orders extends \Core\Controller
             }
         }
 
-        // test
-        // echo '<h4>Lasers in order:</h4>';
-        // if (!empty($lasers))
-        // {
-        //     echo '<pre>';
-        //     print_r($lasers);
-        //     echo '</pre>';
-        //     echo 'Count: ' . count($lasers);
-        // }
-        // else
-        // {
-        //     echo "No lasers in order.<br>";
-        // }
-        // exit();
+            // test
+            // echo '<h4>Lasers in order:</h4>';
+            // if (!empty($lasers))
+            // {
+            //     echo '<pre>';
+            //     print_r($lasers);
+            //     echo '</pre>';
+            //     echo 'Count: ' . count($lasers);
+            // }
+            // else
+            // {
+            //     echo "No lasers in order.<br>";
+            // }
+            // exit();
 
         // return
         if (empty($lasers))
@@ -2151,13 +2053,45 @@ class Orders extends \Core\Controller
     }
 
 
+    function getRmaReasons() 
+    {
+        $reasons = [
+            "battery",
+            "beam",
+            "broken housing",
+            "changed mind",
+            "dimming",
+            "flex damage",
+            "installation",
+            "intermitten",
+            "lost part(s)",
+            "missing part(s)",
+            "no activation",
+            "over adjusted",
+            "programming",
+            "shutting off",
+            "stripped screws",
+            "switch",
+            "windage-elevation loose",
+            "windage-elevation stuck",
+            "wrong model"
+        ];
+
+        return $reasons;
+    }
+
+
+
+    function formatNumberForPayPal($number)
+    {
+        return number_format($number, 2, '.', ''); // decimal, no comma
+    }
+
+        
 
     function setError($string) 
     {
         echo $string;
     }
 
-
-
-    //  - - - - - - - - -  new above  - - - - - - - - - - - - - - - - - - - - //
 }

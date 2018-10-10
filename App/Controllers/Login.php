@@ -109,7 +109,6 @@ class Login extends \Core\Controller
 
 
 
-
     /**
      * Serves LogIn dealer view
      *
@@ -134,7 +133,8 @@ class Login extends \Core\Controller
         ]);
     }
 
-//  = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =  //
+
+//  = = = = = Log In Customer  = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =  //
 
     /**
      * logs in user if matching credentials found
@@ -282,7 +282,7 @@ class Login extends \Core\Controller
    }
 
 
-
+//  = = = = = Log In Admin  = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =  //
 
     /**
      * logs in Admin user if matching credentials found
@@ -320,6 +320,8 @@ class Login extends \Core\Controller
             $_SESSION['loggedIn'] = true;
             if ($user->access_level == 5) {
                 $_SESSION['userType'] = 'supervisor';
+            } else if ($user->access_level == 4) {
+                $_SESSION['userType'] = 'telephoneorder';
             } else {
                 $_SESSION['userType'] = 'admin';
             }
@@ -357,7 +359,7 @@ class Login extends \Core\Controller
     }
 
 
-
+//  = = = = = Log In Partner  = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =  //
 
     /**
      * logs in partner if matching credentials found
@@ -507,7 +509,7 @@ class Login extends \Core\Controller
    }
 
 
-
+//  = = = = = Log In Dealer  = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =  //
 
    /**
     * logs in dealer if matching credentials found

@@ -632,7 +632,8 @@ class Cart extends \Core\Controller
                 exit();
             }
 
-            // logged in Dealer
+            // = = = = = = = logged in Dealer  = = = = = = = = = //
+
             if (isset($_SESSION['user_id']) && $_SESSION['userType'] == 'dealer')
             {
 
@@ -661,7 +662,9 @@ class Cart extends \Core\Controller
                 exit();
             }
 
-            // logged in Partner
+
+            // = = = =  logged in Partner = = = = = = = = //
+
             if (isset($_SESSION['user_id']) && $_SESSION['userType'] == 'partner')
             {
 
@@ -691,7 +694,8 @@ class Cart extends \Core\Controller
             }
 
 
-            // logged in user
+            // = = = =  logged in Customer  = = = = = = = = = //
+
             if (isset($_SESSION['user_id']))
             {
                 // get customer data
@@ -710,7 +714,8 @@ class Cart extends \Core\Controller
                     'checkout'     => 'true'
                 ]);
             }
-            // not logged in user
+
+            // = = = = not logged in user  = = = = = = = = = //
             else
             {
                 // checkout options page

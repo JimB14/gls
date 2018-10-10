@@ -35,14 +35,14 @@ ArmaLaser products are carried by factory trained dealers committed to ArmaLaser
     {% if session.cart_count > 0 %}
         <div class="row">
             <div class="col-md-12">
-                {% if session.access_level != 4 %}
+                {% if session.userType != 'telephoneorder' %}
                     <h2 class="well text-center">Checkout Options</h2>
-                {% else %}
+                {% elseif session.userType == 'telephoneorder' %}
                     <h2 class="well text-center">Internal Entry of Telephone Order</h2>
                 {% endif %}
             </div>
             <div class="col-md-6 col-xs-12">
-                {% if session.access_level == 4 %}
+                {% if session.userType == 'telephoneorder' %}
                     <h2>New Order</h2>
                 {% else %}
                     <h2>New Customer</h2>
@@ -51,7 +51,7 @@ ArmaLaser products are carried by factory trained dealers committed to ArmaLaser
 
                 <form>
                     <!-- telephone order placement via website -->
-                    {% if session.access_level == 4 %}
+                    {% if session.userType == 'telephoneorder' %}
                         <div class="radio">
                             <label for="checkoutOptions3">
                                 <input type="radio" name="checkoutOptions" id="checkoutOptions3" value="internal">
@@ -60,7 +60,7 @@ ArmaLaser products are carried by factory trained dealers committed to ArmaLaser
                         </div>
                     {% endif %}
 
-                    {% if session.access_level != 4 %}
+                    {% if session.userType != 'telephoneorder' %}
                         <div class="radio">
                             <label for="checkoutOptions1">
                                 <input type="radio" name="checkoutOptions" id="checkoutOptions1" value="register">
@@ -77,7 +77,7 @@ ArmaLaser products are carried by factory trained dealers committed to ArmaLaser
                         <br>
                     {% endif %}
 
-                    {% if session.access_level == 4 %}
+                    {% if session.userType == 'telephoneorder' %}
                         <div style="margin-bottom: 40px;">
                             <button class="btn btn-buy" id="checkoutOptBtn">Continue</button>
                         </div>
@@ -88,7 +88,7 @@ ArmaLaser products are carried by factory trained dealers committed to ArmaLaser
 
             </div>
             <div class="col-md-6 col-xs-12">
-                {% if session.access_level != 4 %}
+                {% if session.userType != 'telephoneorder' %}
                     <h2>Returning Customer</h2>
                     <div class="col-md-6">
                         {% include 'Login/inc.login.html' %}

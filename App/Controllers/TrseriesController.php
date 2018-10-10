@@ -26,50 +26,46 @@ class TrseriesController extends \Core\Controller
         $laserId    = $this->route_params['laserId'];
         $laserModel = $this->route_params['laserModel'];
 
-        // test
-        // echo "$pistolMfr <br>";
-        // echo "$laserId <br>";
-        // echo "$laserModel <br>";
-        // exit();
+            // test
+            // echo "$pistolMfr <br>";
+            // echo "$laserId <br>";
+            // echo "$laserModel <br>";
+            // exit();
 
         // get laser
         $laser = Trseries::getTrseriesLaser($laserId);
 
-        // test
-        // echo '<pre>';
-        // print_r($laser);
-        // echo '</pre>';
-        // exit();
+            // test
+            // echo '<pre>';
+            // print_r($laser);
+            // echo '</pre>';
+            // exit();
 
         // get specifications for laser series & beam color
         $specs = Specification::getSpecs($laser->series, $laser->beam);
 
-        // test
-        // echo '<pre>';
-        // print_r($specs);
-        // echo '</pre>';
-        // exit();
+            // test
+            // echo '<pre>';
+            // print_r($specs);
+            // echo '</pre>';
+            // exit();
 
+        // get links
         $productLinks = Trseries::getTrseriesLinks($laserId);
 
-        // test
-        // echo '<pre>';
-        // print_r($productLinks);
-        // echo '</pre>';
-        // exit();
+            // test
+            // echo '<pre>';
+            // print_r($productLinks);
+            // echo '</pre>';
+            // exit();
 
-        // store values from $model object for use in view (use with pistollaser lookup table)
-        $laser_name = explode(' ', $laser->series);
+        // store values from $laser object for use in view (use with pistollaser lookup table)
+        $laser_name  = explode(' ', $laser->series);
         $second_word = array_pop($laser_name);
-        $first_word = implode(' ', $laser_name);
-
+        $first_word  = implode(' ', $laser_name);
 
         // get current date and time in MySQL DATETIME format
-        $timezone =  new \DateTimeZone("America/New_York");
-        $date = new \DateTime("now", $timezone);
-        $now = $date->format("Y-m-d H:i:s"); // matches MySQL format
-        $current_hour = $date->format('H');
-        $today = $date->format('D');
+        $now = $this->getMySQLDateTime();
 
         // render view
         View::renderTemplate('ProductDetails/trseries.html', [
@@ -87,22 +83,21 @@ class TrseriesController extends \Core\Controller
 
 
     /**
-     * displays trseries page
+     * retrieves TR Series lasers & displays trseries page with models
      *
-     * @return void
+     * @return View
      */
     public function trseriesAction()
     {
-        // echo "Connected to trseries() in TrseriesController!"; exit();
 
         // get laser models
         $models = Trseries::getLasers();
 
-        // test
-        // echo '<pre>';
-        // print_r($models);
-        // echo '</pre>';
-        // exit();
+            // test
+            // echo '<pre>';
+            // print_r($models);
+            // echo '</pre>';
+            // exit();
 
         View::renderTemplate('TRSeries/index.html', [
             'series'      => 'trseries',
@@ -130,7 +125,9 @@ class TrseriesController extends \Core\Controller
 
 
 
-
+    /**
+     * retrieves TR Series lasers
+     */
     public function getLasers()
     {
         $lasers = Trseries::getLasersForWarrantyRegistrationDropdown();
@@ -140,8 +137,17 @@ class TrseriesController extends \Core\Controller
     }
 
 
+    // = = = = = =  Class functions  = = = = = = = = = = = = = = = = = = // 
 
-// = = = = refactored updates above  = = = = = = = = = = = = = = = = = = = = = //
+    function getMySQLDateTime() 
+    {
+        $timezone =  new \DateTimeZone("America/New_York");
+        $date = new \DateTime("now", $timezone);
+        // $current_hour = $date->format('H');
+        // $today = $date->format('D');
+
+        return $date->format("Y-m-d H:i:s"); // matches MySQL format;
+    }
 
 
 
