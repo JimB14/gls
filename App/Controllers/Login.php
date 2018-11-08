@@ -147,19 +147,19 @@ class Login extends \Core\Controller
        $email = ( isset($_REQUEST['email'])  ) ? filter_var($_REQUEST['email'], FILTER_SANITIZE_EMAIL) : '';
        $password = ( isset($_REQUEST['password'])  ) ? filter_var($_REQUEST['password'], FILTER_SANITIZE_STRING) : '';
 
-       // test
-       // echo $email . "<br>";
-       // echo $password  . "<br>";
-       // exit();
+        // test
+        // echo $email . "<br>";
+        // echo $password  . "<br>";
+        // exit();
 
        // validate customer & find if in database; store user data in $user object
-       $user = Customer::validateLoginCredentials($email, $password);
+       $user = Customer::validateLoginCredentials($email, $password, $type="customer");
 
        // test
-       // echo '<pre>';
-       // print_r($user);
-       // echo "</pr>";
-       // exit();
+        // echo '<pre>';
+        // print_r($user);
+        // echo "</pr>";
+        // exit();
 
        /* - - - returning customer - - - - - - - - - - - - - - - - - - - - - */
 
@@ -183,14 +183,14 @@ class Login extends \Core\Controller
             $_SESSION['LAST_ACTIVITY'] = time(); // update last activity time stamp
 
             // test
-            // echo "uniqID: " . $_SESSION['user'] . "<br>";
-            // echo "Logged in? " . $_SESSION['loggedIn'] . "<br>";
-            // echo "user_id: " . $_SESSION['user_id'] . "<br>";
-            // echo "access level: " .$_SESSION['access_level'] . "<br>";
-            // echo "First name: " . $_SESSION['first_name'] . "<br>";
-            // echo "Full name: " . $_SESSION['full_name'] . "<br>";
-            // echo "User type: " . $_SESSION['userType'] . "<br>";
-            // exit();
+                // echo "uniqID: " . $_SESSION['user'] . "<br>";
+                // echo "Logged in? " . $_SESSION['loggedIn'] . "<br>";
+                // echo "user_id: " . $_SESSION['user_id'] . "<br>";
+                // echo "access level: " .$_SESSION['access_level'] . "<br>";
+                // echo "First name: " . $_SESSION['first_name'] . "<br>";
+                // echo "Full name: " . $_SESSION['full_name'] . "<br>";
+                // echo "User type: " . $_SESSION['userType'] . "<br>";
+                // exit();
 
             // check if session cart empty
             if ($_SESSION['cart'])
@@ -221,7 +221,7 @@ class Login extends \Core\Controller
 
             // send to security Questions
             View::renderTemplate('Register/security-questions.html', [
-                'partner' => $user,
+                'customer' => $user,
                 'years'   => $years,
                 'instructions' => $instructions,
                 'type'  => 'customer'
@@ -256,14 +256,14 @@ class Login extends \Core\Controller
                 $_SESSION['LAST_ACTIVITY'] = time(); // update last activity time stamp
 
                 // test
-                // echo "uniqID: " . $_SESSION['user'] . "<br>";
-                // echo "Logged in? " . $_SESSION['loggedIn'] . "<br>";
-                // echo "user_id: " . $_SESSION['user_id'] . "<br>";
-                // echo "access level: " .$_SESSION['access_level'] . "<br>";
-                // echo "First name: " . $_SESSION['first_name'] . "<br>";
-                // echo "Full name: " . $_SESSION['full_name'] . "<br>";
-                // echo "Full name: " . $_SESSION['full_name'] . "<br>";
-                // exit();
+                    // echo "uniqID: " . $_SESSION['user'] . "<br>";
+                    // echo "Logged in? " . $_SESSION['loggedIn'] . "<br>";
+                    // echo "user_id: " . $_SESSION['user_id'] . "<br>";
+                    // echo "access level: " .$_SESSION['access_level'] . "<br>";
+                    // echo "First name: " . $_SESSION['first_name'] . "<br>";
+                    // echo "Full name: " . $_SESSION['full_name'] . "<br>";
+                    // echo "Full name: " . $_SESSION['full_name'] . "<br>";
+                    // exit();
 
                 header("Location: /");
                 exit();
@@ -297,18 +297,18 @@ class Login extends \Core\Controller
         $password = ( isset($_REQUEST['password'])  ) ? filter_var($_REQUEST['password'], FILTER_SANITIZE_STRING) : '';
 
         // test
-        // echo $email . "<br>";
-        // echo $password  . "<br>";
-        // exit();
+            // echo $email . "<br>";
+            // echo $password  . "<br>";
+            // exit();
 
         // validate user & find if in database; store user data in $user object
         $user = User::validateLoginCredentials($email, $password);
 
         // test
-        // echo '<pre>';
-        // print_r($user);
-        // echo "</pr>";
-        // exit();
+            // echo '<pre>';
+            // print_r($user);
+            // echo "</pr>";
+            // exit();
 
         // check if returning user; if true log in
         if( ($user) && ($user->first_login == 0) )
@@ -336,14 +336,14 @@ class Login extends \Core\Controller
             $_SESSION['LAST_ACTIVITY'] = time(); // update last activity time stamp
 
             // test
-            // echo "uniqID: " . $_SESSION['user'] . "<br>";
-            // echo "Logged in? " . $_SESSION['loggedIn'] . "<br>";
-            // echo "user_id: " . $_SESSION['user_id'] . "<br>";
-            // echo "access level: " .$_SESSION['access_level'] . "<br>";
-            // echo "First name: " . $_SESSION['first_name'] . "<br>";
-            // echo "Full name: " . $_SESSION['full_name'] . "<br>";
-            // echo "User type: " . $_SESSION['userType'] . "<br>";
-            // exit();
+                // echo "uniqID: " . $_SESSION['user'] . "<br>";
+                // echo "Logged in? " . $_SESSION['loggedIn'] . "<br>";
+                // echo "user_id: " . $_SESSION['user_id'] . "<br>";
+                // echo "access level: " .$_SESSION['access_level'] . "<br>";
+                // echo "First name: " . $_SESSION['first_name'] . "<br>";
+                // echo "Full name: " . $_SESSION['full_name'] . "<br>";
+                // echo "User type: " . $_SESSION['userType'] . "<br>";
+                // exit();
 
             // notify webmaster of sign in
             $result = Mail::signInNotification($user);
@@ -373,18 +373,19 @@ class Login extends \Core\Controller
         $password = ( isset($_REQUEST['password'])  ) ? filter_var($_REQUEST['password'], FILTER_SANITIZE_STRING) : '';
 
         // test
-        // echo $email . "<br>";
-        // echo $password  . "<br>";
-        // exit();
+            // echo $email . "<br>";
+            // echo $password  . "<br>";
+            // exit();
 
         // validate user & find if in database; store user data in $user object
-        $partner = Partner::validateLoginCredentials($email, $password);
+        $partner = Customer::validateLoginCredentials($email, $password, $type='partner');
+        // $partner = Partner::validateLoginCredentials($email, $password, $type='partner');
 
         // test
-        // echo '<pre>';
-        // print_r($partner);
-        // echo "</pre>";
-        // exit();
+            // echo '<pre>';
+            // print_r($partner);
+            // echo "</pre>";
+            // exit();
 
         if ($partner == false)
         {
@@ -409,21 +410,21 @@ class Login extends \Core\Controller
             // assign user ID & access_level & full_name to SESSION variables
             $_SESSION['user_id'] = $partner->id;
             $_SESSION['access_level'] = $partner->access_level;
-            $_SESSION['first_name'] = $partner->first_name;
-            $_SESSION['full_name'] = $partner->first_name . ' ' . $partner->last_name;
+            $_SESSION['first_name'] = $partner->billing_firstname;
+            $_SESSION['full_name'] = $partner->billing_firstname . ' ' . $partner->billing_lastname;
 
             // session timeout code in front-controller public/index.php
             $_SESSION['LAST_ACTIVITY'] = time(); // update last activity time stamp
 
             // test
-            // echo "uniqID: " . $_SESSION['user'] . "<br>";
-            // echo "Logged in? " . $_SESSION['loggedIn'] . "<br>";
-            // echo "user_id: " . $_SESSION['user_id'] . "<br>";
-            // echo "access level: " .$_SESSION['access_level'] . "<br>";
-            // echo "First name: " . $_SESSION['first_name'] . "<br>";
-            // echo "Full name: " . $_SESSION['full_name'] . "<br>";
-            // echo "User type: " . $_SESSION['userType'] . "<br>";
-            // exit();
+                // echo "uniqID: " . $_SESSION['user'] . "<br>";
+                // echo "Logged in? " . $_SESSION['loggedIn'] . "<br>";
+                // echo "user_id: " . $_SESSION['user_id'] . "<br>";
+                // echo "access level: " .$_SESSION['access_level'] . "<br>";
+                // echo "First name: " . $_SESSION['first_name'] . "<br>";
+                // echo "Full name: " . $_SESSION['full_name'] . "<br>";
+                // echo "User type: " . $_SESSION['userType'] . "<br>";
+                // exit();
 
             // send to root
             header("Location: /");
@@ -442,7 +443,7 @@ class Login extends \Core\Controller
             // create array of years
             $years = range( $firstYear, $thisYear);
 
-            $instructions = 'You\'re almost done '.$partner->first_name.'. Please
+            $instructions = 'You\'re almost done '.$partner->billing_firstname.'. Please
             answer the following questions to help secure your account.';
 
             // send to security Questions
@@ -483,14 +484,14 @@ class Login extends \Core\Controller
                 $_SESSION['LAST_ACTIVITY'] = time(); // update last activity time stamp
 
                 // test
-                // echo "uniqID: " . $_SESSION['user'] . "<br>";
-                // echo "Logged in? " . $_SESSION['loggedIn'] . "<br>";
-                // echo "user_id: " . $_SESSION['user_id'] . "<br>";
-                // echo "access level: " .$_SESSION['access_level'] . "<br>";
-                // echo "First name: " . $_SESSION['first_name'] . "<br>";
-                // echo "Full name: " . $_SESSION['full_name'] . "<br>";
-                // echo "Full name: " . $_SESSION['full_name'] . "<br>";
-                // exit();
+                    // echo "uniqID: " . $_SESSION['user'] . "<br>";
+                    // echo "Logged in? " . $_SESSION['loggedIn'] . "<br>";
+                    // echo "user_id: " . $_SESSION['user_id'] . "<br>";
+                    // echo "access level: " .$_SESSION['access_level'] . "<br>";
+                    // echo "First name: " . $_SESSION['first_name'] . "<br>";
+                    // echo "Full name: " . $_SESSION['full_name'] . "<br>";
+                    // echo "Full name: " . $_SESSION['full_name'] . "<br>";
+                    // exit();
 
                 header("Location: /");
                 exit();
@@ -522,64 +523,64 @@ class Login extends \Core\Controller
        $email = ( isset($_REQUEST['email'])  ) ? filter_var($_REQUEST['email'], FILTER_SANITIZE_EMAIL) : '';
        $password = ( isset($_REQUEST['password'])  ) ? filter_var($_REQUEST['password'], FILTER_SANITIZE_STRING) : '';
 
-       // test
-       // echo $email . "<br>";
-       // echo $password  . "<br>";
-       // exit();
+        // test
+            // echo $email . "<br>";
+            // echo $password  . "<br>";
+            // exit();
 
-       // validate dealer & find if in database; store dealer data in $dealer object
-       $dealer = Dealer::validateLoginCredentials($email, $password);
+        // validate dealer & find if in database; store dealer data in $dealer object
+        $dealer = Customer::validateLoginCredentials($email, $password, $type='dealer');
 
-       // test
-       // echo '<pre>';
-       // print_r($dealer);
-       // echo "</pre>";
-       // exit();
+        // test
+            // echo '<pre>';
+            // print_r($dealer);
+            // echo "</pre>";
+            // exit();
 
-       // not found
-       if ($dealer == false)
-       {
+        // not found
+        if ($dealer == false)
+        {
            View::renderTemplate('Error/index.html', [
                'errorMessage' => 'Dealer cannot be found.'
            ]);
            exit();
-       }
+        }
 
-       /* - - - returning dealer - - - - - - - - - - - - - - - - - - - - - */
+        /* - - - returning dealer - - - - - - - - - - - - - - - - - - - - - */
 
-       // check if returning user; if true log in
-       if( ($dealer) && ($dealer->first_login == 0) )
-       {
-           // log returning user in
-           // create unique id & store in SESSION variable
-           $_SESSION['user'] = md5($dealer->id);
-           $_SESSION['userUniqId'] = md5($dealer->id);
-           $_SESSION['loggedIn'] = true;
-           $_SESSION['userType'] = 'dealer';
+        // check if returning user; if true log in
+        if( ($dealer) && ($dealer->first_login == 0) )
+        {
+            // log returning user in
+            // create unique id & store in SESSION variable
+            $_SESSION['user'] = md5($dealer->id);
+            $_SESSION['userUniqId'] = md5($dealer->id);
+            $_SESSION['loggedIn'] = true;
+            $_SESSION['userType'] = 'dealer';
 
-           // assign user ID & access_level & full_name to SESSION variables
-           $_SESSION['user_id'] = $dealer->id;
-           $_SESSION['access_level'] = $dealer->access_level;
-           $_SESSION['first_name'] = $dealer->first_name;
-           $_SESSION['full_name'] = $dealer->first_name . ' ' . $dealer->last_name;
+            // assign user ID & access_level & full_name to SESSION variables
+            $_SESSION['user_id'] = $dealer->id;
+            $_SESSION['access_level'] = $dealer->access_level;
+            $_SESSION['first_name'] = $dealer->billing_firstname;
+            $_SESSION['full_name'] = $dealer->billing_firstname . ' ' . $dealer->billing_lastname;
 
-           // session timeout code in front-controller public/index.php
-           $_SESSION['LAST_ACTIVITY'] = time(); // update last activity time stamp
+            // session timeout code in front-controller public/index.php
+            $_SESSION['LAST_ACTIVITY'] = time(); // update last activity time stamp
 
-           // test
-           // echo "uniqID: " . $_SESSION['user'] . "<br>";
-           // echo "Logged in? " . $_SESSION['loggedIn'] . "<br>";
-           // echo "user_id: " . $_SESSION['user_id'] . "<br>";
-           // echo "access level: " .$_SESSION['access_level'] . "<br>";
-           // echo "First name: " . $_SESSION['first_name'] . "<br>";
-           // echo "Full name: " . $_SESSION['full_name'] . "<br>";
-           // echo "User type: " . $_SESSION['userType'] . "<br>";
-           // exit();
+            // test
+                // echo "uniqID: " . $_SESSION['user'] . "<br>";
+                // echo "Logged in? " . $_SESSION['loggedIn'] . "<br>";
+                // echo "user_id: " . $_SESSION['user_id'] . "<br>";
+                // echo "access level: " .$_SESSION['access_level'] . "<br>";
+                // echo "First name: " . $_SESSION['first_name'] . "<br>";
+                // echo "Full name: " . $_SESSION['full_name'] . "<br>";
+                // echo "User type: " . $_SESSION['userType'] . "<br>";
+                // exit();
 
-           // send to root
-           header("Location: /");
-           exit();
-       }
+            // send to root
+            header("Location: /");
+            exit();
+        }
 
 
 
@@ -593,12 +594,12 @@ class Login extends \Core\Controller
            // create array of years
            $years = range( $firstYear, $thisYear);
 
-           $instructions = 'You\'re almost done '.$dealer->first_name.'. Please
+           $instructions = 'You\'re almost done '.$dealer->billing_firstname.'. Please
            answer the following questions to help secure your account.';
 
            // send to security Questions
            View::renderTemplate('Register/security-questions.html', [
-               'partner'      => $dealer,
+               'dealer'       => $dealer,
                'years'        => $years,
                'instructions' => $instructions,
                'type'         => 'dealer'
@@ -608,56 +609,56 @@ class Login extends \Core\Controller
 
 
 
-       /* - - - new dealer's first log in after answering security questions - - */
-       // check if first login of new user (first_login == 1); if true, special page
-       if( ($dealer) && ($dealer->first_login == 1 && $dealer->security1 != '') )
-       {
-           // update first_login value
-           $result = Dealer::updateFirstLogin($partner->id);
+        /* - - - new dealer's first log in after answering security questions - - */
+        // check if first login of new user (first_login == 1); if true, special page
+        if( ($dealer) && ($dealer->first_login == 1 && $dealer->security1 != '') )
+        {
+            // update first_login value
+            $result = Dealer::updateFirstLogin($partner->id);
 
-           if ($result)
-           {
-               // log returning user in
-               // create unique id & store in SESSION variable
-               $_SESSION['user'] = md5($dealer->id);
-               $_SESSION['userUniqId'] = md5($dealer->id);
-               $_SESSION['loggedIn'] = true;
-               $_SESSION['userType'] = 'dealer';
+            if ($result)
+            {
+                // log returning user in
+                // create unique id & store in SESSION variable
+                $_SESSION['user'] = md5($dealer->id);
+                $_SESSION['userUniqId'] = md5($dealer->id);
+                $_SESSION['loggedIn'] = true;
+                $_SESSION['userType'] = 'dealer';
 
-               // assign user ID & access_level & full_name to SESSION variables
-               $_SESSION['user_id'] = $dealer->id;
-               $_SESSION['access_level'] = $dealer->access_level;
-               $_SESSION['first_name'] = $dealer->first_name;
-               $_SESSION['full_name'] = $dealer->first_name . ' ' . $dealer->last_name;
+                // assign user ID & access_level & full_name to SESSION variables
+                $_SESSION['user_id'] = $dealer->id;
+                $_SESSION['access_level'] = $dealer->access_level;
+                $_SESSION['first_name'] = $dealer->billing_firstname;
+                $_SESSION['full_name'] = $dealer->billing_firstname . ' ' . $dealer->billing_lastname;
 
-               // session timeout code in front-controller public/index.php
-               $_SESSION['LAST_ACTIVITY'] = time(); // update last activity time stamp
+                // session timeout code in front-controller public/index.php
+                $_SESSION['LAST_ACTIVITY'] = time(); // update last activity time stamp
 
-               // test
-               // echo "uniqID: " . $_SESSION['user'] . "<br>";
-               // echo "Logged in? " . $_SESSION['loggedIn'] . "<br>";
-               // echo "user_id: " . $_SESSION['user_id'] . "<br>";
-               // echo "access level: " .$_SESSION['access_level'] . "<br>";
-               // echo "First name: " . $_SESSION['first_name'] . "<br>";
-               // echo "Full name: " . $_SESSION['full_name'] . "<br>";
-               // echo "Full name: " . $_SESSION['full_name'] . "<br>";
-               // exit();
+                // test
+                    // echo "uniqID: " . $_SESSION['user'] . "<br>";
+                    // echo "Logged in? " . $_SESSION['loggedIn'] . "<br>";
+                    // echo "user_id: " . $_SESSION['user_id'] . "<br>";
+                    // echo "access level: " .$_SESSION['access_level'] . "<br>";
+                    // echo "First name: " . $_SESSION['first_name'] . "<br>";
+                    // echo "Full name: " . $_SESSION['full_name'] . "<br>";
+                    // echo "Full name: " . $_SESSION['full_name'] . "<br>";
+                    // exit();
 
-               header("Location: /");
-               exit();
-           }
-           else
-           {
-               echo "Error updating first login status in database.";
-               exit();
-           }
-       }
-       else
-       {
-           echo "Error logging in. Please check credentials and try again.";
-           exit();
-       }
-  }
+                header("Location: /");
+                exit();
+            }
+            else
+            {
+                echo "Error updating first login status in database.";
+                exit();
+            }
+        }
+        else
+        {
+            echo "Error logging in. Please check credentials and try again.";
+            exit();
+        }
+    }
 
 
 
@@ -665,9 +666,7 @@ class Login extends \Core\Controller
 
     public function forgotPassword()
     {
-        View::renderTemplate('Login/get-new-password.html', [
-
-        ]);
+        View::renderTemplate('Login/get-new-password.html', []);
     }
 
 

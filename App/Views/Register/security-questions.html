@@ -23,9 +23,9 @@
                             {% if type == 'partner' %}
                                 action="/register/post-partner-security-answers?id={{ partner.id }}"
                             {% elseif type == 'dealer' %}
-                                action="/register/post-dealer-security-answers?id={{ partner.id }}"
+                                action="/register/post-dealer-security-answers?id={{ dealer.id }}"
                             {% elseif type == 'customer' %}
-                                action="/register/post-customer-security-answers?id={{ partner.id }}"
+                                action="/register/post-customer-security-answers?id={{ customer.id }}"
                             {% endif %}>
 
 

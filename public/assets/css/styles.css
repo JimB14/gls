@@ -152,6 +152,20 @@ body {
    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 
+.uspsBlue {
+    color: #333366 ;
+}
+.upsBrown {
+    color: #644117; 
+}
+
+.boxWithBorder {
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
 /*---------------- Formatting --------------------*/
 .p0{margin-bottom: .5em;}
 .p1{margin-bottom: 1em;}

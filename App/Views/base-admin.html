@@ -182,8 +182,12 @@
   <script src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
   <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
   <script src="//cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.15.0/jquery.validate.js"></script>
-  <script src="//use.fontawesome.com/6acf38a2cb.js"></script>
+  <!-- <script src="//use.fontawesome.com/6acf38a2cb.js"></script> -->
   <script src="//cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.15.0/jquery.validate.js"></script>
+
+  <!-- datepicker -->
+  <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+  <script src="/assets/js/datepicker.js"></script>
 
   {% if session.user == true and session.access_level == 2 %}
     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery.form/3.51/jquery.form.min.js"></script>
@@ -264,8 +268,10 @@ $(document).ready(function(){
 
     // store href/url in variable
     var url = window.location.href;
-    console.log('URL:', url);
-    console.log("Truncated URL: " + url.substring(0,42));
+
+
+    // console.log('URL:', url);
+    // console.log("Truncated URL: " + url.substring(0,42));
 
 
     // = = = = = = = =  Logged in Customer section  = = = = = = = = = = = //
@@ -282,7 +288,7 @@ $(document).ready(function(){
             $("#base-admin-customers-myaccount-show").css({'background-color':'#fff'});
     }
     if (
-        url.substring(0,49) === 'http://localhost/admin/customers/main/get-account' ||
+        url.substring(0,58) === 'http://gunlaser.localhost/admin/customers/main/get-account' ||
         url.substring(0,54) === 'http://gunlaser.store/admin/cusomers/main/get-account') {
 
             $("#base-admin-customers-myaccount-section").show();
@@ -294,14 +300,14 @@ $(document).ready(function(){
         $("#base-admin-customer-orders-section").toggle(250);
     });
     if (
-        url.substring(0,48) === 'http://localhost/admin/customers/main/get-orders' ||
+        url.substring(0,57) === 'http://gunlaser.localhost/admin/customers/main/get-orders' ||
         url.substring(0,53) === 'http://gunlaser.store/admin/orders/main/get-orders') {
 
             $("#base-admin-customer-orders-section").show();
             $("#base-admin-customer-orders").css({'background-color':'#fff'});
     }
     if (
-        url.substring(0,50) === 'http://localhost/admin/customers/main/get-my-order' ||
+        url.substring(0,59) === 'http://gunlaser.localhost/admin/customers/main/get-my-order' ||
         url.substring(0,55) === 'http://gunlaser.store/admin/customers/main/get-my-order') {
 
             $("#base-admin-customer-orders-section").show();
@@ -318,7 +324,7 @@ $(document).ready(function(){
         $("#base-admin-customer-warranty-section").toggle(250);
     });
     if (
-        url.substring(0,50) === 'http://localhost/admin/customers/main/registration' ||
+        url.substring(0,59) === 'http://gunlaser.localhost/admin/customers/main/registration' ||
         url.substring(0,55) === 'http://gunlaser.store/admin/customers/main/registration') {
 
             $("#base-admin-customer-warranty-section").show();
@@ -335,7 +341,7 @@ $(document).ready(function(){
         $("#base-admin-dealers-myaccount-section").toggle(250);
     });
     if (
-        url.substring(0,47) === 'http://localhost/admin/dealers/main/get-account' ||
+        url.substring(0,56) === 'http://gunlaser.localhost/admin/dealers/main/get-account' ||
         url.substring(0,52) === 'http://gunlaser.store/admin/dealers/main/get-account') {
 
             $("#base-admin-dealers-myaccount-section").show();
@@ -348,14 +354,14 @@ $(document).ready(function(){
         $("#base-admin-dealer-orders-section").toggle(250);
     });
     if (
-        url.substring(0,46) === 'http://localhost/admin/dealers/main/get-orders' ||
+        url.substring(0,55) === 'http://gunlaser.localhost/admin/dealers/main/get-orders' ||
         url.substring(0,51) === 'http://gunlaser.store/admin/dealers/main/get-orders') {
 
             $("#base-admin-dealer-orders-section").show();
             $("#base-admin-dealer-orders").css({'background-color':'#fff'});
     }
     if (
-        url.substring(0,48) === 'http://localhost/admin/dealers/main/get-my-order' ||
+        url.substring(0,57) === 'http://gunlaser.localhost/admin/dealers/main/get-my-order' ||
         url.substring(0,53) === 'http://gunlaser.store/admin/dealers/main/get-my-order') {
 
             $("#base-admin-dealer-orders-section").show();
@@ -367,42 +373,42 @@ $(document).ready(function(){
         $("#base-admin-dealers-lasers-section").toggle(250);
     });
     if (
-        url === 'http://localhost/admin/dealers/main/get-trseries'||
+        url === 'http://gunlaser.localhost/admin/dealers/main/get-trseries'||
         url === 'http://gunlaser.store/admin/dealers/main/get-trseries') {
 
             $("#base-admin-dealers-lasers-section").show();
             $("#base-admin-dealers-trseries-show").css({'background-color':'#fff'});
     }
     if (
-        url === 'http://localhost/admin/dealers/main/get-trseriesnp' ||
+        url === 'http://gunlaser.localhost/admin/dealers/main/get-trseriesnp' ||
         url === 'http://gunlaser.store/admin/dealers/main/get-trseriesnp') {
 
             $("#base-admin-dealers-lasers-section").show();
             $("#base-admin-dealers-trseriesnp-show").css({'background-color':'#fff'});
     }
     if (
-        url === 'http://localhost/admin/dealers/main/get-gtoflx' ||
+        url === 'http://gunlaser.localhost/admin/dealers/main/get-gtoflx' ||
         url === 'http://gunlaser.store/admin/dealers/get-gtoflx') {
 
             $("#base-admin-dealers-lasers-section").show();
             $("#base-admin-dealers-gtoflx-show").css({'background-color':'#fff'});
     }
     if (
-        url === 'http://localhost/admin/dealers/main/get-gtonp' ||
+        url === 'http://gunlaser.localhost/admin/dealers/main/get-gtonp' ||
         url === 'http://gunlaser.store/admin/dealers/get-gtonp') {
 
             $("#base-admin-dealers-lasers-section").show();
             $("#base-admin-dealers-gtonp-show").css({'background-color':'#fff'});
     }
     if (
-        url === 'http://localhost/admin/dealers/main/get-stingrays' ||
+        url === 'http://gunlaser.localhost/admin/dealers/main/get-stingrays' ||
         url === 'http://gunlaser.store/admin/dealers/main/get-stingrays') {
 
             $("#base-admin-dealers-lasers-section").show();
             $("#base-admin-dealers-stingray-show").css({'background-color':'#fff'});
     }
     if (
-        url === 'http://localhost/admin/dealers/main/get-stingraysnp' ||
+        url === 'http://gunlaser.localhost/admin/dealers/main/get-stingraysnp' ||
         url === 'http://gunlaser.store/admin/dealers/main/get-stingraysnp') {
 
             $("#base-admin-dealers-lasers-section").show();
@@ -415,7 +421,7 @@ $(document).ready(function(){
         $("#base-admin-dealers-holsters-section").toggle(250);
     });
     if (
-        url === 'http://localhost/admin/dealers/main/get-holsters' ||
+        url === 'http://gunlaser.localhost/admin/dealers/main/get-holsters' ||
         url === 'http://gunlaser.store/admin/dealers/main/get-holsters') {
 
             $("#base-admin-dealers-holsters-section").show();
@@ -428,21 +434,21 @@ $(document).ready(function(){
         $("#base-admin-dealers-accessories-section").toggle(250);
     });
     if (
-        url === 'http://localhost/admin/dealers/main/get-batteries' ||
+        url === 'http://gunlaser.localhost/admin/dealers/main/get-batteries' ||
         url === 'http://gunlaser.store/admin/dealers/main/get-batteries') {
 
             $("#base-admin-dealers-accessories-section").show();
             $("#base-admin-dealers-batteries-show").css({'background-color':'#fff'});
     }
     if (
-        url === 'http://localhost/admin/dealers/main/get-toolkits' ||
+        url === 'http://gunlaser.localhost/admin/dealers/main/get-toolkits' ||
         url === 'http://gunlaser.store/admin/dealers/main/get-toolkits') {
 
             $("#base-admin-dealers-accessories-section").show();
             $("#base-admin-dealers-toolkits-show").css({'background-color':'#fff'});
     }
     if (
-        url === 'http://localhost/admin/dealers/main/get-accessories' ||
+        url === 'http://gunlaser.localhost/admin/dealers/main/get-accessories' ||
         url === 'http://gunlaser.store/admin/dealers/main/get-accessories') {
 
             $("#base-admin-dealers-accessories-section").show();
@@ -455,7 +461,7 @@ $(document).ready(function(){
         $("#base-admin-dealers-flx-section").toggle(250);
     });
     if (
-        url === 'http://localhost/admin/dealers/main/get-flxs' ||
+        url === 'http://gunlaser.localhost/admin/dealers/main/get-flxs' ||
         url === 'http://gunlaser.store/admin/dealers/main/get-flxs') {
 
             $("#base-admin-dealers-flx-section").show();
@@ -472,7 +478,7 @@ $(document).ready(function(){
         $("#base-admin-partners-myaccount-section").toggle(250);
     });
     if (
-        url.substring(0,48) === 'http://localhost/admin/partners/main/get-account' ||
+        url.substring(0,57) === 'http://gunlaser.localhost/admin/partners/main/get-account' ||
         url.substring(0,53) === 'http://gunlaser.store/admin/partners/main/get-account') {
 
             $("#base-admin-partners-myaccount-section").show();
@@ -485,14 +491,14 @@ $(document).ready(function(){
         $("#base-admin-partner-orders-section").toggle(250);
     });
     if (
-        url.substring(0,47) === 'http://localhost/admin/partners/main/get-orders' ||
+        url.substring(0,56) === 'http://gunlaser.localhost/admin/partners/main/get-orders' ||
         url.substring(0,52) === 'http://gunlaser.store/admin/partners/main/get-orders') {
 
             $("#base-admin-partner-orders-section").show();
             $("#base-admin-partner-orders").css({'background-color':'#fff'});
     }
     if (
-        url.substring(0,49) === 'http://localhost/admin/partners/main/get-my-order' ||
+        url.substring(0,58) === 'http://gunlaser.localhost/admin/partners/main/get-my-order' ||
         url.substring(0,54) === 'http://gunlaser.store/admin/partners/main/get-my-order') {
 
             $("#base-admin-partner-orders-section").show();
@@ -505,42 +511,42 @@ $(document).ready(function(){
         $("#base-admin-partners-lasers-section").toggle(250);
     });
     if (
-        url === 'http://localhost/admin/partners/main/get-trseries' ||
+        url === 'http://gunlaser.localhost/admin/partners/main/get-trseries' ||
         url === 'http://gunlaser.store/admin/partners/main/get-trseries') {
 
             $("#base-admin-partners-lasers-section").show();
             $("#base-admin-partners-trseries-show").css({'background-color':'#fff'});
     }
     if (
-        url === 'http://localhost/admin/partners/main/get-trseriesnp' ||
+        url === 'http://gunlaser.localhost/admin/partners/main/get-trseriesnp' ||
         url === 'http://gunlaser.store/admin/partners/main/get-trseriesnp') {
 
             $("#base-admin-partners-lasers-section").show();
             $("#base-admin-partners-trseriesnp-show").css({'background-color':'#fff'});
     }
     if (
-        url === 'http://localhost/admin/partners/main/get-gtoflx' ||
+        url === 'http://gunlaser.localhost/admin/partners/main/get-gtoflx' ||
         url === 'http://gunlaser.store/admin/partners/main/get-gtoflx') {
 
             $("#base-admin-partners-lasers-section").show();
             $("#base-admin-partners-gtoflx-show").css({'background-color':'#fff'});
     }
     if (
-        url === 'http://localhost/admin/partners/main/get-gtonp' ||
+        url === 'http://gunlaser.localhost/admin/partners/main/get-gtonp' ||
         url === 'http://gunlaser.store/admin/partners/main/get-gtofnp') {
 
             $("#base-admin-partners-lasers-section").show();
             $("#base-admin-partners-gtonp-show").css({'background-color':'#fff'});
     }
     if (
-        url === 'http://localhost/admin/partners/main/get-stingrays' ||
+        url === 'http://gunlaser.localhost/admin/partners/main/get-stingrays' ||
         url === 'http://gunlaser.store/admin/partners/main/get-stingrays') {
 
             $("#base-admin-partners-lasers-section").show();
             $("#base-admin-partners-stingray-show").css({'background-color':'#fff'});
     }
     if (
-        url === 'http://localhost/admin/partners/main/get-stingraysnp' ||
+        url === 'http://gunlaser.localhost/admin/partners/main/get-stingraysnp' ||
         url === 'http://gunlaser.store/admin/partners/main/get-stingraysnp') {
 
             $("#base-admin-partners-lasers-section").show();
@@ -553,7 +559,7 @@ $(document).ready(function(){
         $("#base-admin-partners-holsters-section").toggle(250);
     });
     if (
-        url === 'http://localhost/admin/partners/main/get-holsters' ||
+        url === 'http://gunlaser.localhost/admin/partners/main/get-holsters' ||
         url === 'http://gunlaser.store/admin/partners/main/get-holsters') {
 
             $("#base-admin-partners-holsters-section").show();
@@ -566,21 +572,21 @@ $(document).ready(function(){
         $("#base-admin-partners-accessories-section").toggle(250);
     });
     if (
-        url === 'http://localhost/admin/partners/main/get-batteries'
+        url === 'http://gunlaser.localhost/admin/partners/main/get-batteries'
         || url === 'http://gunlaser.store/admin/partners/main/get-batteries') {
 
             $("#base-admin-partners-accessories-section").show();
             $("#base-admin-partners-batteries-show").css({'background-color':'#fff'});
     }
     if (
-        url === 'http://localhost/admin/partners/main/get-toolkits'
+        url === 'http://gunlaser.localhost/admin/partners/main/get-toolkits'
         || url === 'http://gunlaser.store/admin/partners/main/get-toolkits') {
 
             $("#base-admin-partners-accessories-section").show();
             $("#base-admin-partners-toolkits-show").css({'background-color':'#fff'});
     }
     if (
-        url === 'http://localhost/admin/partners/main/get-accessories'
+        url === 'http://gunlaser.localhost/admin/partners/main/get-accessories'
         || url === 'http://gunlaser.store/admin/partners/main/get-accessories') {
 
             $("#base-admin-partners-accessories-section").show();
@@ -593,7 +599,7 @@ $(document).ready(function(){
         $("#base-admin-partners-flx-section").toggle(250);
     });
     if (
-        url === 'http://localhost/admin/partners/main/get-flxs'
+        url === 'http://gunlaser.localhost/admin/partners/main/get-flxs'
         || url === 'http://gunlaser.store/admin/partners/main/get-flxs') {
 
             $("#base-admin-partners-flx-section").show();
@@ -605,20 +611,38 @@ $(document).ready(function(){
 
    // = = = = =  Logged In Admin & Supervisor section  = = = = = = = = = = = = = //
 
+    // Marketing manager section
+    $("#base-admin-marketing-title").click(function(){
+        console.log('Marketing Mgr clicked');
+        $("#base-admin-coupons-section").toggle(250);
+    });
+    if (
+        url === 'http://gunlaser.localhost/admin/coupons/get-coupons'
+        || url === 'http://gunlaser.store/admin/coupons/get-coupons'
+        || url === 'http://gunlaser.localhost/admin/coupons/add-coupon'
+        || url === 'http://gunlaser.store/admin/coupons/add-coupon'
+        || url.substring(0,51) === 'http://gunlaser.localhost/admin/coupons/edit-coupon'
+        || url.substring(0,47) === 'http://gunlaser.store/admin/coupons/edit-coupon') {
+
+            $("#base-admin-coupons-section").show();
+            $("#base-admin-coupons-manage").css({'background-color':'#fff'});
+    }
+
+
     // tr series section
     $("#base-admin-tr-series-title").click(function(){
         console.log('TR Series clicked');
         $("#base-admin-tr-series-section").toggle(250);
     });
     if (
-        url === 'http://localhost/admin/lasers/add-trseries'
+        url === 'http://gunlaser.localhost/admin/lasers/add-trseries'
         || url === 'http://gunlaser.store/admin/lasers/add-trseries') {
 
             $("#base-admin-tr-series-section").show();
             $("#base-admin-tr-series-add").css({'background-color':'#fff'});
     }
     if (
-        url === 'http://localhost/admin/lasers/get-trseries'
+        url === 'http://gunlaser.localhost/admin/lasers/get-trseries'
         || url === 'http://gunlaser.store/admin/lasers/get-trseries') {
 
             $("#base-admin-tr-series-section").show();
@@ -632,14 +656,14 @@ $(document).ready(function(){
         $("#base-admin-gtoflx-section").toggle(250);
     });
     if (
-        url === 'http://localhost/admin/lasers/add-gtoflx'
+        url === 'http://gunlaser.localhost/admin/lasers/add-gtoflx'
         || url === 'http://gunlaser.store/admin/lasers/add-gtoflx') {
 
             $("#base-admin-gtoflx-section").show();
             $("#base-admin-gtoflx-add").css({'background-color':'#fff'});
     }
     if (
-        url === 'http://localhost/admin/lasers/get-gtoflx'
+        url === 'http://gunlaser.localhost/admin/lasers/get-gtoflx'
         || url === 'http://gunlaser.store/admin/lasers/get-gtoflxs') {
 
             $("#base-admin-gtoflx-section").show();
@@ -653,14 +677,14 @@ $(document).ready(function(){
         $("#base-admin-stingray-section").toggle(250);
     });
     if (
-        url === 'http://localhost/admin/lasers/add-stingray'
+        url === 'http://gunlaser.localhost/admin/lasers/add-stingray'
         || url === 'http://gunlaser.store/admin/lasers/add-stingray') {
 
             $("#base-admin-stingray-section").show();
             $("#base-admin-stingray-add").css({'background-color':'#fff'});
     }
     if (
-        url === 'http://localhost/admin/lasers/get-stingray'
+        url === 'http://gunlaser.localhost/admin/lasers/get-stingray'
         || url === 'http://gunlaser.store/admin/lasers/get-stingrays') {
 
             $("#base-admin-stingray-section").show();
@@ -674,14 +698,14 @@ $(document).ready(function(){
         $("#base-admin-flx-section").toggle(250);
     });
     if (
-        url === 'http://localhost/admin/lasers/add-flx'
+        url === 'http://gunlaser.localhost/admin/lasers/add-flx'
         || url === 'http://gunlaser.store/admin/lasers/add-flx') {
 
             $("#base-admin-flx-section").show();
             $("#base-admin-flx-add").css({'background-color':'#fff'});
     }
     if (
-        url === 'http://localhost/admin/lasers/get-flxs'
+        url === 'http://gunlaser.localhost/admin/lasers/get-flxs'
         || url === 'http://gunlaser.store/admin/lasers/get-flxs') {
 
             $("#base-admin-flx-section").show();
@@ -695,14 +719,14 @@ $(document).ready(function(){
         $("#base-admin-holsters-section").toggle(250);
     });
     if (
-        url === 'http://localhost/admin/holsters/add-holster'
+        url === 'http://gunlaser.localhost/admin/holsters/add-holster'
         || url === 'http://gunlaser.store/admin/holsters/add-holster') {
 
             $("#base-admin-holsters-section").show();
             $("#base-admin-holsters-add").css({'background-color':'#fff'});
     }
     if (
-        url === 'http://localhost/admin/holsters/get-holsters'
+        url === 'http://gunlaser.localhost/admin/holsters/get-holsters'
         || url === 'http://gunlaser.store/admin/holsters/get-holsters') {
 
             $("#base-admin-holsters-section").show();
@@ -716,14 +740,14 @@ $(document).ready(function(){
         $("#base-admin-accessories-section").toggle(250);
     });
     if (
-        url === 'http://localhost/admin/accessories/add-accessory'
+        url === 'http://gunlaser.localhost/admin/accessories/add-accessory'
         || url === 'http://gunlaser.store/admin/accessories/add-accessory') {
 
             $("#base-admin-accessories-section").show();
             $("#base-admin-accessories-add").css({'background-color':'#fff'});
     }
     if (
-        url === 'http://localhost/admin/accessories/get-accessories'
+        url === 'http://gunlaser.localhost/admin/accessories/get-accessories'
         || url === 'http://gunlaser.store/admin/accessories/get-accessories') {
 
             $("#base-admin-accessories-section").show();
@@ -737,14 +761,14 @@ $(document).ready(function(){
         $("#base-admin-batteries-section").toggle(250);
     });
     if (
-        url === 'http://localhost/admin/accessories/add-battery'
+        url === 'http://gunlaser.localhost/admin/accessories/add-battery'
         || url === 'http://gunlaser.store/admin/accessories/add-battery') {
 
             $("#base-admin-batteries-section").show();
             $("#base-admin-batteries-add").css({'background-color':'#fff'});
     }
     if (
-        url === 'http://localhost/admin/accessories/get-batteries'
+        url === 'http://gunlaser.localhost/admin/accessories/get-batteries'
         || url === 'http://gunlaser.store/admin/accessories/get-batteries') {
 
             $("#base-admin-batteries-section").show();
@@ -758,14 +782,14 @@ $(document).ready(function(){
         $("#base-admin-toolkits-section").toggle(250);
     });
     if (
-        url === 'http://localhost/admin/accessories/add-toolkit'
+        url === 'http://gunlaser.localhost/admin/accessories/add-toolkit'
         || url === 'http://gunlaser.store/admin/accessories/add-toolkit') {
 
             $("#base-admin-toolkits-section").show();
             $("#base-admin-toolkits-add").css({'background-color':'#fff'});
     }
     if (
-        url === 'http://localhost/admin/accessories/get-toolkits'
+        url === 'http://gunlaser.localhost/admin/accessories/get-toolkits'
         || url === 'http://gunlaser.store/admin/accessories/get-toolkits') {
 
             $("#base-admin-batteries-section").show();
@@ -779,21 +803,21 @@ $(document).ready(function(){
         $("#base-admin-shows-section").toggle(250);
     });
     if (
-        url === 'http://localhost/admin/shows/add-show'
+        url === 'http://gunlaser.localhost/admin/shows/add-show'
         || url === 'http://gunlaser.store/admin/shows/add-show') {
 
             $("#base-admin-shows-section").show();
             $("#base-admin-shows-add").css({'background-color':'#fff'});
     }
     if (
-        url === 'http://localhost/admin/shows/get-shows'
+        url === 'http://gunlaser.localhost/admin/shows/get-shows'
         || url === 'http://gunlaser.store/admin/shows/get-shows') {
 
             $("#base-admin-shows-section").show();
             $("#base-admin-shows-manage").css({'background-color':'#fff'});
     }
     if (
-        url.substring(0,38) === 'http://localhost/admin/shows/edit-show'
+        url.substring(0,47) === 'http://gunlaser.localhost/admin/shows/edit-show'
         || url.substring(0,43) === 'http://gunlaser.store/admin/shows/edit-show') {
 
             $("#base-admin-shows-section").show();
@@ -806,27 +830,48 @@ $(document).ready(function(){
         $("#base-admin-customers-section").toggle(250);
     });
     if (
-        url === 'http://localhost/admin/customers/add-customer'
-        || url === 'http://gunlaser.store/admin/customers/add-customer') {
+        url === 'http://gunlaser.localhost/admin/customers/add'
+        || url === 'http://gunlaser.store/admin/customers/add') {
 
             $("#base-admin-customers-section").show();
             $("#base-admin-customers-add").css({'background-color':'#fff'});
     }
     if (
-        url === 'http://localhost/admin/customers/get-customers'
-        || url === 'http://gunlaser.store/admin/customers/get-customers') {
+        url === 'http://gunlaser.localhost/admin/customers/get-customers-by-type?type=all'
+        || url === 'http://gunlaser.store/admin/customers/get-customers-by-type?type=all') {
 
             $("#base-admin-customers-section").show();
-            $("#base-admin-customers-manage").css({'background-color':'#fff'});
+            $("#base-admin-customers-all").css({'background-color':'#fff'});
     }
     if (
-        url.substring(0,46) === 'http://localhost/admin/customers/edit-customer'
+        url === 'http://gunlaser.localhost/admin/customers/get-customers-by-type?type=customer'
+        || url === 'http://gunlaser.store/admin/customers/get-customers-by-type?type=customer') {
+
+            $("#base-admin-customers-section").show();
+            $("#base-admin-customers-customers").css({'background-color':'#fff'});
+    }
+    if (
+        url === 'http://gunlaser.localhost/admin/customers/get-customers-by-type?type=dealer'
+        || url === 'http://gunlaser.store/admin/customers/get-customers-by-type?type=dealer') {
+
+            $("#base-admin-customers-section").show();
+            $("#base-admin-customers-dealers").css({'background-color':'#fff'});
+    }
+    if (
+        url === 'http://gunlaser.localhost/admin/customers/get-customers-by-type?type=partner'
+        || url === 'http://gunlaser.store/admin/customers/get-customers-by-type?type=partner') {
+
+            $("#base-admin-customers-section").show();
+            $("#base-admin-customers-partners").css({'background-color':'#fff'});
+    }
+    if (
+        url.substring(0,55) === 'http://gunlaser.localhost/admin/customers/edit-customer'
         || url.substring(0,51) === 'http://gunlaser.store/admin/customers/edit-customer') {
 
             $("#base-admin-customers-section").show();
     }
     if (
-        url.substring(0,43) === 'http://localhost/admin/customers/get-orders'
+        url.substring(0,52) === 'http://gunlaser.localhost/admin/customers/get-orders'
         || url.substring(0,48) === 'http://gunlaser.store/admin/customers/get-orders') {
 
             $("#base-admin-customers-section").show();
@@ -839,59 +884,71 @@ $(document).ready(function(){
         $("#base-admin-dealers-section").toggle(250);
     });
     if (
-        url === 'http://localhost/admin/dealers/add-dealer'
+        url === 'http://gunlaser.localhost/admin/dealers/add-dealer'
         || url === 'http://gunlaser.store/admin/dealers/add-dealer') {
 
             $("#base-admin-dealers-section").show();
             $("#base-admin-dealers-add").css({'background-color':'#fff'});
     }
     if (
-        url === 'http://localhost/admin/dealers/get-dealers'
+        url === 'http://gunlaser.localhost/admin/dealers/get-dealers'
         || url === 'http://gunlaser.store/admin/dealers/get-dealers') {
 
             $("#base-admin-dealers-section").show();
             $("#base-admin-dealers-manage").css({'background-color':'#fff'});
     }
     if (
-        url.substring(0,42) === 'http://localhost/admin/dealers/edit-dealer'
+        url.substring(0,50) === 'http://gunlaser.localhost/admin/dealers/add-dealer'
+        || url.substring(0,47) === 'http://gunlaser.store/admin/dealers/add-dealer') {
+
+            $("#base-admin-dealers-section").show();
+    }
+    if (
+        url.substring(0,51) === 'http://gunlaser.localhost/admin/dealers/edit-dealer'
         || url.substring(0,47) === 'http://gunlaser.store/admin/dealers/edit-dealer') {
 
             $("#base-admin-dealers-section").show();
     }
     if (
-        url.substring(0,41) === 'http://localhost/admin/dealers/get-orders'
-        || url.substring(0,46) === 'http://gunlaser.store/admin/dealers/get-orders') {
+        url.substring(0,51) === 'http://gunlaser.localhost/admin/dealers/get-dealers'
+        || url.substring(0,47) === 'http://gunlaser.store/admin/dealers/get-dealers') {
 
             $("#base-admin-dealers-section").show();
     }
 
-    // parters section
+    // partners section
     $("#base-admin-partners-title").click(function(){
         console.log('Partners clicked');
         $("#base-admin-partners-section").toggle(250);
     });
     if (
-        url === 'http://localhost/admin/partners/add-partner'
+        url === 'http://gunlaser.localhost/admin/partners/add-partner'
         || url === 'http://gunlaser.store/admin/partners/add-partner') {
 
             $("#base-admin-partners-section").show();
             $("#base-admin-partners-add").css({'background-color':'#fff'});
     }
     if (
-        url === 'http://localhost/admin/partners/get-partners'
+        url === 'http://gunlaser.localhost/admin/partners/get-partners'
         || url === 'http://gunlaser.store/admin/partners/get-partners') {
 
             $("#base-admin-partners-section").show();
             $("#base-admin-partners-manage").css({'background-color':'#fff'});
     }
     if (
-        url.substring(0,44) === 'http://localhost/admin/partners/edit-partner'
+        url.substring(0,52) === 'http://gunlaser.localhost/admin/partners/add-partner'
+        || url.substring(0,49) === 'http://gunlaser.store/admin/partners/add-partner') {
+
+            $("#base-admin-partners-section").show();
+    }
+    if (
+        url.substring(0,53) === 'http://gunlaser.localhost/admin/partners/edit-partner'
         || url.substring(0,49) === 'http://gunlaser.store/admin/partners/edit-partner') {
 
             $("#base-admin-partners-section").show();
     }
     if (
-        url.substring(0,42) === 'http://localhost/admin/partners/get-orders'
+        url.substring(0,51) === 'http://gunlaser.localhost/admin/partners/get-orders'
         || url.substring(0,47) === 'http://gunlaser.store/admin/partners/get-orders') {
 
             $("#base-admin-partners-section").show();
@@ -904,21 +961,21 @@ $(document).ready(function(){
         $("#base-admin-users-section").toggle(250);
     });
     if (
-        url === 'http://localhost/admin/users/add-user'
+        url === 'http://gunlaser.localhost/admin/users/add-user'
         || url === 'http://gunlaser.store/admin/users/add-user') {
 
             $("#base-admin-users-section").show();
             $("#base-admin-users-add").css({'background-color':'#fff'});
     }
     if (
-        url === 'http://localhost/admin/users/get-users'
+        url === 'http://gunlaser.localhost/admin/users/get-users'
         || url === 'http://gunlaser.store/admin/users/get-users') {
 
             $("#base-admin-users-section").show();
             $("#base-admin-users-manage").css({'background-color':'#fff'});
     }
     if (
-        url.substring(0,38) === 'http://localhost/admin/users/edit-user'
+        url.substring(0,47) === 'http://gunlaser.localhost/admin/users/edit-user'
         || url.substring(0,43) === 'http://gunlaser.store/admin/users/edit-user') {
 
             $("#base-admin-users-section").show();
@@ -931,7 +988,7 @@ $(document).ready(function(){
         $("#base-admin-postage-section").toggle(250);
     });
     if (
-        url === 'http://localhost/admin/postage/get-account-status'
+        url === 'http://gunlaser.localhost/admin/postage/get-account-status'
         || url === 'http://gunlaser.store/admin/postage/get-account-status') {
 
             $("#base-admin-postage-section").show();
@@ -945,74 +1002,74 @@ $(document).ready(function(){
         $("#base-admin-orders-section").toggle(250);
     });
     if (
-        url === 'http://localhost/admin/orders/get-orders?status=all'
+        url === 'http://gunlaser.localhost/admin/orders/get-orders?status=all'
         || url === 'http://gunlaser.store/admin/orders/get-orders?status=all') {
 
             $("#base-admin-orders-section").show();
             $("#base-admin-orders-all").css({'background-color':'#fff'});
     }
     if (
-        url === 'http://localhost/admin/orders/get-orders?status=pending'
+        url === 'http://gunlaser.localhost/admin/orders/get-orders?status=pending'
         || url === 'http://gunlaser.store/admin/orders/get-orders?status=pending') {
 
             $("#base-admin-orders-section").show();
             $("#base-admin-orders-pending").css({'background-color':'#fff'});
     }
     if (
-        url === 'http://localhost/admin/orders/get-orders?status=label-created'
+        url === 'http://gunlaser.localhost/admin/orders/get-orders?status=label-created'
         || url === 'http://gunlaser.store/admin/orders/get-orders?status=label-created') {
 
             $("#base-admin-orders-section").show();
             $("#base-admin-orders-label-created").css({'background-color':'#fff'});
     }
     if (
-        url === 'http://localhost/admin/orders/get-orders?status=shipped'
+        url === 'http://gunlaser.localhost/admin/orders/get-orders?status=shipped'
         || url === 'http://gunlaser.store/admin/orders/get-orders?status=shipped') {
 
             $("#base-admin-orders-section").show();
             $("#base-admin-orders-shipped").css({'background-color':'#fff'});
     }
     if (
-        url === 'http://localhost/admin/orders/get-orders?status=return-pending'
+        url === 'http://gunlaser.localhost/admin/orders/get-orders?status=return-pending'
         || url === 'http://gunlaser.store/admin/orders/get-orders?status=return-pending') {
 
             $("#base-admin-orders-section").show();
             $("#base-admin-orders-return-pending").css({'background-color':'#fff'});
     }
     if (
-        url === 'http://localhost/admin/orders/get-orders?status=returned'
+        url === 'http://gunlaser.localhost/admin/orders/get-orders?status=returned'
         || url === 'http://gunlaser.store/admin/orders/get-orders?status=returned') {
 
             $("#base-admin-orders-section").show();
             $("#base-admin-orders-returned").css({'background-color':'#fff'});
     }
     if (
-        url === 'http://localhost/admin/orders/get-orders?status=refunded'
+        url === 'http://gunlaser.localhost/admin/orders/get-orders?status=refunded'
         || url === 'http://gunlaser.store/admin/orders/get-orders?status=refunded') {
 
             $("#base-admin-orders-section").show();
             $("#base-admin-orders-refunded").css({'background-color':'#fff'});
     }
     if (
-        url.substring(0,39) === 'http://localhost/admin/orders/get-order'
+        url.substring(0,48) === 'http://gunlaser.localhost/admin/orders/get-order'
         || url.substring(0,44) === 'http://gunlaser.store/admin/orders/get-order') {
 
             $("#base-admin-orders-section").show();
     }
     if (
-        url.substring(0,39) === 'http://localhost/admin/orders/new-order'
+        url.substring(0,48) === 'http://gunlaser.localhost/admin/orders/new-order'
         || url.substring(0,44) === 'http://gunlaser.store/admin/orders/new-order') {
 
             $("#base-admin-orders-section").show();
     }
     if (
-        url.substring(0,38) === 'http://localhost/admin/orders/exchange'
+        url.substring(0,47) === 'http://gunlaser.localhost/admin/orders/exchange'
         || url.substring(0,43) === 'http://gunlaser.store/admin/orders/exchange') {
 
             $("#base-admin-orders-section").show();
     }
     if (
-        url.substring(0,40) === 'http://localhost/admin/orders/assign-rma'
+        url.substring(0,49) === 'http://gunlaser.localhost/admin/orders/assign-rma'
         || url.substring(0,45) === 'http://gunlaser.store/admin/orders/assign-rma') {
 
             $("#base-admin-orders-section").show();
@@ -1026,21 +1083,21 @@ $(document).ready(function(){
         $("#base-admin-labels-section").toggle(250);
     });
     if (
-        url === 'http://localhost/admin/labels/get-usps-labels'
+        url === 'http://gunlaser.localhost/admin/labels/get-usps-labels'
         || url === 'http://gunlaser.store/admin/labels/get-usps-labels') {
 
             $("#base-admin-labels-section").show();
             $("#base-admin-labels-usps").css({'background-color':'#fff'});
     }
     if (
-        url === 'http://localhost/admin/labels/get-ups-labels'
+        url === 'http://gunlaser.localhost/admin/labels/get-ups-labels'
         || url === 'http://gunlaser.store/admin/labels/get-ups-labels') {
 
             $("#base-admin-labels-section").show();
             $("#base-admin-labels-ups").css({'background-color':'#fff'});
     }
     if (
-        url === 'http://localhost/admin/labels/get-ups-return-labels'
+        url === 'http://gunlaser.localhost/admin/labels/get-ups-return-labels'
         || url === 'http://gunlaser.store/admin/labels/get-ups-return-labels') {
 
             $("#base-admin-labels-section").show();
@@ -1055,7 +1112,7 @@ $(document).ready(function(){
         $("#base-admin-warranty-section").toggle(250);
     });
     if (
-        url === 'http://localhost/admin/warrantyregistrations/get-warranty-registrations'
+        url === 'http://gunlaser.localhost/admin/warrantyregistrations/get-warranty-registrations'
         || url === 'http://gunlaser.store/admin/warrantyregistrations/get-warranty-registrations') {
 
             $("#base-admin-warranty-section").show();
@@ -1280,9 +1337,110 @@ $(document).ready(function(){
         document.getElementById('base-admin-labels-section').style.display = 'none';
         document.getElementById('base-admin-warranty-section').style.display = 'none';
     }
+</script>
+<script>
+$(function() {
 
- </script>
+    /* - - - -   Phone order coupon application - - - - */
+    // get coupon detaiils
+    $("#check_coupon_btn").click(function() {
+        console.log('Check coupon button clicked.');
+        var phone_coupon = $("#phone_coupon").val();
+        var customer_id = $("#phone_customer_id").val();
 
+        console.log('Coupon: ', phone_coupon);
+        console.log('Customer ID: ', customer_id);
+
+        // validation
+        if (phone_coupon === '') {
+            alert("No code entered. Please try again.");
+            $("#phone_coupon").focus();
+            return false;
+        }
+
+        // alphanumeric only filter
+        if (!phone_coupon.match('^[a-zA-Z0-9]*$')) {
+            alert("Invalid characters.");
+            $("#phone_coupon").val('');
+            $("#phone_coupon").focus();
+            return false;
+        }
+
+        $.ajax({
+            url: '/admin/phone/ajax-check-coupon',
+            type: 'POST',
+            data: { phone_coupon: phone_coupon, customer_id: customer_id },
+            success: function(result) {
+                console.log('======');
+                console.log('Inside Ajax success property');
+                console.log('Success');
+                console.log('Returned data: [JSON]: ', result);
+
+                // parse returned JSON into JavaScript object
+                let res = $.parseJSON(result);
+
+                console.log('JavaScript object: ', res);
+
+                // loop through JavaScript object and display in view
+                $.each(res, function (key, value) {
+                    console.log( key + ': ' + value);
+
+                    if(res.status === false) {
+                        $("#coupon_data").show();
+                        $("#coupon_details").html(
+                            '<div class="alert alert-danger">' +
+                            '<p>' + res.reason + '</p>' +
+                            '</div>'
+                        );
+                    } else {
+                        $("#coupon_data").show();
+                        var html = '<div class="alert alert-success">' +
+                                '<h3 style="margin:0px; margin-bottom: -15px;">Promotion Details</h3>' +
+                                '<hr style="margin-bottom: 10px;">' +
+                                '<p>Name: ' + res.promo_name + '</p>' +
+                                '<p>Discount type: ' + res.discount_type + '</p>' +
+                                '<p style="margin-bottom: 15px;">Amount: ' + res.discount + '%</p>' +
+                                '<h4 style="margin-bottom: 15px;">Qualifying products: '+ (res.products ? res.products.length : 0) +'</h4>';
+
+                                if (res.products) {
+                                    for (var i =  0; i < res.products.length; i++) {
+                                        html += '<li style="margin-left:10px;">' + res.products[i].name + '</li>';
+                                    }
+                                }
+
+                        html += '<div id="apply-discount-div">' +
+                                    '<form action="/admin/phone/apply-coupon" method="post">' +
+                                        '<div class="form-group p1">' +
+                                            '<input id="coupon_code" name="coupon_code" type="hidden">' +
+                                            '<input id="customer_id" name="customer_id" type="hidden" value="{{ customer.id }}">' +
+                                            '<br>' +
+                                            '<button id="apply_discount_btn" class="btn btn-default btn-primary" type="submit">' +
+                                            '    Apply coupon' +
+                                            '</button>' +
+                                        '</div>' +
+                                    '</form>' +
+                                '</div>' +
+                            '</div>';
+                        $("#coupon_details").html(html);
+                    }
+                });
+
+                // set value in hidden input
+                $("#coupon_code").val(phone_coupon);
+
+                // display div
+                $("#apply-discount-div").show();
+            },
+            // error with first ajax request
+            error: function() {
+                alert("Ajax error");
+            }
+        });
+    });
+
+
+});
+</script>
 {% block bottomjs %}
 
 {% endblock %}

@@ -1,0 +1,389 @@
+{% extends 'base.html' %}
+
+{% block title %}
+  Checkout | ArmaLaser
+{% endblock %}
+
+{% block metadescription %}
+Checkout page for ArmaLaser
+{% endblock %}
+
+{% block css %}
+<style>
+    .table tbody > tr > td,
+    .table tfoot tr td {
+        vertical-align: middle !important;
+    }
+    table tr:last-child {
+        border-left: 1px solid #fff !important;
+        border-right: 1px solid #fff !important;
+    }
+    #shippinginfo {
+        display:block:;
+    }
+    form .error {
+        color: #ff0000;
+    }
+    #checkout-first-class-details,
+    #checkout-priority-class-details,
+    #checkout-ups-ground-details,
+    #checkout-three-day-select-details,
+    #checkout-second-day-air-details {
+        display: none;
+    }
+    #next-day-in-fl {
+        display:none;
+    }
+    .checkbox {
+        margin-bottom: 10px !important;
+    }
+    input[type="radio"]:hover {
+        cursor:pointer;
+    }
+    .shipping-radio-label:hover {
+        text-decoration: underline;
+        font-weight: bold;
+    }
+    .glyphicon-remove {
+        color: #ff0000;
+    }
+    .glyphicon-ok {
+        color: green;
+    }
+    #billing_firstname-error,
+    #billing_lastname-error,
+    #billing_phone-error,
+    #billing_address-error,
+    #billing_city-error,
+    #billing_state-error,
+    #billing_zip-error,
+    #email-error,
+    #shipping_firstname-error,
+    #shipping_lastname-error,
+    #shipping_phone-error,
+    #shipping_address-error,
+    #shipping_city-error,
+    #shipping_state-error,
+    #shipping_zip-error,
+    #addresstype-error {
+        color: #ff0000;
+    }
+</style>
+{% endblock %}
+
+{% block outsidecontainer %}
+{% endblock %}
+
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            {% include 'Cart/inc.cart.html' %}
+        </div>
+
+        <form name="bill_ship_info" id="bill_ship_info" action="/cart/checkout/order-summary" method="post">
+
+            {% include '/Cart/billing-shipping.component.html' %}
+
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block bottomjs %}
+<script>
+    function copybilling() {
+
+        if (document.bill_ship_info.same2.checked) {
+            console.log("checked");
+
+            document.bill_ship_info.shipping_firstname.value = document.bill_ship_info.billing_firstname.value;
+            document.bill_ship_info.shipping_lastname.value = document.bill_ship_info.billing_lastname.value;
+            document.bill_ship_info.shipping_company.value = document.bill_ship_info.billing_company.value;
+            document.bill_ship_info.shipping_address.value = document.bill_ship_info.billing_address.value;
+            document.bill_ship_info.shipping_address2.value = document.bill_ship_info.billing_address2.value;
+            document.bill_ship_info.shipping_city.value = document.bill_ship_info.billing_city.value;
+            document.bill_ship_info.shipping_state.value = document.bill_ship_info.billing_state.value;
+            document.bill_ship_info.shipping_zip.value = document.bill_ship_info.billing_zip.value;
+            document.bill_ship_info.shipping_phone.value = document.bill_ship_info.billing_phone.value;
+        } else {
+            document.bill_ship_info.shipping_firstname.value = '';
+            document.bill_ship_info.shipping_lastname.value = '';
+            document.bill_ship_info.shipping_company.value = '';
+            document.bill_ship_info.shipping_address.value = '';
+            document.bill_ship_info.shipping_address2.value = '';
+            document.bill_ship_info.shipping_city.value = '';
+            document.bill_ship_info.shipping_state.value = '';
+            document.bill_ship_info.shipping_zip.value = '';
+            document.bill_ship_info.shipping_phone.value = '';
+        }
+    }
+</script>
+<script>
+$(function(){
+
+    $("#bill_ship_info").validate({
+        rules: {
+            billing_firstname: 'required',
+            billing_lastname: 'required',
+            billing_address: 'required',
+            billing_city: 'required',
+            billing_state: 'required',
+            billing_zip: 'required',
+            billing_phone: 'required',
+            email: {
+                required: true,
+                email: true
+            },
+            shipping_firstname: 'required',
+            shipping_lastname: 'required',
+            shipping_address: 'required',
+            shipping_city: 'required',
+            shipping_state: 'required',
+            shipping_zip: 'required',
+            addresstype: 'required'
+        },
+        messages: {
+            billing_firstname: '*First name is required',
+            billing_lastname: '*Last name is required',
+            billing_address: '*Address is required',
+            billing_city: '*City is required',
+            billing_state: '*State is required',
+            billing_zip: '*Zip code is required',
+            billing_phone: '*Phone is required',
+            email: {
+                required: '*Email is required',
+                email: '*Valid email address is required'
+            },
+            shipping_firstname: '*First name is required',
+            shipping_lastname: '*Last name is required',
+            shipping_address: '*Address is required',
+            shipping_city: '*City is required',
+            shipping_state: '*State is required',
+            shipping_zip: '*Zip code is required',
+            addresstype: '*Address type is required'
+        },
+        highlight: function(element) {
+            var id_attr = "#" + $( element ).attr("id") + "1";
+            $(element).closest('.form-group has-feedback').removeClass('has-success').addClass('has-error');
+            $(id_attr).removeClass('glyphicon-ok').addClass('glyphicon-remove');
+        },
+        unhighlight: function(element) {
+            var id_attr = "#" + $( element ).attr("id") + "1";
+            $(element).closest('.form-group has-feedback').removeClass('has-error').addClass('has-success');
+            $(id_attr).removeClass('glyphicon-remove').addClass('glyphicon-ok');
+        },
+        errorElement: 'span',
+            errorClass: 'help-block',
+            errorPlacement: function(error, element) {
+                if(element.length) {
+                    error.insertAfter(element);
+                } else {
+                error.insertAfter(element);
+                }
+            }
+    });
+
+    // display shipping info when user returns to page
+    if ($("#shipping_firstname").val() != '') {
+        $("#shippinginfo").show();
+    }
+
+    $("#checkoutOptBtn").on('click', function(){
+        $("form").submit(function(e){
+            e.preventDefault();
+        });
+        console.log("Clicked!");
+        let register = $("#checkoutOptions1").val();
+        console.log(register);
+        if (register === 'register') {
+            console.log("Match!");
+            window.location.href = "/admin/register";
+        }
+    });
+
+
+    // $("#sameAsBilling").on('click', function() {
+    //     if ($(this).is(':checked')) {
+    //         let shipToBilling = 'shipToBilling';
+    //         console.log(shipToBilling);
+    //         $("#shippinginfo").slideUp();
+    //         $("#hide-show-checkbox").text('Complete if "Ship to address" is different than "Bill to" address');
+    //     } else  {
+    //         $("#shippinginfo").slideDown();
+    //         $("#hide-show-checkbox").text('Hide if "Ship to address" is the same as "Bill to" address');
+    //         shipToBilling = false;
+    //         console.log(shipToBilling);
+    //     }
+    // });
+
+        // auto-fill shipping fields from billing fields
+            // $("#billing_firstname").on('blur', function(){
+            //     var firstname = $(this).val();
+            //     $("#shipping_firstname").val(firstname);
+            // });
+            // $("#billing_lastname").on('blur', function(){
+            //     var lastname = $(this).val();
+            //     $("#shipping_lastname").val(lastname);
+            // });
+            // $("#billing_company").on('blur', function(){
+            //     var company = $(this).val();
+            //     $("#shipping_company").val(company);
+            // });
+            // $("#billing_phone").on('blur', function(){
+            //     var phone = $(this).val();
+            //     $("#shipping_phone").val(phone);
+            // });
+            // $("#billing_address").on('blur', function(){
+            //     var address = $(this).val();
+            //     $("#shipping_address").val(address);
+            // });
+            // $("#billing_address2").on('blur', function(){
+            //     var address2 = $(this).val();
+            //     $("#shipping_address2").val(address2);
+            // });
+            // $("#billing_city").on('blur', function(){
+            //     var city = $(this).val();
+            //     $("#shipping_city").val(city);
+            // });
+            // $("#billing_state").on('blur', function(){
+            //     var state = $(this).val();
+            //     $("#shipping_state").val(state);
+            // });
+            // $("#billing_zip").on('blur', function(){
+            //     var zip = $(this).val();
+            //     $("#shipping_zip").val(zip);
+            // });
+
+    // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
+
+    // get shipping rate and data from Endicia or UPS APIs
+    $( 'input[name="shipping_method"]' ).on('click', function() {
+        // store
+        var shipping_method = $('input:checked').val();
+        console.log('Shipping method: ', shipping_method);
+
+        // get all radio buttons
+        var checkboxes = $('input[name="shipping_method"]');
+        console.dir(checkboxes);
+
+        var free = checkboxes[0].checked;
+        var priority = checkboxes[1].checked;
+        var upsGround = checkboxes[2].checked;
+        var upsThreeDaySelect = checkboxes[3].checked;
+        var upsSecondDayAir = checkboxes[4].checked;
+
+        console.log('Free: ', free);
+        console.log('Priority: ', priority);
+        console.log('UPS Ground: ', upsGround);
+        console.log('UPS 3 Day Select: ', upsThreeDaySelect);
+        console.log('UPS 2nd Day Air: ', upsSecondDayAir);
+
+        // get values for first-time buyer (not yet in db)
+        // var shipAddress1 = document.getElementById('shipping_address').value;
+        // console.log('shipAddress1: ', shipAddress1);
+
+        // var total_weight = {{ cartMetaData.total_weight }}; // integer: no quotation marks
+        var numberOfItems = {{ cartMetaData.numberOfItems }}; // integer: no quotation marks
+        var company = '{% if customer.shipping_company %}{{ customer.shipping_company }}{% else %}'+ $("#shipping_company").val() +'{% endif %}';
+        var firstName = '{% if customer.shipping_firstname %}{{ customer.shipping_firstname }}{% else %}'+ $("#shipping_firstname").val() +'{% endif %}';
+        var lastName = '{% if customer.shipping_lastname %}{{ customer.shipping_lastname }}{% else %}'+ $("#shipping_lastname").val() +'{% endif %}';
+        var phone = '{% if customer.shipping_phone %}{{ customer.shipping_phone }}{% else %}'+ $("#shipping_phone").val() +'{% endif %}'; // string: quotes
+        var address1 = '{% if customer.shipping_address %}{{ customer.shipping_address }}{% else %}'+ $("#shipping_address").val() +'{% endif %}'; // string: quotes
+        var address2 = '{% if customer.shipping_address2 %}{{ customer.shipping_address2 }}{% else %}'+ $("#shipping_address2").val() +'{% endif %}';
+        var city = '{% if customer.shipping_city %}{{ customer.shipping_city }}{% else %}'+ $("#shipping_city").val() +'{% endif %}';
+        var state = '{% if customer.shipping_state%}{{ customer.shipping_state }}{% else %}'+ $("#shipping_state").val() +'{% endif %}';
+        var zip = '{% if customer.shipping_zip %}{{ customer.shipping_zip }}{% else %}'+ $("#shipping_zip").val() +'{% endif %}';
+
+        // test
+        console.log("User chose: " + shipping_method);
+        console.log('Shipping method: ', shipping_method);
+        console.log('Total weight: ', total_weight);
+        console.log('Item count: ', numberOfItems);
+        console.log('Company: ', company);
+        console.log('First name: ', firstName);
+        console.log('Last name: ', lastName);
+        console.log('Phone: ', phone);
+        console.log('Address1: ', address1);
+        console.log('Address2: ', address2);
+        console.log('City: ', city);
+        console.log('State: ', state);
+        console.log('Zip: ', zip);
+
+        if (firstName === '' || lastName === '' || address1 === ''
+            || city === '' || state === '' || zip === '') {
+
+                alert("Shipping information that is is missing.");
+                return;
+        }
+
+
+        // - - - - - FREE SHIPPING - user selects free shipping - - - - - - - //
+        if (free === true) {
+            // hide other shipping detail divs
+            $("#checkout-priority-class-details").css("display", "none");
+            $("#checkout-ups-ground-details").css("display", "none");
+            $("#checkout-three-day-select-details").css("display", "none");
+            $("#checkout-second-day-air-details").css("display", "none");
+        }
+
+        // - - - -PRIORITY MAIL - user selects priority mail - - - - - - - - //
+        else if (priority === true) {
+            // set standard price per ArmaLaser
+            let price = 7.50;
+
+            // hide other shipping detail divs
+            $("#checkout-ups-ground-details").css("display", "none");
+            $("#checkout-three-day-select-details").css("display", "none");
+            $("#checkout-second-day-air-details").css("display", "none");
+
+        // - - - - UPS GROUND - user selects UPS Ground - - - - - - - - - - - //
+        } else if (upsGround === true) {
+
+            console.log("UPS Ground selected.");
+
+            // store UPS code value in variable
+            var upsGroundCode = '03';
+
+            // hide other shipping detail divs
+            $("#checkout-priority-class-details").css("display", "none");
+            $("#checkout-three-day-select-details").css("display", "none");
+            $("#checkout-second-day-air-details").css("display", "none");
+
+        // - - - - UPS THREE DAY SELECT - user selects UPS 3 Day Select - - - //
+        } else if (upsThreeDaySelect === true) {
+
+            console.log("UPS 3 Day Select selected.");
+
+            // store UPS code value in variable
+            var threeDaySelectCode = '12';
+
+            // hide other shipping detail divs
+            $("#checkout-priority-class-details").css("display", "none");
+            $("#checkout-ups-ground-details").css("display", "none");
+            $("#checkout-second-day-air-details").css("display", "none");
+
+        // - - - - UPS 2ND DAY AIR - user selects UPS 2nd Day Air - - - - - - //
+        } else if (upsSecondDayAir === true) {
+
+            console.log("UPS 2nd Day Air selected.");
+
+            // store UPS code value in variable
+            var secondDayAirCode = '02';
+
+            // hide other shipping detail divs
+            $("#checkout-priority-class-details").css("display", "none");
+            $("#checkout-ups-ground-details").css("display", "none");
+            $("#checkout-three-day-select-details").css("display", "none");
+        }
+    });
+
+
+    // - - - - - - functions - - - - - - - - - - //
+
+
+
+});
+</script>
+{% endblock %}

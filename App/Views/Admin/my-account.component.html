@@ -1,0 +1,267 @@
+<div class="row">
+    <div class="col-md-6">
+        <h3>Billing information:</h3>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group has-feedback">
+                    <label>First name</label>
+                    <input type="text" class="form-control" name="billing_firstname"
+                        id="billing_firstname" placeholder="First name"
+                        value="{{ customer.billing_firstname }}">
+                    <span class="glyphicon form-control-feedback" id="billing_firstname1"></span>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group has-feedback">
+                    <label>Last name</label>
+                    <input type="text" class="form-control" name="billing_lastname"
+                        id="billing_lastname" placeholder="Last name"
+                        value="{{ customer.billing_lastname }}">
+                    <span class="glyphicon form-control-feedback" id="billing_lastname1"></span>
+                </div>
+            </div>
+
+            <div class="col-sm-12">
+                <div class="form-group">
+                    <label>Company</label>
+                    <input type="text" class="form-control" name="billing_company"
+                        id="billing_company" placeholder="Company"
+                        value="{{ customer.billing_company|raw }}">
+                </div>
+            </div>
+
+            <div class="col-sm-6">
+                <div class="form-group has-feedback">
+                    <label>Address</label>
+                    <input type="text" class="form-control" name="billing_address"
+                        id="billing_address" placeholder="Address"
+                        value="{{ customer.billing_address }}">
+                    <span class="glyphicon form-control-feedback" id="billing_address1"></span>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label>Address2</label>
+                    <input type="text" class="form-control" name="billing_address2"
+                        id="billing_address2" placeholder="Address2"
+                        value="{{ customer.billing_address2 }}">
+                </div>
+            </div>
+
+            <div class="col-sm-4">
+                <div class="form-group has-feedback">
+                    <label>City</label>
+                    <input type="text" class="form-control" name="billing_city"
+                        id="billing_city" placeholder="City"
+                        value="{{ customer.billing_city }}">
+                    <span class="glyphicon form-control-feedback" id="billing_city1"></span>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="form-group has-feedback">
+                    <label>State</label>
+                    <select class="form-control required" id="billing_state" name="billing_state">
+                        <option value="{{ customer.billing_state }}">{{ customer.billing_state }}</option>
+                        {% for state in states %}
+                            <option value="{{ state.abbrev}}">{{ state.name }}</option>
+                        {% endfor %}
+                    </select>
+                    <span class="glyphicon form-control-feedback" id="billing_state1"></span>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="form-group has-feedback">
+                    <label>Zip</label>
+                    <input type="text" class="form-control" name="billing_zip"
+                        id="billing_zip" placeholder="Zip code"
+                        value="{{ customer.billing_zip }}">
+                    <span class="glyphicon form-control-feedback" id="billing_zip1"></span>
+                </div>
+            </div>
+
+            <div class="col-sm-4">
+                <div class="form-group has-feedback">
+                    <label>Telephone</label>
+                    <input type="text" class="form-control" name="billing_phone"
+                        id="billing_phone" placeholder="Telephone"
+                        value="{{ customer.billing_phone|raw }}">
+                    <span class="glyphicon form-control-feedback" id="billing_phone1"></span>
+                </div>
+            </div>
+            <div class="col-sm-8">
+                <div class="form-group has-feedback">
+                    <label>Login email</label>
+                    <input type="email" class="form-control" name="email"
+                        id="email" placeholder="Email" value="{{ customer.email }}">
+                    <span class="glyphicon form-control-feedback" id="email1"></span>
+                    <small>
+                        *Login credential and email used by ArmaLaser for
+                        all automated correspondence. If you change your
+                        email, previous orders will not reflect the
+                        change.
+                    </small>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <h3>Shipping information:</h3>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group has-feedback">
+                    <label>First name</label>
+                    <input type="text" class="form-control" name="shipping_firstname"
+                        id="shipping_firstname" placeholder="First name"
+                        value="{{ customer.shipping_firstname }}">
+                    <span class="glyphicon form-control-feedback" id="shipping_firstname1"></span>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group has-feedback">
+                    <label>Last name</label>
+                    <input type="text" class="form-control" name="shipping_lastname"
+                        id="shipping_lastname" placeholder="Last name"
+                        value="{{ customer.shipping_lastname }}">
+                    <span class="glyphicon form-control-feedback" id="shipping_lastname1"></span>
+                </div>
+            </div>
+
+            <div class="col-sm-12">
+                <div class="form-group">
+                    <label>Company</label>
+                    <input type="text" class="form-control" name="shipping_company"
+                        id="shipping_company" placeholder="Company"
+                        value="{{ customer.shipping_company|raw }}">
+                </div>
+            </div>
+
+            <div class="col-sm-6">
+                <div class="form-group has-feedback">
+                    <label>Address</label>
+                    <input type="text" class="form-control" name="shipping_address"
+                        id="shipping_address" placeholder="Address"
+                        value="{{ customer.shipping_address }}">
+                    <span class="glyphicon form-control-feedback" id="shipping_address1"></span>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label>Address2</label>
+                    <input type="text" class="form-control" name="shipping_address2"
+                        id="shipping_address2" placeholder="Address2"
+                        value="{{ customer.shipping_address2 }}">
+                </div>
+            </div>
+
+            <div class="col-sm-4">
+                <div class="form-group has-feedback">
+                    <label>City</label>
+                    <input type="text" class="form-control" name="shipping_city"
+                        id="shipping_city" placeholder="City"
+                        value="{{ customer.billing_city }}">
+                        <span class="glyphicon form-control-feedback" id="shipping_city1"></span>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="form-group has-feedback">
+                    <label>State</label>
+                    <select class="form-control required" id="shipping_state" name="shipping_state">
+                        <option value="{{ customer.shipping_state }}">{{ customer.shipping_state }}</option>
+                        {% for state in states %}
+                            <option value="{{ state.abbrev}}">{{ state.name }}</option>
+                        {% endfor %}
+                    </select>
+                    <span class="glyphicon form-control-feedback" id="shipping_state1"></span>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="form-group has-feedback">
+                    <label>Zip</label>
+                    <input type="text" class="form-control" name="shipping_zip"
+                        id="shipping_zip" placeholder="Zip code"
+                        value="{{ customer.shipping_zip }}">
+                    <span class="glyphicon form-control-feedback" id="shipping_zip1"></span>
+                </div>
+            </div>
+
+            <div class="col-sm-4">
+                <div class="form-group has-feedback">
+                    <label>Telephone</label>
+                    <input type="text" class="form-control" name="shipping_phone"
+                        id="shipping_phone" placeholder="Telephone"
+                        value="{{ customer.shipping_phone|raw }}">
+                        <span class="glyphicon form-control-feedback" id="shipping_phone1"></span>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="form-group has-feedback">
+                    <label>Address Type</label>
+                    <select class="form-control" name="addresstype" id="addresstype">
+                        <option value="{{ customer.address_type }}">{{ customer.address_type|title }}</option>
+                        <option value="residential">Residential</option>
+                        <option value="commercial">Commercial</option>
+                    </select>
+                    <span class="glyphicon form-control-feedback" id="addresstype1"></span>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <label>Email marketing</label>
+                    <select  class="form-control" name="email_optin" id="email_optin">
+                        <option value="{{ customer.email_optin }}">{% if customer.email_optin == 1 %}Yes{% else %}No{% endif %}</option>
+                        {% for value in boolArr %}
+                            <option value="{{ value }}">{% if value == 1 %}Yes{% else %}No{% endif %}</option>
+                        {% endfor %}
+                    </select>
+                    <small>*Yes = keep me informed about new products, sales and other promotions. No = unsubscribe from all email.</small>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="row">
+    <div class="col-md-6">
+        <h3>Securty Answers:</h3>
+        <div class="row">
+            <div class="col-sm-4">
+                <div class="form-group has-feedback">
+                    <label for="security1">Security answer 1</label>
+                    <input type="text" class="form-control" name="security1"
+                        id="security1" placeholder="City of birth" value="{{ customer.security1 }}">
+                    <span class="glyphicon form-control-feedback" id="security11"></span>
+                    <small>*City of birth</small>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="form-group has-feedback">
+                    <label>Security answer 2</label>
+                    <input type="text" class="form-control" name="security2"
+                        id="security2" placeholder="Mother's maiden name" value="{{ customer.security2 }}">
+                        <span class="glyphicon form-control-feedback" id="security21"></span>
+                    <small>*Mother&apos;s maiden name</small>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="form-group has-feedback">
+                    <label>Security answer 3</label>
+                    <select  class="form-control" name="security3" id="security3">
+                        <option value="{{ customer.security3 }}">{{ customer.security3 }}</option>
+                        {% for year in years %}
+                            <option value="{{ year }}">{{ year }}</option>
+                        {% endfor %}
+                    </select>
+                    <span class="glyphicon form-control-feedback" id="security31"></span>
+                    <small>*Year of high school graduation</small>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <button  id="update-user-btn" type="submit" class="btn btn-primary btn-lg">
+                Update
+            </button>
+        </div>
+    </div>
+</div>

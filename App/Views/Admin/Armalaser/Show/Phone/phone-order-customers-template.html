@@ -1,0 +1,104 @@
+<!-- = = = = = = = Customers  = = = = = = = = = = = = = = = = = = = = = = = = = = = = -->
+<form>
+    <div class="form-group p2 t1">
+        <input type="text" name="searchword" id="phone-order-search-input" 
+            class="form-control" placeholder="Enter last name, press tab key">
+        <!-- <span class="input-group-btn">
+            <button class="btn btn-primary">Search</button>
+        </span> -->
+    </div>
+</form>
+
+{% if searchword %}
+    {% if searchword and customers|length > 0 %}
+        <h3>{{ customers|length }} search results for: <span>&quot;{{ searchword }}&quot;</span></h3>
+        <h4><span><a href="/admin/phone/order"><span class="glyphicon glyphicon-refresh"></span> refresh page</a></span></h4>
+    {% elseif searchword and customers|length == 0 %}
+        <h3>No results found. <a href="/admin/orders/phone-order"><span class="glyphicon glyphicon-refresh"></span> refresh page</a></h3>
+    {% endif %} 
+{% endif %}
+
+<div>
+    <table class="table striped table-hover">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Phone</th>
+                <th>Address</th>
+                <th>City</th>
+                <th>State</th>
+                <th>Zip</th>
+                <th class="text-right">Action</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for customer in customers %}
+                <tr>
+                    <td class="fifteenpercent">
+                        <!-- <a href="/admin/customers/get/{{customer.id }}"> -->
+                        <a href="/admin/phone/step-two/{{customer.id }}">
+                            {{ customer.billing_firstname }} {{ customer.billing_lastname }}
+                        </a>
+                    </td>
+                    <td class="fifteenpercent">{{ customer.email }}</td>
+                    <td class="tenpercent">{{ customer.billing_phone }}</td>
+                    <td class="twentypercent">{{ customer.billing_address }}</td>
+                    <td class="fifteenpercent">{{ customer.billing_city }}</td>
+                    <td class="fivepercent">{{ customer.billing_state }}</td>                                       
+                    <td class="sevenpercent">{{ customer.billing_zip }}</td>                                       
+                    <td class="fivepercent text-right">
+                        <div class="btn-group" role="group">
+                            <button type="button" class="btn btn-default"><span class="glyphicon glyphicon-cog"></span></button>
+                            <button type="button" class="btn btn-dfault dropdown-toggle" data-toggle="dropdown">
+                                <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li><a href="/admin/phone/step-two/{{ customer.id }}">Select</a></li>
+                                <!-- <li><a href="#">Another action</a></li>
+                                <li><a href="#">Something else here</a></li>
+                                <li class="divider"></li>
+                                <li><a href="#">Separated link</a></li> -->
+                            </ul>
+                        </div>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>                   
+
+<script>
+$(function() {
+
+    // search customers
+    $('#phone-order-search-input').blur(function() { 
+
+        console.log('Input lost focus.');
+        var searchword = $(this).val();
+        console.log(searchword);
+
+        var url = '/admin/customers/ajaxSearch';
+
+        $.ajax({
+            url: url,
+            type: 'POST',
+            data: { searchword: searchword },
+            dataType: 'html',
+            success: function(customers) {
+                console.log('Success!');
+                console.log(customers);
+
+                // append data to div
+                $("#ajax_search_results_customers").append(customers);
+            },
+            error: function() {
+                alert("Ajax request failure.");
+            }
+        });
+
+    });
+
+});
+</script>

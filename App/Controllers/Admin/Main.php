@@ -10,6 +10,7 @@ use \App\Models\Caller;
 use \App\Models\Partner;
 use \App\Models\Dealeruser;
 use \App\Models\Dealer;
+use \App\Models\Product;
 
 
 /**
@@ -200,7 +201,6 @@ class Main extends \Core\Controller
             'pagetitle' => ucfirst($customer->type) . ' Details (read only)',
             'customer'  => $customer
         ]);
-
     }
 
 }

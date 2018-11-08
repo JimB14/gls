@@ -1,0 +1,133 @@
+<!-- shopping cart component -->
+<div class="col-md-12" style="margin-bottom: 0px;">
+    {% if session.cart %}
+        <h3>Order Total</h3>
+
+        <table class="table table-responsive table-condensed"  style="background-color:#fff; border-bottom: 0px solid;">
+
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Pistol match</th>
+                    <th>Unit price</th>
+                    <th>Quantity</th>
+                    <th class="text-right">Extended</th>
+                    <th class="text-right">Delete</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for item in session.cart %}
+                    <tr>
+                        <td class="twentyfivepercent">{{ item.name }}</td>
+                        {% if item.id != 3001 %}
+                            <td class="fifteenpercent" style="width:18em;">{{ item.pistolMfr| title }}<br>{{ item.pistol_models }}</td>
+                        {% else %}
+                            <td class="fifteenpercent" style="width:18em;">Matches hidden</td>
+                        {% endif %}
+                        <!-- Unit price -->
+                        <td class="fifteenpercent">
+                            <form action="/admin/phone/update-unit-price" method="post">
+                                <div class="input-group">
+                                    <input type="number" class="form-control" name="new_price" id="new_price" min="0.00" step=".01" value="{{ item.price }}">
+                                    <input type="hidden" name="id" value="{{ item.id }}">
+                                    <span class="input-group-btn">
+                                        <button class="btn btn-default" type="submit">
+                                            Update
+                                        </button>
+                                    </span>
+                                </div>
+                            </form>
+                        </td>
+
+
+                        <!-- Quantity -->
+                        <td class="fifteenpercent">
+                            <form method="post" action="/admin/phone/update-quantity">
+                                <div class="input-group">
+                                    <input type="number" class="form-control" name="new_quantity" id="update_qty" min="1" max="99" value="{{ item.quantity }}">
+                                    <input type="hidden" name="id" value="{{ item.id }}">
+                                    <span class="input-group-btn">
+                                        <button class="btn btn-default"  type="submit">
+                                            Update
+                                        </button>
+                                    </span>
+                                </div>
+                            </form>
+                        </td>
+
+                        <!-- Extended -->
+                        <td class="fifteenpercent text-right">{{ (item.price * item.quantity)|number_format(2) }}</td>
+
+                        <!-- Delete item -->
+                        <td class="sevenpercent text-right">
+                            <a href="/admin/phone/delete-item?id={{ item.id }}" title="Delete item from cart">
+                                <span style="color:#ff0000;" class='glyphicon glyphicon-trash'></span>
+                            </a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+
+            <!--  Resource:  https://developer.paypal.com/docs/classic/paypal-payments-standard/integration-guide/Appx_websitestandard_htmlvariables/ -->
+
+            <tfoot>
+                <tr>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                </tr>
+            </tfoot>
+        </table>
+
+
+        <div class="col-md-2 col-md-offset-10" style="margin-top: -30px;">
+            <div class="row">
+                <div class="text-right p1">
+                    <h4><span class="bold">TOTAL: &nbsp;&nbsp;</span>{{ session.cart_total|number_format(2) }}</h4>
+                </div>
+
+                <div class="input-group p1">
+                    <input id="phone_coupon" name='phone_coupon' type="text"
+                        class="form-control" placeholder="Enter coupon code"
+                        {% if session.total_discount %}readonly{% endif %}>
+                    <input type="hidden" name="customer_id" id="phone_customer_id"
+                        value="{{ customer.id }}">
+                    <span class="input-group-btn">
+                        <!-- Ajax code in base-admin.html -->
+                        <button id="check_coupon_btn" class="btn btn-default"
+                            type="button" {% if session.total_discount %}disabled{% endif %}>
+                            Check
+                        </button>
+                    </span>
+                </div>
+
+                <!-- Ajax response data -->
+                <div id="coupon_data">
+                    <div id="coupon_details" style="margin-bottom: 20px;"></div>
+                </div>
+                <!-- end Ajax response -->
+
+
+
+                {% if session.total_discount %}
+                    <div class="alert alert-info">
+                        <p>A {{ session.promo_name }} discount of ${{ session.total_discount|number_format(2) }} has been applied to this order.</p>
+                        <p>New total: <strong>${{ session.cart_total|number_format(2) }}</strong></p>
+                    </div>
+                {% endif %}
+
+                <div class="text-right p1">
+                    <a href="/cart/checkout-admin?id={{ customer.id }}&type={{ customer.type }}"
+                        style="vertical-align:middle;"
+                        class="btn btn-primary btn-block">
+                        Checkout
+                    </a>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+</div>

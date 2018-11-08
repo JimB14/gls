@@ -1,0 +1,160 @@
+<div class="col-md-4 col-xs-12">
+    <h2>Order Summary</h2>
+    <table class="table">
+        <tr>
+            <td>{{ cartMetaData.numberOfItems }}{% if cartMetaData.numberOfItems < 2 %} Item {% else %} Items {% endif %}</td>
+            <td class="text-right">${{ cartMetaData.pretax_total|number_format(2) }}</td>
+        </tr>
+        <tr>
+            <td>Shipping: {% if shipping_data.shipping_method|slice(0, 3) == 'UPS' %}<span><img height="25" src="/assets/images/ups/logo_small.gif"></span>{% else %}<span><img height="25" src="/assets/images/usps/logo.png"></span>{% endif %} {{ shipping_data.shipping_method }} </td>
+            <td class="text-right">${% if shipping_data.shipping_cost > 0 %}{{ shipping_data.shipping_cost|number_format(2) }}{% else %}0.00{% endif %}</td>
+        </tr>
+        <tr>
+            <td>Subtotal:</td>
+            <td class="text-right">${{ (cartMetaData.pretax_total + shipping_data.shipping_cost)|number_format(2, '.', ',') }}</td>
+        </tr>
+        <!-- ship to state == Florida -->
+        {% if session.sales_tax_data.otax_state == 'fl' %}
+            <tr>
+                <td>{{ session.sales_tax_data.otax_state|upper }} sales tax:</td>
+                <td class="text-right">${{ session.sales_tax_data.otax_state_amt }}</td>
+            </tr>
+            <tr>
+                <td>{{ session.sales_tax_data.otax_county|title }} sales tax:</td>
+                <td class="text-right">${{ session.sales_tax_data.otax_county_amt }}</td>
+            </tr>
+        <!-- ship to == other than Florida -->
+        {% else %}
+            <tr>
+                <td>State sales tax:</td>
+                <td class="text-right">${{ salesTax|number_format(2, '.', '') }}</td>
+            </tr>
+            <tr>
+                <td>County sales tax:</td>
+                <td class="text-right">${{ salesTax|number_format(2, '.', '') }}</td>
+            </tr>
+        {% endif %}
+        <tr>
+            <td>TOTAL:</td>
+            <td class="text-right" id="order_grand_total">
+                ${% if salesTax > 0 %}
+                    {{ (cartMetaData.pretax_total + shipping_data.shipping_cost + session.sales_tax_data.otax_total)|number_format(2, '.', ',') }}
+                {% else %}
+                    {{ (cartMetaData.pretax_total + shipping_data.shipping_cost)|number_format(2, '.', ',') }}
+                {% endif %}
+
+            </td>
+        </tr>
+    </table>
+</div>
+
+<div class="col-md-4 col-xs-12">
+    <h2>Bill To</h2>
+    <table class="table">
+        <tr>
+            <td>Name:</td>
+            <td class="text-right">
+                {{ customer.billing_firstname }}
+                {{ customer.billing_lastname }}
+            </td>
+        </tr>
+            <tr>
+                <td>Company:</td>
+                <td class="text-right">
+                    {% if customer.billing_company %}
+                        {{ customer.billing_company }}
+                    {% else %}
+                        -
+                    {% endif %}
+                </td>
+            </tr>
+        <tr>
+            <td>Address:</td>
+            <td class="text-right">
+                {{ customer.billing_address }}
+            </td>
+        </tr>
+        {% if customer.billing_address2 != '' %}
+            <tr>
+                <td>Apt / Ste:</td>
+                <td class="text-right">
+                    {{ customer.billing_address2 }}
+                </td>
+            </tr>
+        {% endif %}
+        <tr>
+            <td>City:</td>
+            <td class="text-right">
+                {{ customer.billing_city }}
+            </td>
+        </tr>
+        <tr>
+            <td>State:</td>
+            <td class="text-right">
+                {{ customer.billing_state }}
+            </td>
+        </tr>
+        <tr>
+            <td>Zip:</td>
+            <td class="text-right">
+                {{ customer.billing_zip }}
+            </td>
+        </tr>
+    </table>
+
+</div>
+
+<div class="col-md-4 col-xs-12">
+    <h2>Ship To</h2>
+    <table class="table">
+        <tr>
+            <td>Name:</td>
+            <td class="text-right">
+                {{ customer.shipping_firstname }}
+                {{ customer.shipping_lastname }}
+            </td>
+        </tr>
+        <tr>
+            <td>Company:</td>
+            <td class="text-right">
+                {% if customer.shipping_company %}
+                    {{ customer.shipping_company|raw }}
+                {% else %}
+                    -
+                {% endif %}
+            </td>
+        </tr>
+        <tr>
+            <td>Address:</td>
+            <td class="text-right">
+                {{ customer.shipping_address }}
+            </td>
+        </tr>
+        {% if customer.shipping_address2 != '' %}
+            <tr>
+                <td>Apt / Ste:</td>
+                <td class="text-right">
+                    {{ customer.shipping_address2 }}
+                </td>
+            </tr>
+        {% endif %}
+        <tr>
+            <td>City:</td>
+            <td class="text-right">
+                {{ customer.shipping_city }}
+            </td>
+        </tr>
+        <tr>
+            <td>State:</td>
+            <td class="text-right">
+                {{ customer.shipping_state }}
+            </td>
+        </tr>
+        <tr>
+            <td>Zip:</td>
+            <td class="text-right">
+                {{ customer.shipping_zip }}
+            </td>
+        </tr>
+    </table>
+</div>

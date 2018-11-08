@@ -1,0 +1,174 @@
+{% extends 'base-admin.html' %}
+
+{% block title %}
+  Phone orders | ArmaLaser
+{% endblock %}
+
+{% block css %}
+<style>
+.border {
+    border: 1px solid #ddd; padding: 10px 15px 60px 15px;
+    border-radius: 3px;
+}
+.nav > li > a:hover, 
+.nav > li > a:focus,
+.nav-tabs > li.active > a,
+.nav-tabs > li.active > a:focus {
+    text-decoration: none;
+    background-color: transparent !important;
+    color: #32cd32 !important;
+    border-top: none !important;
+    border-left: none !important;
+    border-right: none !important;
+    border-bottom: 3px solid #32cd32 !important;
+}
+/* .active {
+    text-decoration: none;
+    background-color: transparent !important;
+    color: #32cd32 !important;
+    border-top: none !important;
+    border-left: none !important;
+    border-right: none !important;
+    border-bottom: 3px solid #32cd32 !important; 
+} */
+.fivepercent {width: 5%;}
+.sevenpercent {width: 7%;}
+.tenpercent {width: 10%;}
+.fifteenpercent {width: 15%;}
+.twentypercent {width: 20%;}
+.twentyfivepercent {width: 25%;}
+#itemQty {
+    width: 30%;
+    border-color: #ddd;
+    border-radius: 4px;
+    text-align: center;
+}
+#coupon_data,
+#apply-discount-div {
+    display: none;
+}
+#customer-search {
+    font-size: 20px;
+}
+</style>
+{% endblock %}
+
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div id="dashboard-toggle" class="col-md-10" style="margin-top:-20px;margin-left:254px;">
+
+            <h2>
+                <span class="glyphicon glyphicon-phone-alt"></span>
+                &nbsp;{{ pagetitle }} 
+            </h2>
+
+            <p style="margin-left: 0px;margin-bottom: -10px;">
+                <span class="glyphicon glyphicon-menu-left"></span>
+                <a onclick="window.history.go(-1)" style="cursor:pointer;">
+                    Go Back
+                </a>
+            </p>
+
+            {% include 'Admin/Armalaser/Show/Phone/cart-component.html' %}
+
+            <div class="col-md-12 p2">
+                {% include 'Admin/Armalaser/Show/Phone/customer-component.html' %}
+            </div>
+
+            <!-- = = = = = = = Tabs  = = = = = = = = = = = = = = = = = = = = = = = = = = = = -->
+            <div class="col-md-12">
+
+                {% include 'Admin/Armalaser/Show/Phone/tabs-component.html' %}
+
+                <!-- = = = = = = = Tab pane  = = = = = = = = = = = = = = = = = = = = = = = = -->
+                <div class="tab-content" style="margin-bottom: 80px;">
+
+                    <div class="tab-pane active">
+
+                        <!-- Customer search -->
+                        <form action="/admin/phone/search" method="post" >
+                            <div class="input-group p2 t1">
+                                <input style="padding: 20px 0px 20px 10px;" type="text" id="customer-search" name="searchword" 
+                                    class="form-control" placeholder="Search last name">
+                                <span class="input-group-btn">
+                                    <button style="padding: 10px 20px 10px 20px;" class="btn btn-primary">Search</button>
+                                </span>
+                            </div>
+                        </form>
+
+                        {% if searchword %}
+                            {% if searchword and customers|length > 0 %}
+                                <h3>{{ customers|length }} search results for: <span>&quot;{{ searchword }}&quot;</span></h3>
+                                <h4><span><a href="/admin/phone/order"><span class="glyphicon glyphicon-refresh"></span> refresh page</a></span></h4>
+                            {% elseif searchword and customers|length == 0 %}
+                                <h3>No results found. <a href="/admin/phone/order"><span class="glyphicon glyphicon-refresh"></span> refresh page</a></h3>
+                            {% endif %} 
+                        {% endif %}
+                        
+                        <!-- Customer list  -->
+                        <table class="table striped table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Email</th>
+                                    <th>Phone</th>
+                                    <th>Address</th>
+                                    <th>City</th>
+                                    <th>State</th>
+                                    <th>Zip</th>
+                                    <th class="text-right">Action</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                {% for customer in customers %}
+                                    <tr>
+                                        <td class="fifteenpercent">
+                                            <a href="/admin/phone/order-step-two/{{customer.id }}">
+                                                {{ customer.billing_firstname }} {{ customer.billing_lastname }}
+                                            </a>
+                                        </td>
+                                        <td class="fifteenpercent">{{ customer.email }}</td>
+                                        <td class="tenpercent">{{ customer.billing_phone }}</td>
+                                        <td class="twentypercent">{{ customer.billing_address }}</td>
+                                        <td class="fifteenpercent">{{ customer.billing_city }}</td>
+                                        <td class="fivepercent">{{ customer.billing_state }}</td>                                       
+                                        <td class="sevenpercent">{{ customer.billing_zip }}</td>                                       
+                                        <td class="sevenpercent text-right">
+                                            <div class="btn-group" role="group">
+                                                <button type="button" class="btn btn-default"><span class="glyphicon glyphicon-cog"></span></button>
+                                                <button type="button" class="btn btn-dfault dropdown-toggle" data-toggle="dropdown">
+                                                    <span class="caret"></span>
+                                                </button>
+                                                <ul class="dropdown-menu">
+                                                    <li><a href="/admin/phone/step-two/{{ customer.id }}">Select</a></li>
+                                                    <!-- <li><a href="#">Another action</a></li>
+                                                    <li><a href="#">Something else here</a></li>
+                                                    <li class="divider"></li>
+                                                    <li><a href="#">Separated link</a></li> -->
+                                                </ul>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div> 
+    </div>
+</div>     
+{% endblock %}
+
+
+{% block bottomjs %}
+<script>
+$(function(){
+
+
+});
+</script>
+{% endblock %}

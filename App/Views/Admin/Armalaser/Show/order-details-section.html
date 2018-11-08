@@ -3,14 +3,8 @@
 {% if customer %}
 {% if order.customerid != 0 and order.guestid == 0 and order.callerid == 0 and order.dealerid == 0 and order.partnerid == 0 %}
     <h3>Customer information:</h3>
-{% elseif order.callerid != 0 and order.customerid == 0 and order.guestid == 0 and order.dealerid == 0 and order.partnerid == 0 %}
-    <h3>Caller information:</h3>
 {% elseif order.guestid != 0 and order.customerid == 0 and order.callerid == 0 and order.dealerid == 0 and order.partnerid == 0 %}
     <h3>Guest information:</h3>
-{% elseif order.dealerid != 0 and order.customerid == 0 and order.guestid == 0 and order.callerid == 0 and order.partnerid == 0 %}
-    <h3>Dealer information - <span style="color:#0000FF;">{{ customer.company|raw }}</span></h3>
-{% elseif order.partnerid != 0 and order.customerid == 0 and order.guestid == 0 and order.callerid == 0 and order.dealerid == 0 %}
-    <h3>Partner information - <span style="color:#0000FF;">{{ customer.company|raw }}</span></h3>
 {% endif %}
 
 <table class="table table-bordered table-striped bg-fff">
@@ -18,15 +12,11 @@
         <tr>
             {% if order.customerid != 0 and order.guestid == 0 and order.callerid == 0 and order.dealerid == 0 and order.partnerid == 0 %}
                 <th>Customer ID</th>
-            {% elseif order.callerid != 0 and order.customerid == 0 and order.guestid == 0 and order.dealerid == 0 and order.partnerid == 0 %}
-                <th>Caller ID</th>
             {% elseif order.guestid != 0 and order.customerid == 0 and order.callerid == 0 and order.dealerid == 0 and order.partnerid == 0 %}
                 <th>Guest ID</th>
-            {% elseif order.dealerid != 0 and order.customerid == 0 and order.guestid == 0 and order.callerid == 0 and order.partnerid == 0 %}
-                <th>Dealer ID</th>
-            {% elseif order.partnerid != 0 and order.customerid == 0 and order.guestid == 0 and order.callerid == 0 and order.dealerid == 0 %}
-                <th>Partner ID</th>
             {% endif %}
+            <th>Type</th>
+            <th>Company</th>
             <th>First</th>
             <th>Last</th>
             <th>Address</th>
@@ -44,7 +34,9 @@
     <tbody>
         <tr>
             <td>{{ customer.id }}</td>
-            <td>{% if customer.first_name %}{{customer.first_name }}{% else %}{{ customer.billing_firstname }}{% endif %}</td>
+            <td>{% if customer.type %}{{ customer.type|title }}{% else %}Guest{% endif %}</td>
+            <td>{{ customer.billing_company }}</td>
+            <td>{{ customer.billing_firstname }}</td>
             <td>{% if customer.last_name %}{{customer.last_name }}{% else %}{{ customer.billing_lastname }}{% endif %}</td>
             <td>{% if customer.address1 %}{{ customer.address1 }}{% elseif customer.address %}{{ customer.address}}{% else %}{{ customer.billing_address }}{% endif %}</td>
             {% if customer.address2 or customer.billing_address2 %}
@@ -64,7 +56,7 @@
 </table>
 {% endif %}
 
-<!-- - - - - - - Order & Shipping Information - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->    
+<!-- - - - - - - Order & Shipping Information - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 
 {% if order %}
 <h3>Order & Shipping information:</h3>
@@ -76,14 +68,8 @@
             <th>PayPal PNREF</th>
             {% if order.customerid != 0 and order.guestid == 0 and order.callerid == 0 and order.dealerid == 0 and order.partnerid == 0 %}
                 <th>Customer ID</th>
-            {% elseif order.callerid != 0 and order.customerid == 0 and order.guestid == 0 and order.dealerid == 0 and order.partnerid == 0 %}
-                <th>Caller ID</th>
             {% elseif order.guestid != 0 and order.customerid == 0 and order.callerid == 0 and order.dealerid == 0 and order.partnerid == 0 %}
                 <th>Guest ID</th>
-            {% elseif order.dealerid != 0 and order.customerid == 0 and order.guestid == 0 and order.callerid == 0 and order.partnerid == 0 %}
-                <th>Dealer ID</th>
-            {% elseif order.partnerid != 0 and order.customerid == 0 and order.guestid == 0 and order.callerid == 0 and order.dealerid == 0 %}
-                <th>Partner ID</th>
             {% endif %}
             <th>Total</th>
             <th>Products</th>
@@ -127,14 +113,8 @@
             <td>{{ order.pnref }}</td>
             {% if order.customerid != 0 and order.guestid == 0 and order.callerid == 0 and order.dealerid == 0 and order.partnerid == 0 %}
                 <td>{{ order.customerid }}</td>
-            {% elseif order.callerid != 0 and order.customerid == 0 and order.guestid == 0 and order.dealerid == 0 and order.partnerid == 0 %}
-                <td>{{ order.callerid }}</td>
             {% elseif order.guestid != 0 and order.customerid == 0 and order.callerid == 0 and order.dealerid == 0 and order.partnerid == 0 %}
                 <td>{{ order.guestid }}</td>
-            {% elseif order.dealerid != 0 and order.customerid == 0 and order.callerid == 0 and order.guestid == 0 and order.partnerid == 0 %}
-                <td>{{ order.dealerid }}</td>
-            {% elseif order.partnerid != 0 and order.customerid == 0 and order.callerid == 0 and order.guestid == 0 and order.dealerid == 0 %}
-                <td>{{ order.partnerid }}</td>
             {% endif %}
             <td>{{ order.orderamount }}</td>
             <td>{{ order.itemamount }}</td>
@@ -175,19 +155,13 @@
     <thead>
         <tr>
             <th>Order ID</th>
-            <th>Status</th>
+            <th>Item status</th>
             <th>RMA</th>
             {% if order.customerid != 0 and order.guestid == 0 and order.callerid == 0 and order.dealerid == 0 and order.partnerid == 0 %}
                 <th>Customer ID</th>
-            {% elseif order.callerid != 0 and order.customerid == 0 and order.guestid == 0 and order.dealerid == 0 and order.partnerid == 0 %}
-                <th>Caller ID</th>
             {% elseif order.guestid != 0 and order.customerid == 0 and order.callerid == 0 and order.dealerid == 0 and order.partnerid == 0 %}
                 <th>Guest ID</th>
-            {% elseif order.dealerid != 0 and order.customerid == 0 and order.guestid == 0 and order.callerid == 0 and order.partnerid == 0 %}
-                <th>Dealer ID</th>
-            {% elseif order.partnerid != 0 and order.customerid == 0 and order.guestid == 0 and order.callerid == 0 and order.dealerid == 0 %}
-                <th>Partner ID</th>
-            {% endif %}           
+            {% endif %}
             <th>Qty</th>
             <th>Item ID</th>
             <th>Serial Number</th>

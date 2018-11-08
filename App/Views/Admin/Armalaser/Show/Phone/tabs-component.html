@@ -1,0 +1,62 @@
+<div class="pull-right">
+    <a href="/admin/customers/add" class="btn btn-primary">
+        <span class="glyphicon glyphicon-plus"></span> 
+        Add New Customer
+    </a>
+</div>
+
+<div id="phone-order-tabs">
+    <ul class="nav nav-tabs" role="tablist">
+
+        <!-- Customer -->
+        <li class="{% if activetab == 'customer' %}active{% endif %}" style="padding-right: 25px;">
+            <a href="/admin/phone/order" style="cursor:pointer">
+                <span style="font-size: 18px">
+                    <span class="glyphicon glyphicon-user"></span>
+                    Customer
+                </span>
+                {% if customers %}
+                    <span class="badge">{{ customer_count | number_format(0, ',') }}</span>
+                {% endif %}   
+            </a>
+        </li>
+
+        <!-- Items -->
+        <li class="{% if selectedtab == 'items' %}active{% endif %}">
+            <a href="/admin/phone/items">
+                <span style="font-size: 18px">
+                    <span class="glyphicon glyphicon-tags"></span>
+                    &nbsp;Items
+                </span>
+                {% if products %}
+                    <span class="badge">{{ count | number_format(0, ',') }}</span> 
+                {% endif %}    
+            </a>
+        </li>
+
+        <!-- Review -->
+        <!-- <li role="presentation">
+            <a href="#review" aria-controls="review" role="tab" data-toggle="tab" id="review-tab">
+                <span class="glyphicon glyphicon-ok"></span>
+                Review
+            </a>
+        </li> -->
+
+
+        <!-- Shipping -->
+        <!-- <li role="presentation">
+            <a href="#shipping" aria-controls="shipping" role="tab" data-toggle="tab">
+                <span class="glyphicon glyphicon-plane"></span>
+                Shipping
+            </a>
+        </li> -->
+
+        <!-- Billing -->
+        <!-- <li role="presentation">
+            <a href="#billing" aria-controls="billing" role="tab" data-toggle="tab">
+                <span class="glyphicon glyphicon-credit-card"></span>
+                Billing
+            </a>
+        </li> -->
+    </ul>
+</div>

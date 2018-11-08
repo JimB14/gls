@@ -35,65 +35,38 @@ ArmaLaser products are carried by factory trained dealers committed to ArmaLaser
     {% if session.cart_count > 0 %}
         <div class="row">
             <div class="col-md-12">
-                {% if session.userType != 'telephoneorder' %}
-                    <h2 class="well text-center">Checkout Options</h2>
-                {% elseif session.userType == 'telephoneorder' %}
-                    <h2 class="well text-center">Internal Entry of Telephone Order</h2>
-                {% endif %}
+                <h1 class="text-center">Checkout Options</h1>
             </div>
             <div class="col-md-6 col-xs-12">
-                {% if session.userType == 'telephoneorder' %}
-                    <h2>New Order</h2>
-                {% else %}
-                    <h2>New Customer</h2>
-                    <h4>Checkout options</h4>
-                {% endif %}
+                <h2>New Customer</h2>
+                <h4>Checkout options</h4>
 
+                <!-- submission executed by jQuery -->
                 <form>
-                    <!-- telephone order placement via website -->
-                    {% if session.userType == 'telephoneorder' %}
-                        <div class="radio">
-                            <label for="checkoutOptions3">
-                                <input type="radio" name="checkoutOptions" id="checkoutOptions3" value="internal">
-                                <strong>Telephone order</strong>
-                            </label>
-                        </div>
-                    {% endif %}
+                    <div class="radio">
+                        <label for="checkoutOptions1">
+                            <input type="radio" name="checkoutOptions" id="checkoutOptions1" value="register">
+                            <strong>Create Account</strong><small> (recommended)<sup style="font-size:120%;">1</sup></small>
+                        </label>
+                    </div>
+                    <div class="radio p3">
+                        <label for="checkoutOptions2"><input type="radio" name="checkoutOptions" id="checkoutOptions2" value="guest">
+                            <strong>Checkout as Guest</strong>
+                        </label>
+                    </div>
 
-                    {% if session.userType != 'telephoneorder' %}
-                        <div class="radio">
-                            <label for="checkoutOptions1">
-                                <input type="radio" name="checkoutOptions" id="checkoutOptions1" value="register">
-                                <strong>Create Account</strong><small> (recommended)<sup style="font-size:120%;">1</sup></small>
-                            </label>
-                        </div>
-                        <div class="radio">
-                            <label for="checkoutOptions2"><input type="radio" name="checkoutOptions" id="checkoutOptions2" value="guest">
-                                <strong>Checkout as Guest</strong>
-                            </label>
-                        </div>
-                        <br>
-                        <p><sup style="font-size:100%;">1 </sup>By creating an acount you can shop much faster.</p>
-                        <br>
-                    {% endif %}
+                    <button class="btn btn-buy" id="checkoutOptBtn" disabled>Select Checkout Option</button>
 
-                    {% if session.userType == 'telephoneorder' %}
-                        <div style="margin-bottom: 40px;">
-                            <button class="btn btn-buy" id="checkoutOptBtn">Continue</button>
-                        </div>
-                    {% else %}
-                        <button class="btn btn-buy" id="checkoutOptBtn">Continue</button>
-                    {% endif %}
+                    <p style="font-size:95%;"><sup style="font-size:100%;">1 </sup>By creating an acount you can shop faster, <br>see your orders and manage your account.</p>
+
                 </form>
 
             </div>
             <div class="col-md-6 col-xs-12">
-                {% if session.userType != 'telephoneorder' %}
-                    <h2>Returning Customer</h2>
-                    <div class="col-md-6">
-                        {% include 'Login/inc.login.html' %}
-                    </div>
-                {% endif %}
+                <h2>Returning Customer</h2>
+                <div class="col-md-6">
+                    {% include 'Login/inc.login.html' %}
+                </div>
             </div>
         </div>
     {% endif %}
@@ -106,17 +79,23 @@ $(document).ready(function(){
 
     $("#loginform").validate();
 
+
     $("input:radio[name=checkoutOptions]").click(function(){
         let value = $(this).val();
         console.log(value);
+
+        // enable button
+        $("#checkoutOptBtn").attr("disabled", false);
+        $("#checkoutOptBtn").text("Continue");
 
         $("#checkoutOptBtn").on('click', function(){
             $("form").submit(function(e){
                 e.preventDefault();
             });
             console.log("Clicked!");
+
             if (value === 'register') {
-                window.location.href = "/admin/register";
+                window.location.href = "/admin/customer/register";
             } else if (value === 'guest') {
                 window.location.href = "/cart/checkout/guest";
             } else {
@@ -124,8 +103,6 @@ $(document).ready(function(){
             }
         });
     });
-
-
 
 });
 </script>

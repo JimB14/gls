@@ -1,0 +1,183 @@
+{% extends 'base-admin.html' %}
+
+{% block title %}
+  Items | ArmaLaser
+{% endblock %}
+
+{% block css %}
+<style>
+.border {
+    border: 1px solid #ddd; padding: 10px 15px 60px 15px;
+    border-radius: 3px;
+}
+.nav > li > a:hover, 
+.nav > li > a:focus,
+.nav-tabs > li.active > a,
+.nav-tabs > li.active > a:focus {
+    text-decoration: none;
+    background-color: transparent !important;
+    color: #32cd32 !important;
+    border-top: none !important;
+    border-left: none !important;
+    border-right: none !important;
+    border-bottom: 3px solid #32cd32 !important;
+}
+.fivepercent {width: 5%;}
+.sevenpercent {width: 7%;}
+.tenpercent {width: 10%;}
+.fifteenpercent {width: 15%;}
+.twentypercent {width: 20%;}
+.twentyfivepercent {width: 25%;}
+#itemQty {
+    width: 30%;
+    border-color: #ddd;
+    border-radius: 4px;
+    text-align: center;
+}
+</style>
+{% endblock %}
+
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div id="dashboard-toggle" class="col-md-10" style="margin-top:-20px;margin-left:254px;">
+
+            <h2>
+                <span class="glyphicon glyphicon-phone-alt"></span>
+                &nbsp;{{ pagetitle }}
+            </h2>
+
+            <p style="margin-left: 0px;margin-bottom: -10px;">
+                <span class="glyphicon glyphicon-menu-left"></span>
+                <a onclick="window.history.go(-1)" style="cursor:pointer;">
+                    Go Back
+                </a>
+            </p>
+
+            {% include 'Admin/Armalaser/Show/Phone/cart-component.html' %}
+
+            <div class="col-md-12 p2">
+                {% include 'Admin/Armalaser/Show/Phone/customer-component.html' %}
+            </div>
+
+            <div id="content"></div>
+
+            <!-- = = = = = = = Tabs  = = = = = = = = = = = = = = = = = = = = = = = = = = = = -->
+            <div class="col-md-12">
+
+                {% include 'Admin/Armalaser/Show/Phone/tabs-component.html' %}
+
+                    <!-- = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = -->
+                {% if laser %}
+                    <!-- Items  -->
+                    <div role="tabpanel" class="tab-pane" id="items">
+                        <!-- Items  -->
+                        <form action="/admin/customers/search" method="post">
+                            <div class="input-group p2 t1">
+                                <input type="text" name="searchword" class="form-control" placeholder="Search">
+                                <span class="input-group-btn">
+                                    <button class="btn btn-primary">Search</button>
+                                </span>
+                            </div>
+                        </form>
+
+                        <div>
+                            <table class="table striped">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>&nbsp;</th>
+                                        <th>Name</th>
+                                        <th>Pistol matches</th>
+                                        <th>Price</th>
+                                        <th>Qty</th>
+                                        <th class="text-right">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for laser in trseries %}
+                                        <tr>
+                                            <td class="sevenpercent">{{ laser.id }}</td>
+                                            <td class="sevenpercent"><img src="/assets/images/laser-pistol/{{ laser.model|replace({'g': ''}) }}/{{ laser.img_thumb }}"
+                                                height="40px" alt="Need image"></td>
+                                            <td class="twentypercent">{{ laser.name }}</td>
+                                            <td class="twentyfivepercent">{{ laser.pistol_models }}</td>
+                                            <td class="tenpercent">{{ laser.price }}</td>
+                                            <td class="fifteenpercent"><input value="1" name="itemQty" id="itemQty" size="3"></td>
+                                            <td class="text-right tenpercent"><a class="btn btn-default" href="#"><span class="glyphicon glyphicon-plus"></span> Add</a></td>
+                                        </tr>
+                                    {% endfor %}    
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
+                {% else %}
+                    <h3>No products found.</h3>
+                {% endif %}
+
+                    <!-- = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = -->
+                    
+
+                    <!-- Review -->
+                    <div role="tabpanel" class="tab-pane" id="review">
+                        <h3>Review</h3>
+                        <div id="ajax_results_customers"></div>
+                    </div>
+
+                    <!-- = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = -->
+
+
+                    <!-- Shipping  -->
+                    <div role="tabpanel" class="tab-pane" id="shipping">
+                        <h3>Shipping</h3>
+                    </div>
+
+                    <!-- = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = -->
+
+
+                    <!-- Billing  -->
+                    <div role="tabpanel" class="tab-pane" id="billing">
+                        <h3>Billing</h3>
+                    </div>
+
+                    <!-- = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = -->
+
+                </div>
+            </div>
+        </div> 
+    </div>
+</div>     
+{% endblock %}
+
+
+{% block bottomjs %}
+<script>
+$(function(){
+
+    // get customers on page load
+    $.ajax({
+        url: '/admin/customers/ajaxGetCustomers',
+        type: 'POST',
+        data: { },
+        dataType: 'html',
+        cache: false,
+        success: function(customers) {
+        
+            // console.log(customers);
+
+            // apppend data to div
+            $("#ajax_results_customers").append(customers);
+        },
+         error: function(){
+            alert("Ajax request failure.");
+        }
+    });
+
+ 
+  
+
+});
+</script>
+{% endblock %}

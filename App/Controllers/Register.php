@@ -20,8 +20,17 @@ class Register extends \Core\Controller
 
     public function indexAction()
     {
+        $id = (isset($_REQUEST['id'])) ? filter_var($_REQUEST['id'], FILTER_SANITIZE_STRING) : '';
+
+        if ($id) {
+            $couponentered = true;
+        } else {
+            $couponentered = false;
+        }
+        
         View::renderTemplate('Register/customer.html',  [
-            'pagetitle'   => 'Customer Registration'
+            'pagetitle'     => 'Customer Registration',
+            'couponentered' => $couponentered
         ]);
     }
 
@@ -583,16 +592,16 @@ class Register extends \Core\Controller
         $partnerid = isset($_REQUEST['id']) ? filter_var($_REQUEST['id'], FILTER_SANITIZE_STRING) : '';
 
         // get partner data
-        $partner = Partner::getPartner($partnerid);
+        $partner = Customer::getCustomer($partnerid);
 
         // store security answers in `partners` table
-        $result = Partner::storeSecurityAnswers($partnerid);
+        $result = Customer::storeSecurityAnswers($partnerid);
 
         // success
         if($result)
         {
             // update first_login status to false (first_login = 0)
-            $result = Partner::updateFirstLoginStatus($partnerid);
+            $result = Customer::updateFirstLoginStatus($partnerid);
 
             if($result)
             {
@@ -612,8 +621,8 @@ class Register extends \Core\Controller
                   'register_success2' => $register_success2,
                   'register_success3' => $register_success3,
                   'register_success4' => $register_success4,
-                  'first_name'        => $partner->first_name,
-                  'last_name'         => $partner->last_name
+                  'first_name'        => $partner->billing_firstname,
+                  'last_name'         => $partner->billing_lastname
               ]);
             }
             else
@@ -640,16 +649,16 @@ class Register extends \Core\Controller
         $dealerid = isset($_REQUEST['id']) ? filter_var($_REQUEST['id'], FILTER_SANITIZE_STRING) : '';
 
         // get dealer
-        $dealer = Dealer::getDealer($dealerid);
+        $dealer = Customer::getCustomer($dealerid);
 
         // store security answers in `partners` table
-        $result = Dealer::storeSecurityAnswers($dealerid);
+        $result = Customer::storeSecurityAnswers($dealerid);
 
         // success
         if($result)
         {
             // update first_login status to false (first_login = 0)
-            $result = Dealer::updateFirstLoginStatus($dealerid);
+            $result = Customer::updateFirstLoginStatus($dealerid);
 
             if($result)
             {
@@ -669,8 +678,8 @@ class Register extends \Core\Controller
                   'register_success2' => $register_success2,
                   'register_success3' => $register_success3,
                   'register_success4' => $register_success4,
-                  'first_name'        => $dealer->first_name,
-                  'last_name'         => $dealer->last_name
+                  'first_name'        => $dealer->billing_firstname,
+                  'last_name'         => $dealer->billing_lastname
               ]);
             }
             else

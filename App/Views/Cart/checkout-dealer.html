@@ -19,7 +19,7 @@ Checkout page for ArmaLaser
         border-right: 1px solid #fff !important;
     }
     #shippinginfo {
-        display:block:;
+        display:block;
     }
     form .error {
         color: #ff0000;
@@ -57,231 +57,97 @@ Checkout page for ArmaLaser
         <div class="col-md-12">
             {% include 'Cart/inc.cart.html' %}
         </div>
+    </div>
 
-        <div class="col-md-8" style="margin-bottom: 60px;">
-            <div style="border: 1px solid #ddd;border-radius: 3px; padding:5px 30px 20px 20px;">
-                <h3 style="margin:10px 0 20px 0;padding: 0px;">Billing / Ship-to information on file</h3>
-                <form name="bill_ship_info" id="bill_ship_info" action="/cart/checkout/dealer-order-summary"
-                    method="post" class="form-horizontal">
-                    <div class="form-group has-feedback">
-                        <label for="dealer_firstname" class="col-sm-2 control-label">
-                            First name
-                        </label>
-                        <div class="col-sm-10">
-                            <input type="text" class="form-control required" name="dealer_firstname"
-                            id="dealer_firstname" placeholder="First name" value="{{ customer.first_name }}">
-                            <span class="glyphicon form-control-feedback" id="dealer_firstname1"></span>
-                        </div>
-                    </div>
-                    <div class="form-group has-feedback">
-                        <label for="dealer_lastname" class="col-sm-2 control-label">
-                            Last name
-                        </label>
-                        <div class="col-sm-10">
-                            <input type="text" class="form-control required" name="dealer_lastname"
-                            id="dealer_lastname" placeholder="Last name" value="{{ customer.last_name }}">
-                            <span class="glyphicon form-control-feedback" id="dealer_lastname1"></span>
-                        </div>
-                    </div>
-                    <div class="form-group has-feedback">
-                        <label for="dealer_company" class="col-sm-2 control-label">
-                            Company
-                        </label>
-                        <div class="col-sm-10">
-                            <input type="text" class="form-control required" name="dealer_company"
-                            id="dealer_company" placeholder="Company" value="{{ customer.company|raw }}">
-                            <span class="glyphicon form-control-feedback" id="dealer_company1"></span>
-                        </div>
-                    </div>
-                    <div class="form-group has-feedback">
-                        <label for="dealer_phone" class="col-sm-2 control-label">
-                           Telephone
-                        </label>
-                        <div class="col-sm-10">
-                            <input type="text" class="form-control required" name="dealer_phone"
-                            id="dealer_phone" placeholder="Telephone" value="{{ customer.telephone }}">
-                            <span class="glyphicon form-control-feedback" id="dealer_phone1"></span>
-                        </div>
-                    </div>
-                    <div class="form-group has-feedback">
-                        <label for="dealer_address" class="col-sm-2 control-label">
-                            Address
-                        </label>
-                        <div class="col-sm-10">
-                            <input type="text" class="form-control required" name="dealer_address"
-                            id="dealer_address" placeholder="Address" value="{{ customer.address }}">
-                            <span class="glyphicon form-control-feedback" id="dealer_address1"></span>
-                        </div>
-                    </div>
-                    <!-- <div class="form-group has-feedback">
-                        <label for="dealer_address2" class="col-sm-2 control-label">
-                            Unit / Suite
-                        </label>
-                        <div class="col-sm-10">
-                            <input type="text" class="form-control" name="dealer_address2"
-                            id="dealer_address2" placeholder="Unit / Suite" value="{# customer.address2 #}">
-                            <span class="glyphicon form-control-feedback" id="dealer_address21"></span>
-                        </div>
-                    </div> -->
-                    <div class="form-group has-feedback">
-                        <label for="dealer_city" class="col-sm-2 control-label">
-                            City
-                        </label>
-                        <div class="col-sm-10">
-                            <input type="text" class="form-control required" name="dealer_city"
-                            id="dealer_city" placeholder="City" value="{{ customer.city }}">
-                            <span class="glyphicon form-control-feedback" id="dealer_city1"></span>
-                        </div>
-                    </div>
-                    <div class="form-group has-feedback">
-                        <label for="dealer_state" class="col-sm-2 control-label">
-                            State
-                        </label>
-                        <div class="col-sm-10">
-                            <select class="form-control required" name="dealer_state" id="dealer_state">
-                                <option value="{{ customer.state }}">{% if customer.state %}{{ customer.state }}{% else %}Select{% endif %}</option>
-                                {% for state in states %}
-                                    <option value="{{ state.abbrev }}">{{ state.abbrev }}</option>
-                                {% endfor %}
-                            </select>
-                            <span class="glyphicon form-control-feedback" id="dealer_state1"></span>
-                        </div>
-                    </div>
-                    <div class="form-group has-feedback">
-                        <label for="dealer_zip" class="col-sm-2 control-label">
-                            Zip
-                        </label>
-                        <div class="col-sm-10">
-                            <input type="text" class="form-control required" name="dealer_zip"
-                            id="dealer_zip" placeholder="Zip" value="{{ customer.zip }}">
-                            <span class="glyphicon form-control-feedback" id="dealer_zip1"></span>
-                        </div>
-                    </div>
-                    <div class="form-group has-feedback">
-                        <label for="email" class="col-sm-2 control-label">
-                            Email
-                        </label>
-                        <div class="col-sm-10">
-                            <input type="text" class="form-control required" name="email"
-                            id="email" placeholder="Email" value="{{ customer.email }}">
-                            <span class="glyphicon form-control-feedback" id="email1"></span>
-                        </div>
-                    </div>
+    <form action="/cart/checkout/dealer-order-summary" method="post"
+        name="bill_ship_info" id="bill_ship_info">
 
+        <!-- Dealers prohibited from drop-shipping -->
+        <h3>Ship-to information</h3>
+        <div class="row">
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label>First name</label>
+                    <input type="text" class="form-control" name="dealer_firstname"
+                        id="dealer_firstname" placeholder="First name" value="{{ customer.shipping_firstname }}">
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label>Last name</label>
+                    <input type="text" class="form-control" name="dealer_lastname"
+                        id="dealer_lastname" placeholder="Last name" value="{{ customer.shipping_lastname }}">
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label>Company</label>
+                    <input type="text" class="form-control" name="dealer_company"
+                        id="dealer_company" placeholder="Company" value="{{ customer.shipping_company|raw }}">
+                </div>
+            </div>
 
-                    <div style="border: .5px solid #eee; margin-top: 40px; margin-bottom: 20px;"></div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label>Address</label>
+                    <input type="text" class="form-control" name="dealer_address"
+                        id="dealer_address" placeholder="Address" value="{{ customer.shipping_address }}">
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label>Address2</label>
+                    <input type="text" class="form-control" name="dealer_address2"
+                        id="dealer_address2" placeholder="Address2" value="{{ customer.shipping_address2 }}">
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label>City</label>
+                    <input type="text" class="form-control" name="dealer_city"
+                        id="dealer_city" placeholder="City" value="{{ customer.shipping_city }}">
+                </div>
+            </div>
+            <div class="col-md-1">
+                <div class="form-group">
+                    <label>State</label>
+                    <input type="text" class="form-control" name="dealer_state"
+                       id="dealer_state" placeholder="State" value="{{ customer.shipping_state }}">
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="form-group">
+                    <label>Zip</label>
+                    <input type="text" class="form-control" name="dealer_zip"
+                        id="dealer_zip" placeholder="Zip" value="{{ customer.shipping_zip }}">
+                </div>
+            </div>
 
-
-                    <h3 style="margin:20px 0 0 0;padding: 0px;">
-                        Shipping Options
-                    </h3>
-                    <div class="checkbox">
-                        <label class="col-sm-offset-2 col-sm-8 shipping-radio-label">
-                            <input type="radio" id="free_shipping" name="shipping_method" value="First" checked>
-                            <span><img height="25" src="/assets/images/usps/logo.png"></span>
-                            USPS First Class - <span id="priority-mail-amount" class="checkout-shipping-amount">FREE <a href="https://www.usps.com/ship/first-class-mail.htm" target="_blank">(1-3 days)</a></span>
-                            <input type="hidden" name="free_shipping_cost" id="free_shipping_cost" value="first">
-                        </label>
-                        <div id="checkout-first-class-details" class="col-sm-offset-2 col-sm-10">
-                            <div class="alert alert-info" style="padding: 0; margin: 0; padding-bottom:7px;">
-                                <h4 style="margin:0; padding: 7px 0 5px 7px;">First Class details</h4>
-                                <div id="first-class-rate" style="margin-left:12px;"></div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="checkbox">
-                        <label class="col-sm-offset-2 col-sm-10 shipping-radio-label">
-                            <input type="radio" id="priority_mail" name="shipping_method" value="Priority">
-                                <span><img height="25" src="/assets/images/usps/logo.png"></span>
-                                USPS Priority Mail <a href="https://www.usps.com/ship/priority-mail.htm" target="_blank">(1-3 days)</a> - <span id="priority-mail-amount" class="checkout-shipping-amount">$7.50</span>
-                                <input type="hidden" name="priority_mail_cost" id="priority_mail_cost" value="7.50">
-                        </label>
-                        <!-- <div id="checkout-priority-class-details" class="col-sm-offset-2 col-sm-10">
-                            <div class="alert alert-info" style="padding: 0; margin: 0; margin: 7px 0px; padding-bottom:7px;">
-                                <h4 style="margin:0; padding: 7px 0 5px 7px;">Priority Mail details <span style="font-size:14px;">(delivery times apply after your order is shipped)</span></h4>
-                                <div id="priority-rate" style="margin-left:12px;"></div>
-                            </div>
-                        </div> -->
-                    </div>
-
-                    <div class="checkbox">
-                        <label class="col-sm-offset-2 col-sm-10 shipping-radio-label">
-                            <input type="radio" id="ups_ground" name="shipping_method" value="UPS Ground">
-                                <span><img height="25" src="/assets/images/ups/logo_small.gif"></span>
-                                UPS Ground - <span id="priority-mail-amount" class="checkout-shipping-amount">$12.50</span> <span id="next-day-in-fl"> (usually next day in Florida)</span>
-                            <input type="hidden" name="ups_ground_cost" id="ups_ground_cost" value="12.50">
-                            <input type="hidden" name="ups_ground_shipment_digest" id="ups_ground_shipment_digest" value="">
-                            <input type="hidden" name="ups_ground_tracking_number" id="ups_ground_tracking_number" value="">
-                        </label>
-                        <div id="checkout-ups-ground-details" class="col-sm-offset-2 col-sm-10">
-                            <div class="alert alert-info" style="padding: 0; margin: 0; margin: 7px 0px; padding-bottom:7px;">
-                                <h4 style="margin:0; padding: 7px 0 5px 7px;">UPS Ground rate: $<span id="ups-ground-rate"></span></h4>
-                                <!-- <div style="margin-left:12px;"><span id="ups-ground-rate"></span></div> -->
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="checkbox">
-                        <label class="col-sm-offset-2 col-sm-10 shipping-radio-label">
-                            <input type="radio" id="ups_three_day_select" name="shipping_method" value="UPS Three Day Select">
-                                <span><img height="25" src="/assets/images/ups/logo_small.gif"></span>
-                                UPS 3 Day Select - <span id="priority-mail-amount" class="checkout-shipping-amount">$25.00</span>
-                            <input type="hidden" name="ups_three_day_select_cost" id="ups_three_day_select_cost" value="25.00">
-                            <input type="hidden" name="ups_three_day_select_shipment_digest" id="ups_three_day_select_shipment_digest" value="">
-                            <input type="hidden" name="ups_three_day_select_tracking_number" id="ups_three_day_select_tracking_number" value="">
-                        </label>
-                        <div id="checkout-three-day-select-details" class="col-sm-offset-2 col-sm-10">
-                            <div class="alert alert-info" style="padding: 0; margin: 0; margin: 7px 0px; padding-bottom:7px;">
-                                <h4 style="margin:0; padding: 7px 0 5px 7px;">UPS 3 Day Select rate: $<span id="ups-three-day-select-rate"></span></h4>
-                                <!-- <div id="three-day-select-rate" style="margin-left:12px;"></div> -->
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="checkbox">
-                        <label class="col-sm-offset-2 col-sm-10 shipping-radio-label">
-                            <input type="radio" id="ups_second_day_air" name="shipping_method" value="UPS Second Day Air">
-                                <span><img height="25" src="/assets/images/ups/logo_small.gif"></span>
-                                UPS 2nd Day Air - <span id="priority-mail-amount" class="checkout-shipping-amount">$35.00</span>
-                            <input type="hidden" name="ups_second_day_air_cost" id="ups_second_day_air_cost" value="35.00">
-                            <input type="hidden" name="ups_second_day_air_shipment_digest" id="ups_second_day_air_shipment_digest" value="">
-                            <input type="hidden" name="ups_second_day_air_tracking_number" id="ups_second_day_air_tracking_number" value="">
-                        </label>
-                        <div id="checkout-second-day-air-details" class="col-sm-offset-2 col-sm-10">
-                            <div class="alert alert-info" style="padding: 0; margin: 0; margin: 7px 0px; padding-bottom:7px;">
-                                <h4 style="margin:0; padding: 7px 0 5px 7px;">UPS 2nd Day Air rate: $<span id="ups-second-day-air"></span></h4>
-                                <!-- <div id="second-day-air-rate" style="margin-left:12px;"></div> -->
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-sm-offset-2 col-sm-10" style="margin-top: 15px;">
-                        <p class="small">
-                            UPS, the UPS brand mark, and the Color Brown are trademarks of United
-                            Parcel Service of America, Inc. All Rights Reserved.
-                        </p>
-                    </div>
-
-                    <h3 style="margin:20px 0 20px 0;padding: 0px;">
-                        Shipping Instructions
-                    </h3>
-
-                    <div class="form-group has-feedback">
-                        <div class="col-sm-offset-2 col-sm-10">
-                            <textarea class="form-control" name="shipping_instructions" id="shipping_instructions" placeholder="Special shipping instructions"></textarea>
-                            <span class="glyphicon form-control-feedback" id="notes_from_customer1"></span>
-                        </div>
-                    </div>
-
-                    <div style="border: .5px solid #eee; margin-top:20px; margin-bottom: 15px;"></div>
-                    <div class="col-sm-offset-2">
-                        <button id="continue-btn" class="btn btn-buy btn-lg" role="submit">Continue</button>
-                    </div>
-                </form>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label>Telephone</label>
+                    <input type="text" class="form-control" name="dealer_phone"
+                        id="dealer_phone" placeholder="Telephone" value="{{ customer.shipping_phone }}">
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="text" class="form-control" name="email"
+                        id="email" placeholder="Email" value="{{ customer.email }}">
+                </div>
             </div>
         </div>
-    </div>
+
+        {% include 'Cart/choose-shipping.component.html' %}
+
+            <input type="hidden" name="dealer_id" value="{{ customer.id }}">
+            <input type="hidden" name="type" value="{{ session.userType }}">
+
+            <div class="p4">
+                <button id="continue-btn" class="btn btn-buy btn-lg" role="submit">Continue</button>
+            </div>
+    </form>
 </div>
 {% endblock %}
 
@@ -348,8 +214,8 @@ $(document).ready(function(){
         var company = '{% if customer.shipping_company %}{{ customer.shipping_company }}{% else %}'+ $("#shipping_company").val() +'{% endif %}';
         var firstName = '{% if customer.shipping_firstname %}{{ customer.shipping_firstname }}{% else %}'+ $("#shipping_firstname").val() +'{% endif %}';
         var lastName = '{% if customer.shipping_lastname %}{{ customer.shipping_lastname }}{% else %}'+ $("#shipping_lastname").val() +'{% endif %}';
-        var phone = '{% if customer.shipping_phone %}{{ customer.shipping_phone }}{% else %}'+ $("#shipping_phone").val() +'{% endif %}'; // string: quotes required
-        var address1 = '{% if customer.shipping_address %}{{ customer.shipping_address }}{% else %}'+ $("#shipping_address").val() +'{% endif %}'; // string: quotes required
+        var phone = '{% if customer.shipping_phone %}{{ customer.shipping_phone }}{% else %}'+ $("#shipping_phone").val() +'{% endif %}'; // string: quotes
+        var address1 = '{% if customer.shipping_address %}{{ customer.shipping_address }}{% else %}'+ $("#shipping_address").val() +'{% endif %}'; // string: quotes
         var address2 = '{% if customer.shipping_address2 %}{{ customer.shipping_address2 }}{% else %}'+ $("#shipping_address2").val() +'{% endif %}';
         var city = '{% if customer.shipping_city %}{{ customer.shipping_city }}{% else %}'+ $("#shipping_city").val() +'{% endif %}';
         var state = '{% if customer.shipping_state%}{{ customer.shipping_state }}{% else %}'+ $("#shipping_state").val() +'{% endif %}';
@@ -373,7 +239,7 @@ $(document).ready(function(){
         if (firstName === '' || lastName === '' || address1 === ''
             || city === '' || state === '' || zip === '') {
 
-                alert("Shipping information that is required is missing.");
+                alert("Shipping information that is is missing.");
                 return;
         }
 

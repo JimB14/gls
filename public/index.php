@@ -5,6 +5,10 @@
  * PHP  version 7.0
  */
 
+// ini_set('display_errors', 1);
+// ini_set('display_startup_errors', 1);
+// error_reporting(E_ALL);
+
 /**
  * Composer
  */
@@ -62,6 +66,7 @@ if ( isset($_SESSION['chatuser_id']) )
 $timezone =  new \DateTimeZone("America/New_York");
 $date = new \DateTime("now", $timezone);
 $now = $date->format("m-d-Y"); // matches MySQL format
+$nowMySQL = $date->format("Y-m-d"); // matches MySQL format
 $current_hour = $date->format('H');
 $today = $date->format('D');
 $current_date = $date->format('d');
@@ -76,6 +81,7 @@ $_SESSION['thisMonth'] = $current_month;
 $_SESSION['thisYear']  = $current_year;
 $_SESSION['thisHour']  = $current_hour;
 $_SESSION['now'] = $now;
+$_SESSION['nowMySQL'] = $nowMySQL;
 
 // remove YEAR to make reusable regardless of year (e.g. 12-25-2017 becomes 12-25)
 $_SESSION['nowMMDD'] = substr($now, 0, 5);
@@ -136,6 +142,8 @@ $router->add('home', ['controller' => 'Home',  'action' => 'index']);
 
 // = = = = = =  new routes = = = = = = = = = = = //
 
+
+
 // products by pistol manufacturer route (https://armalaser.com/glock)
 $router->add('{manufacturer:[A-za-z -]+}', ['controller' => 'Products', 'action' => 'showProductsByPistolMfr']);
 
@@ -169,6 +177,9 @@ $router->add('cart/checkout/admin-order-summary', ['controller' => 'Cart', 'acti
 $router->add('cart/checkout/process-discount', ['controller'=>'Cart', 'action'=> 'processDiscount']);
 $router->add('cart/checkout/process-payment', ['controller'=>'Cart', 'action'=> 'processPayment']);
 $router->add('cart/checkout/process-no-payment', ['controller'=>'Cart', 'action'=> 'processNoPayment']);
+
+// phone order with promise to send check/money order
+$router->add('cart/checkout/process-without-payment', ['controller'=>'Cart', 'action'=> 'processWithoutPayment']);
 
 
 
@@ -325,14 +336,19 @@ $router->add('info/laser-warranty', ['controller' => 'Warranty', 'action' => 'in
 
 // $router->add('login/login-user', ['controller' => 'Login', 'action' => 'login-user']);
 
+$router->add('admin/{controller}/{action}/{status:[A-za-z -]+}/{id:\d+}', ['namespace' => 'Admin']); // assign namespace
 
 // get customer data by type
 $router->add('admin/{controller}/{action}/{buyerType:[A-za-z -]+}/{id:\d+}', ['namespace' => 'Admin']); // assign namespace
 
+
 $router->add('admin/{controller}/{action}', ['namespace' => 'Admin']); // assign the namespace
+$router->add('admin/{controller}/{action}/{id:\d+}', ['namespace' => 'Admin']); // assign namespace
+
 $router->add('admin/dealers/{controller}/{action}', ['namespace' => 'Admin\Dealers']); // assign namespace
 $router->add('admin/partners/{controller}/{action}', ['namespace' => 'Admin\Partners']); // assign namespace
 $router->add('admin/customers/{controller}/{action}', ['namespace' => 'Admin\Customers']); // assign namespace
+
 
 
 $router->add('api/{controller}/{action}', ['namespace' => 'Api']); // assign namespace

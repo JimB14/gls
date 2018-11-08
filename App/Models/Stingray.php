@@ -260,47 +260,93 @@ class Stingray extends \Core\Model
      */
     public static function getStingrayDetailsForCart($id, $pistolMfr)
     {
-        try
+       
+        if ($pistolMfr != '') 
         {
-            // establish db connection
-            $db = static::getDB();
-
-            $sql = "SELECT DISTINCT
-                        stingrays.id, stingrays.name, stingrays.series, stingrays.model,
-                        stingrays.beam, stingrays.price, stingrays.price_dealer,
-                        stingrays.price_partner, stingrays.weight,
-                        stingray_images.thumb,
-                        pistol_brands.name AS pistolMfr,
-                    	GROUP_CONCAT(DISTINCT pistols.model ORDER BY pistols.model ASC SEPARATOR ', ') AS pistol_models
-                    FROM pistols
-                    INNER JOIN pistol_stingray_lookup
-                    	ON pistol_stingray_lookup.pistolid = pistols.id
-                    INNER JOIN stingrays
-                    	ON stingrays.id = pistol_stingray_lookup.stingrayid
-                    INNER JOIN stingray_images
-                    	ON stingray_images.stingray_id = stingrays.id
-                    INNER JOIN pistol_brands
-                    	ON pistol_brands.id = pistols.brand_id
-                    WHERE stingrays.id = :id
-                    AND pistol_brands.name = :pistolMfr
-                    GROUP BY stingrays.model";
-            $stmt = $db->prepare($sql);
-            $parameters = [
-                ':id'        => $id,
-                ':pistolMfr' => $pistolMfr
-            ];
-            $stmt->execute($parameters);
-
-            $item = $stmt->fetch(PDO::FETCH_OBJ);
-
-            // return to Cart controller
-            return $item;
+            try
+            {
+                // establish db connection
+                $db = static::getDB();
+    
+                $sql = "SELECT DISTINCT
+                            stingrays.id, stingrays.name, stingrays.series, stingrays.model,
+                            stingrays.beam, stingrays.price, stingrays.price_dealer,
+                            stingrays.price_partner, stingrays.weight,
+                            stingray_images.thumb,
+                            pistol_brands.name AS pistolMfr,
+                            GROUP_CONCAT(DISTINCT pistols.model ORDER BY pistols.model ASC SEPARATOR ', ') AS pistol_models
+                        FROM pistols
+                        INNER JOIN pistol_stingray_lookup
+                            ON pistol_stingray_lookup.pistolid = pistols.id
+                        INNER JOIN stingrays
+                            ON stingrays.id = pistol_stingray_lookup.stingrayid
+                        INNER JOIN stingray_images
+                            ON stingray_images.stingray_id = stingrays.id
+                        INNER JOIN pistol_brands
+                            ON pistol_brands.id = pistols.brand_id
+                        WHERE stingrays.id = :id
+                        AND pistol_brands.name = :pistolMfr
+                        GROUP BY stingrays.model";
+                $stmt = $db->prepare($sql);
+                $parameters = [
+                    ':id'        => $id,
+                    ':pistolMfr' => $pistolMfr
+                ];
+                $stmt->execute($parameters);
+    
+                $item = $stmt->fetch(PDO::FETCH_OBJ);
+    
+                // return to Cart controller
+                return $item;
+            }
+            catch(PDOException $e)
+            {
+                echo $e->getMessage();
+                exit();
+            }
         }
-        catch(PDOException $e)
+        // for phone order only where $pistolMfr = '';
+        else 
         {
-            echo $e->getMessage();
-            exit();
+            try
+            {
+                // establish db connection
+                $db = static::getDB();
+    
+                $sql = "SELECT DISTINCT
+                            stingrays.id, stingrays.name, stingrays.series, stingrays.model,
+                            stingrays.beam, stingrays.price, stingrays.price_dealer,
+                            stingrays.price_partner, stingrays.weight,
+                            stingray_images.thumb,
+                            pistol_brands.name AS pistolMfr,
+                            GROUP_CONCAT(DISTINCT pistols.model ORDER BY pistols.model ASC SEPARATOR ', ') AS pistol_models
+                        FROM pistols
+                        INNER JOIN pistol_stingray_lookup
+                            ON pistol_stingray_lookup.pistolid = pistols.id
+                        INNER JOIN stingrays
+                            ON stingrays.id = pistol_stingray_lookup.stingrayid
+                        INNER JOIN stingray_images
+                            ON stingray_images.stingray_id = stingrays.id
+                        INNER JOIN pistol_brands
+                            ON pistol_brands.id = pistols.brand_id
+                        WHERE stingrays.id = :id";
+                $stmt = $db->prepare($sql);
+                $parameters = [
+                    ':id' => $id
+                ];
+                $stmt->execute($parameters);
+    
+                $item = $stmt->fetch(PDO::FETCH_OBJ);
+    
+                return $item;
+            }
+            catch(PDOException $e)
+            {
+                echo $e->getMessage();
+                exit();
+            }            
         }
+        
     }
 
 

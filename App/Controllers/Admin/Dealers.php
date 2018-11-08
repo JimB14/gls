@@ -284,68 +284,7 @@ class Dealers extends \Core\Controller
 
 
 
-    /**
-     * Dealer functionality - updates dealer credentials in `dealers`
-     *
-     * @return boolean
-     */
-    public function updateAccountPasswordAction()
-    {
-        // retrieve id from query string
-        $id = ( isset($_REQUEST['id'] ) ) ? filter_var($_REQUEST['id'], FILTER_SANITIZE_STRING): '';
-
-        // retrieve form values
-        $password = ( isset($_REQUEST['new_password'])  ) ? filter_var($_REQUEST['new_password'], FILTER_SANITIZE_STRING) : '';
-        $confirm_password = ( isset($_REQUEST['confirm_password'])  ) ? filter_var($_REQUEST['confirm_password'], FILTER_SANITIZE_STRING) : '';
-
-        // test
-        // echo '<pre>';
-        // print_r($_REQUEST);
-        // echo '</pre>';
-        // echo $password . '<br>';
-        // echo $confirm_newpassword . '<br>';
-        // exit();
-
-        // validation if JavaScript fails or is disabled
-        if($password == '' || $confirm_password == '')
-        {
-            $errorMessage = 'All fields required.';
-            View::renderTemplate('Error/index.html', [
-                'errorMessage' => $errorMessage
-            ]);
-           exit();
-        }
-
-        if(strlen($password) < 6 )
-        {
-            $errorMessage = 'Password must be at least 6 characters in length.';
-            View::renderTemplate('Error/index.html', [
-                'errorMessage' => $errorMessage
-            ]);
-            exit();
-        }
-
-        if($password != $confirm_password)
-        {
-            $errorMessage = 'Passwords do not match. Please check and try again.';
-            View::renderTemplate('Error/index.html', [
-                'errorMessage' => $errorMessage
-            ]);
-            exit();
-        }
-
-        // hash new password
-        $password = password_hash($password, PASSWORD_DEFAULT);
-
-        // update dealer record
-        $result = Dealer::updateAccountPassword($id, $password);
-
-        if ($result)
-        {
-            echo '<script>alert("Your Password was successfully changed.\n\n\You will now be logged out.\n\n\You can log back in with your new password.")</script>';
-            echo '<script>window.location.href="/admin/logout"</script>';
-        }
-    }
+    
 
 
 

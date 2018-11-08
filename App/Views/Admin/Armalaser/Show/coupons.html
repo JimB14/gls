@@ -1,0 +1,162 @@
+{% extends 'base-admin.html' %}
+
+{% block title %}
+  Coupons | ArmaLaser
+{% endblock %}
+
+{% block css %}
+<style>
+.border-box {
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 15px;
+}
+</style>
+{% endblock %}
+
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div id="dashboard-toggle" class="col-md-9" style="margin-top:-20px;margin-left:254px;">
+            
+            <div class="row">
+                <div class="col-md-6">
+                    <h2>
+                        {{ pagetitle }}
+                        {% if coupons|length > 0 %}
+                            <span class="badge" style="margin: -18px 0px 0px 7px;">
+                                {{ coupons|length }}
+                            </span>
+                        {% endif %}
+                    </h2>
+                    <p style="margin-left: 0px;">
+                        <span class="glyphicon glyphicon-menu-left"></span>
+                        <a onclick="window.history.go(-1)" style="cursor:pointer;">
+                            Go  Back
+                        </a>
+                    </p>
+                </div>
+                <div class="md-6">
+                    <h2 class="text-right">
+                        <a href="/admin/coupons/add-coupon" class="btn btn-primary">
+                            <span class="glyphicon glyphicon-plus"></span> 
+                            Add New Promotion
+                        </a>
+                    </h2>
+                </div>
+            </div>
+            
+
+            <div class="" style="margin-bottom: 80px;">
+
+                <form method="get" action="/admin/coupons/search-coupons-by-name">
+                    <div class="input-group p2 t1">
+                        <input type="text" class="form-control" name="promo" id="promo" placeholder="Enter promo name">
+                        <span class="input-group-btn">
+                            <button class="btn btn-primary" type="submit">Search</button>
+                        </span>
+                    </div>
+                </form>
+
+                {% if searchword %}
+                    {% if searchword and coupons|length > 0 %}
+                        <h3>
+                            {{ coupons|length }} search results for: 
+                            <span>&quot;{{ searchword }}&quot;</span>
+                        </h3>
+                    {% elseif searchword and coupons|length == 0 %}
+                        <h3>No results found</h3>
+                    {% endif %} 
+                {% endif %}
+
+                {% if coupons %}
+                    <table class="table table-striped bg-fff display-broker-agents">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Start</th>
+                                <th>Ends</th>
+                                <th>Type</th>
+                                <th>Enabled</th>
+                                <th>Uses</th>
+                                <th>Use per<br>customer</th>
+                                <th>Max uses<br>allowable</th>
+                                <th>Discount</th>
+                                <th>Code</th>
+                                <th class="text-right">Action</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            {% for item in coupons %}
+                                <tr>
+                                    <td>
+                                        <a href="/admin/coupons/edit-coupon?id={{ item.id }}" title="Edit">
+                                            {{ item.promo_name }}
+                                        </a>
+                                    </td>
+                                    <td>{{ item.promo_start }}</td>
+                                    <td {% if session.nowMySQL > item.promo_end %} class="red"{% endif %}>
+                                        {{ item.promo_end }}
+                                    </td>
+                                    <td>{{ item.discount_type|title }}</td>
+                                    <td>{% if item.enabled == 1 %}Yes{% else %}No{% endif %}</td>
+                                    <td>{{ item.uses_count }}</td>
+                                    <td>{{ item.uses_per_customer }}</td>
+                                    <td>{{ item.max_uses }}</td>
+                                    <td>{{ item.discount}}</td>
+                                    <td>{{ item.coupon_code }}</td>
+                                    <td class="text-right">
+                                        <div class="btn-group" role="group">
+                                            <button type="button" class="btn btn-default"><span class="glyphicon glyphicon-cog"></span></button>
+                                            <button type="button" class="btn btn-dfault dropdown-toggle" data-toggle="dropdown">
+                                                <span class="caret"></span>
+                                            </button>
+                                            <ul class="dropdown-menu">
+                                                <li><a href="/admin/coupons/edit-coupon?id={{ item.id }}">Edit</a></li>
+                                                <li><a href="/admin/coupons/enable-coupon?id={{ item.id }}">Enable</a></li>
+                                                <li><a href="/admin/coupons/disable-coupon?id={{ item.id }}">Disable</a></li>
+                                                <li class="divider"></li>
+                                                <li>
+                                                    <a href="/admin/coupons/delete-coupon?id={{ item.id }}" 
+                                                        onclick="return confirm('TO PERMANENTLY DELETE THIS ITEM, click OK. \n\n\WARNING! DELETED DATA CANNOT BE RECOVERED.');">
+                                                        Delete
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </td>
+                                </tr>    
+                            {% endfor %}
+                        </tbody>
+                    </table>
+
+                {% else %}
+                    <div class="col-md-8" style="margin-left:-15px;">
+                        <div class="alert alert-warning" style="margin-top:30px;">
+                            <h4 style="margin-bottom:0px;">
+                            No coupons to display
+                            </h4>
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+            
+        </div><!--  // col-md-12  -->
+    </div><!--  // .row  -->
+</div><!-- // .container-fluid  -->
+{% endblock %}
+
+
+{% block bottomjs %}
+<script>
+$(document).ready(function(){
+
+
+
+
+});
+</script>
+
+{% endblock %}

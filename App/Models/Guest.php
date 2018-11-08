@@ -57,15 +57,15 @@ class Guest extends \Core\Model
         // echo "Connected!";
 
         // test
-        // echo '<pre>';
-        // echo '<h4>Billing data:</h4>';
-        // print_r($billing_data);
-        // echo '</pre>';
-        // // echo '<pre>';
-        // // echo '<h4>Shipping data:</h4>';
-        // print_r($shipping_data);
-        // echo '</pre>';
-        // exit();
+            // echo '<pre>';
+            // echo '<h4>Billing data:</h4>';
+            // print_r($billing_data);
+            // echo '</pre>';
+            // // echo '<pre>';
+            // // echo '<h4>Shipping data:</h4>';
+            // print_r($shipping_data);
+            // echo '</pre>';
+            // exit();
 
         try
         {
@@ -90,6 +90,7 @@ class Guest extends \Core\Model
                     shipping_city         = :shipping_city,
                     shipping_state        = :shipping_state,
                     shipping_zip          = :shipping_zip,
+                    addresstype           = :addresstype,
                     shipping_instructions = :shipping_instructions
                     WHERE id = :id";
             $stmt = $db->prepare($sql);
@@ -113,6 +114,7 @@ class Guest extends \Core\Model
                 ':shipping_city'         => $shipping_data['shipping_city'],
                 ':shipping_state'        => $shipping_data['shipping_state'],
                 ':shipping_zip'          => $shipping_data['shipping_zip'],
+                ':addresstype'           => $shipping_data['addresstype'],
                 ':shipping_instructions' => $shipping_data['shipping_instructions']
             ];
             $result = $stmt->execute($parameters);
@@ -142,15 +144,15 @@ class Guest extends \Core\Model
         $user_ip = $_SERVER['REMOTE_ADDR'];
 
         // test
-        // echo '<h4>Billing data: </h4>';
-        // echo '<pre>';
-        // print_r($billing_data);
-        // echo '</pre>';
-        // echo '<h4>Shipping data: </h4>';
-        // echo '<pre>';
-        // print_r($shipping_data);
-        // echo '</pre>';
-        // exit();
+            // echo '<h4>Billing data: </h4>';
+            // echo '<pre>';
+            // print_r($billing_data);
+            // echo '</pre>';
+            // echo '<h4>Shipping data: </h4>';
+            // echo '<pre>';
+            // print_r($shipping_data);
+            // echo '</pre>';
+            // exit();
 
         try
         {
@@ -176,6 +178,7 @@ class Guest extends \Core\Model
                     shipping_address2     = :shipping_address2,
                     shipping_city         = :shipping_city,
                     shipping_zip          = :shipping_zip,
+                    addresstype           = :addresstype,
                     shipping_state        = :shipping_state,
                     shipping_instructions = :shipping_instructions";
             $stmt = $db->prepare($sql);
@@ -200,6 +203,7 @@ class Guest extends \Core\Model
                 ':shipping_city'         => $shipping_data['shipping_city'],
                 ':shipping_state'        => $shipping_data['shipping_state'],
                 ':shipping_zip'          => $shipping_data['shipping_zip'],
+                ':addresstype'           => $shipping_data['addresstype'],
                 ':shipping_instructions' => $shipping_data['shipping_instructions']
             ];
             $result = $stmt->execute($parameters);

@@ -353,51 +353,104 @@ class Holster extends \Core\Model
     {
         // echo "Connected to getHolsterDetailsForCart() method of Holster model!";
 
-        try
+        if ($trseries_model != '') 
         {
-            $db = static::getDB();
-
-            $sql = "SELECT DISTINCT
-                        holster_brands.name as holsterMfr,
-                        holsters.id, holsters.name, holsters.model as holster_model,
-                        holsters.waist, holsters.hand, holsters.ad_title,
-                        holsters.price, holsters.weight, holsters.special_message,
-                        holster_images.thumb,
-                        trseries.id as trseries_id, trseries.model as trseries_model,
-                        pistol_brands.name as pistolMfr,
-                        GROUP_CONCAT(DISTINCT pistols.model SEPARATOR ', ') as pistol_models
-                    FROM holsters
-                    INNER JOIN holster_trseries_pistol_lookup
-                        ON holster_trseries_pistol_lookup.holsterid = holsters.id
-                    INNER JOIN trseries
-                        ON trseries.id = holster_trseries_pistol_lookup.trseriesid
-                    INNER JOIN pistols
-                        ON pistols.id = holster_trseries_pistol_lookup.pistolid
-                    INNER JOIN holster_brands
-                        ON holster_brands.id = holsters.holster_brand_id
-                    INNER JOIN pistol_brands
-                        ON pistol_brands.id = pistols.brand_id
-                    INNER JOIN holster_images
-                        ON holster_images.holster_id = holsters.id
-                    WHERE holsters.id = :id
-                    AND trseries.model = :model
-                    GROUP BY holsters.id";
-            $stmt = $db->prepare($sql);
-            $parameters = [
-                ':id'    => $id,
-                ':model' => $trseries_model
-            ];
-            $stmt->execute($parameters);
-            $item = $stmt->fetch(PDO::FETCH_OBJ);
-
-            // return to Cart controller
-            return $item;
-        }
-        catch ( PDOException $e)
+            try
+            {
+                $db = static::getDB();
+    
+                $sql = "SELECT DISTINCT
+                            holster_brands.name as holsterMfr,
+                            holsters.id, holsters.name, holsters.model as holster_model,
+                            holsters.waist, holsters.hand, holsters.ad_title,
+                            holsters.price, holsters.weight, holsters.special_message,
+                            holster_images.thumb,
+                            trseries.id as trseries_id, trseries.model as trseries_model,
+                            pistol_brands.name as pistolMfr,
+                            GROUP_CONCAT(DISTINCT pistols.model SEPARATOR ', ') as pistol_models
+                        FROM holsters
+                        INNER JOIN holster_trseries_pistol_lookup
+                            ON holster_trseries_pistol_lookup.holsterid = holsters.id
+                        INNER JOIN trseries
+                            ON trseries.id = holster_trseries_pistol_lookup.trseriesid
+                        INNER JOIN pistols
+                            ON pistols.id = holster_trseries_pistol_lookup.pistolid
+                        INNER JOIN holster_brands
+                            ON holster_brands.id = holsters.holster_brand_id
+                        INNER JOIN pistol_brands
+                            ON pistol_brands.id = pistols.brand_id
+                        INNER JOIN holster_images
+                            ON holster_images.holster_id = holsters.id
+                        WHERE holsters.id = :id
+                        AND trseries.model = :model
+                        GROUP BY holsters.id";
+                $stmt = $db->prepare($sql);
+                $parameters = [
+                    ':id'    => $id,
+                    ':model' => $trseries_model
+                ];
+                $stmt->execute($parameters);
+                $item = $stmt->fetch(PDO::FETCH_OBJ);
+    
+                // return to Cart controller
+                return $item;
+            }
+            catch ( PDOException $e)
+            {
+                echo $e->getMessage();
+                exit();
+            }
+        } 
+        // phone order only
+        else 
         {
-            echo $e->getMessage();
-            exit();
+            try
+            {
+                $db = static::getDB();
+    
+                $sql = "SELECT DISTINCT
+                            holster_brands.name as holsterMfr,
+                            holsters.id, holsters.name, holsters.model as holster_model,
+                            holsters.waist, holsters.hand, holsters.ad_title,
+                            holsters.price, holsters.weight, holsters.special_message,
+                            holster_images.thumb,
+                            trseries.id as trseries_id, trseries.model as trseries_model,
+                            pistol_brands.name as pistolMfr,
+                            GROUP_CONCAT(DISTINCT pistols.model SEPARATOR ', ') as pistol_models
+                        FROM holsters
+                        INNER JOIN holster_trseries_pistol_lookup
+                            ON holster_trseries_pistol_lookup.holsterid = holsters.id
+                        INNER JOIN trseries
+                            ON trseries.id = holster_trseries_pistol_lookup.trseriesid
+                        INNER JOIN pistols
+                            ON pistols.id = holster_trseries_pistol_lookup.pistolid
+                        INNER JOIN holster_brands
+                            ON holster_brands.id = holsters.holster_brand_id
+                        INNER JOIN pistol_brands
+                            ON pistol_brands.id = pistols.brand_id
+                        INNER JOIN holster_images
+                            ON holster_images.holster_id = holsters.id
+                        WHERE holsters.id = :id
+                        AND trseries.model = :model
+                        GROUP BY holsters.id";
+                $stmt = $db->prepare($sql);
+                $parameters = [
+                    ':id'    => $id,
+                    ':model' => $trseries_model
+                ];
+                $stmt->execute($parameters);
+                $item = $stmt->fetch(PDO::FETCH_OBJ);
+    
+                // return to Cart controller
+                return $item;
+            }
+            catch ( PDOException $e)
+            {
+                echo $e->getMessage();
+                exit();
+            }
         }
+        
     }
 
 
@@ -441,6 +494,59 @@ class Holster extends \Core\Model
                         ON holster_images.holster_id = holsters.id
                     GROUP BY holsters.id
                     ORDER BY trseries.id";
+            $stmt = $db->prepare($sql);
+            $stmt->execute();
+            $holsters = $stmt->fetchAll(PDO::FETCH_OBJ);
+
+            // return to Controller
+            return $holsters;
+        }
+        catch(PDOException $e)
+        {
+            echo $e->getMessage();
+            exit();
+        }
+    }
+
+
+
+    /**
+     * retrieves holsters to populate drop-down
+     *
+     *
+     * @return Object  The holsters
+     */
+    public static function getHolstersForDropdown()
+    {
+        try
+        {
+            $db = static::getDB();
+
+            // retrieve data
+            $sql = "SELECT DISTINCT
+                        holster_brands.name as holsterMfr,
+                        holsters.id, holsters.mvc_model, holsters.name,
+                        holsters.model as holster_model, holsters.waist, holsters.hand,
+                        holsters.price, holsters.price_dealer, holster_images.thumb,
+                        holsters.upc,
+                        pistol_brands.name as pistolMfr,
+                        trseries.id as trseries_id, trseries.model as trseries_model,
+                        GROUP_CONCAT(DISTINCT pistols.model SEPARATOR ', ') as pistol_models
+                    FROM holsters
+                    INNER JOIN holster_trseries_pistol_lookup
+                        ON holster_trseries_pistol_lookup.holsterid = holsters.id
+                    INNER JOIN trseries
+                        ON trseries.id = holster_trseries_pistol_lookup.trseriesid
+                    INNER JOIN pistols
+                        ON pistols.id = holster_trseries_pistol_lookup.pistolid
+                    INNER JOIN holster_brands
+                        ON holster_brands.id = holsters.holster_brand_id
+                    INNER JOIN pistol_brands
+                        ON pistol_brands.id = pistols.brand_id
+                    INNER JOIN holster_images
+                        ON holster_images.holster_id = holsters.id
+                    GROUP BY holsters.id
+                    ORDER BY holster_brands.name";
             $stmt = $db->prepare($sql);
             $stmt->execute();
             $holsters = $stmt->fetchAll(PDO::FETCH_OBJ);

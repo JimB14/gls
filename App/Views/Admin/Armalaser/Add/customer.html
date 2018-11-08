@@ -1,0 +1,362 @@
+{% extends 'base-admin.html' %}
+
+{% block title %}
+  Add customer | ArmaLaser
+{% endblock %}
+
+{% block css %}
+<style>
+.error {
+    color: #ff0000;
+}
+</style>
+{% endblock %}
+
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div id="dashboard-toggle" class="col-md-10" style="margin-top:-20px;margin-left:254px;">
+            <h2 style="margin-bottom: 10px;">{{ pagetitle }}</h2>
+            <p style="margin-left: 0px;">
+                <span class="glyphicon glyphicon-menu-left"></span>
+                <a onclick="window.history.go(-1)" style="cursor:pointer;">
+                    Go Back
+                </a>
+            </p>
+            <form name="addCustomer" id="addCustomer" action="/admin/customers/create" method="post">
+                <div class="col-md-6">
+                    <h3>Billing information</h3>
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <div class="form-group has-feedback">
+                                <label>Type</label>
+                                <select class="form-control" id="type" name="type" >
+                                    <option value="">Select</option>
+                                    <option value="customer">Customer</option>
+                                    <option value="dealer">Dealer</option>
+                                    <option value="partner">Partner</option>
+                                </select>
+                            </div>
+                        </div>
+                        <section class="col-md-4">
+                            <div class="form-group">
+                                <label>First Name</label>
+                                <input class="form-control required" name="billing_firstname"
+                                    id="billing_firstname" maxlength="100" value="">
+                            </label>
+                        </section>
+                        <section class="col-md-4">
+                            <div class="form-group">
+                                <label>Last Name</label>
+                                <input class="form-control required" name="billing_lastname"
+                                    id="billing_lastname" maxlength="100" value="">
+                            </label>
+                        </section>
+                    </div>
+                        <div class="form-group">
+                            <label>Company</label>
+                            <input class="form-control" name="billing_company"
+                                id="billing_company" maxlength="255" value="">
+                        </div>
+                    <div class="row">
+                        <section class="col-md-6">
+                            <label>Address</label>
+                            <div class="form-group">
+                                <input class="form-control required" name="billing_address"
+                                    id="billing_address" value="" maxlength="255">
+                            </label>
+                        </section>
+                        <section class="col-md-6">
+                            <label>Address2</label>
+                            <div class="form-group">
+                                <input class="form-control" name="billing_address2"
+                                    id="billing_address2" maxlength="50" value="">
+                            </label>
+                        </section>
+                    </div>
+
+                    <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+                    <div class="row">
+                        <section class="col-md-3">
+                            <label>City</label>
+                            <div class="form-group">
+                                <input class="form-control required" size="15" name="billing_city"
+                                    id="billing_city" value="" maxlength="100">
+                            </label>
+                        </section>
+                        <section class="col-md-3">
+                            <label>State</label>
+                            <select class="form-control required" id="billing_state" name="billing_state">
+                                <option value="">Select</option>
+                                {% if states %}
+                                    {% for state in states %}
+                                        <option value="{{ state.abbrev }}">{{ state.name }}</option>
+                                    {% endfor %}
+                                {% endif %}
+                            </select>
+                        </section>
+                        <section class="col-md-3">
+                            <label>Zip Code</label>
+                            <div class="form-group">
+                                <input class="form-control required" size="12" name="billing_zip"
+                                    id="billing_zip" value="" maxlength="20">
+                            </label>
+                        </section>
+                        <section class="col-md-3">
+                            <label>Country</label>
+                            <select class="form-control" id="billing_country" name="billing_country">
+                                <option value="US">United States</option>
+                            </select>
+                        </section>
+                    </div>
+                    <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+
+                    <div class="row">
+                        <section class="col-md-3">
+                            <label>Phone</label>
+                            <div class="form-group">
+                                <input type="text" class="form-control required" size="13" name="billing_phone"
+                                    id="billing_phone" value="" maxlength="50" placeholder="Numbers only">
+                            </div>
+                        </section>
+                        <section class="col-md-6">
+                            <label>Email</label>
+                            <div class="form-group">
+                                <input class="form-control required" name="email"
+                                    id="email" value="" maxlength="100">
+                            </div>
+                        </section>
+                        <section class="col-md-3">
+                            <label>Password (temporary)</label>
+                            <div class="form-group">
+                                <input class="form-control required" name="password"
+                                    id="password" value="123456">
+                            </div>
+                        </section>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="row">
+                        <section class="col-md-4"><h3>Shipping information</h3></section>
+                        <section class="col-md-8">
+                            <div class="checkbox" style="margin-top: 26px;">
+                                <label>
+                                    <input name="same" id="same" onclick="copybilling()" type="checkbox">
+                                    Same as billing
+                                </label>
+                            </div>
+                        </section>
+                    </div>
+                    <div class="row">
+                        <section class="col-md-6">
+                            <label>First Name</label>
+                            <div class="form-group">
+                                <input class="form-control required" name="shipping_firstname"
+                                    id="shipping_firstname" value="" maxlength="100">
+                            </div>
+                        </section>
+                        <section class="col-md-6">
+                            <label>Last Name</label>
+                            <div class="form-group">
+                                <input class="form-control required" name="shipping_lastname"
+                                    id="shipping_lastname" value="" maxlength="100">
+                            </div>
+                        </section>
+                    </div>
+                    <section>
+                        <label>Company</label>
+                        <div class="form-group">
+                            <input class="form-control" name="shipping_company"
+                                id="shipping_company" value="" maxlength="255">
+                        </div>
+                    </section>
+                    <div class="row">
+                        <section class="col-md-6">
+                            <label>Address</label>
+                            <div class="form-group">
+                                <input class="form-control required" name="shipping_address"
+                                    id="shipping_address" value="" maxlength="255">
+                            </div>
+                        </section>
+                        <section class="col-md-6">
+                            <label>Address2</label>
+                            <div class="form-group">
+                                <input class="form-control" name="shipping_address2"
+                                    id="shipping_address2" value="" maxlength="50">
+                            </div>
+                        </section>
+                    </div>
+                    <div class="row">
+                        <section class="col-md-3">
+                            <label>City</label>
+                            <div class="form-group">
+                                <input class="form-control required" size="15" name="shipping_city"
+                                    id="shipping_city" value="" maxlength="100">
+                            </div>
+                        </section>
+                        <section class="col-md-3">
+                            <label>State</label>
+                            <select class="form-control required" id="shipping_state" name="shipping_state">
+                                <option value="">Select</option>
+                                {% if states %}
+                                    {% for state in states %}
+                                        <option value="{{ state.abbrev }}">{{ state.name }}</option>
+                                    {% endfor %}
+                                {% endif %}
+                            </select>
+                        </section>
+                        <section class="col-md-3">
+                            <label>Zip Code</label>
+                            <div class="form-group">
+                                <input class="form-control required" size="12" name="shipping_zip"
+                                    id="shipping_zip" value="" maxlength="20">
+                            </div>
+                        </section>
+                        <section class="col-md-3">
+                            <label>Country</label>
+                            <select class="form-control" id="shipping_country" name="shipping_country">
+                                <option value="US">United States</option>
+                            </select>
+                        </section>
+                    </div>
+                    <div class="row">
+                        <section class="col-md-6">
+                            <label>Phone</label>
+                            <div class="form-group">
+                                <input class="form-control" size="13" name="shipping_phone"
+                                    id="shipping_phone" maxlength="50" value="">
+                            </div>
+                        </section>
+                        <!--START: addressType-->
+                        <section class="col-md-6">
+                            <div class="form-group">
+                                <label>Address Type</label>
+                                <select class="form-control" name="addresstype" id="addresstype">
+                                    <option value="residential" selected="selected">Residential</option>
+                                    <option value="commercial">Commercial</option>
+                                </select>
+                            </div>
+                        </section>
+                        <!--END: addressType-->
+                    </div>
+                </div>
+
+                <div class="col-md-12">
+                    <h3>Mailing list</h3>
+                    <!-- <section class="col-md-3">
+                    <label>Customer Group</label>
+                    <select class="form-control" name="discount" id="discount">
+                        <option value="0">None</option>
+                        <option value="1">Dealer</option>
+                        <option value="4">3dCartTest</option>
+                        <option value="5">Partner</option>
+                    </select>
+                    </section> -->
+
+                    <div class="checkbox">
+                        <label>
+                            <input name="email_optin" id="email_optin" value="1" type="checkbox" checked>
+                                Add to Mailing List <br>(customer can opt out at any time)
+                        </label>
+                    </div>
+                    <!-- <div class="checkbox">
+                        <label>
+                            <input name="type" id="type" value="1" type="checkbox">
+                                Non Taxable
+                        </label>
+                    </div> -->
+                    <!-- <label>&nbsp;</label> -->
+                    <button type="submit" class="btn btn-primary btn-lg">Create new customer</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+
+{% block bottomjs %}
+<script>
+$(document).ready(function() {
+
+    $('#addCustomer').validate();
+
+    // format phone number
+    $("#billing_phone").blur(function() {
+        // remove hyphen or space
+        var phone = $(this).val().replace(/-/g, '').replace(/ /g, '');
+        console.log('No whitespace:', phone);
+
+        // format
+        phone = phone.replace(/(\d{3})\-?(\d{3})\-?(\d{4})/, '$1-$2-$3');
+        console.log('Formatted: ', phone);
+
+        // replace
+        $('#billing_phone').val(phone);
+
+    });
+
+    // fill shipping fields with billing field values
+        // $('#same').click(function() {
+        //     console.log('Checkbox clicked.');
+
+        //     if($(this).prop('checked') == true) {
+        //         console.log($(this).prop('checked'));
+        //         $('#shipping_firstname').val($('#billing_firstname').val());
+        //         $('#shipping_lastname').val($('#billing_lastname').val());
+        //         $('#shipping_company').val($('#billing_company').val());
+        //         $('#shipping_address').val($('#billing_address').val());
+        //         $('#shipping_address2').val($('#billing_address2').val());
+        //         $('#shipping_city').val($('#billing_city').val());
+        //         $('#shipping_state').val($('#billing_state').val());
+        //         $('#shipping_zip').val($('#billing_zip').val());
+        //         $('#shipping_phone').val($('#billing_phone').val());
+
+        //     } else if ($(this).prop('checked') == false) {
+        //         console.log($(this).prop('checked'));
+        //         $('#shipping_firstname').val('');
+        //         $('#shipping_lastname').val('');
+        //         $('#shipping_company').val('');
+        //         $('#shipping_address').val('');
+        //         $('#shipping_address2').val('');
+        //         $('#shipping_city').val('');
+        //         $('#shipping_state').val('');
+        //         $('#shipping_zip').val('');
+        //         $('#shipping_phone').val('');
+        //     }
+        // });
+
+});
+</script>
+<script>
+    function copybilling() {
+
+        if (document.addCustomer.same.checked) {
+
+            document.addCustomer.shipping_firstname.value = document.addCustomer.billing_firstname.value;
+            document.addCustomer.shipping_lastname.value = document.addCustomer.billing_lastname.value;
+            document.addCustomer.shipping_company.value = document.addCustomer.billing_company.value;
+            document.addCustomer.shipping_address.value = document.addCustomer.billing_address.value;
+            document.addCustomer.shipping_address2.value = document.addCustomer.billing_address2.value;
+            document.addCustomer.shipping_city.value = document.addCustomer.billing_city.value;
+            document.addCustomer.shipping_state.value = document.addCustomer.billing_state.value;
+            document.addCustomer.shipping_country.value = document.addCustomer.billing_country.value;
+            document.addCustomer.shipping_zip.value = document.addCustomer.billing_zip.value;
+            document.addCustomer.shipping_phone.value = document.addCustomer.billing_phone.value;
+        } else {
+            document.addCustomer.shipping_firstname.value = '';
+            document.addCustomer.shipping_lastname.value = '';
+            document.addCustomer.shipping_company.value = '';
+            document.addCustomer.shipping_address.value = '';
+            document.addCustomer.shipping_address2.value = '';
+            document.addCustomer.shipping_city.value = '';
+            document.addCustomer.shipping_state.value = '';
+            document.addCustomer.shipping_country.value = '';
+            document.addCustomer.shipping_zip.value = '';
+            document.addCustomer.shipping_phone.value = '';
+        }
+    }
+ </script>
+
+{% endblock %}

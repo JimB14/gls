@@ -21,202 +21,342 @@
                 </a>
             </p>
 
-            <hr>
-
             {% if customer %}
-                <form name="customerupdateform" class="form-horizontal" id="customerupdateform"
+                <form name="customerupdateform" id="customerupdateform"
                     action="/admin/customers/update-customer?id={{ customer.id }}" method="post">
 
-                    <div class="form-group has-feedback">
-                        <label for="customer_firstname" class="control-label col-md-1 col-xs-2">
-                          First name
-                        </label>
-                        <div class="col-md-6">
-                            <input type="text" class="form-control" name="customer_firstname"
-                                id="customer_firstname" value="{{ customer.billing_firstname }}">
+                    <div class="col-md-6">
+                        <h3>Billing information</h3>
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="form-group has-feedback">
+                                    <label>
+                                        First name
+                                    </label>
+                                    <input type="text" class="form-control" name="billing_firstname"
+                                        id="billing_firstname" value="{{ customer.billing_firstname }}">
+                                </div>
+                            </div>
+
+                            <div class="col-sm-6">
+                                <div class="form-group has-feedback">
+                                    <label>
+                                        Last name
+                                    </label>
+                                    <input type="text" class="form-control" name="billing_lastname"
+                                        id="billing_lastname" value="{{ customer.billing_lastname }}">
+                                </div>
+                            </div>
+
+                            <div class="col-sm-12">
+                                <div class="form-group has-feedback">
+                                    <label>
+                                        Company
+                                    </label>
+                                    <input type="text" class="form-control" name="billing_company"
+                                        id="billing_company" value="{{ customer.billing_company }}">
+                                </div>
+                            </div>
+
+                            <div class="col-sm-6">
+                                <div class="form-group has-feedback">
+                                    <label>
+                                        Address
+                                    </label>
+                                    <input type="text" class="form-control" name="billing_address"
+                                        id="billing_address" value="{{ customer.billing_address }}">
+                                </div>
+                            </div>
+
+                            <div class="col-sm-6">
+                                <div class="form-group has-feedback">
+                                    <label>
+                                        Address2
+                                    </label>
+                                    <input type="text" class="form-control" name="billing_address2"
+                                        id="billing_address2" value="{{ customer.billing_addresss2 }}">
+                                </div>
+                            </div>
+
+                            <div class="col-sm-3">
+                                <div class="form-group has-feedback">
+                                    <label>
+                                        City
+                                    </label>
+                                    <input type="text" class="form-control" name="billing_city"
+                                        id="billing_city" value="{{ customer.billing_city }}">
+                                </div>
+                            </div>
+
+                            <div class="col-sm-3">
+                                <div class="form-group has-feedback">
+                                    <label>
+                                        State
+                                    </label>
+                                    <select class="form-control" name="customer_state" id="billing_state">
+                                        <option value="{{ customer.billing_state }}">{{ customer.billing_state }}</option>
+                                        {% for state in states %}
+                                            <option value="{{ state.abbrev }}">{{ state.name }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-3">
+                                <div class="form-group has-feedback">
+                                    <label>
+                                        Zip code
+                                    </label>
+                                    <input type="text" class="form-control" name="billing_zip"
+                                        id="billing_zip" value="{{ customer.billing_zip }}">
+                                </div>
+                            </div>
+
+                            <div class="col-md-3">
+                                <label>Country</label>
+                                <select class="form-control" id="billing_country" name="billing_country">
+                                    <option value="US">United States</option>
+                                </select>
+                            </div>
+
+                            <div class="col-sm-4">
+                                <div class="form-group has-feedback">
+                                    <label>Phone</label>
+                                    <input type="text" class="form-control" name="billing_phone"
+                                        id="billing_phone" value="{{ customer.billing_phone }}"
+                                        placeholder="Numbers only">
+                                </div>
+                            </div>
+
+                            <div class="col-sm-4">
+                                <div class="form-group has-feedback">
+                                    <label>Email</label>
+                                    <input type="text" class="form-control" name="customer_email"
+                                        id="customer_email" value="{{ customer.email }}">
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="form-group has-feedback">
+                                    <label>Type</label>
+                                    <select class="form-control" id="customer_type" name="customer_type">
+                                        <option value="{{ customer.type }}">{{ customer.type|title }}</option>
+                                        <option value="customer">Customer</option>
+                                        <option value="dealer">Dealer</option>
+                                        <option value="partner">Partner</option>
+                                    </select>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
-                    <div class="form-group has-feedback">
-                        <label for="customer_lastname" class="control-label col-md-1">
-                          Last name
-                        </label>
-                        <div class="col-md-6">
-                            <input type="text" class="form-control" name="customer_lastname"
-                                id="customer_lastname" value="{{ customer.billing_lastname }}">
+
+                    <div class="col-md-6">
+                        <h3>Shipping information</h3>
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="form-group has-feedback">
+                                    <label>
+                                        First name
+                                    </label>
+                                    <input type="text" class="form-control" name="shiping_firstname"
+                                        id="shiping_firstname" value="{{ customer.shipping_firstname }}">
+                                </div>
+                            </div>
+
+                            <div class="col-sm-6">
+                                <div class="form-group has-feedback">
+                                    <label>
+                                        Last name
+                                    </label>
+                                    <input type="text" class="form-control" name="shipping_lastname"
+                                        id="shipping_lastname" value="{{ customer.shipping_lastname }}">
+                                </div>
+                            </div>
+
+                            <div class="col-sm-12">
+                                <div class="form-group has-feedback">
+                                    <label>
+                                        Company
+                                    </label>
+                                    <input type="text" class="form-control" name="shipping_company"
+                                        id="shipping_company" value="{{ customer.shipping_company }}">
+                                </div>
+                            </div>
+
+                            <div class="col-sm-6">
+                                <div class="form-group has-feedback">
+                                    <label>
+                                        Address
+                                    </label>
+                                    <input type="text" class="form-control" name="shipping_address"
+                                        id="shipping_address" value="{{ customer.shipping_address }}">
+                                </div>
+                            </div>
+
+                            <div class="col-sm-6">
+                                <div class="form-group has-feedback">
+                                    <label>
+                                        Address2
+                                    </label>
+                                    <input type="text" class="form-control" name="shipping_address2"
+                                        id="shipping_address2" value="{{ customer.shipping_addresss2 }}">
+                                </div>
+                            </div>
+
+                            <div class="col-sm-3">
+                                <div class="form-group has-feedback">
+                                    <label>
+                                        City
+                                    </label>
+                                    <input type="text" class="form-control" name="shipping_city"
+                                        id="shipping_city" value="{{ customer.shipping_city }}">
+                                </div>
+                            </div>
+
+                            <div class="col-sm-3">
+                                <div class="form-group has-feedback">
+                                    <label>
+                                        State
+                                    </label>
+                                    <select class="form-control" name="shipping_state" id="shipping_state">
+                                        <option value="{{ customer.shipping_state }}">{{ customer.shipping_state }}</option>
+                                        {% for state in states %}
+                                            <option value="{{ state.abbrev }}">{{ state.name }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-3">
+                                <div class="form-group has-feedback">
+                                    <label>
+                                        Zip code
+                                    </label>
+                                    <input type="text" class="form-control" name="shipping_zip"
+                                        id="shipping_zip" value="{{ customer.shipping_zip }}">
+                                </div>
+                            </div>
+
+                            <div class="col-md-3">
+                                <label>Country</label>
+                                <select class="form-control" id="shipping_country" name="shipping_country">
+                                    <option value="US">United States</option>
+                                </select>
+                            </div>
+
+
+                            <div class="col-sm-6">
+                                <div class="form-group has-feedback">
+                                    <label>
+                                        Phone
+                                    </label>
+                                    <input type="text" class="form-control" name="shipping_phone"
+                                        id="shipping_phone" value="{{ customer.shipping_phone }}"
+                                        placeholder="Numbers only">
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Address Type</label>
+                                    <select class="form-control" name="addresstype" id="addresstype">
+                                        <option value="residential" selected="selected">Residential</option>
+                                        <option value="commercial">Commercial</option>
+                                    </select>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
-                    <div class="form-group has-feedback">
-                        <label for="customer_address" class="control-label col-md-1">
-                          Address
-                        </label>
-                        <div class="col-md-6">
-                            <input type="text" class="form-control" name="customer_address"
-                                id="customer_address" value="{{ customer.billing_address }}">
+
+                    <div class="col-md-6">
+                        <h3>Other information</h3>
+                        <div class="row">
+                            <div class="col-sm-4">
+                                <div class="form-group has-feedback">
+                                    <label for="customer_security1">
+                                        Security 1
+                                    </label>
+                                    <input type="text" class="form-control" name="customer_security1"
+                                        id="customer_security1" value="{{ customer.security1 }}">
+                                        <small>City of birth</small>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-4">
+                                <div class="form-group has-feedback">
+                                    <label for="customer_security2">
+                                    Security 2
+                                    </label>
+                                    <input type="text" class="form-control" name="customer_security2"
+                                        id="customer_security2" value="{{ customer.security2 }}">
+                                        <small>Mother&apos;s maiden name</small>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-4">
+                                <div class="form-group has-feedback">
+                                    <label for="customer_security3">
+                                    Security 3
+                                    </label>
+                                    <input type="text" class="form-control" name="customer_security3"
+                                        id="customer_security3" value="{{ customer.security3 }}">
+                                        <small>Year of high school graduation</small>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-3">
+                                <div class="form-group has-feedback">
+                                    <label for="customer_ip">
+                                        IP Address
+                                    </label>
+                                    <input type="text" class="form-control" name="customer_ip"
+                                        id="customer_ip" value="{{ customer.ip }}">
+                                        <small>IP address of registration submission</small>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-3">
+                                <div class="form-group has-feedback">
+                                    <label for="customer_active">
+                                        Activation
+                                    </label>
+                                    <select class="form-control" name="active" id="active">
+                                        <option value="{{ customer.active }}">{% if customer.active == 0 %}Not activated {% else %}Active{% endif %}</option>
+                                        <option value="1">Activate</option>
+                                    </select>
+                                    <small>Security questions must have answers to activate.</small>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-3">
+                                <div class="form-group has-feedback">
+                                    <label for="customer_first_login">
+                                        Not logged in
+                                    </label>
+                                    <input type="number" class="form-control" name="customer_first_login"
+                                        id="customer_first_login" value="{{ customer.first_login }}" disabled>
+                                        <small>0= false (has logged in); 1=true (has never logged in)</small>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-3">
+                                <div class="form-group has-feedback">
+                                    <label for="customer_access_level">
+                                    Access level
+                                    </label>
+                                    <input type="number" class="form-control" name="customer_access_level"
+                                        id="customer_access_level" value="{{ customer.access_level }}" disabled>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-12" style="margin-bottom: 60px;">
+                                <button id="registerBtn" type="submit" class="btn btn-lg btn-buy">
+                                    Update
+                                </button>
+                            </div>
                         </div>
                     </div>
-
-                    <div class="form-group has-feedback">
-                        <label for="customer_address2" class="control-label col-md-1">
-                          Address2
-                        </label>
-                        <div class="col-md-6">
-                            <input type="text" class="form-control" name="customer_address2"
-                                id="customer_address2" value="{{ customer.billing_addresss2 }}">
-                        </div>
-                    </div>
-
-                    <div class="form-group has-feedback">
-                        <label for="customer_city" class="control-label col-md-1">
-                          City
-                        </label>
-                        <div class="col-md-6">
-                            <input type="text" class="form-control" name="customer_city"
-                                id="customer_city" value="{{ customer.billing_city }}">
-                        </div>
-                    </div>
-
-                    <div class="form-group has-feedback">
-                        <label for="customer_state" class="control-label col-md-1">
-                          State
-                        </label>
-                        <div class="col-md-6">
-                            <select class="form-control" name="customer_state" id="customer_state">
-                                <option value="{{ customer.billing_state }}">{{ customer.billing_state }}</option>
-                                {% for state in states %}
-                                    <option value="{{ state.abbrev }}">{{ state.name }}</option>
-                                {% endfor %}
-                            </select>
-                        </div>
-                    </div>
-
-                    <div class="form-group has-feedback">
-                        <label for="customer_zip" class="control-label col-md-1">
-                          Zip code
-                        </label>
-                        <div class="col-md-6">
-                            <input type="text" class="form-control" name="customer_zip"
-                                id="customer_zip" value="{{ customer.billing_zip }}">
-                        </div>
-                    </div>
-
-                    <div class="form-group has-feedback">
-                        <label for="customer_company" class="control-label col-md-1">
-                          Company
-                        </label>
-                        <div class="col-md-6">
-                            <input type="text" class="form-control" name="customer_company"
-                                id="customer_company" value="{{ customer.billing_company }}">
-                        </div>
-                    </div>
-
-                    <div class="form-group has-feedback">
-                        <label for="customer_phone" class="control-label col-md-1">
-                          Telephone
-                        </label>
-                        <div class="col-md-6">
-                            <input type="text" class="form-control" name="customer_phone"
-                                id="customer_phone" value="{{ customer.billing_phone }}">
-                        </div>
-                    </div>
-
-                    <div class="form-group has-feedback">
-                        <label for="customer_email" class="control-label col-md-1">
-                          Email
-                        </label>
-                        <div class="col-md-6">
-                            <input type="text" class="form-control" name="customer_email"
-                                id="customer_email" value="{{ customer.email }}">
-                                <small>Log in credential. Mailbox for all correspondence from ArmaLaser.</small>
-                        </div>
-                    </div>
-
-                    <div class="form-group has-feedback">
-                        <label for="customer_security1" class="control-label col-md-1">
-                          Security 1
-                        </label>
-                        <div class="col-md-6">
-                            <input type="text" class="form-control" name="customer_security1"
-                                id="customer_security1" value="{{ customer.security1 }}">
-                                <small>City of birth</small>
-                        </div>
-                    </div>
-
-                    <div class="form-group has-feedback">
-                        <label for="customer_security2" class="control-label col-md-1">
-                          Security 2
-                        </label>
-                        <div class="col-md-6">
-                            <input type="text" class="form-control" name="customer_security2"
-                                id="customer_security2" value="{{ customer.security2 }}">
-                                <small>Mother&apos;s maiden name</small>
-                        </div>
-                    </div>
-
-                    <div class="form-group has-feedback">
-                        <label for="customer_security3" class="control-label col-md-1">
-                          Security 3
-                        </label>
-                        <div class="col-md-6">
-                            <input type="text" class="form-control" name="customer_security3"
-                                id="customer_security3" value="{{ customer.security3 }}">
-                                <small>Year of high school graduation</small>
-                        </div>
-                    </div>
-
-                    <div class="form-group has-feedback">
-                        <label for="customer_ip" class="control-label col-md-1">
-                          IP Address
-                        </label>
-                        <div class="col-md-6">
-                            <input type="text" class="form-control" name="customer_ip"
-                                id="customer_ip" value="{{ customer.ip }}">
-                                <small>IP address of registration submission</small>
-                        </div>
-                    </div>
-
-                    <div class="form-group has-feedback">
-                        <label for="customer_active" class="control-label col-md-1">
-                          Activation
-                        </label>
-                        <div class="col-md-6">
-                            <input type="number" class="form-control" name="customer_ip"
-                                id="customer_active" value="{{ customer.active }}">
-                                <small>0=not activated; 1=activated</small>
-                        </div>
-                    </div>
-
-                    <div class="form-group has-feedback">
-                        <label for="customer_first_login" class="control-label col-md-1">
-                            Not logged in
-                        </label>
-                        <div class="col-md-6">
-                            <input type="number" class="form-control" name="customer_first_login"
-                                id="customer_first_login" value="{{ customer.first_login }}" disabled>
-                                <small>0= false (has logged in); 1=true (has never logged in)</small>
-                        </div>
-                    </div>
-
-                    <div class="form-group has-feedback">
-                        <label for="customer_access_level" class="control-label col-md-1">
-                          Access level
-                        </label>
-                        <div class="col-md-6">
-                            <input type="number" class="form-control" name="customer_access_level"
-                                id="customer_access_level" value="{{ customer.access_level }}" disabled>
-                        </div>
-                    </div>
-
-                    <div class="form-group has-feedback">
-                        <label class="control label col-md-1">&nbsp;</label>
-                        <div class="col-md-6" style="margin-bottom:60px;">
-                            <button id="registerBtn" type="submit" class="btn btn-lg btn-buy">
-                                Update
-                            </button>
-                        </div>
-                    </div>
-
                 </form>
             {% else %}
                 <div class="alert alert-info">Customer not found.</div>
@@ -231,6 +371,90 @@
 {% block bottomjs %}
 <script>
 $(document).ready(function() {
+
+    $("#customerupdateform").validate();
+
+    // format billing phone number
+    $("#billing_phone").blur(function() {
+        // remove hyphen or space
+        var phone = $(this).val().replace(/-/g, '').replace(/ /g, '');
+        console.log('No whitespace:', phone);
+
+        // format
+        phone = phone.replace(/(\d{3})\-?(\d{3})\-?(\d{4})/, '$1-$2-$3');
+        console.log('Formatted: ', phone);
+
+        // replace
+        $('#billing_phone').val(phone);
+
+    });
+
+    // format shipping phone number
+    $("#shipping_phone").blur(function() {
+        // remove hyphen or space
+        var phone = $(this).val().replace(/-/g, '').replace(/ /g, '');
+        console.log('No whitespace:', phone);
+
+        // format
+        phone = phone.replace(/(\d{3})\-?(\d{3})\-?(\d{4})/, '$1-$2-$3');
+        console.log('Formatted: ', phone);
+
+        // replace
+        $('#shipping_phone').val(phone);
+
+    });
+
+    // allow activation only if security answers exist
+    $("#active").on('change', function() {
+        var security1 =  $("#customer_security1").val();
+        var security2 =  $("#customer_security2").val();
+        var security3 =  $("#customer_security3").val();
+
+        if (security1 === '' || security2 === '' || security3 === '') {
+            alert('Security answers are required to activate an account.');
+
+            // set 'Not activated' as selected
+            $("#active").find("option[text='Not activated']").prop('selected', true);
+            // $("#active option:contains('Not activated')".prop('selected', true));
+
+            // disable input
+            $(this).prop('disabled', true);
+        }
+    });
+
+    // check status of all security questions on blur of any security question
+    $("#customer_security1").blur(function() {
+        var security1 =  $("#customer_security1").val();
+        var security2 =  $("#customer_security2").val();
+        var security3 =  $("#customer_security3").val();
+
+        if (security1 !== '' && security2 !== '' && security3 !== '') {
+            alert("Values found" );
+            $("#active").removeAttr('disabled');
+        }
+    });
+
+    $("#customer_security2").blur(function() {
+        var security1 =  $("#customer_security1").val();
+        var security2 =  $("#customer_security2").val();
+        var security3 =  $("#customer_security3").val();
+
+        if (security1 !== '' && security2 !== '' && security3 !== '') {
+            alert("Values found" );
+            $("#active").removeAttr('disabled');
+        }
+    });
+
+    $("#customer_security3").blur(function() {
+        var security1 =  $("#customer_security1").val();
+        var security2 =  $("#customer_security2").val();
+        var security3 =  $("#customer_security3").val();
+
+        if (security1 !== '' && security2 !== '' && security3 !== '') {
+            alert("This account can be activated." );
+            $("#active").removeAttr('disabled');
+        }
+    });
 
 
 });

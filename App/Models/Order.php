@@ -25,95 +25,119 @@ class Order extends \Core\Model
      * @param  Array   $sales_tax_data      Sales tax data (state & county breakdown)
      * @return Boolean
      */
-    public function insertOrder($buyer, $customer, $cart, $totalAmt, $pnref, $sales_tax_data)
+    // public function insertOrder($buyer, $customer, $cart, $totalAmt, $pnref, $sales_tax_data)
+    public function insertOrder($customer, $cart, $totalAmt, $pnref, $sales_tax_data)
     {
         // echo "Connected to insertOrder() in Order model."; exit();
         $user_ip = $_SERVER['REMOTE_ADDR'];
 
         // test
-        // echo $user_ip . '<br>';
-        // echo "PNREF: $pnref <br>";
-        // echo 'Total amt: ' . $totalAmt . '<br>';
-        // echo 'Ship method: ' . $_SESSION['shipping_method'] . '<br>';
-        // if ($_SESSION['coupon']) {
-        //     echo 'Coupon used: ' . $_SESSION['coupon'];
-        // }
-        // echo '<pre>';
-        // print_r($cart);
-        // echo '</pre>';
-        // echo '<pre>';
-        // print_r($customer);
-        // echo '</pre>';
-        // exit();
+            // echo $user_ip . '<br>';
+            // echo "PNREF: $pnref <br>";
+            // echo 'Total amt: ' . $totalAmt . '<br>';
+            // echo 'Ship method: ' . $_SESSION['shipping_method'] . '<br>';
+            // if (isset($_SESSION['promo_name'])) {
+            //     echo 'Coupon used: ' . $_SESSION['promo_name'];
+            // } else {
+            //     echo 'No coupon used';
+            // }
+            // echo '<pre>';
+            // print_r($cart);
+            // echo '</pre>';
+            // echo '<h3>Customer:</h3>';
+            // echo '<pre>';
+            // print_r($customer);
+            // echo '</pre>';
+            // exit();
 
         // set shipping cost
-        switch($_SESSION['shipping_method'])
-        {
-            CASE 'USPS Priority Mail':
-                $oshipcost = Config::PRIORITY;
-                break;
-            CASE 'UPS Ground':
-                $oshipcost = Config::UPSGROUND;
-                break;
-            CASE 'UPS 3 Day Select':
-                $oshipcost = Config::UPS3DAYSELECT;
-                break;
-            CASE 'UPS 2nd Day Air':
-                $oshipcost = Config::UPS2NDDAYAIR;
-                break;
-            default:
-                $oshipcost = 0;
-        }
+        $oshipcost = $this->getShippingCost($_SESSION['shipping_method']);
 
-        // store coupon in variable
-        if (isset($_SESSION['coupon']) && $_SESSION['coupon'] != '')
-        {
-            $coupon = $_SESSION['coupon'];
+        $results = $this->insertCustomerOrder($customer, $cart, $totalAmt, $pnref, $sales_tax_data, $oshipcost, $user_ip, $order_status='pending');
 
-            // identify coupon name from code & store in variable
-            $results = Order::getDiscountProgramName($coupon);
+        return $results;
+    }
 
-            // store program and discount percentage in variable
-            $coupon = $results['program'];
-            $coupondiscount = $results['discountPercentage'];
-        }
-        else
-        {
-            $coupon = '';
-            $coupondiscount = '';
-        }
 
-        // buyer is customer (registered)
-        if ($buyer == 'customer')
-        {
-            $results = $this->insertCustomerOrder($customer, $cart, $totalAmt, $pnref, $oshipcost, $coupon, $coupondiscount, $user_ip, $sales_tax_data);
 
-            return $results;
-        }
-        else if ($buyer == 'guest')
-        {
-            $results = $this->insertGuestOrder($customer, $cart, $totalAmt, $pnref, $oshipcost, $coupon, $coupondiscount, $user_ip, $sales_tax_data);
+    public function insertOrderForGuest($customer, $cart, $totalAmt, $pnref, $sales_tax_data)
+    {
 
-            return $results;
-        }
-        else if ($buyer == 'caller')
-        {
-            $results = $this->insertCallerOrder($customer, $cart, $totalAmt, $pnref, $oshipcost, $coupon, $coupondiscount, $user_ip, $sales_tax_data);
 
-            return $results;
-        }
-        else if ($buyer == 'dealer')
-        {
-            $results = $this->insertDealerOrder($customer, $cart, $totalAmt, $pnref, $oshipcost, $coupon, $coupondiscount, $user_ip, $sales_tax_data);
+        $user_ip = $_SERVER['REMOTE_ADDR'];
 
-            return $results;
-        }
-        else if ($buyer == 'partner')
-        {
-            $results = $this->insertPartnerOrder($customer, $cart, $totalAmt, $pnref, $oshipcost, $coupon, $coupondiscount, $user_ip, $sales_tax_data);
+        // test
+            // echo $user_ip . '<br>';
+            // echo "PNREF: $pnref <br>";
+            // echo 'Total amt: ' . $totalAmt . '<br>';
+            // echo 'Ship method: ' . $_SESSION['shipping_method'] . '<br>';
+            // if (isset($_SESSION['promo_name'])) {
+            //     echo 'Coupon used: ' . $_SESSION['promo_name'];
+            // } else {
+            //     echo 'No coupon used';
+            // }
+            // echo '<pre>';
+            // print_r($sales_tax_data);
+            // echo '</pre>';
+            // echo '<pre>';
+            // print_r($cart);
+            // echo '</pre>';
+            // echo '<h3>Customer:</h3>';
+            // echo '<pre>';
+            // print_r($customer);
+            // echo '</pre>';
+            // exit();
 
-            return $results;
-        }
+        // set shipping cost
+        $oshipcost = $this->getShippingCost($_SESSION['shipping_method']);
+
+        $results = $this->insertGuestOrder($customer, $cart, $totalAmt, $pnref, $sales_tax_data, $oshipcost, $user_ip, $order_status='pending');
+
+        return $results;
+    }
+
+
+
+    /**
+     * Insert new order data into `orders` and `orders_content` tables with 'pending-payment' status
+     *
+     * @param  Object  $buyer               Buyer type
+     * @param  Object  $customer            Buyer data
+     * @param  Array   $cart                Shopping cart content
+     * @param  Decimal $totalAmt            Order total
+     * @param  String  $pnref               PayPal transaction ID
+     * @param  Array   $sales_tax_data      Sales tax data (state & county breakdown)
+     * @return Boolean
+     */
+    public function insertPendingPaymentOrder($customer, $cart, $totalAmt, $pnref, $sales_tax_data, $order_status)
+    {
+        // echo "Connected to insertPendingPaymentOrder() in Order model."; exit();
+        $user_ip = $_SERVER['REMOTE_ADDR'];
+
+        // test
+            // echo $user_ip . '<br>';
+            // echo "PNREF: $pnref <br>";
+            // echo 'Total amt: ' . $totalAmt . '<br>';
+            // echo 'Ship method: ' . $_SESSION['shipping_method'] . '<br>';
+            // if (isset($_SESSION['coupon'])) {
+            //     echo 'Coupon used: ' . $_SESSION['coupon'];
+            // } else {
+            //     echo 'No coupon used';
+            // }
+            // echo '<pre>';
+            // print_r($cart);
+            // echo '</pre>';
+            // echo '<pre>';
+            // print_r($customer);
+            // echo '</pre>';
+            // exit();
+
+        // set shipping cost
+        $oshipcost = $this->getShippingCost($_SESSION['shipping_method']);
+
+        $results = $this->insertCustomerOrder($customer, $cart, $totalAmt, $pnref, $oshipcost, $user_ip, $sales_tax_data, $order_status);
+
+        return $results;
     }
 
 
@@ -132,6 +156,10 @@ class Order extends \Core\Model
             CASE 'all':
                 $WHERE = '';
                 $LIMIT = 'LIMIT 50';
+                break;
+            CASE 'payment-pending':
+                $WHERE = 'WHERE orders.order_status = "payment-pending"';
+                $LIMIT = '';
                 break;
             CASE 'pending':
                 $WHERE = 'WHERE orders.order_status = "pending"';
@@ -163,49 +191,28 @@ class Order extends \Core\Model
             $db = static::getDB();
 
             $sql = "SELECT orders.id, orders.pnref, orders.odate, orders.customerid,
-                    orders.guestid, orders.callerid, orders.dealerid, orders.partnerid,
-                    orders.orderamount, orders.oshippeddate, orders.oshipmethod,
-                    orders.trackingcode, orders.order_status, orders.return_label_created,
-                    orders.return_label_date, orders.return_label_url,
-                    customers.billing_firstname,
+                    orders.guestid, orders.orderamount, orders.oshippeddate,
+                    orders.oshipmethod, orders.trackingcode, orders.order_status,
+                    orders.return_label_created, orders.return_label_date, orders.return_label_url,
+                    customers.type, customers.billing_firstname,
                     customers.billing_lastname, customers.email,
                     customers.billing_company AS customer_company,
                     guests.billing_firstname AS guest_firstname,
                     guests.billing_lastname AS guest_lastname,
                     guests.email AS guest_email,
-                    guests.billing_company AS guest_company,
-                    callers.billing_firstname AS caller_firstname,
-                    callers.billing_lastname AS caller_lastname,
-                    callers.email AS caller_email,
-                    callers.billing_company AS caller_company,
-                    dealers.first_name as dealer_firstname,
-                    dealers.last_name as dealer_lastname,
-                    dealers.email AS dealer_email,
-                    dealers.company AS dealer_company,
-                    partners.first_name as partner_firstname,
-                    partners.last_name as partner_lastname,
-                    partners.email AS partner_email,
-                    partners.company AS partner_company
+                    guests.billing_company AS guest_company
                     FROM orders
                     LEFT JOIN customers
                         ON orders.customerid = customers.id
                     LEFT JOIN guests
                         ON guests.id = orders.guestid
-                    LEFT JOIN callers
-                        ON callers.id = orders.callerid
-                    LEFT JOIN dealers
-                        ON dealers.id = orders.dealerid
-                    LEFT JOIN partners
-                        ON partners.id = orders.partnerid
                     $WHERE
                     ORDER BY orders.odate DESC
                     $LIMIT";
             $stmt  = $db->prepare($sql);
             $stmt->execute();
-
             $orders = $stmt->fetchAll(PDO::FETCH_OBJ);
 
-            // return to Controller
             return $orders;
         }
         catch(PDOException $e)
@@ -418,8 +425,7 @@ class Order extends \Core\Model
         {
             $db = static::getDB();
 
-            $sql = "SELECT orders.customerid, orders.guestid, orders.callerid,
-                    orders.dealerid, orders.partnerid
+            $sql = "SELECT orders.customerid, orders.guestid
                     FROM orders
                     WHERE id = :id";
             $stmt  = $db->prepare($sql);
@@ -430,10 +436,10 @@ class Order extends \Core\Model
             $order = $stmt->fetch(PDO::FETCH_OBJ);
 
             // test
-            // echo '<pre>';
-            // print_r($order);
-            // echo '</pre>';
-            // exit();
+                // echo '<pre>';
+                // print_r($order);
+                // echo '</pre>';
+                // exit();
 
             // buyer type cannot = 0
             foreach ($order as $key => $value) {
@@ -449,7 +455,6 @@ class Order extends \Core\Model
                 'customerid' => $id
             ];
 
-            // return to Controller
             return $results;
         }
         catch(PDOException $e)
@@ -512,7 +517,7 @@ class Order extends \Core\Model
             $db = static::getDB();
 
             $sql = "SELECT * FROM orders_content
-                    WHERE orderid = :orderid 
+                    WHERE orderid = :orderid
                     AND itemid = :itemid";
             $stmt  = $db->prepare($sql);
             $parameters = [
@@ -757,7 +762,7 @@ class Order extends \Core\Model
     /**
      * Store RMA data in orders_content table
      */
-    public static function setRMA() 
+    public static function setRMA()
     {
         // form data
         $id = ( isset($_REQUEST['return_orderid'])  ) ? filter_var($_REQUEST['return_orderid'], FILTER_SANITIZE_NUMBER_INT): '';
@@ -1081,28 +1086,23 @@ class Order extends \Core\Model
      *
      * @return Object     The orders
      */
-    public static function getMyOrders($type, $id)
+    public static function getMyOrders($id)
     {
-        // create field name from $type value
-        $field = $type.'id';
-
         try
         {
             // establish db connection
             $db = static::getDB();
 
             $sql = "SELECT * FROM orders
-                    WHERE $field = :id
+                    WHERE customerid = :customerid
                     ORDER BY odate DESC";
             $stmt  = $db->prepare($sql);
             $parameters = [
-                ':id' => $id
+                ':customerid' => $id
             ];
             $stmt->execute($parameters);
-
             $orders = $stmt->fetchAll(PDO::FETCH_OBJ);
 
-            // return to Controller
             return $orders;
         }
         catch(PDOException $e)
@@ -1166,17 +1166,17 @@ class Order extends \Core\Model
         $serial_numbers = ( isset($_REQUEST['serial_numbers'])  ) ? $_REQUEST['serial_numbers'] : '';
 
         // test
-        // echo $orderid . '<br>';
-        // echo '<pre>';
-        // print_r($_REQUEST);
-        // echo '</pre>';
-        // echo '<pre>';
-        // print_r($lasers);
-        // echo '</pre>';
-        // echo '<pre>';
-        // print_r($serial_numbers);
-        // echo '</pre>';
-        // exit();
+            // echo $orderid . '<br>';
+            // echo '<pre>';
+            // print_r($_REQUEST);
+            // echo '</pre>';
+            // echo '<pre>';
+            // print_r($lasers);
+            // echo '</pre>';
+            // echo '<pre>';
+            // print_r($serial_numbers);
+            // echo '</pre>';
+            // exit();
 
 
         // check for identical values in serial_numbers[]
@@ -1213,17 +1213,17 @@ class Order extends \Core\Model
         }
 
         // test
-        // echo '<pre>';
-        // print_r($laser_serial);
-        // echo '</pre>';
-        // exit();
+            // echo '<pre>';
+            // print_r($laser_serial);
+            // echo '</pre>';
+            // exit();
 
-        // test
-        // foreach($laser_serial as $value) {
-        //     echo $value['serial']. '<br>';
-        //     echo $value['laser']. '<br>';
-        // }
-        // exit();
+            // test
+            // foreach($laser_serial as $value) {
+            //     echo $value['serial']. '<br>';
+            //     echo $value['laser']. '<br>';
+            // }
+            // exit();
 
         // update order record in `orders_content`
         try
@@ -1245,7 +1245,6 @@ class Order extends \Core\Model
 
             // return to Controller
             return $result;
-
         }
         catch (PDOException $e)
         {
@@ -1253,7 +1252,64 @@ class Order extends \Core\Model
             // email webmaster
             exit();
         }
+    }
 
+
+
+    public static function changeStatus($status, $id)
+    {
+        try
+        {
+            $db = static::getDB();
+
+            $sql = "UPDATE orders SET
+                    order_status = :order_status
+                    WHERE id = :id";
+            $stmt  = $db->prepare($sql);
+            $parameters = [
+                ':order_status' => $status,
+                ':id' => $id
+            ];
+            $result = $stmt->execute($parameters);
+
+            // `orders` update successful
+            if($result)
+            {
+                try
+                {
+                    $db = static::getDB();
+
+                    $sql = "UPDATE orders_content SET
+                            status = :status
+                            WHERE orderid = :orderid";
+                    $stmt  = $db->prepare($sql);
+                    $parameters = [
+                        ':status' => $status,
+                        ':orderid' => $id
+                    ];
+                    $result = $stmt->execute($parameters);
+
+                    return $result;
+                }
+                catch(PDOException $e)
+                {
+                    echo 'Error updating orders_content table: ' . $e->getMessage();
+                    exit();
+                }
+            }
+            // `orders` update failure
+            else
+            {
+                echo 'Error updating orders table.';
+                exit();
+            }
+        }
+        catch (PDOException $e)
+        {
+            echo "Error adding serial number to orders content table: $e->getMessage()";
+            // email webmaster
+            exit();
+        }
     }
 
 
@@ -1261,6 +1317,29 @@ class Order extends \Core\Model
 
 
     // - - - -  class functions  - - - - - - - - - - - - - - - - //
+
+    private function getShippingCost($shipping_method)
+    {
+        switch($shipping_method)
+        {
+            CASE 'USPS Priority Mail':
+                $oshipcost = Config::PRIORITY;
+                break;
+            CASE 'UPS Ground':
+                $oshipcost = Config::UPSGROUND;
+                break;
+            CASE 'UPS 3 Day Select':
+                $oshipcost = Config::UPS3DAYSELECT;
+                break;
+            CASE 'UPS 2nd Day Air':
+                $oshipcost = Config::UPS2NDDAYAIR;
+                break;
+            default:
+                $oshipcost = 0;
+        }
+        return $oshipcost;
+    }
+
 
     /**
      * Inserts customer order into orders & orders_content tables
@@ -1276,9 +1355,12 @@ class Order extends \Core\Model
      * @param  Array    $sales_tax_data     Sales tax data
      * @return Array                        Boolean & shopping cart content
      */
-    private function insertCustomerOrder($customer, $cart, $totalAmt, $pnref, $oshipcost, $coupon, $coupondiscount, $user_ip, $sales_tax_data)
+    private function insertCustomerOrder($customer, $cart, $totalAmt, $pnref, $sales_tax_data, $oshipcost, $user_ip, $order_status)
     {
-        // insert into `orders` table
+        // phone order modifications
+        // set order status value
+        if ($order_status != 'payment-pending') { $order_status = 'pending'; }
+
         try
         {
             // establish db connection
@@ -1288,9 +1370,9 @@ class Order extends \Core\Model
                     pnref           = :pnref,
                     customerid      = :customerid,
                     guestid         = :guestid,
-                    callerid        = :callerid,
-                    dealerid        = :dealerid,
-                    partnerid       = :partnerid,
+                    -- callerid        = :callerid,
+                    -- dealerid        = :dealerid,
+                    -- partnerid       = :partnerid,
                     orderamount     = :orderamount,
                     otax_total      = :otax_total,
                     otax_state      = :otax_state,
@@ -1310,8 +1392,6 @@ class Order extends \Core\Model
                     oshipstate      = :oshipstate,
                     oshipzip        = :oshipzip,
                     oshipphone      = :oshipphone,
-                    coupon          = :coupon,
-                    coupondiscount  = :coupondiscount,
                     order_status    = :order_status,
                     ip              = :ip,
                     numitems        = :numitems";
@@ -1320,15 +1400,15 @@ class Order extends \Core\Model
                 ':pnref'           => $pnref,
                 ':customerid'      => $customer->id,
                 ':guestid'         => '',
-                ':callerid'        => '',
-                ':dealerid'        => '',
-                ':partnerid'       => '',
+                // ':callerid'        => '',
+                // ':dealerid'        => '',
+                // ':partnerid'       => '',
                 ':orderamount'     => $totalAmt,
-                ':otax_total'      => $sales_tax_data['otax_total'],
-                ':otax_state'      => $sales_tax_data['otax_state'],
-                ':otax_state_amt'  => $sales_tax_data['otax_state_amt'],
-                ':otax_county'     => $sales_tax_data['otax_county'],
-                ':otax_county_amt' => $sales_tax_data['otax_county_amt'],
+                ':otax_total'      => isset($sales_tax_data['otax_total']) ? $sales_tax_data['otax_total'] : 0,
+                ':otax_state'      => isset($sales_tax_data['otax_state']) ? $sales_tax_data['otax_state'] : 0,
+                ':otax_state_amt'  => isset($sales_tax_data['otax_state_amt']) ? $sales_tax_data['otax_state_amt'] : 0,
+                ':otax_county'     => isset($sales_tax_data['otax_county']) ? $sales_tax_data['otax_county'] : 0,
+                ':otax_county_amt' => isset($sales_tax_data['otax_county_amt']) ? $sales_tax_data['otax_county_amt'] : 0,
                 ':itemamount'      => $_SESSION['pretaxTotal'],
                 ':oshipmethod'     => $_SESSION['shipping_method'],
                 ':oshipcost'       => number_format($oshipcost, 2, '.', ''),
@@ -1342,9 +1422,7 @@ class Order extends \Core\Model
                 ':oshipstate'      => $customer->shipping_state,
                 ':oshipzip'        => $customer->shipping_zip,
                 ':oshipphone'      => $customer->shipping_phone,
-                ':coupon'          => $coupon,
-                ':coupondiscount'  => $coupondiscount,
-                ':order_status'    => 'pending',
+                ':order_status'    => $order_status,
                 ':ip'              => $user_ip,
                 ':numitems'        => $_SESSION['numberOfItems']
             ];
@@ -1354,76 +1432,137 @@ class Order extends \Core\Model
             if ($result)
             {
                 // get order ID & store in variable
-                $id = $db->lastInsertId();
+                $new_order_id = $db->lastInsertId();
 
                 // test - display $cart
-                // echo '<pre>';
-                // print_r($cart);
-                // echo '</pre>';
-                // exit();
+                    // echo '<pre>';
+                    // print_r($cart);
+                    // echo '</pre>';
+                    // exit();
 
-                // rename keys in $cart array using array_map
-                // resource: http://php.net/manual/en/function.array-map.php
-                // resource: https://stackoverflow.com/questions/9605143/how-to-rename-array-keys-in-php
-                $cart = array_map(function($tag) {
-                    return [
-                        'itemid'     => $tag['id'],
-                        'name'       => $tag['name'],
-                        'qty'        => $tag['quantity'],
-                        'unitprice'  => $tag['price'],
-                    ];
-                }, $cart);
+                    // rename keys in $cart array using array_map
+                    // resource: http://php.net/manual/en/function.array-map.php
+                    // resource: https://stackoverflow.com/questions/9605143/how-to-rename-array-keys-in-php
+                    // $cart = array_map(function($tag) {
+                    //     return [
+                    //         'itemid'     => $tag['id'],
+                    //         'name'       => $tag['name'],
+                    //         'qty'        => $tag['quantity'],
+                    //         'unitprice'  => $tag['price']
+                    //         // 'discount_applied' => $tag['discount_applied'],
+                    //         // 'promo_name' => $tag['promo_name'],
+                    //         // 'promo_id'   => $tag['promo_id']
+                    //     ];
+                    // }, $cart);
+
+                // rename fields in prep for insert into `orders_content`
+                foreach($cart as &$item)
+                {
+                    $item['itemid']     = $item['id'];
+                    $item['name']       = $item['name'];
+                    $item['qty']        = $item['quantity'];
+                    $item['unitprice']  = $item['price'];
+                }
 
                 // test - display new $cart array
-                // echo '<h4>New cart:</h4>';
-                // echo '<pre>';
-                // print_r($cart);
-                // exit();
+                    // echo '<h4>New cart:</h4>';
+                    // echo '<pre>';
+                    // print_r($cart);
+                    // exit();
 
-                // add missing fields to $cart array (using pass by reference '&' prefixed to $item variable)
-                // resource: https://stackoverflow.com/questions/12286272/adding-columns-to-existing-php-arrays
+                // notes
+                    // remove fields without matches in `orders_content` so
+                    // data can be inserted into `orders_content`
+                foreach($cart as &$item) {
+                    foreach($item as $key => $value) {
+                        if($key == 'id') { unset($item[$key]); }
+                        if($key == 'thumb') { unset($item[$key]); }
+                        if($key == 'series') { unset($item[$key]); }
+                        if($key == 'model') { unset($item[$key]); }
+                        if($key == 'beam') { unset($item[$key]); };
+                        if($key == 'quantity') { unset($item[$key]); }
+                        if($key == 'price') { unset($item[$key]); }
+                        if($key == 'pistolMfr') { unset($item[$key]); }
+                        if($key == 'pistol_models') { unset($item[$key]); }
+                        if($key == 'mvc_model') { unset($item[$key]); }
+                        if($key == 'holsterMfr') { unset($item[$key]); }
+                        if($key == 'waist') { unset($item[$key]); }
+                        if($key == 'hand') { unset($item[$key]); }
+                        if($key == 'trseriesModel') { unset($item[$key]); }
+                        if($key == 'weight') { unset($item[$key]); }
+                        if($key == 'description') { unset($item[$key]); }
+                    }
+                }
+
+                // notes
+                    // add missing fields to $cart array (using pass by reference '&' prefixed to $item variable)
+                    // resource: https://stackoverflow.com/questions/12286272/adding-columns-to-existing-php-arrays
                 foreach ($cart as &$item)
                 {
-                    $item['orderid'] = $id;
+                    $item['orderid'] = $new_order_id;
                     $item['customerid'] = $customer->id;
                     $item['itemtotal'] = $item['qty'] * $item['unitprice'];
+                    $item['status'] = $order_status;
                 }
 
                 // test
-                // echo '<h4>New cart with all fields:</h4>';
-                // echo '<pre>';
-                // print_r($cart);
-                // exit();
+                    // echo '<h4>New cart with all fields:</h4>';
+                    // echo '<pre>';
+                    // print_r($cart);
+                    // exit();
 
                 // store updated cart in variable
                 $updatedCart = $cart;
 
                 // test
-                // echo '<h4>Updated cart:</h4>';
-                // echo '<pre>';
-                // print_r($cart);
-                // echo '</pre>';
-                // echo '=================<br>';
+                    // echo '<h4>Updated cart:</h4>';
+                    // echo '<pre>';
+                    // print_r($cart);
+                    // echo '</pre>';
+                    // echo '=================<br>';
+                    // exit();
 
-                // insert order content into orders_content table
+                // insert order content into `orders_content`
                 try
                 {
                     // establish db connection
                     $db = static::getDB();
 
-                    $sql = "INSERT INTO orders_content SET
-                            orderid    = :orderid,
-                            customerid = :customerid,
-                            itemid     = :itemid,
-                            name       = :name,
-                            qty        = :qty,
-                            unitprice  = :unitprice,
-                            itemtotal  = :itemtotal";
+                    // coupon being used
+                    if (isset($_SESSION['promo_id']))
+                    {
+                        $sql = "INSERT INTO orders_content SET
+                                orderid          = :orderid,
+                                customerid       = :customerid,
+                                status           = :status,
+                                itemid           = :itemid,
+                                name             = :name,
+                                qty              = :qty,
+                                unitprice        = :unitprice,
+                                itemtotal        = :itemtotal,
+                                promo_name       = :promo_name,
+                                promo_id         = :promo_id,
+                                discount_applied = :discount_applied";
+                    }
+                    // no coupon
+                    else
+                    {
+                        $sql = "INSERT INTO orders_content SET
+                                orderid          = :orderid,
+                                customerid       = :customerid,
+                                status           = :status,
+                                itemid           = :itemid,
+                                name             = :name,
+                                qty              = :qty,
+                                unitprice        = :unitprice,
+                                itemtotal        = :itemtotal";
+                    }
                     $stmt = $db->prepare($sql);
 
-                    // iterate over array (note: single loop for multidimensional array)
-                    // ** array keys in $updatedCart are identical to table fields **
-                    // resource: https://gist.github.com/odan/0c3f80eec13ac493ed64fadd0bb1a66e#insert-multiple-rows
+                    // notes
+                        // iterate over array (note: single loop for multidimensional array)
+                        // ** array keys in $updatedCart are identical to table fields **
+                        // resource: https://gist.github.com/odan/0c3f80eec13ac493ed64fadd0bb1a66e#insert-multiple-rows
                     $i = 0;
                     $len = count($updatedCart);
                     foreach ($updatedCart as $arr)
@@ -1432,12 +1571,14 @@ class Order extends \Core\Model
                         $i++;
                     }
 
-                    // echo '$i: ' . $i . '<br>';
-                    // echo '$len: ' . $len . '<br>';
-                    // exit();
+                    // test
+                        // echo '$i: ' . $i . '<br>';
+                        // echo '$len: ' . $len . '<br>';
+                        // exit();
 
-                    // confirm foreach loop was successful (iterates over entire length of $updatedCart array)
-                    // failure - loop failed
+                    // notes
+                        // confirm foreach loop was successful (iterates over entire length of $updatedCart array)
+                        // failure - loop failed
                     if ($i != $len)
                     {
                         // empty $cart & $updatedCart arrays ($_SESSION['cart'] still holds shopping cart data)
@@ -1454,229 +1595,7 @@ class Order extends \Core\Model
                     {
                         $results = [
                             'result' => true,
-                            'updatedCart' => $updatedCart
-                        ];
-
-                        return $results;
-                        exit();
-                    }
-                }
-                catch (PDOException $e)
-                {
-                    echo 'Unable to insert order contents in orders_content table: ' . $e->getMessage();
-                    // email webmaster
-                    exit();
-                }
-            }
-            else
-            {
-                echo "Unable to insert order into orders table.";
-                // email webmaster
-                exit();
-            }
-        }
-        catch (PDOException $e)
-        {
-            echo $e->getMessage();
-            exit();
-        }
-    }
-
-
-
-
-    /**
-     * Inserts caller order into orders & orders_content tables
-     *
-     * @param  Obj      $customer           The caller
-     * @param  Array    $cart               Shopping cart content
-     * @param  Int      $totalAmt           Total order amount
-     * @param  String   $pnref              PayPal transaction ID
-     * @param  Decimal  $oshipcost          Shipping cost
-     * @param  String   $coupon             Name of coupon
-     * @param  String   $coupondiscount     Percentage discount
-     * @param  String   $user_ip            Buyer's IP Address
-     * @param  Array    $sales_tax_data     Sales tax data
-     *
-     * @return Array                        Boolean & shopping cart content
-     */
-    private function insertCallerOrder($customer, $cart, $totalAmt, $pnref, $oshipcost, $coupon, $coupondiscount, $user_ip, $sales_tax_data)
-    {
-        // insert into `orders` table
-        try
-        {
-            // establish db connection
-            $db = static::getDB();
-
-            $sql = "INSERT INTO orders SET
-                    pnref           = :pnref,
-                    customerid      = :customerid,
-                    guestid         = :guestid,
-                    callerid        = :callerid,
-                    dealerid        = :dealerid,
-                    partnerid       = :partnerid,
-                    orderamount     = :orderamount,
-                    otax_total      = :otax_total,
-                    otax_state      = :otax_state,
-                    otax_state_amt  = :otax_state_amt,
-                    otax_county     = :otax_county,
-                    otax_county_amt = :otax_county_amt,
-                    itemamount      = :itemamount,
-                    oshipmethod     = :oshipmethod,
-                    oshipcost       = :oshipcost,
-                    oshipfirstname  = :oshipfirstname,
-                    oshiplastname   = :oshiplastname,
-                    oshipcompany    = :oshipcompany,
-                    oshipemail      = :oshipemail,
-                    oshipaddress    = :oshipaddress,
-                    oshipaddress2   = :oshipaddress2,
-                    oshipcity       = :oshipcity,
-                    oshipstate      = :oshipstate,
-                    oshipzip        = :oshipzip,
-                    oshipphone      = :oshipphone,
-                    coupon          = :coupon,
-                    coupondiscount  = :coupondiscount,
-                    order_status    = :order_status,
-                    ip              = :ip,
-                    numitems        = :numitems";
-            $stmt = $db->prepare($sql);
-            $parameters = [
-                ':pnref'           => $pnref,
-                ':customerid'      => '',
-                ':guestid'         => '',
-                ':callerid'        => $customer->id,
-                ':dealerid'        => '',
-                ':partnerid'       => '',
-                ':orderamount'     => $totalAmt,
-                ':otax_total'      => $sales_tax_data['otax_total'],
-                ':otax_state'      => $sales_tax_data['otax_state'],
-                ':otax_state_amt'  => $sales_tax_data['otax_state_amt'],
-                ':otax_county'     => $sales_tax_data['otax_county'],
-                ':otax_county_amt' => $sales_tax_data['otax_county_amt'],
-                ':itemamount'      => $_SESSION['pretaxTotal'],
-                ':oshipmethod'     => $_SESSION['shipping_method'],
-                ':oshipcost'       => number_format($oshipcost, 2, '.', ''),
-                ':oshipfirstname'  => $customer->shipping_firstname,
-                ':oshiplastname'   => $customer->shipping_lastname,
-                ':oshipcompany'    => $customer->shipping_company,
-                ':oshipemail'      => $customer->email,
-                ':oshipaddress'    => $customer->shipping_address,
-                ':oshipaddress2'   => $customer->shipping_address2,
-                ':oshipcity'       => $customer->shipping_city,
-                ':oshipstate'      => $customer->shipping_state,
-                ':oshipzip'        => $customer->shipping_zip,
-                ':oshipphone'      => $customer->shipping_phone,
-                ':coupon'          => $coupon,
-                ':coupondiscount'  => $coupondiscount,
-                ':order_status'    => 'pending',
-                ':ip'              => $user_ip,
-                ':numitems'        => $_SESSION['numberOfItems']
-            ];
-            $result = $stmt->execute($parameters);
-
-            // success
-            if ($result)
-            {
-                // get order ID & store in variable
-                $id = $db->lastInsertId();
-
-                // test - display $cart
-                // echo '<pre>';
-                // print_r($cart);
-                // echo '</pre>';
-                // exit();
-
-                // rename keys in $cart array using array_map
-                // resource: http://php.net/manual/en/function.array-map.php
-                // resource: https://stackoverflow.com/questions/9605143/how-to-rename-array-keys-in-php
-                $cart = array_map(function($tag) {
-                    return [
-                        'itemid'     => $tag['id'],
-                        'name'       => $tag['name'],
-                        'qty'        => $tag['quantity'],
-                        'unitprice'  => $tag['price'],
-                    ];
-                }, $cart);
-
-                // test - display new $cart array
-                // echo '<h4>New cart:</h4>';
-                // echo '<pre>';
-                // print_r($cart);
-                // exit();
-
-                // add missing fields to $cart array (using pass by reference '&' prefixed to $item variable)
-                // resource: https://stackoverflow.com/questions/12286272/adding-columns-to-existing-php-arrays
-                foreach ($cart as &$item) {
-                    $item['orderid'] = $id;
-                    $item['customerid'] = $customer->id;
-                    $item['itemtotal'] = $item['qty'] * $item['unitprice'];
-                }
-
-                // test
-                // echo '<h4>New cart with all fields:</h4>';
-                // echo '<pre>';
-                // print_r($cart);
-                // exit();
-
-                // store updated cart in variable
-                $updatedCart = $cart;
-
-                // test
-                // echo '<h4>Updated cart:</h4>';
-                // echo '<pre>';
-                // print_r($cart);
-                // echo '</pre>';
-                // echo '=================<br>';
-
-                // insert order content into orders_content table
-                try
-                {
-                    // establish db connection
-                    $db = static::getDB();
-
-                    $sql = "INSERT INTO orders_content SET
-                            orderid    = :orderid,
-                            customerid = :customerid,
-                            itemid     = :itemid,
-                            name       = :name,
-                            qty        = :qty,
-                            unitprice  = :unitprice,
-                            itemtotal  = :itemtotal";
-                    $stmt = $db->prepare($sql);
-
-                    // iterate over array (note: single loop for multidimensional array)
-                    // ** array keys in $updatedCart are identical to table fields **
-                    // resource: https://gist.github.com/odan/0c3f80eec13ac493ed64fadd0bb1a66e#insert-multiple-rows
-                    $i = 0;
-                    $len = count($updatedCart);
-                    foreach ($updatedCart as $arr)
-                    {
-                        $stmt->execute($arr);
-                        $i++;
-                    }
-
-                    // echo '$i: ' . $i . '<br>';
-                    // echo '$len: ' . $len . '<br>';
-                    // exit();
-
-                    // confirm foreach loop was successful (iterates over entire length of $updatedCart array)
-                    // failure - loop failed
-                    if ($i != $len)
-                    {
-                        // empty $cart & $updatedCart arrays ($_SESSION['cart'] still holds shopping cart data)
-                        if( !empty($cart) )  {$cart = [];}
-                        if( !empty($updatedCart) ) {$updatedCart = [];}
-
-                        $results = ['result' => false];
-
-                        return $results;
-                        exit();
-                    }
-                    // success
-                    else
-                    {
-                        $results = [
-                            'result' => true,
+                            'order_id' => $new_order_id,
                             'updatedCart' => $updatedCart
                         ];
 
@@ -1723,9 +1642,9 @@ class Order extends \Core\Model
      *
      * @return Array                        Boolean & shopping cart content
      */
-    private function insertGuestOrder($customer, $cart, $totalAmt, $pnref, $oshipcost, $coupon, $coupondiscount, $user_ip, $sales_tax_data)
+    private function insertGuestOrder($customer, $cart, $totalAmt, $pnref, $sales_tax_data, $oshipcost, $user_ip, $order_status)
     {
-        // insert into `orders` table
+
         try
         {
             // establish db connection
@@ -1735,9 +1654,6 @@ class Order extends \Core\Model
                     pnref           = :pnref,
                     customerid      = :customerid,
                     guestid         = :guestid,
-                    callerid        = :callerid,
-                    dealerid        = :dealerid,
-                    partnerid       = :partnerid,
                     orderamount     = :orderamount,
                     otax_total      = :otax_total,
                     otax_state      = :otax_state,
@@ -1757,8 +1673,6 @@ class Order extends \Core\Model
                     oshipstate      = :oshipstate,
                     oshipzip        = :oshipzip,
                     oshipphone      = :oshipphone,
-                    coupon          = :coupon,
-                    coupondiscount  = :coupondiscount,
                     order_status    = :order_status,
                     ip              = :ip,
                     numitems        = :numitems";
@@ -1767,15 +1681,12 @@ class Order extends \Core\Model
                 ':pnref'           => $pnref,
                 ':customerid'      => '',
                 ':guestid'         => $customer->id,
-                ':callerid'        => '',
-                ':dealerid'        => '',
-                ':partnerid'       => '',
                 ':orderamount'     => $totalAmt,
-                ':otax_total'      => $sales_tax_data['otax_total'],
-                ':otax_state'      => $sales_tax_data['otax_state'],
-                ':otax_state_amt'  => $sales_tax_data['otax_state_amt'],
-                ':otax_county'     => $sales_tax_data['otax_county'],
-                ':otax_county_amt' => $sales_tax_data['otax_county_amt'],
+                ':otax_total'      => isset($sales_tax_data['otax_total']) ? $sales_tax_data['otax_total'] : 0,
+                ':otax_state'      => isset($sales_tax_data['otax_state']) ? $sales_tax_data['otax_state'] : 0,
+                ':otax_state_amt'  => isset($sales_tax_data['otax_state_amt']) ? $sales_tax_data['otax_state_amt'] : 0,
+                ':otax_county'     => isset($sales_tax_data['otax_county']) ? $sales_tax_data['otax_county'] : 0,
+                ':otax_county_amt' => isset($sales_tax_data['otax_county_amt']) ? $sales_tax_data['otax_county_amt'] : 0,
                 ':itemamount'      => $_SESSION['pretaxTotal'],
                 ':oshipmethod'     => $_SESSION['shipping_method'],
                 ':oshipcost'       => number_format($oshipcost, 2, '.', ''),
@@ -1789,9 +1700,7 @@ class Order extends \Core\Model
                 ':oshipstate'      => $customer->shipping_state,
                 ':oshipzip'        => $customer->shipping_zip,
                 ':oshipphone'      => $customer->shipping_phone,
-                ':coupon'          => $coupon,
-                ':coupondiscount'  => $coupondiscount,
-                ':order_status'    => 'pending',
+                ':order_status'    => $order_status,
                 ':ip'              => $user_ip,
                 ':numitems'        => $_SESSION['numberOfItems']
             ];
@@ -1801,75 +1710,137 @@ class Order extends \Core\Model
             if ($result)
             {
                 // get order ID & store in variable
-                $id = $db->lastInsertId();
+                $new_order_id = $db->lastInsertId();
 
                 // test - display $cart
-                // echo '<pre>';
-                // print_r($cart);
-                // echo '</pre>';
-                // exit();
+                    // echo '<pre>';
+                    // print_r($cart);
+                    // echo '</pre>';
+                    // exit();
 
-                // rename keys in $cart array using array_map
-                // resource: http://php.net/manual/en/function.array-map.php
-                // resource: https://stackoverflow.com/questions/9605143/how-to-rename-array-keys-in-php
-                $cart = array_map(function($tag) {
-                    return [
-                        'itemid'     => $tag['id'],
-                        'name'       => $tag['name'],
-                        'qty'        => $tag['quantity'],
-                        'unitprice'  => $tag['price'],
-                    ];
-                }, $cart);
+                    // rename keys in $cart array using array_map
+                    // resource: http://php.net/manual/en/function.array-map.php
+                    // resource: https://stackoverflow.com/questions/9605143/how-to-rename-array-keys-in-php
+                    // $cart = array_map(function($tag) {
+                    //     return [
+                    //         'itemid'     => $tag['id'],
+                    //         'name'       => $tag['name'],
+                    //         'qty'        => $tag['quantity'],
+                    //         'unitprice'  => $tag['price']
+                    //         // 'discount_applied' => $tag['discount_applied'],
+                    //         // 'promo_name' => $tag['promo_name'],
+                    //         // 'promo_id'   => $tag['promo_id']
+                    //     ];
+                    // }, $cart);
+
+                // rename fields in prep for insert into `orders_content`
+                foreach($cart as &$item)
+                {
+                    $item['itemid']     = $item['id'];
+                    $item['name']       = $item['name'];
+                    $item['qty']        = $item['quantity'];
+                    $item['unitprice']  = $item['price'];
+                }
 
                 // test - display new $cart array
-                // echo '<h4>New cart:</h4>';
-                // echo '<pre>';
-                // print_r($cart);
-                // exit();
+                    // echo '<h4>New cart:</h4>';
+                    // echo '<pre>';
+                    // print_r($cart);
+                    // exit();
 
-                // add missing fields to $cart array (using pass by reference '&' prefixed to $item variable)
-                // resource: https://stackoverflow.com/questions/12286272/adding-columns-to-existing-php-arrays
-                foreach ($cart as &$item) {
-                    $item['orderid'] = $id;
+                // notes
+                    // remove fields without matches in `orders_content` so
+                    // data can be inserted into `orders_content`
+                foreach($cart as &$item) {
+                    foreach($item as $key => $value) {
+                        if($key == 'id') { unset($item[$key]); }
+                        if($key == 'thumb') { unset($item[$key]); }
+                        if($key == 'series') { unset($item[$key]); }
+                        if($key == 'model') { unset($item[$key]); }
+                        if($key == 'beam') { unset($item[$key]); };
+                        if($key == 'quantity') { unset($item[$key]); }
+                        if($key == 'price') { unset($item[$key]); }
+                        if($key == 'pistolMfr') { unset($item[$key]); }
+                        if($key == 'pistol_models') { unset($item[$key]); }
+                        if($key == 'mvc_model') { unset($item[$key]); }
+                        if($key == 'holsterMfr') { unset($item[$key]); }
+                        if($key == 'waist') { unset($item[$key]); }
+                        if($key == 'hand') { unset($item[$key]); }
+                        if($key == 'trseriesModel') { unset($item[$key]); }
+                        if($key == 'weight') { unset($item[$key]); }
+                        if($key == 'description') { unset($item[$key]); }
+                    }
+                }
+
+                // notes
+                    // add missing fields to $cart array (using pass by reference '&' prefixed to $item variable)
+                    // resource: https://stackoverflow.com/questions/12286272/adding-columns-to-existing-php-arrays
+                foreach ($cart as &$item)
+                {
+                    $item['orderid'] = $new_order_id;
                     $item['customerid'] = $customer->id;
                     $item['itemtotal'] = $item['qty'] * $item['unitprice'];
+                    $item['status'] = $order_status;
                 }
 
                 // test
-                // echo '<h4>New cart with all fields:</h4>';
-                // echo '<pre>';
-                // print_r($cart);
-                // exit();
+                    // echo '<h4>New cart with all fields:</h4>';
+                    // echo '<pre>';
+                    // print_r($cart);
+                    // exit();
 
                 // store updated cart in variable
                 $updatedCart = $cart;
 
                 // test
-                // echo '<h4>Updated cart:</h4>';
-                // echo '<pre>';
-                // print_r($cart);
-                // echo '</pre>';
-                // echo '=================<br>';
+                    // echo '<h4>Updated cart:</h4>';
+                    // echo '<pre>';
+                    // print_r($cart);
+                    // echo '</pre>';
+                    // echo '=================<br>';
+                    // exit();
 
-                // insert order content into orders_content table
+                // insert order content into `orders_content`
                 try
                 {
                     // establish db connection
                     $db = static::getDB();
 
-                    $sql = "INSERT INTO orders_content SET
-                            orderid    = :orderid,
-                            customerid = :customerid,
-                            itemid     = :itemid,
-                            name       = :name,
-                            qty        = :qty,
-                            unitprice  = :unitprice,
-                            itemtotal  = :itemtotal";
+                    // coupon being used
+                    if (isset($_SESSION['promo_id']))
+                    {
+                        $sql = "INSERT INTO orders_content SET
+                                orderid          = :orderid,
+                                customerid       = :customerid,
+                                status           = :status,
+                                itemid           = :itemid,
+                                name             = :name,
+                                qty              = :qty,
+                                unitprice        = :unitprice,
+                                itemtotal        = :itemtotal,
+                                promo_name       = :promo_name,
+                                promo_id         = :promo_id,
+                                discount_applied = :discount_applied";
+                    }
+                    // no coupon
+                    else
+                    {
+                        $sql = "INSERT INTO orders_content SET
+                                orderid          = :orderid,
+                                customerid       = :customerid,
+                                status           = :status,
+                                itemid           = :itemid,
+                                name             = :name,
+                                qty              = :qty,
+                                unitprice        = :unitprice,
+                                itemtotal        = :itemtotal";
+                    }
                     $stmt = $db->prepare($sql);
 
-                    // iterate over array (note: single loop for multidimensional array)
-                    // ** array keys in $updatedCart are identical to table fields **
-                    // resource: https://gist.github.com/odan/0c3f80eec13ac493ed64fadd0bb1a66e#insert-multiple-rows
+                    // notes
+                        // iterate over array (note: single loop for multidimensional array)
+                        // ** array keys in $updatedCart are identical to table fields **
+                        // resource: https://gist.github.com/odan/0c3f80eec13ac493ed64fadd0bb1a66e#insert-multiple-rows
                     $i = 0;
                     $len = count($updatedCart);
                     foreach ($updatedCart as $arr)
@@ -1878,12 +1849,14 @@ class Order extends \Core\Model
                         $i++;
                     }
 
-                    // echo '$i: ' . $i . '<br>';
-                    // echo '$len: ' . $len . '<br>';
-                    // exit();
+                    // test
+                        // echo '$i: ' . $i . '<br>';
+                        // echo '$len: ' . $len . '<br>';
+                        // exit();
 
-                    // confirm foreach loop was successful (iterates over entire length of $updatedCart array)
-                    // failure - loop failed
+                    // notes
+                        // confirm foreach loop was successful (iterates over entire length of $updatedCart array)
+                        // failure - loop failed
                     if ($i != $len)
                     {
                         // empty $cart & $updatedCart arrays ($_SESSION['cart'] still holds shopping cart data)
@@ -1900,6 +1873,7 @@ class Order extends \Core\Model
                     {
                         $results = [
                             'result' => true,
+                            'order_id' => $new_order_id,
                             'updatedCart' => $updatedCart
                         ];
 
@@ -1907,6 +1881,112 @@ class Order extends \Core\Model
                         exit();
                     }
                 }
+
+                // // test - display $cart
+                //     // echo '<pre>';
+                //     // print_r($cart);
+                //     // echo '</pre>';
+                //     // exit();
+
+                // // rename keys in $cart array using array_map
+                // // resource: http://php.net/manual/en/function.array-map.php
+                // // resource: https://stackoverflow.com/questions/9605143/how-to-rename-array-keys-in-php
+                // $cart = array_map(function($tag) {
+                //     return [
+                //         'itemid'     => $tag['id'],
+                //         'name'       => $tag['name'],
+                //         'qty'        => $tag['quantity'],
+                //         'unitprice'  => $tag['price'],
+                //     ];
+                // }, $cart);
+
+                // // test - display new $cart array
+                //     // echo '<h4>New cart:</h4>';
+                //     // echo '<pre>';
+                //     // print_r($cart);
+                //     // exit();
+
+                // // add missing fields to $cart array (using pass by reference '&' prefixed to $item variable)
+                // // resource: https://stackoverflow.com/questions/12286272/adding-columns-to-existing-php-arrays
+                // foreach ($cart as &$item) {
+                //     $item['orderid'] = $id;
+                //     $item['customerid'] = $customer->id;
+                //     $item['itemtotal'] = $item['qty'] * $item['unitprice'];
+                // }
+
+                // // test
+                //     // echo '<h4>New cart with all fields:</h4>';
+                //     // echo '<pre>';
+                //     // print_r($cart);
+                //     // exit();
+
+                // // store updated cart in variable
+                // $updatedCart = $cart;
+
+                // // test
+                //     // echo '<h4>Updated cart:</h4>';
+                //     // echo '<pre>';
+                //     // print_r($cart);
+                //     // echo '</pre>';
+                //     // echo '=================<br>';
+
+                // // insert order content into orders_content table
+                // try
+                // {
+                //     // establish db connection
+                //     $db = static::getDB();
+
+                //     $sql = "INSERT INTO orders_content SET
+                //             orderid    = :orderid,
+                //             customerid = :customerid,
+                //             itemid     = :itemid,
+                //             name       = :name,
+                //             qty        = :qty,
+                //             unitprice  = :unitprice,
+                //             itemtotal  = :itemtotal";
+                //     $stmt = $db->prepare($sql);
+
+                //     // iterate over array (note: single loop for multidimensional array)
+                //     // ** array keys in $updatedCart are identical to table fields **
+                //     // resource: https://gist.github.com/odan/0c3f80eec13ac493ed64fadd0bb1a66e#insert-multiple-rows
+                //     $i = 0;
+                //     $len = count($updatedCart);
+                //     foreach ($updatedCart as $arr)
+                //     {
+                //         $stmt->execute($arr);
+                //         $i++;
+                //     }
+
+                //     // test
+                //         // echo '$i: ' . $i . '<br>';
+                //         // echo '$len: ' . $len . '<br>';
+                //         // exit();
+
+                //     // confirm foreach loop was successful (iterates over entire length of $updatedCart array)
+                //     // failure - loop failed
+                //     if ($i != $len)
+                //     {
+                //         // empty $cart & $updatedCart arrays ($_SESSION['cart'] still holds shopping cart data)
+                //         if( !empty($cart) )  {$cart = [];}
+                //         if( !empty($updatedCart) ) {$updatedCart = [];}
+
+                //         $results = ['result' => false];
+
+                //         return $results;
+                //         exit();
+                //     }
+                //     // success
+                //     else
+                //     {
+                //         $results = [
+                //             'result' => true,
+                //             'updatedCart' => $updatedCart
+                //         ];
+
+                //         return $results;
+                //         exit();
+                //     }
+                // }
                 catch (PDOException $e)
                 {
                     echo 'Unable to insert order contents in orders_content table: ' . $e->getMessage();
@@ -1945,7 +2025,7 @@ class Order extends \Core\Model
      * @param  Array    $sales_tax_data     Sales tax data
      * @return Array                        Boolean & shopping cart content
      */
-    private function insertDealerOrder($dealer, $cart, $totalAmt, $pnref, $oshipcost, $coupon, $coupondiscount, $user_ip, $sales_tax_data)
+    private function insertDealerOrder($dealer, $cart, $totalAmt, $pnref, $oshipcost, $user_ip, $sales_tax_data, $order_status)
     {
         // insert into `orders` table
         try
@@ -1957,7 +2037,7 @@ class Order extends \Core\Model
                     pnref           = :pnref,
                     customerid      = :customerid,
                     guestid         = :guestid,
-                    callerid        = :callerid,
+                    -- callerid        = :callerid,
                     dealerid        = :dealerid,
                     partnerid       = :partnerid,
                     orderamount     = :orderamount,
@@ -1978,8 +2058,6 @@ class Order extends \Core\Model
                     oshipstate      = :oshipstate,
                     oshipzip        = :oshipzip,
                     oshipphone      = :oshipphone,
-                    coupon          = :coupon,
-                    coupondiscount  = :coupondiscount,
                     order_status    = :order_status,
                     ip              = :ip,
                     numitems        = :numitems";
@@ -1988,7 +2066,7 @@ class Order extends \Core\Model
                 ':pnref'           => $pnref,
                 ':customerid'      => '',
                 ':guestid'         => '',
-                ':callerid'        => '',
+                // ':callerid'        => '',
                 ':dealerid'        => $dealer->id,
                 ':partnerid'       => '',
                 ':orderamount'     => $totalAmt,
@@ -2000,18 +2078,16 @@ class Order extends \Core\Model
                 ':itemamount'      => $_SESSION['pretaxTotal'],
                 ':oshipmethod'     => $_SESSION['shipping_method'],
                 ':oshipcost'       => number_format($oshipcost, 2, '.', ''),
-                ':oshipfirstname'  => $dealer->first_name,
-                ':oshiplastname'   => $dealer->last_name,
-                ':oshipcompany'    => $dealer->company,
+                ':oshipfirstname'  => $dealer->shipping_firstname,
+                ':oshiplastname'   => $dealer->shipping_lastname,
+                ':oshipcompany'    => $dealer->shipping_company,
                 ':oshipemail'      => $dealer->email,
-                ':oshipaddress'    => $dealer->address,
-                ':oshipcity'       => $dealer->city,
-                ':oshipstate'      => $dealer->state,
-                ':oshipzip'        => $dealer->zip,
-                ':oshipphone'      => $dealer->telephone,
-                ':coupon'          => $coupon,
-                ':coupondiscount'  => $coupondiscount,
-                ':order_status'    => 'pending',
+                ':oshipaddress'    => $dealer->shipping_address,
+                ':oshipcity'       => $dealer->shipping_city,
+                ':oshipstate'      => $dealer->shipping_state,
+                ':oshipzip'        => $dealer->shipping_zip,
+                ':oshipphone'      => $dealer->shipping_phone,
+                ':order_status'    => $order_status,
                 ':ip'              => $user_ip,
                 ':numitems'        => $_SESSION['numberOfItems']
             ];
@@ -2024,10 +2100,10 @@ class Order extends \Core\Model
                 $id = $db->lastInsertId();
 
                 // test - display $cart
-                // echo '<pre>';
-                // print_r($cart);
-                // echo '</pre>';
-                // exit();
+                    // echo '<pre>';
+                    // print_r($cart);
+                    // echo '</pre>';
+                    // exit();
 
                 // rename keys in $cart array using array_map
                 // resource: http://php.net/manual/en/function.array-map.php
@@ -2042,10 +2118,10 @@ class Order extends \Core\Model
                 }, $cart);
 
                 // test - display new $cart array
-                // echo '<h4>New cart:</h4>';
-                // echo '<pre>';
-                // print_r($cart);
-                // exit();
+                    // echo '<h4>New cart:</h4>';
+                    // echo '<pre>';
+                    // print_r($cart);
+                    // exit();
 
                 // add missing fields to $cart array (using pass by reference '&' prefixed to $item variable)
                 // resource: https://stackoverflow.com/questions/12286272/adding-columns-to-existing-php-arrays
@@ -2057,20 +2133,20 @@ class Order extends \Core\Model
                 }
 
                 // test
-                // echo '<h4>New cart with all fields:</h4>';
-                // echo '<pre>';
-                // print_r($cart);
-                // exit();
+                    // echo '<h4>New cart with all fields:</h4>';
+                    // echo '<pre>';
+                    // print_r($cart);
+                    // exit();
 
                 // store updated cart in variable
                 $updatedCart = $cart;
 
                 // test
-                // echo '<h4>Updated cart:</h4>';
-                // echo '<pre>';
-                // print_r($cart);
-                // echo '</pre>';
-                // echo '=================<br>';
+                    // echo '<h4>Updated cart:</h4>';
+                    // echo '<pre>';
+                    // print_r($cart);
+                    // echo '</pre>';
+                    // echo '=================<br>';
 
                 // insert order content into orders_content table
                 try
@@ -2099,9 +2175,10 @@ class Order extends \Core\Model
                         $i++;
                     }
 
-                    // echo '$i: ' . $i . '<br>';
-                    // echo '$len: ' . $len . '<br>';
-                    // exit();
+                    // test
+                        //echo '$i: ' . $i . '<br>';
+                        // echo '$len: ' . $len . '<br>';
+                        // exit();
 
                     // confirm foreach loop was successful (iterates over entire length of $updatedCart array)
                     // failure - loop failed
@@ -2530,6 +2607,8 @@ class Order extends \Core\Model
             exit();
         }
     }
+
+
 
 
 }

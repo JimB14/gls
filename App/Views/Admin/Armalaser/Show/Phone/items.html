@@ -1,0 +1,178 @@
+{% extends 'base-admin.html' %}
+
+{% block title %}
+  Items | ArmaLaser
+{% endblock %}
+
+{% block css %}
+<style>
+.border {
+    border: 1px solid #ddd; padding: 10px 15px 60px 15px;
+    border-radius: 3px;
+}
+.nav > li > a:hover, 
+.nav > li > a:focus,
+.nav-tabs > li.active > a,
+.nav-tabs > li.active > a:focus {
+    text-decoration: none;
+    background-color: transparent !important;
+    color: #32cd32 !important;
+    border-top: none !important;
+    border-left: none !important;
+    border-right: none !important;
+    border-bottom: 3px solid #32cd32 !important;
+}
+.fivepercent {width: 5%;}
+.sevenpercent {width: 7%;}
+.tenpercent {width: 10%;}
+.fifteenpercent {width: 15%;}
+.twentypercent {width: 20%;}
+.twentyfivepercent {width: 25%;}
+#itemQty {
+    width: 30%;
+    border-color: #ddd;
+    border-radius: 4px;
+    text-align: center;
+}
+#coupon_data,
+#apply-discount-div {
+    display: none;
+} 
+#item-search {
+    font-size: 20px;
+}  
+#phone_coupon {
+    font-size: 18px;
+}
+</style>
+{% endblock %}
+
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div id="dashboard-toggle" class="col-md-10" style="margin-top:-20px;margin-left:254px;">
+
+            <h2>
+                <span class="glyphicon glyphicon-phone-alt"></span>
+                &nbsp;{{ pagetitle }}
+            </h2>
+
+            <p style="margin-left: 0px;margin-bottom: -10px;">
+                <span class="glyphicon glyphicon-menu-left"></span>
+                <a onclick="window.history.go(-1)" style="cursor:pointer;">
+                    Go Back
+                </a>
+            </p>
+
+            {% include 'Admin/Armalaser/Show/Phone/cart-component.html' %}
+
+            <div class="col-md-12 p2">
+                {% include 'Admin/Armalaser/Show/Phone/customer-component.html' %}
+            </div>
+
+            <!-- = = = = = = = Tabs  = = = = = = = = = = = = = = = = = = = = = = = = = = = = -->
+            <div class="col-md-12">
+
+                {% include 'Admin/Armalaser/Show/Phone/tabs-component.html' %}
+
+                <!-- = = = = = = = Tab pane  = = = = = = = = = = = = = = = = = = = = = = = = = = = = -->
+                <div class="tab-content" style="margin-bottom: 80px;">
+                    {% if products %}
+                        <!-- Items  -->
+                        <div  class="tab-pane active">
+
+                            <!-- Items  -->
+                            <form action="/admin/phone/search-items" method="GET">
+                                <div class="input-group p2 t1">
+                                    <input style="padding: 20px 0px 20px 10px;" type="text" id="item-search" name="searchword" class="form-control" 
+                                        placeholder="Search by product name">
+                                    <span  class="input-group-btn">
+                                        <button style="padding: 10px 20px 10px 20px;" class="btn btn-primary">Search</button>
+                                    </span>
+                                </div>
+                            </form>
+
+                            {% if searchword %}
+                                {% if searchword and products|length > 0 %}
+                                    <h3>
+                                        {{ products|length }} search results for: 
+                                        <span>&quot;{{ searchword }}&quot;</span>
+                                    </h3>
+                                {% elseif searchword and customers|length == 0 %}
+                                    <h3>No results found</h3>
+                                {% endif %} 
+                            {% endif %}
+
+                            <div>
+                                <table class="table striped">
+                                    <thead>
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>Category</th>
+                                            <th>Name</th>
+                                            <th>Price</th>
+                                            <th>Qty</th>
+                                            <th class="text-right">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for product in products %}
+                                            <tr>
+                                                <td class="tenpercent">{{ product.id }}</td>
+                                                <td class="fifteenpercent">{{ product.mvc_model|title }}</td>
+                                                <td class="twentyfivepercent">{{ product.name }}</td>
+                                                <td class="fifteenpercent">{{ product.price }}</td>
+                                                <td class="fifteenpercent">1<!--<input value="1" name="itemQty" id="itemQty" size="3">--></td>
+                                                <td class="text-right tenpercent">
+                                                    <a class="btn btn-default" href="/admin/phone/add-item?customerid={{ customer.id }}&productid={{ product.id }}&model={{ product.mvc_model }}">
+                                                        <span class="glyphicon glyphicon-plus"></span> 
+                                                            Add
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        {% endfor %}    
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    {% else %}
+                        <h3>No products found.</h3>
+                    {% endif %}
+                </div>    
+            </div>
+        </div>
+    </div> 
+</div>     
+{% endblock %}
+
+
+{% block bottomjs %}
+<script>
+$(function(){
+
+    // get customers on page load
+    // $.ajax({
+    //     url: '/admin/customers/ajaxGetCustomers',
+    //     type: 'POST',
+    //     data: { },
+    //     dataType: 'html',
+    //     cache: false,
+    //     success: function(customers) {
+        
+    //         // console.log(customers);
+
+    //         // apppend data to div
+    //         $("#ajax_results_customers").append(customers);
+    //     },
+    //      error: function(){
+    //         alert("Ajax request failure.");
+    //     }
+    // });
+
+ 
+  
+
+});
+</script>
+{% endblock %}

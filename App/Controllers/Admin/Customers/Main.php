@@ -62,10 +62,10 @@ class Main extends \Core\Controller
         $customer = Customer::getCustomer($id);
 
         // test
-        // echo '<pre>';
-        // print_r($customer);
-        // echo '</pre>';
-        // exit();
+            // echo '<pre>';
+            // print_r($customer);
+            // echo '</pre>';
+            // exit();
 
         // get states
         $states = State::getStates();
@@ -105,19 +105,19 @@ class Main extends \Core\Controller
         $customer = Customer::getCustomer($id);
 
         // test
-        // echo '<pre>';
-        // print_r($customer);
-        // echo '</pre>';
-        // exit();
+            // echo '<pre>';
+            // print_r($customer);
+            // echo '</pre>';
+            // exit();
 
         // get orders data
         $orders = Order::getMyOrders($type='customer', $id);
 
         // test
-        // echo '<pre>';
-        // print_r($orders);
-        // echo '</pre>';
-        // exit();
+            // echo '<pre>';
+            // print_r($orders);
+            // echo '</pre>';
+            // exit();
 
         // create empty array
         $orderIds = [];
@@ -136,10 +136,10 @@ class Main extends \Core\Controller
         }
 
         // test
-        // echo '<pre>';
-        // print_r($orderIds);
-        // echo '</pre>';
-        // exit();
+            // echo '<pre>';
+            // print_r($orderIds);
+            // echo '</pre>';
+            // exit();
 
         // no orders
         if (empty($orderIds))
@@ -156,10 +156,10 @@ class Main extends \Core\Controller
             $orders_content = Order::getContentOfOrders($id, $idString);
 
             // test
-            // echo '<pre>';
-            // print_r($orders_content);
-            // echo '</pre>';
-            // exit();
+                // echo '<pre>';
+                // print_r($orders_content);
+                // echo '</pre>';
+                // exit();
 
             View::renderTemplate('Admin/Customers/Show/orders.html', [
                 'pagetitle'      => 'My Orders',

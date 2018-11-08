@@ -1,0 +1,32 @@
+<!-- customer component -->
+<div>
+    {% if customer %}
+        <h3><span class="glyphicon glyphicon-user"></span> Customer Information</h3>
+
+        <div class="border">
+            <div class="col-md-3 col-sm-3">
+                <p class="bold">Name</p>
+                <p>
+                    {{ customer.billing_firstname }} {{ customer.billing_lastname }}
+                    &nbsp;
+                    <a href="/admin/customers/edit/{{ customer.id }}">
+                        <span class="edit-green"><span class="glyphicon glyphicon-pencil"></span> Edit</span>
+                    </a>
+                </p>
+            </div>
+            <div class="col-md-3 col-sm-3">
+                <p class="bold">Phone</p>
+                <p>
+                    {{ customer.billing_phone }}
+                </p>
+            </div>
+            <div class="col-md-3 col-sm-3">
+                <p class="bold">Email</p>
+                <p>
+                    {{ customer.email }}
+                </p>
+            </div>
+            <div class="col-md-3 col-sm-3">&nbsp;</div>
+        </div>   
+    {% endif %}
+</div>

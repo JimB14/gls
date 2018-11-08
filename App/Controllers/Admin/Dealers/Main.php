@@ -17,6 +17,7 @@ use \App\Models\Battery;
 use \App\Models\Toolkit;
 use \App\Models\Accessory;
 use \App\Models\Flx;
+use \App\Models\Customer;
 use \App\Mail;
 
 
@@ -59,13 +60,13 @@ class Main extends \Core\Controller
         $id = ( isset($_REQUEST['id']) ) ? filter_var($_REQUEST['id'], FILTER_SANITIZE_STRING) : '';
 
         // get dealer
-        $dealer = Dealer::getDealer($id);
+        $dealer = Customer::getCustomer($id);
 
         // test
-        // echo '<pre>';
-        // print_r($dealer);
-        // echo '</pre>';
-        // exit();
+            // echo '<pre>';
+            // print_r($dealer);
+            // echo '</pre>';
+            // exit();
 
         // get states
         $states = State::getStates();
@@ -76,11 +77,102 @@ class Main extends \Core\Controller
         // create array of years
         $years = range( $firstYear, $thisYear);
 
+        // create array for email opt-in
+        $boolArr = [1,2];
+
         View::renderTemplate('Admin/Dealers/Show/account.html', [
-            'dealer' => $dealer,
-            'years'  => $years,
-            'states' => $states
+            'customer' => $dealer,
+            'years'    => $years,
+            'states'   => $states,
+            'boolArr'  => $boolArr
         ]);
+    }
+
+
+
+    public function updateAccount()
+    {
+        // retrieve id from query string
+        $id = ( isset($_REQUEST['id'] ) ) ? filter_var($_REQUEST['id'], FILTER_SANITIZE_STRING): '';
+
+        $result = Customer::updateCustomerAccount($id);
+
+        if ($result)
+        {
+            echo '<script>alert("Account updated successfully.")</script>';
+            echo '<script>window.location.href = "/admin/dealers/main/get-account?id='.$id.'&type=dealer"</script>';
+            exit();
+        }
+        else
+        {
+            echo "Error updating account.";
+            exit();
+        }
+    }
+
+
+
+    /**
+     * Dealer functionality - updates dealer credentials in `customers`
+     *
+     * @return boolean
+     */
+    public function updatePasswordAction()
+    {
+        // retrieve id from query string
+        $id = ( isset($_REQUEST['id'] ) ) ? filter_var($_REQUEST['id'], FILTER_SANITIZE_STRING): '';
+
+        // retrieve form values
+        $password = ( isset($_REQUEST['new_password'])  ) ? filter_var($_REQUEST['new_password'], FILTER_SANITIZE_STRING) : '';
+        $confirm_password = ( isset($_REQUEST['confirm_password'])  ) ? filter_var($_REQUEST['confirm_password'], FILTER_SANITIZE_STRING) : '';
+
+        // test
+        // echo '<pre>';
+        // print_r($_REQUEST);
+        // echo '</pre>';
+        // echo $password . '<br>';
+        // echo $confirm_newpassword . '<br>';
+        // exit();
+
+        // validation if JavaScript fails or is disabled
+        if($password == '' || $confirm_password == '')
+        {
+            $errorMessage = 'All fields required.';
+            View::renderTemplate('Error/index.html', [
+                'errorMessage' => $errorMessage
+            ]);
+           exit();
+        }
+
+        if(strlen($password) < 6 )
+        {
+            $errorMessage = 'Password must be at least 6 characters in length.';
+            View::renderTemplate('Error/index.html', [
+                'errorMessage' => $errorMessage
+            ]);
+            exit();
+        }
+
+        if($password != $confirm_password)
+        {
+            $errorMessage = 'Passwords do not match. Please check and try again.';
+            View::renderTemplate('Error/index.html', [
+                'errorMessage' => $errorMessage
+            ]);
+            exit();
+        }
+
+        // hash new password
+        $password = password_hash($password, PASSWORD_DEFAULT);
+
+        // update dealer record
+        $result = Customer::updateAccountPassword($id, $password);
+
+        if ($result)
+        {
+            echo '<script>alert("Your Password was successfully changed.\n\n\You will now be logged out.\n\n\You can log back in with your new password.")</script>';
+            echo '<script>window.location.href="/admin/logout"</script>';
+        }
     }
 
 
@@ -98,7 +190,7 @@ class Main extends \Core\Controller
         $id = ( isset($_REQUEST['id'])  ) ? filter_var($_REQUEST['id'], FILTER_SANITIZE_STRING): '';
 
         // get buyer data
-        $customer = Dealer::getDealer($id);
+        $customer = Customer::getCustomer($id);
 
         // test
         // echo '<pre>';
@@ -107,7 +199,7 @@ class Main extends \Core\Controller
         // exit();
 
         // get orders data
-        $orders = Order::getMyOrders($type='dealer', $id);
+        $orders = Order::getMyOrders($id);
 
         // test
         // echo '<pre>';

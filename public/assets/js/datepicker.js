@@ -1,10 +1,35 @@
+
+// two pages each use 2 instances of datepicker (Admin/Armalaser/Update/coupon.html and Admin/Armalaser/Add/coupon.html)
 $(function() {
-    $( "#datepicker" ).datepicker({
+    $( "#datepicker1" ).datepicker({
       dateFormat: 'yy-mm-dd'
     });
     $( "#anim" ).change(function() {
-      $( "#datepicker" ).datepicker( "option", "showAnim", $( this ).val() );
+      $( "#datepicker1" ).datepicker( "option", "showAnim", $( this ).val() );
     });
+
+    $( "#datepicker2" ).datepicker({
+      dateFormat: 'yy-mm-dd'
+    });
+    $( "#anim" ).change(function() {
+      $( "#datepicker2" ).datepicker( "option", "showAnim", $( this ).val() );
+    });
+
+    $( "#datepicker3" ).datepicker({
+      dateFormat: 'yy-mm-dd'
+    });
+    $( "#anim" ).change(function() {
+      $( "#datepicker3" ).datepicker( "option", "showAnim", $( this ).val() );
+    });
+
+    $( "#datepicker4" ).datepicker({
+      dateFormat: 'yy-mm-dd'
+    });
+    $( "#anim" ).change(function() {
+      $( "#datepicker4" ).datepicker( "option", "showAnim", $( this ).val() );
+    });
+
+    
   });
 
 

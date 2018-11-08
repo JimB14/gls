@@ -58,20 +58,17 @@ class Labels extends \Core\Controller
 
     public function getUspsLabelsAction()
     {
-        // Assign target directory based on server
-        if ($_SERVER['SERVER_NAME'] != 'localhost')
-        {
-            // production - IMH
-            $target_dir = Config::UPLOAD_PATH . '/assets/shipping_labels/usps/';
-        }
-        else
-        {
-            // development
-            $target_dir = $_SERVER['DOCUMENT_ROOT'] . '\assets\shipping_labels\usps\\';
-        }
+        // get target directory where shipping labels are stored    
+       $target_dir = $this->getTargetDirectory($_SERVER['SERVER_NAME'], 'usps');
 
-        // store images in array
+        // get images from target directory & store in array
         $images = scandir($target_dir);
+
+        // test
+        // echo '<pre>';
+        // print_r($images);
+        // echo '</pre>';
+        // exit();
 
         // declare empty array for foreach loop
         $newArr = [];
@@ -79,17 +76,29 @@ class Labels extends \Core\Controller
         // separate jpg files & store in $newArr
         foreach ($images as $image)
         {
+            // echo '$image: ' . $image . '<br>';
             $file_parts = pathinfo($image);
+            // echo 'dirname: ' . $file_parts['dirname'] . '<br>';
+            // echo 'basename: ' . $file_parts['basename'] . '<br>';
+            // echo 'filename: ' . $file_parts['filename'] . '<br>';
+            // echo 'extension: ' . $file_parts['extension'] . '<br><br>';
             if ($file_parts['extension'] == 'jpg')
             {
+                // $newArr[] = $file_parts['filename'];
                 $newArr[] = $image;
             }
         }
 
+        // test
+        // echo '<pre>';
+        // print_r($newArr);
+        // echo '</pre>';
+        // exit();
+
         View::renderTemplate('Admin/Armalaser/Show/labels.html', [
             'pagetitle' => 'USPS Labels',
-            'images' => $newArr,
-            'shipper' => 'USPS'
+            'images'    => $newArr,
+            'shipper'   => 'USPS'
         ]);
     }
 
@@ -102,17 +111,8 @@ class Labels extends \Core\Controller
      */
     public function getUpsLabelsAction()
     {
-        // Assign target directory based on server
-        if ($_SERVER['SERVER_NAME'] != 'localhost')
-        {
-            // production - IMH
-            $target_dir = Config::UPLOAD_PATH . '/assets/shipping_labels/ups/';
-        }
-        else
-        {
-            // development
-            $target_dir = $_SERVER['DOCUMENT_ROOT'] . '\assets\shipping_labels\ups\\';
-        }
+       // get target directory where shipping labels are stored    
+       $target_dir = $this->getTargetDirectory($_SERVER['SERVER_NAME'], 'ups');
 
         // store images in array
         $images = scandir($target_dir);
@@ -147,18 +147,9 @@ class Labels extends \Core\Controller
      */
     public function getUpsReturnLabelsAction()
     {
-        // Assign target directory based on server
-        if ($_SERVER['SERVER_NAME'] != 'localhost')
-        {
-            // production - IMH
-            $target_dir = Config::UPLOAD_PATH . '/assets/shipping_labels/ups/';
-        }
-        else
-        {
-            // development
-            $target_dir = $_SERVER['DOCUMENT_ROOT'] . '/assets/shipping_labels/ups/';
-        }
-
+        // get target directory where shipping labels are stored    
+        $target_dir = $this->getTargetDirectory($_SERVER['SERVER_NAME'], 'ups');
+        
         // test
         // echo $target_dir;
         // exit();
@@ -248,17 +239,8 @@ class Labels extends \Core\Controller
         {
             $shipper = (isset($_REQUEST['shipper'])) ? filter_var($_REQUEST['shipper'], FILTER_SANITIZE_STRING): '';
 
-            // Assign target directory based on server
-            if ($_SERVER['SERVER_NAME'] != 'localhost')
-            {
-                // production - IMH
-                $target_dir = Config::UPLOAD_PATH . '/assets/shipping_labels/'.$shipper.'/';
-            }
-            else
-            {
-                // development
-                $target_dir = $_SERVER['DOCUMENT_ROOT'] . '/assets/shipping_labels/'.$shipper.'/';
-            }
+            // get target directory where shipping labels are stored    
+            $target_dir = $this->getTargetDirectory($_SERVER['SERVER_NAME'], $shipper);
 
             // Get parameters
             $file = urldecode($_REQUEST["file"]); // Decode URL-encoded string
@@ -281,6 +263,98 @@ class Labels extends \Core\Controller
                 exit;
             }
         }
+    }
+
+
+    /**
+     *  Deletes selected image from server; returns user to referer page
+     * 
+     * @return Boolean
+     */
+    public function deleteAction() 
+    {
+        // echo "Connected to deleteAction() in Admin/Labels Controller!";
+
+        // retrieve query string parameters
+        $image   = (isset($_REQUEST['file'])) ? filter_var($_REQUEST['file'], FILTER_SANITIZE_STRING) : '';
+        $shipper = (isset($_REQUEST['shipper'])) ? filter_var($_REQUEST['shipper'], FILTER_SANITIZE_STRING) : '';
+
+        // convert to lower case
+        $shipper = strtolower($shipper);
+
+        // echo $image . '<br>';
+        // echo $shipper . '<br>';
+
+        // get target directory where shipping labels are stored    
+        $target_dir = $this->getTargetDirectory($_SERVER['SERVER_NAME'], $shipper);
+
+        // create full path to file being deleted    
+        $full_path = $target_dir . $image;
+
+        // echo 'Target directory: ' . $target_directory . '<br>';
+        // echo 'Full path: ' . $full_path . '<br>';
+
+        // delete image from server
+        $result = unlink($full_path);
+
+        // future development: remove XML file of same name
+
+        if ($result) 
+        {
+            // success message
+            // echo '<script>';
+            // echo 'alert("The shipping label was successfully deleted! \n\nIf previously downloaded, it will remain on your local hard-drive until you delete it.")';
+            // echo '</script>';
+
+            if ($shipper == 'usps')
+            {
+                // return to same page
+                echo '<script>';
+                echo 'window.location.href="/admin/labels/get-usps-labels"';
+                echo '</script>';
+                exit();
+            } 
+            // shipper is UPS
+            else 
+            {
+                //  set URL for current window
+                echo '<script>';
+                echo 'window.location.href="/admin/labels/get-ups-labels"';
+                echo '</script>';
+                exit();
+            }
+        }
+        // failure
+        else 
+        {
+            echo "Error attempting to delete shipping label.";
+            // email webmaster
+            exit();
+        }
+    }
+
+
+
+
+    private function getTargetDirectory($server_name, $shipper)
+    {
+        // Assign target directory based on server
+        if ($server_name != 'localhost')
+        {
+            // production - IMH
+            $target_dir = Config::UPLOAD_PATH . "/assets/shipping_labels/$shipper/";
+        }
+        else
+        {
+            // development
+            $target_dir = $_SERVER['DOCUMENT_ROOT'] . "/assets/shipping_labels/$shipper/";
+        }
+
+        // test
+        // echo $target_dir;
+        // exit();
+
+        return $target_dir;
     }
 
 }

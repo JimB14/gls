@@ -50,26 +50,16 @@
                         <tbody>
                             <tr>
                                 <td>{{ customer.id }}</td>
-                                {% if session.userType == 'customer' %}
-                                    <td>{{ customer.billing_firstname }}</td>
-                                    <td>{{ customer.billing_lastname }}</td>
-                                    <td>{{ customer.billing_address }}</td>
-                                    {% if customerbilling_address2 %}
-                                        <td>{{ customer.billing_address2 }}</td>
-                                    {% endif %}
-                                    <td>{{ customer.billing_city }}</td>
-                                    <td>{{ customer.billing_state }}</td>
-                                    <td>{{ customer.billing_zip }}</td>
-                                    <td>{{ customer.billing_phone }}</td>
-                                {% else %}
-                                    <td>{{ customer.first_name }}</td>
-                                    <td>{{ customer.last_name }}</td>
-                                    <td>{{ customer.address }}</td>
-                                    <td>{{ customer.city }}</td>
-                                    <td>{{ customer.state }}</td>
-                                    <td>{{ customer.zip }}</td>
-                                    <td>{{ customer.telephone }}</td>
+                                <td>{{ customer.billing_firstname }}</td>
+                                <td>{{ customer.billing_lastname }}</td>
+                                <td>{{ customer.billing_address }}</td>
+                                {% if customerbilling_address2 %}
+                                    <td>{{ customer.billing_address2 }}</td>
                                 {% endif %}
+                                <td>{{ customer.billing_city }}</td>
+                                <td>{{ customer.billing_state }}</td>
+                                <td>{{ customer.billing_zip }}</td>
+                                <td>{{ customer.billing_phone }}</td>
                                 <td>{{ customer.email }}</td>
                             </tr>
                         </tbody>

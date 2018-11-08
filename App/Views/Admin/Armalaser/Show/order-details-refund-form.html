@@ -1,0 +1,58 @@
+<div style="margin-top: 0px; margin-bottom: 30px;">
+    <h3 id="issue-refund-toggle"><a>Issue refund to customer<a></h3>
+    <div id="issue-refund-section">
+
+        <form class="form-horizontal" method="post" action="/admin/orders/order-returned">
+            <input type="hidden" name="id" value="{{ order.id }}">
+            <div class="form-group">
+                <label class="control-label col-sm-1">
+                    Amount
+                </label>
+                <div class="col-sm-2">
+                    <input type="number" id="return_amount" class="form-control" name="return_amount"
+                        value="{{ order.orderamount - order.oshipcost }}" required>
+                        <small>*Order total - shipping</small>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-sm-1">
+                    PayPal ID
+                </label>
+                <div class="col-sm-2">
+                    <input type="text" id="return_pnref" class="form-control" name="return_pnref"
+                        value="{{ order.pnref }}" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-sm-1">
+                    &nbsp;
+                </label>
+                <div class="col-sm-6">
+                    <button id="issue-refund-btn" role="submit" class="btn btn-primary btn-lg">
+                        Issue refund now
+                    </button>
+                    <br>
+                    <help>
+                        *Except in the case where an order is being refunded prior to shipment,
+                        do <strong><i>not</i></strong> issue a refund unless returned product(s)
+                        have been received and inspected, according to
+                        ArmaLaser's return policy guidelines.
+                        <br><br>
+                        *Refund only the value of what was returned. For orders with multiple items,
+                        make certain that the refund is equal to the item or items returned. Do
+                        <strong><i>not</i></strong> refund the entire order if only part of the order is returned.
+                        <br><br>
+                        *A credit will be issued by PayPal against the
+                        credit card used to make the purchase. Armalaser
+                        does not store credit card information. All
+                        website credit card transactions and processed
+                        by PayPal.
+                        <br><br>
+                        *Upon completion, please add a new comment explaining why
+                        the refund was issued.
+                    </help>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

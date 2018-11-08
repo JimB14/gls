@@ -1,4 +1,0 @@
-[15-Apr-2017 00:05:16 Europe/Berlin] Uncaught exception: 'Exception' with message 'No route matched'
-Stack trace: #0 C:\xampp\htdocs\armalaser.online\public\index.php(87): Core\Router->dispatch('assets/Calibri....')
-#1 {main}
-Thrown in  'C:\xampp\htdocs\armalaser.online\Core\Router.php' on line 194

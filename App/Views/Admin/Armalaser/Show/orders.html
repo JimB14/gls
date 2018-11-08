@@ -53,6 +53,7 @@
                         <select class="form-control" name="status">
                             <option value="">Order status</option>
                             <option value="all">All</option>
+                            <option value="payment-pending">Payment pending</option>
                             <option value="pending">Pending</option>
                             <option value="shipped">Shipped</option>
                             <option value="return-pending">Return-pending</option>
@@ -104,49 +105,28 @@
                                         {{ order.id }}
                                     </a>
                                 </td>
-                                <td {% if order.order_status == 'pending' %}class="pendingGreen bold"{% elseif order.order_status == 'return-pending' %} class="returnPendingBurngundy bold"{% endif %}>{{ order.order_status }}</td>
+                                <td {% if (order.order_status == 'pending') or (order.order_status == 'payment-pending') %}class="pendingGreen bold"{% elseif order.order_status == 'return-pending' %} class="returnPendingBurngundy bold"{% endif %}>{{ order.order_status }}</td>
                                 <td>{{ order.odate }}</td>
                                 <td>{{ order.pnref }}</td>
-                                {% if order.customerid > 0 and order.callerid == 0 and order.guestid == 0 and order.dealerid == 0 and order.partnerid == 0 %}
+                                {% if order.customerid > 0 and order.guestid == 0%}
                                     <td>Customer</td>
-                                    <td>{% if order.customer_company %}{{ order.customer_company|raw }}{% else %}No company given{% endif %}</td>
+                                    <td>{{ order.customer_company|raw }}</td>
                                     <td>{{ order.customerid }}</td>
                                     <td>{{ order.billing_firstname }}</td>
                                     <td>{{ order.billing_lastname }}</td>
                                     <td>{{ order.email }}</td>
-                                {% elseif order.callerid > 0 and order.customerid == 0 and order.guestid == 0 and order.dealerid == 0 and order.partnerid == 0 %}
-                                    <td>Caller</td>
-                                    <td>{% if order.customer_company %}{{ order.customer_company|raw }}{% else %}No company given{% endif %}</td>
-                                    <td>{{ order.callerid }}</td>
-                                    <td>{{ order.caller_firstname }}</td>
-                                    <td>{{ order.caller_lastname }}</td>
-                                    <td>{{ order.caller_email }}</td>
-                                {% elseif order.guestid > 0 and order.customerid == 0 and order.callerid == 0 and order.dealerid == 0 and order.partnerid == 0 %}
+                                {% elseif order.guestid > 0 and order.customerid == 0 %}
                                     <td>Guest</td>
-                                    <td>{% if order.customer_company %}{{ order.customer_company|raw }}{% else %}No company given{% endif %}</td>
+                                    <td>{{ order.customer_company|raw }}</td>
                                     <td>{{ order.guestid }}</td>
                                     <td>{{ order.guest_firstname }}</td>
                                     <td>{{ order.guest_lastname }}</td>
                                     <td>{{ order.guest_email }}</td>
-                                {% elseif order.dealerid > 0 and order.customerid == 0 and order.guestid == 0 and order.callerid == 0 and order.partnerid == 0 %}
-                                    <td>Dealer</td>
-                                    <td>{{ order.dealer_company|raw }}</td>
-                                    <td>{{ order.dealerid }}</td>
-                                    <td>{{ order.dealer_firstname }}</td>
-                                    <td>{{ order.dealer_lastname }}</td>
-                                    <td>{{ order.dealer_email }}</td>
-                                {% elseif order.partnerid > 0 and order.customerid == 0 and order.guestid == 0 and order.callerid == 0 and order.dealerid == 0 %}
-                                    <td>Partner</td>
-                                    <td>{{ order.partner_company|raw }}</td>
-                                    <td>{{ order.partnerid }}</td>
-                                    <td>{{ order.partner_firstname }}</td>
-                                    <td>{{ order.partner_lastname }}</td>
-                                    <td>{{ order.partner_email }}</td>
                                 {% endif %}
                                 <td>{{ order.orderamount }}</td>
-                                <td>{% if order.oshippeddate == '' and order.order_status == 'pending' %}<span class="pendingGreen bold">pending{% else %}{{ order.oshippeddate }}{% endif %}</td>
+                                <td>{% if order.oshippeddate == '' and ((order.order_status == 'pending') or (order.order_status == 'payment-pending')) %}<span class="pendingGreen bold">{{ order.order_status }}{% else %}{{ order.oshippeddate }}{% endif %}</td>
                                 <td>{{ order.oshipmethod }}</td>
-                                <td>{% if order.oshippeddate == '' and order.order_status == 'pending' %}<span class="pendingGreen bold">pending{% else %}{{ order.trackingcode }}{% endif %}</td>
+                                <td>{% if order.oshippeddate == '' and ((order.order_status == 'pending') or (order.order_status == 'payment-pending')) %}<span class="pendingGreen bold">{{ order.order_status }}{% else %}{{ order.trackingcode }}{% endif %}</td>
                             </tr>
                         {% endfor %}
                     </tbody>

@@ -5,11 +5,11 @@
         </div>
     </div>
 {% else %}
-    {% if session.user and session.access_level != 4 and (session.userType == 'admin' or session.userType == 'supervisor') %}
+    {% if session.userType == 'admin' or session.userType == 'supervisor' %}
         <h1>Shopping Cart - Admin only</h1>
     {% else %}
         <h1>{{ page_title }}</h1>
-    {% endif %}    
+    {% endif %}
 
     <table class="table table-responsive table-bordered table-condensed"  style="background-color:#fff; border-bottom: 0px solid;">
 
@@ -17,9 +17,9 @@
             <tr>
                 <th></th>
                 <th>Description</th>
-                <th>Each</th>
+                <th class="text-center">Each</th>
                 <!-- <th style="width:12em;">Quantity</th> -->
-                <th>Qty</th>
+                <th class="text-center">Qty</th>
                 <th>Extended</th>
                 <th class="text-center"></th>
             </tr>
@@ -137,9 +137,10 @@
                     </td>
 
                     <!-- admin or supervisor only -->
-                    {% if session.user and session.access_level != 4 and (session.userType == 'admin' or session.userType == 'supervisor') %}
-                        <td style="width:12em;">
-                            <form action="/cart/update-unit-price" method="post">
+                    {% if session.userType == 'admin' or session.userType == 'supervisor' %}
+                        <td class="text-center" style="width:12em;">
+                            {{ item.price }}
+                            <!-- <form action="/cart/update-unit-price" method="post">
                                 <div class="input-group">
                                     <input type="number" class="form-control" name="new_price" id="new_price" min="0.00" step=".01" value="{{ item.price }}">
                                     <span class="input-group-btn">
@@ -151,22 +152,22 @@
                                         </button>
                                     </span>
                                 </div>
-                            </form>
+                            </form> -->
                         </td>
 
                     <!-- default  -->
                     {% else %}
                         <td>{{ item.price|number_format(2) }}</td>
-                    {% endif %}    
-                    <td style="width:10em;">
+                    {% endif %}
+                    <td class="text-center" style="width:10em;">
                         <form method="post" action="/cart/update-quantity">
                             <div class="input-group">
                                 <input type="number" class="form-control" name="new_quantity" id="update_qty" min="1" value="{{ item.quantity }}">
                                 <span class="input-group-btn">
                                     <input type="hidden" name="id" value="{{ item.id }}">
-                                    <input type="hidden" name="series" value="{{ item.series }}">
-                                    <input type="hidden" name="model" value="{{ item.model }}">
-                                    <button class="btn btn-default"  type="submit">
+                                    <input type="hidden" name="customer_id" value="{{ customer.id }}">
+                                    <input type="hidden" name="type" value="{{ customer.type }}">
+                                    <button class="btn btn-default" type="submit">
                                         Update
                                     </button>
                                 </span>
@@ -184,34 +185,94 @@
                 </tr>
             {% endfor %}
         </tbody>
-
         <!--  Resource:  https://developer.paypal.com/docs/classic/paypal-payments-standard/integration-guide/Appx_websitestandard_htmlvariables/ -->
-
-        <tfoot>
-            <tr style="height: 30px;">
-                <td colspan="4" style="text-align: right; font-size:120%;">TOTAL</td>
-                <td style="text-align:right;">{{ cartMetaData.pretax_total|number_format(2) }}</td>
-                <td class="text-center" style="text-align:middle;"></td>
-                <tr style="border-left: 0px solid; border-right: 0px solid;">
-                    <td colspan="4" style="border-left: 0px solid; border-right: 0px solid; border-bottom: 0px solid; vertical-align:top!important;">
-                        <small>*Firearm shown for display purposes only. Firearm not included.</small>
-                    </td>
-                    {% if checkout_btn == 'show' %}
-                        <!-- admin or supervisor checking out  -->
-                        {% if session.userType == 'admin' or session.userType == 'supervisor' %}
-                            <td colspan="3" style="border-left: 0px solid; border-right: 0px solid; border-bottom: 0px solid;">
-                                <a href="/cart/checkout-admin?id={{ customer.id }}&type={{ customer.type }}" style="vertical-align:middle" 
-                                class="btn btn-primary btn-block">Checkout</a>
-                            </td>
-                        {% else %}
-                            <!--  normal user checkout  -->
-                            <td colspan="3" style="border-left: 0px solid; border-right: 0px solid; border-bottom: 0px solid;">
-                                <a href="/cart/checkout" style="vertical-align:middle" class="btn btn-primary btn-block">Checkout</a>
-                            </td>
-                        {% endif %}
-                    {% endif %}
-                </tr>
-            </tr>
-        </tfoot>
     </table>
+    <p style="margin-top: -19px;">
+        <small>*Firearm shown for display purposes only. Firearm not included.</small>
+    </p>
+
+
+    <div class="col-md-3 col-md-offset-9" style="margin-top: -30px;">
+        <div class="row">
+            <div class="text-right p1">
+                <h4><span class="bold">TOTAL: &nbsp;&nbsp;</span>{{ session.cart_total|number_format(2) }}</h4>
+            </div>
+
+            <!-- <h1>{{ session.userType }}</h1> -->
+
+            <!-- display coupon code section only for customers or guests -->
+            {% if session.userType == 'customer' or session.userType == '' %}
+
+                <div {% if nobutton%}style="display:none;"{% endif %}>
+                    <div class="input-group p1">
+                        <input id="cart_coupon" name='cart_coupon' type="text"
+                            class="form-control" placeholder="Coupon code"
+                            {% if session.total_discount %}readonly{% endif %}>
+                        <input type="hidden" name="cart_customer_id" id="cart_customer_id"
+                            value="{{ session.user_id }}">
+                        <span class="input-group-btn">
+                            <!-- Ajax code in cart/index.html -->
+                            <button id="cart_check_coupon_btn" class="btn btn-default"
+                                type="button" {% if session.total_discount %}disabled{% endif %}>
+                                Check
+                            </button>
+                        </span>
+                    </div>
+
+                    <!-- Ajax response data -->
+                    <div id="coupon_data">
+                        <div id="coupon_details" style="margin-bottom: 20px;"></div>
+                    </div>
+                    <!-- end Ajax response -->
+
+                    {% if session.total_discount %}
+                        <div class="alert alert-info">
+                            <p>A {{ session.promo_name }} discount of ${{ session.total_discount|number_format(2) }} has been applied to this order.</p>
+                            <p>New total: <strong>${{ session.cart_total|number_format(2) }}</strong></p>
+                        </div>
+                    {% endif %}
+                </div>
+            {% endif %}
+
+
+            <!-- admin or supervisor checking out  -->
+            {% if session.userType == 'admin' or session.userType == 'supervisor' %}
+                <div class="p3" {% if nobutton%}style="display:none;"{% endif %}>
+                    <a href="/cart/checkout-admin?id={{ customer.id }}&type={{ customer.type }}" style="vertical-align:middle"
+                        class="btn btn-primary btn-block">
+                        Checkout by Admin
+                    </a>
+                </div>
+            {% elseif session.userType == 'customer' %}
+                <!--  logged in customer checkout  -->
+                <div class="p3" {% if nobutton%}style="display:none;"{% endif %}>
+                    <a href="/cart/checkout?id=nobutton" style="vertical-align:middle" class="btn btn-primary btn-block">
+                        Checkout
+                    </a>
+                </div>
+            {% elseif session.userType == 'dealer' %}
+                <!--  logged in customer checkout  -->
+                <div class="p3" {% if nobutton%}style="display:none;"{% endif %}>
+                    <a href="/cart/checkout" style="vertical-align:middle" class="btn btn-primary btn-block">
+                        Checkout
+                    </a>
+                </div>
+            {% elseif session.userType == 'partner' %}
+                <!--  logged in customer checkout  -->
+                <div class="p3" {% if nobutton%}style="display:none;"{% endif %}>
+                    <a href="/cart/checkout" style="vertical-align:middle" class="btn btn-primary btn-block">
+                        Checkout
+                    </a>
+                </div>
+            {% else %}
+                 <!--  guest checkout  -->
+                 <div class="p3" {% if nobutton%}style="display:none;"{% endif %}>
+                        <!-- <a href="/cart/checkout/guest?id=nobutton" style="vertical-align:middle" class="btn btn-primary btn-block"> -->
+                        <a href="/cart/checkout" style="vertical-align:middle" class="btn btn-primary btn-block">
+                            Checkout
+                        </a>
+                    </div>
+            {% endif %}
+        </div>
+    </div>
 {% endif %}

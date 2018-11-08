@@ -15,11 +15,15 @@
 
           <div class="col-md-4">
                 <h2 style="margin-left:-15px;">
-                    Manage Customers
+                    {% if type == 'all' %} All Customers{% else %}{{ type|title }}s{% endif %}
                     {% if not searched %}
                         {% if customers|length > 0 %}
                             <span class="badge" style="margin: -18px 0px 0px 7px;">
-                                {{ count|number_format(0, ',') }}
+                                {% if type == 'all' %}
+                                    {{ count|number_format(0, ',') }}
+                                {% else %}
+                                    {{ (customers|length)|number_format(0, ',') }}
+                                {% endif %}
                             </span>
                         {% endif %}
                     {% endif %}
@@ -27,7 +31,7 @@
                 {% if searched %}
                     <p><a href="/admin/customers/get-customers"><span class="glyphicon glyphicon-chevron-left"></span> Back to all customers</a></p>
                 {% else %}
-                    <h3 style="margin-top: 0px;">{{ customers|length }} most recent customers</h3>
+                    <h3 style="margin-top: 0px;">{{ customers|length }} most recent {% if type == 'all' %}customers{% else %}{{ type }}s{% endif %}</h3>
                 {% endif %}
           </div>
           <div  class="col-md-5 col-sm-7 col-xs-12" style="margin:15px 0px 15px -15px;">
@@ -55,6 +59,7 @@
                       <th>Edit</th>
                       <!-- <th>Delete</th> -->
                       <th>ID</th>
+                      <th>Type</th>
                       <th>First</th>
                       <th>Last</th>
                       <th>Address</th>
@@ -83,6 +88,7 @@
                           </a>
                       </td> -->
                       <td><a href="/admin/customers/get-orders?id={{ customer.id }}" title="See Orders">{{ customer.id }}</a></td>
+                      <td>{{ customer.type }}</td>
                       <td>{{ customer.billing_firstname }}</td>
                       <td>{{ customer.billing_lastname }}</td>
                       <td>{{ customer.billing_address }}</td>

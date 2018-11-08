@@ -1,0 +1,16 @@
+<h3>
+    Create
+    {% if order.oshipmethod|slice(0,3) == 'UPS' %}
+        <span><img height="25" src="/assets/images/ups/logo_small.gif"></span> UPS
+    {% else %}
+        <span><img height="25" src="/assets/images/usps/logo.png"></span> USPS
+    {% endif %}
+    Shipping Label:
+</h3>
+<div style="margin-bottom: 80px;">
+    <a class="btn btn-primary btn-lg" href="/admin/orders/label?id={{ order.id }}">
+        Continue
+    </a>
+    <br><br>
+    <hr>
+</div>

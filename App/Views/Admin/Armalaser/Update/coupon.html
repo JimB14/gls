@@ -1,0 +1,228 @@
+{% extends 'base-admin.html' %}
+
+{% block title %}
+    Update Coupon | ArmaLaser
+{% endblock %}
+
+{% block css %}
+{% endblock %}
+
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div id="dashboard-toggle" class="col-md-10" style="margin-top:-20px;margin-left:254px;">
+
+            <h2>{{ pagetitle }}</h2>
+            <p style="margin-left: 0px;">
+                <span class="glyphicon glyphicon-menu-left"></span>
+                <a onclick="window.history.go(-1)" style="cursor:pointer;">
+                    Go  Back
+                </a>
+            </p>
+
+            {% if coupon %}
+                <form name="couponupdateform" id="couponupdateform"
+                    action="/admin/coupons/update-coupon?id={{ coupon.id }}" method="post">
+                    
+                    <div class="col-md-12">
+                        <h3>Promotion information</h3>
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="form-group has-feedback">
+                                    <label>Promotion name</label>
+                                    <input type="text" class="form-control" name="promo_name"
+                                        id="promo_name" value="{{ coupon.promo_name|title }}">
+                                </div>
+                                <div class="checkbox">
+                                    <label>
+                                        <input type="checkbox" name="enabled" id="enabled" {% if coupon.enabled == 1 %} checked="checked"{% endif %}> 
+                                        Is Enabled
+                                    </label>
+                                </div>
+                            </div> 
+                               
+                        
+                            <div class="col-sm-12">
+                                <div class="form-group has-feedback">
+                                    <label>Description</label>
+                                    <textarea class="form-control" name="promo_description"id="promo_description" rows="5">{{ coupon.promo_description }}</textarea>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-3">
+                                <div class="form-group has-feedback">
+                                    <label>From Date</label>
+                                    <input type="text" class="form-control" name="promo_start"
+                                        id="datepicker1" value="{{ coupon.promo_start }}">
+                                        <span class="glyphicon glyphicon-calendar form-control-feedback"></span>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-3">
+                                <div class="form-group has-feedback">
+                                    <label>To Date</label>
+                                    <input type="text" class="form-control" name="promo_end"
+                                        id="datepicker2" value="{{ coupon.promo_end }}">
+                                        <span class="glyphicon glyphicon-calendar form-control-feedback"></span>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-3">
+                                <div class="form-group has-feedback">
+                                    <label>Total allowed uses</label>
+                                    <input type="text" class="form-control" name="max_uses"
+                                        id="max_uses" value="{{ coupon.max_uses }}">
+                                </div>
+                            </div>
+
+                            <div class="col-sm-3">
+                                <div class="form-group has-feedback">
+                                    <label> Uses per customer</label>
+                                    <input type="text" class="form-control" name="uses_per_customer"
+                                        id="uses_per_customer" value="{{ coupon.uses_per_customer }}">
+                                </div>
+                            </div>
+
+                            <div class="col-sm-3">
+                                <div class="form-group has-feedback">
+                                    <label> Discount</label>
+                                    <input type="text" class="form-control" name="discount"
+                                        id="discount" value="{{ coupon.discount }}">
+                                </div>
+                            </div>
+
+                            <div class="col-md-3">
+                                <label>Type</label>
+                                <select class="form-control" id="discount_type" name="discount_type">
+                                    <option value="{{ coupon.discount_type }}">{{ coupon.discount_type|title }}</option>
+                                    <option value="percentage">Percentage</option>
+                                    <option value="item">Item</option>
+                                </select>
+                            </div>
+                       
+                            <div class="col-sm-3">
+                                <div class="form-group has-feedback">
+                                    <label>Code</label>
+                                    <input type="text" class="form-control" name="coupon_code"
+                                        id="coupon_code" value="{{ coupon.coupon_code }}"
+                                        placeholder="Alphanumeric characters only">
+                                </div>
+                            </div>
+
+                            <div class="col-sm-3">
+                                <div class="form-group has-feedback">
+                                    <label> Uses count</label>
+                                    <input type="text" class="form-control" name="uses_count"
+                                        id="uses_count" value="{{ coupon.uses_count }}">
+                                </div>
+                            </div>
+
+                            <div class="col-sm-2">
+                                <button class="btn btn-primary" type="submit">Update</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            {% else %}
+                <div class="alert alert-info">Coupon not found.</div>
+            {% endif %}
+
+      </div><!--  // col-md-12  -->
+    </div><!--  // .row  -->
+</div><!-- // .container-fluid  -->
+{% endblock %}
+
+
+{% block bottomjs %}
+<script>
+$(document).ready(function() {
+
+    $("#couponupdateform").validate();
+
+    // format billing phone number
+    $("#coupon_code").blur(function() {
+        // remove hyphen or space
+        var phone = $(this).val().replace(/-/g, '').replace(/ /g, '');
+        console.log('No whitespace:', phone);
+
+        // format
+        phone = phone.replace(/(\d{3})\-?(\d{3})\-?(\d{4})/, '$1-$2-$3');
+        console.log('Formatted: ', phone);
+
+        // replace
+        $('#coupon_code').val(phone);
+
+    });
+
+    // format shipping phone number
+    $("#shipping_phone").blur(function() {
+        // remove hyphen or space
+        var phone = $(this).val().replace(/-/g, '').replace(/ /g, '');
+        console.log('No whitespace:', phone);
+
+        // format
+        phone = phone.replace(/(\d{3})\-?(\d{3})\-?(\d{4})/, '$1-$2-$3');
+        console.log('Formatted: ', phone);
+
+        // replace
+        $('#shipping_phone').val(phone);
+
+    });
+
+    // allow activation only if security answers exist
+    $("#active").on('change', function() {
+        var security1 =  $("#coupon_security1").val();
+        var security2 =  $("#coupon_security2").val();
+        var security3 =  $("#coupon_security3").val();
+
+        if (security1 === '' || security2 === '' || security3 === '') {
+            alert('Security answers are required to activate an account.');
+
+            // set 'Not activated' as selected
+            $("#active").find("option[text='Not activated']").prop('selected', true);
+            // $("#active option:contains('Not activated')".prop('selected', true));
+
+            // disable input
+            $(this).prop('disabled', true);
+        }     
+    });
+
+    // check status of all security questions on blur of any security question
+    $("#coupon_security1").blur(function() {
+        var security1 =  $("#coupon_security1").val();
+        var security2 =  $("#coupon_security2").val();
+        var security3 =  $("#coupon_security3").val();
+
+        if (security1 !== '' && security2 !== '' && security3 !== '') {
+            alert("Values found" );
+            $("#active").removeAttr('disabled');
+        }
+    });
+
+    $("#coupon_security2").blur(function() {
+        var security1 =  $("#coupon_security1").val();
+        var security2 =  $("#coupon_security2").val();
+        var security3 =  $("#coupon_security3").val();
+
+        if (security1 !== '' && security2 !== '' && security3 !== '') {
+            alert("Values found" );
+            $("#active").removeAttr('disabled');
+        }
+    });
+    
+    $("#coupon_security3").blur(function() {
+        var security1 =  $("#coupon_security1").val();
+        var security2 =  $("#coupon_security2").val();
+        var security3 =  $("#coupon_security3").val();
+
+        if (security1 !== '' && security2 !== '' && security3 !== '') {
+            alert("This account can be activated." );
+            $("#active").removeAttr('disabled');
+        }
+    });
+    
+
+});
+</script>
+{% endblock %}

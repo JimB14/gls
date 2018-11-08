@@ -1,3 +1,19 @@
+<!-- - - Marketing Manager - - - - - - - - - - - - - - - - - - - - -->
+
+<li class="title" id="base-admin-marketing-title">
+        <span class="glyphicon glyphicon-tasks text-size130 m-leftminus20"></span>
+         &nbsp; Marketing
+    </li>
+    <div id="base-admin-coupons-section">
+        <li class="subtitle p0 btm-margin" id="base-admin-coupons-manage">
+            <a href="/admin/coupons/get">
+                Promotions
+            </a>
+        </li>
+    </div>
+
+ <!-- - - TR Series - - - - - - - - - - - - - - - - - - - - -->
+
 <li class="title" id="base-admin-tr-series-title">
     <span class="glyphicon glyphicon-star text-size130 m-leftminus20"></span>
      &nbsp; TR Series
@@ -175,14 +191,29 @@
      &nbsp; Customers
 </li>
 <div id="base-admin-customers-section">
-    <!-- <li class="subtitle" id="base-admin-customers-add">
-        <a href="/admin/customers/add-customer">
-            Add
+    <li class="subtitle p0 btm-margin" id="base-admin-customers-add">
+        <a href="/admin/customers/add">
+            Add new
         </a>
-    </li> -->
-    <li class="subtitle p0 btm-margin" id="base-admin-customers-manage">
-        <a href="/admin/customers/get-customers">
-            Manage
+    </li>
+    <li class="subtitle" id="base-admin-customers-all">
+        <a href="/admin/customers/get-customers-by-type?type=all">
+            All customers
+        </a>
+    </li>
+    <li class="subtitle" id="base-admin-customers-customers">
+        <a href="/admin/customers/get-customers-by-type?type=customer">
+            Customers
+        </a>
+    </li>
+    <li class="subtitle" id="base-admin-customers-dealers">
+        <a href="/admin/customers/get-customers-by-type?type=dealer">
+            Dealers
+        </a>
+    </li>
+    <li class="subtitle p0 btm-margin" id="base-admin-customers-partners">
+        <a href="/admin/customers/get-customers-by-type?type=partner">
+            Partners
         </a>
     </li>
 </div>
@@ -241,70 +272,76 @@
 </div>
 
 <li class="title" id="base-admin-orders-title">
-                        <span class="glyphicon glyphicon-th-list text-size130 m-leftminus20"></span>
-                         &nbsp; Orders
-                    </li>
-                    <div id="base-admin-orders-section">
-                        <li class="subtitle p0" id="base-admin-orders-all">
-                            <a href="/admin/orders/get-orders?status=all">
-                                All
-                            </a>
-                        </li>
-                        <li class="subtitle p0" id="base-admin-orders-pending">
-                            <a href="/admin/orders/get-orders?status=pending">
-                                New (pending)
-                            </a>
-                        </li>
-                        <!-- <li class="subtitle p0" id="base-admin-orders-label-created">
-                            <a href="/admin/orders/get-orders?status=label-created">
-                                Ready to ship
-                            </a>
-                        </li> -->
-                        <li class="subtitle p0" id="base-admin-orders-shipped">
-                            <a href="/admin/orders/get-orders?status=shipped">
-                                Shipped
-                            </a>
-                        </li>
-                        <li class="subtitle p0" id="base-admin-orders-return-pending">
-                            <a href="/admin/orders/get-orders?status=return-pending">
-                                Return pending
-                            </a>
-                        </li>
-                        <li class="subtitle p0 btm-margin" id="base-admin-orders-returned">
-                            <a href="/admin/orders/get-orders?status=returned">
-                                Returned
-                            </a>
-                        </li>
-                        <li class="subtitle p0 btm-margin" id="base-admin-orders-refunded">
-                            <a href="/admin/orders/get-orders?status=refunded">
-                                Refunds
-                            </a>
-                        </li>
-                    </div>
+        <span class="glyphicon glyphicon-th-list text-size130 m-leftminus20"></span>
+            &nbsp; Orders
+    </li>
+    <div id="base-admin-orders-section">
+        <li class="subtitle p0" id="base-admin-orders-all">
+            <a href="/admin/orders/get-orders?status=all">
+                All
+            </a>
+        </li>
+        /li>
+        <li class="subtitle p0" id="base-admin-orders-payment-pending">
+            <a href="/admin/orders/get-orders?status=payment-pending">
+                Payment pending
+            </a>
+        </li>
+        <li class="subtitle p0" id="base-admin-orders-pending">
+            <a href="/admin/orders/get-orders?status=pending">
+                New (pending)
+            </a>
+        </li>
+        <!-- <li class="subtitle p0" id="base-admin-orders-label-created">
+            <a href="/admin/orders/get-orders?status=label-created">
+                Ready to ship
+            </a>
+        </li> -->
+        <li class="subtitle p0" id="base-admin-orders-shipped">
+            <a href="/admin/orders/get-orders?status=shipped">
+                Shipped
+            </a>
+        </li>
+        <li class="subtitle p0" id="base-admin-orders-return-pending">
+            <a href="/admin/orders/get-orders?status=return-pending">
+                Return pending
+            </a>
+        </li>
+        <li class="subtitle p0 btm-margin" id="base-admin-orders-returned">
+            <a href="/admin/orders/get-orders?status=returned">
+                Returned
+            </a>
+        </li>
+        <li class="subtitle p0 btm-margin" id="base-admin-orders-refunded">
+            <a href="/admin/orders/get-orders?status=refunded">
+                Refunds
+            </a>
+        </li>
+    </div>
 
-                    <!-- - - Labels - - - - - - - - - - - - - - - - - - - - -->
+    <!-- - - Labels - - - - - - - - - - - - - - - - - - - - -->
 
-                    <li class="title" id="base-admin-labels-title">
-                        <span class="glyphicon glyphicon-tags text-size130 m-leftminus20"></span>
-                         &nbsp; Shipping Labels
-                    </li>
-                    <div id="base-admin-labels-section">
-                        <li class="subtitle" id="base-admin-labels-usps">
-                            <a href="/admin/labels/get-usps-labels">
-                                USPS
-                            </a>
-                        </li>
-                        <li class="subtitle" id="base-admin-labels-ups">
-                            <a href="/admin/labels/get-ups-labels">
-                                UPS
-                            </a>
-                        </li>
-                        <li class="subtitle p0 btm-margin" id="base-admin-return-labels-ups">
-                            <a href="/admin/labels/get-ups-return-labels">
-                                UPS return labels
-                            </a>
-                        </li>
-                    </div>
+    <li class="title" id="base-admin-labels-title">
+        <span class="glyphicon glyphicon-tags text-size130 m-leftminus20"></span>
+            &nbsp; Shipping Labels
+    </li>
+    <div id="base-admin-labels-section">
+        <li class="subtitle" id="base-admin-labels-usps">
+            <a href="/admin/labels/get-usps-labels">
+                USPS
+            </a>
+        </li>
+        <li class="subtitle" id="base-admin-labels-ups">
+            <a href="/admin/labels/get-ups-labels">
+                UPS
+            </a>
+        </li>
+        <li class="subtitle p0 btm-margin" id="base-admin-return-labels-ups">
+            <a href="/admin/labels/get-ups-return-labels">
+                UPS return labels
+            </a>
+        </li>
+    </div>
 
 
 <!-- - -Warranty Registration - - - - - - - - - - - - - -->

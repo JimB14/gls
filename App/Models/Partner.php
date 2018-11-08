@@ -246,7 +246,7 @@ class Partner extends \Core\Model
      *
      * @return boolean
      */
-    public static function validateLoginCredentials($email, $password)
+    public static function validateLoginCredentials($email, $password, $type)
     {
         // clear variable for new values
         unset($_SESSION['loginerror']);
@@ -280,12 +280,14 @@ class Partner extends \Core\Model
                 // establish db connection
                 $db = static::getDB();
 
-                $sql = "SELECT * FROM partners
+                $sql = "SELECT * FROM customers
                         WHERE email = :email
+                        AND type = :type
                         AND active = 1";
                 $stmt = $db->prepare($sql);
                 $parameters = [
-                    ':email' => $email
+                    ':email' => $email,
+                    ':type' => $type
                 ];
                 $stmt->execute($parameters);
                 $partner = $stmt->fetch(PDO::FETCH_OBJ);

@@ -1,0 +1,296 @@
+{% extends 'base-admin.html' %}
+
+{% block title %}
+    Add Promotion | ArmaLaser
+{% endblock %}
+
+{% block css %}
+<style>
+#promo-products-div {
+    display: none;
+}
+#promo-choose-items {
+    cursor: pointer;
+}
+</style>
+{% endblock %}
+
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div id="dashboard-toggle" class="col-md-10" style="margin-top:-20px;margin-left:254px;">
+
+            <h2>{{ pagetitle }}</h2>
+            <p style="margin-left: 0px;">
+                <span class="glyphicon glyphicon-menu-left"></span>
+                <a onclick="window.history.go(-1)" style="cursor:pointer;">
+                    Go  Back
+                </a>
+            </p>
+
+            <form name="couponaddform" id="couponaddform"
+                action="/admin/coupons/create-coupon" method="post">
+                
+                <div class="col-md-12">
+                    <h3>Promotion information</h3>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="form-group has-feedback">
+                                <label>Promotion name</label>
+                                <input type="text" class="form-control" name="promo_name"
+                                    id="promo_name" value="{{ coupon.promo_name|title }}" autofocus>
+                            </div>
+                            <div class="checkbox">
+                                <label>
+                                    <input type="checkbox" name="enabled" id="enabled"> 
+                                    Is Enabled
+                                </label>
+                            </div>
+                        </div> 
+                            
+                        <div class="col-sm-12">
+                            <div class="form-group has-feedback">
+                                <label>Description</label>
+                                <textarea class="form-control" name="promo_description"id="promo_description" rows="5">{{ coupon.promo_description }}</textarea>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-3">
+                            <div class="form-group has-feedback">
+                                <label>From Date</label>
+                                <input type="text" class="form-control" name="promo_start"
+                                    id="datepicker3" value="{{ coupon.promo_start }}">
+                                    <span class="glyphicon glyphicon-calendar form-control-feedback"></span>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-3">
+                            <div class="form-group has-feedback">
+                                <label>To Date</label>
+                                <input type="text" class="form-control" name="promo_end"
+                                    id="datepicker4" value="{{ coupon.promo_end }}">
+                                    <span class="glyphicon glyphicon-calendar form-control-feedback"></span>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-3">
+                            <div class="form-group has-feedback">
+                                <label>Total allowed uses</label>
+                                <input type="text" class="form-control" name="max_uses"
+                                    id="max_uses" value="{{ coupon.max_uses }}">
+                            </div>
+                        </div>
+
+                        <div class="col-sm-3">
+                            <div class="form-group has-feedback">
+                                <label> Uses per customer</label>
+                                <input type="text" class="form-control" name="uses_per_customer"
+                                    id="uses_per_customer" value="{{ coupon.uses_per_customer }}">
+                            </div>
+                        </div>
+
+                        <div class="col-sm-3">
+                            <div class="form-group has-feedback">
+                                <label> Discount</label>
+                                <input type="text" class="form-control" name="discount"
+                                    id="discount" value="{{ coupon.discount }}">
+                            </div>
+                        </div>
+
+                        <div class="col-md-3">
+                            <label>Type</label>
+                            <select class="form-control" id="discount_type" name="discount_type">
+                                <option value="">Select</option>
+                                <option value="percentage">Percentage</option>
+                                <option value="item">Item</option>
+                            </select>
+                        </div>
+                    
+                        <div class="col-sm-3">
+                            <div class="form-group has-feedback">
+                                <label>Code</label>
+                                <input type="text" class="form-control" name="coupon_code"
+                                    id="coupon_code" value="{{ coupon.coupon_code }}"
+                                    placeholder="Alphanumeric characters only">
+                            </div>
+                        </div>
+
+                        <div class="col-sm-3">
+                            <div class="form-group has-feedback">
+                                <label> Uses count</label>
+                                <input type="text" class="form-control" name="uses_count"
+                                    id="uses_count" value="{{ coupon.uses_count }}">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row p3">
+                        <h3 id="promo-choose-items"><a>Add promotion items</a></h3>
+                        <div id="promo-products-div">
+                            <div class="col-sm-3">
+                                <div class="form-group">
+                                    <label>TR Series</label>
+                                    <select name="promo_trseries[]" id="promo_trseries"
+                                        class="form-control" multiple>
+                                        {% for laser in trseries %}
+                                            <option value="{{ laser.id }}">{{ laser.name }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-3">
+                                <div class="form-group">
+                                    <label>GTO/FLX</label>
+                                    <select name="promo_gtoflx[]" id="promo_gtoflx"
+                                        class="form-control" multiple>
+                                        {% for laser in gtoflx %}
+                                            <option value="{{ laser.id }}">{{ laser.name }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-3">
+                                <div class="form-group">
+                                    <label>Stingray</label>
+                                    <select name="promo_stingray[]" id="promo_stingray"
+                                        class="form-control" multiple>
+                                        {% for laser in stingray %}
+                                            <option value="{{ laser.id }}">{{ laser.name }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-3">
+                                <div class="form-group">
+                                    <label>Holsters</label>
+                                    <select name="promo_holsters[]" id="promo_holsters"
+                                        class="form-control" multiple>
+                                        {% for item in holsters %}
+                                            <option value="{{ item.id }}">{{ item.name }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div> 
+                            
+                            <div class="col-sm-3">
+                                <div class="form-group">
+                                    <label>FLX</label>
+                                    <select name="promo_flx[]" id="promo_flx"
+                                        class="form-control" multiple>
+                                        {% for item in flx %}
+                                            <option value="{{ item.id }}">{{ item.name }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>   
+
+                            <div class="col-sm-3">
+                                <div class="form-group">
+                                    <label>Accessories</label>
+                                    <select name="promo_accessories[]" id="promo_accessories"
+                                        class="form-control" multiple>
+                                        {% for item in accessories %}
+                                            <option value="{{ item.id }}">{{ item.name }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div> 
+                            
+                            <div class="col-sm-3">
+                                <div class="form-group">
+                                    <label>Batteries</label>
+                                    <select name="promo_batteries[]" id="promo_batteries"
+                                        class="form-control" multiple>
+                                        {% for item in batteries %}
+                                            <option value="{{ item.id }}">{{ item.name }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>   
+        
+                            <div class="col-sm-3">
+                                <div class="form-group">
+                                    <label>Toolkits</label>
+                                    <select name="promo_toolkits[]" id="promo_toolkits"
+                                        class="form-control" multiple>
+                                        {% for item in toolkits %}
+                                            <option value="{{ item.id }}">{{ item.name }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div> 
+                        </div> 
+                    </div>
+
+                    <div class="row p3">
+                        <div class="col-sm-2">
+                            <button class="btn btn-primary" type="submit">Submit</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+      </div>
+    </div>
+</div>
+{% endblock %}
+
+
+{% block bottomjs %}
+<script>
+$(document).ready(function() {
+
+    $("#couponaddform").validate();
+
+    // show/hide toggle for products
+    $("#promo-choose-items").click(function() {
+        console.log('Clicked');
+        if ($("#promo-products-div").css('display') === 'none') {
+            $("#promo-products-div").show(500);
+            $(this).text('Hide items');
+        } else {
+            $("#promo-products-div").hide(250);
+            $(this).text('Add promotion items');
+        }
+    });
+
+
+
+    // $("#promotion_product_category").blur(function(){
+    //     var category = $(this).val();
+    //     console.log(category);
+
+    //     $.ajax({
+    //         url: '/admin/products/ajax-get-products',
+    //         type: 'POST',
+    //         data: { category: category },
+    //         success: function(data) {
+    //             // console.log(data);
+
+    //             // convert JSON string to JS object
+    //             var dataObj = JSON.parse(data);
+
+    //             // empty select
+    //             $("#promotion_products").empty();
+
+    //             // loop through Obj & append in HTML
+    //             $.each(dataObj, function( key, value ) {
+    //                 console.log(value.id + ': ' + value.name);
+
+    //                 $("#promotion_products").append('<option value='+ value.id +'>'+ value.name +'</option>');
+    //             });
+    //         },
+    //         error: function() {
+    //             alert("Ajax failure");
+    //         }
+    //     });
+    // });
+    
+
+});
+</script>
+{% endblock %}

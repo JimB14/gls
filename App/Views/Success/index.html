@@ -22,7 +22,7 @@
           <hr>
       </div>
 
-      <div class="col-md-8">
+      <div class="col-md-8" style="margin-bottom: 150px;">
 
           {% if logout == 'true' %}
             <h3 style="margin-top: 0px; margin-bottom: 375px;">
@@ -166,9 +166,19 @@
             <br><br><br><br>
           {% endif %}
 
+          {% if phone_purchase %}
+            <h3 style="margin-top: 0px">
+                The order for {{ first_name }} {{ last_name }} was successful.
+            </h3>
+            <h3>
+                The customer was sent an order summary by email.
+            </h3>
+            <br><br><br><br>
+          {% endif %}
+
       </div>
 
-      <div class="col-md-4">
+      <div class="col-md-4" style="margin-bottom: 150px;">
 
       </div><!-- // .col-md-4  -->
 

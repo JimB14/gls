@@ -21,7 +21,8 @@
 #form-create-ups-return-label,
 #modal-order-details-section,
 #issue-refund-section,
-#form-assign-serial-number {
+#form-assign-serial-number,
+#create-label-div {
     display: none;
 }
 #enter-serial-numbers a,
@@ -64,6 +65,15 @@ input[type="text"],
 input[type="number"] {
     background-color: #fff !important;
 } 
+#refund-form {
+    display: block;
+}
+.visible {
+    display: block;
+}
+.invisible {
+    display: none;
+}
 </style>
 {% endblock %}
 
@@ -95,6 +105,15 @@ input[type="number"] {
 
             <!-- - - - - - -  Order Processing & Management - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 
+            {% if order.order_status == 'payment-pending' %}
+                <div id="payment-pending">
+                    <h3>On receipt of payment:</h3>
+                    <a href="/admin/orders/change-status/pending/{{ order.id }}" class="btn btn-success">
+                        Change Order Status to Pending
+                    </a>
+                </div>
+            {% endif %}
+
             <div>
                 <h2>Order Processing &amp; Management</h2>
                <!-- Comments -->
@@ -105,6 +124,13 @@ input[type="number"] {
                         </a>
                     </li>
 
+                    <!-- Enter serial number(s)  -->
+                    <li role="presentation">
+                        <a href="#serial_number" aria-controls="serial_number" role="tab" data-toggle="tab">
+                            Enter Serial Number
+                        </a>
+                    </li>
+
                     <!-- Create shipping label -->
                     <li role="presentation">
                         <a href="#create_label" aria-controls="create_label" role="tab" data-toggle="tab">
@@ -112,13 +138,6 @@ input[type="number"] {
                         </a>
                     </li>
 
-                    <!-- Enter serial number(s)  -->
-                    <li role="presentation">
-                        <a href="#serial_number" aria-controls="serial_number"
-                            role="tab" data-toggle="tab" id="enter-serial-number-tab">
-                            Enter Serial Number
-                        </a>
-                    </li>
 
                     <!-- View/Download label -->
                     <li role="presentation">
@@ -188,10 +207,12 @@ input[type="number"] {
                 </ul>
             </div>
 
+
             <!-- = = = = = = = Tab panes  = = = = = = = = = = = = = = = = = = = = = = = -->
 
-            <!-- Comments -->
             <div class="tab-content" style="margin-bottom: 80px;">
+
+                <!-- Comments  -->
                 <div role="tabpanel" class="tab-pane active" id="comments">
                     <h3>Manage Comments</h3>
                     <!-- Button trigger modal -->
@@ -201,26 +222,244 @@ input[type="number"] {
                     </button>
                 </div>
 
+
+                <!-- Enter serial number  -->
+                <div role="tabpanel" class="tab-pane" id="serial_number">
+                        {% if order.order_status == 'pending' %}
+                            <!-- check if laser is in order -->
+                            {% if lasers != false %}
+                                <h3 id="show-enter-serial-form"><a>Enter serial {% if lasers|length > 1 %}numbers{% else %}number{% endif %}</a></h3>
+    
+                                {% if serialNumber %}
+                                    <h4>It appears that serial numbers are already assigned.</h4>
+                                    {% if order.order_status == 'label-created' %}
+                                        <h4>The order status is &quot;{{ order.order_status }}.&quot; It is ready to ship.</h4>
+                                        <h4>If you need to void the shipping label, go to &quot;Void Label&quot; tab.</h4>
+                                    {% endif %}
+                                    <h4>If this is an error, please contact the IT dept.</h4>
+                                {% else %}
+                                    <div id="form-assign-serial-number">
+                                        <h3>This order includes {{ lasers|length }} {% if lasers|length == 1 %}laser{% else %}lasers{% endif %}.</h3>
+                                        <form action="/admin/orders/assign-serial-number" method="post"
+                                            class="form-horizontal" id="assign-serial-number-form">
+                                            <!-- honeypot -->
+                                            <input type="hidden" name="honeypot" id="honeypot">
+                                            <input type="hidden" name="order_id" value="{{ order.id }}">
+                                            <input type="hidden" name="buyer_type" value="{{ customer.buyer_type }}">
+                                            <input type="hidden" name="customer_id" value="{{ customer.id }}">
+                                            <input type="hidden" name="customer_firstname" value="{{ customer.billing_firstname }}">
+                                            <input type="hidden" name="customer_lastname" value="{{ customer.billing_lastname }}">
+                                            <input type="hidden" name="customer_address" value="{{ customer.billing_address }}">
+                                            <input type="hidden" name="customer_city" value="{{ customer.billing_city }}">
+                                            <input type="hidden" name="customer_state" value="{{ customer.billing_state }}">
+                                            <input type="hidden" name="customer_zip" value="{{ customer.billing_zip }}">
+                                            <input type="hidden" name="customer_email" value="{{ customer.email }}">
+    
+                                            <div class="form-group">
+                                                <label for="first_name" class="col-sm-1 control-label">
+                                                    First name
+                                                </label>
+                                                <div class="col-sm-3">
+                                                    <input type="text" class="form-control required"
+                                                        name="first_name" id="first_name" value="{{ order.oshipfirstname }}" required>
+                                                </div>
+                                            </div>
+    
+                                            <div class="form-group">
+                                                <label for="last_name" class="col-sm-1 control-label">
+                                                    Last name
+                                                </label>
+                                                <div class="col-sm-3">
+                                                    <input type="text" class="form-control required"
+                                                        name="last_name" id="last_name" value="{{ order.oshiplastname }}" required>
+                                                </div>
+                                            </div>
+    
+                                            <div class="form-group">
+                                                <label for="address" class="col-sm-1 control-label">
+                                                    Address
+                                                </label>
+                                                <div class="col-sm-3">
+                                                    <input type=text class="form-control required"
+                                                        name="address" id="address" value="{{ order.oshipaddress }}" required>
+                                                </div>
+                                            </div>
+    
+                                            <div class="form-group">
+                                                <label for="city" class="col-sm-1 control-label">
+                                                    City
+                                                </label>
+                                                <div class="col-sm-3">
+                                                    <input type=text class="form-control required"
+                                                        name="city" id="city" value="{{ order.oshipcity }}" required>
+                                                </div>
+                                            </div>
+    
+                                            <div class="form-group">
+                                                <label for="state" class="col-sm-1 control-label">
+                                                    State
+                                                </label>
+                                                <div class="col-sm-3">
+                                                    <input type=text class="form-control required"
+                                                        name="state" id="state" value="{{ order.oshipstate }}" required>
+                                                </div>
+                                            </div>
+    
+                                            <div class="form-group">
+                                                <label for="zipcode" class="col-sm-1 control-label">
+                                                    Zip code
+                                                </label>
+                                                <div class="col-sm-3">
+                                                    <input type=text class="form-control required"
+                                                        name="zipcode" id="zipcode" value="{{ order.oshipzip }}" required>
+                                                </div>
+                                            </div>
+    
+                                            <div class="form-group">
+                                                <label for="dealer" class="col-sm-1 control-label">
+                                                    Seller
+                                                </label>
+                                                <div class="col-sm-3">
+                                                    <select class="form-control required" id="seller" name="seller">
+                                                        <option value="armalaser">ArmaLaser</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+    
+                                            <div class="form-group">
+                                                <label for="purchase_date" class="col-sm-1 control-label">
+                                                    Purchase date
+                                                </label>
+                                                <div class="col-sm-3">
+                                                    <input type="text" class="form-control required"
+                                                        name="purchase_date" value="{{ order.odate|date('Y-m-d') }}" required>
+                                                </div>
+                                            </div>
+    
+                                            <!-- display inputs based on number of lasers purchased -->
+                                            {% for laser in lasers %}
+                                                <div class="form-group">
+                                                    <label for="model" class="col-sm-1 control-label">
+                                                        <!-- resource: https://twig.symfony.com/doc/2.x/tags/for.html -->
+                                                        <!-- check loop iteration (starts at 0 index) & label laser number accordingly -->
+                                                        {% if lasers|length > 1 %}
+                                                            {% if loop.index0 == 0 %}
+                                                                Laser1
+                                                            {% elseif loop.index0 == 1 %}
+                                                                Laser2
+                                                            {% elseif loop.index0 == 2 %}
+                                                                Laser3
+                                                            {% elseif loop.index0 == 3 %}
+                                                                Laser4
+                                                            {% elseif loop.index0 == 4 %}
+                                                                Laser5
+                                                            {% elseif loop.index0 == 5 %}
+                                                                Laser6
+                                                            {% endif %}
+                                                        {% endif %}
+                                                        {% if lasers|length == 1 %}
+                                                            Laser
+                                                        {% endif %}
+                                                    </label>
+                                                    <div class="col-sm-3">
+                                                        <input type=text class="form-control required"
+                                                            name="lasers[]" value="{{ laser|slice(0,  -8) }}">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="model" class="col-sm-1 control-label">
+                                                        <!-- resource: https://twig.symfony.com/doc/2.x/tags/for.html -->
+                                                        <!-- check loop iteration (starts at 0 index) & label laser number accordingly -->
+                                                        {% if lasers|length > 1 %}
+                                                            {% if loop.index0 == 0 %}
+                                                                LaserID1
+                                                            {% elseif loop.index0 == 1 %}
+                                                                LaserID2
+                                                            {% elseif loop.index0 == 2 %}
+                                                                LaserID3
+                                                            {% elseif loop.index0 == 3 %}
+                                                                LaserID4
+                                                            {% elseif loop.index0 == 4 %}
+                                                                LaserID5
+                                                            {% elseif loop.index0 == 5 %}
+                                                                LaserID6
+                                                            {% endif %}
+                                                        {% endif %}
+                                                        {% if lasers|length == 1 %}
+                                                            LaserID
+                                                        {% endif %}
+                                                    </label>
+                                                    <div class="col-sm-3">
+                                                        <input type=text class="form-control required"
+                                                            name="laserids[]" value="{{ laser|slice(-4) }}"
+                                                            placeholder="Enter ID of the above laser">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="serial_numbers" class="col-sm-1 control-label" >
+                                                        {% if lasers|length > 1 %}
+                                                            {% if loop.index0 == 0 %}
+                                                                Serial1
+                                                            {% elseif loop.index0 == 1 %}
+                                                                Serial2
+                                                            {% elseif loop.index0 == 2 %}
+                                                                Serial3
+                                                            {% elseif loop.index0 == 3 %}
+                                                                Serial4
+                                                            {% elseif loop.index0 == 4 %}
+                                                                Serial5
+                                                            {% elseif loop.index0 == 5 %}
+                                                                Serial6
+                                                            {% endif %}
+                                                        {% endif %}
+                                                        {% if lasers|length == 1 %}
+                                                            Serial#
+                                                        {% endif %}
+                                                    </label>
+                                                    <div class="col-sm-3">
+                                                        <input type=text class="form-control required"
+                                                            name="serial_numbers[]" id="serial_numbers"
+                                                            placeholder="Enter serial number of the above laser" required>
+                                                    </div>
+                                                </div>
+                                            {% endfor %}
+    
+                                            <div class="form-group">
+                                                <label for="serial_numbers" class="col-sm-1 control-label">
+                                                    &nbsp;
+                                                </label>
+                                                <div class="col-sm-3" id="assign-serial-number-btn">
+                                                    <button type="submit" class="btn btn-buy btn-block">
+                                                        Assign serial number now
+                                                    </button>
+                                                    <help>*Please make sure all fields are filled before clicking button.</help>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-8">&nbsp;</div>
+                                        </form>
+                                    </div>
+                                {% endif %}
+                            {% else %}
+                                <h3>It appears that there are no lasers in this order.</h3>
+                            {% endif %}
+                        {% else %}
+                            <h3>Laser serial number(s) cannot be assigned to this order.</h3>
+                            <h4>The following error has occurred:</h4>
+                            <ul>
+                                <li>Incorrect order status</li>
+                            </ul>
+                            <h4>The order status must be &quot;shipped&quot; to assign serial numbers. The status of this order is &quot;{{ order.order_status }}.&quot;</h4>
+                            <br>
+                            <h4>Please create a shipping label before assigning serial numbers.</h4>
+                        {% endif %}
+                    </div>
+
+
                 <!-- Create label -->
                 <div role="tabpanel" class="tab-pane" id="create_label">
                     <!-- display if order status == pending (new order) -->
                     {% if order.order_status == 'pending' %}
-                        <h3>
-                            Create
-                            {% if order.oshipmethod|slice(0,3) == 'UPS' %}
-                                <span><img height="25" src="/assets/images/ups/logo_small.gif"></span> UPS
-                            {% else %}
-                                <span><img height="25" src="/assets/images/usps/logo.png"></span> USPS
-                            {% endif %}
-                            Shipping Label:
-                        </h3>
-                        <div style="margin-bottom: 80px;">
-                            <a class="btn btn-primary btn-lg" href="/admin/orders/label?id={{ order.id }}">
-                                Continue
-                            </a>
-                            <br><br>
-                            <hr>
-                        </div>
+                        {% include 'Admin/Armalaser/Show/order-details-create-shipping-label-section.html' %}
                     {% else %}
                         <h3>A label cannot be created for this order.</h3>
                         <h4>The following error has occurred:</h4>
@@ -245,8 +484,17 @@ input[type="number"] {
                                     &quot;View/Download Label&quot; tab and search
                                     for the label with the Tracking number of this order ({{ order.trackingcode }}).
                                 </h4>
+                                <br><br>
+                                <button id="create-another-label-btn" class="btn btn-primary">
+                                    Show Create Shipping Label
+                                </button>
+                                <div id="create-label-div">
+                                    {% include 'Admin/Armalaser/Show/order-details-create-shipping-label-section.html' %}
+                                </div>
                             {% endif %}
                         </h4>
+
+                       
                     {% endif %}
 
                 </div>
@@ -289,237 +537,6 @@ input[type="number"] {
                     {% endif %}
                 </div>
 
-
-                <!-- Enter serial number  -->
-                <div role="tabpanel" class="tab-pane" id="serial_number">
-                    {% if order.order_status == 'shipped' %}
-                        <!-- check if laser is in order -->
-                        {% if lasers != false %}
-                            <h3 id="show-enter-serial-form"><a>Enter serial {% if lasers|length > 1 %}numbers{% else %}number{% endif %}</a></h3>
-
-                            {% if serialNumber %}
-                                <h4>It appears that serial numbers are already assigned.</h4>
-                                {% if order.order_status == 'label-created' %}
-                                    <h4>The order status is &quot;{{ order.order_status }}.&quot; It is ready to ship.</h4>
-                                    <h4>If you need to void the shipping label, go to &quot;Void Label&quot; tab.</h4>
-                                {% endif %}
-                                <h4>If this is an error, please contact the IT dept.</h4>
-                            {% else %}
-                                <div id="form-assign-serial-number">
-                                    <h3>This order includes {{ lasers|length }} {% if lasers|length == 1 %}laser{% else %}lasers{% endif %}.</h3>
-                                    <form action="/admin/orders/assign-serial-number" method="post"
-                                        class="form-horizontal" id="assign-serial-number-form">
-                                        <!-- honeypot -->
-                                        <input type="hidden" name="honeypot" id="honeypot">
-                                        <input type="hidden" name="order_id" value="{{ order.id }}">
-                                        <input type="hidden" name="buyer_type" value="{{ customer.buyer_type }}">
-                                        <input type="hidden" name="customer_id" value="{{ customer.id }}">
-                                        <input type="hidden" name="customer_firstname" value="{{ customer.billing_firstname }}">
-                                        <input type="hidden" name="customer_lastname" value="{{ customer.billing_lastname }}">
-                                        <input type="hidden" name="customer_address" value="{{ customer.billing_address }}">
-                                        <input type="hidden" name="customer_city" value="{{ customer.billing_city }}">
-                                        <input type="hidden" name="customer_state" value="{{ customer.billing_state }}">
-                                        <input type="hidden" name="customer_zip" value="{{ customer.billing_zip }}">
-                                        <input type="hidden" name="customer_email" value="{{ customer.email }}">
-
-                                        <div class="form-group">
-                                            <label for="first_name" class="col-sm-1 control-label">
-                                                First name
-                                            </label>
-                                            <div class="col-sm-3">
-                                                <input type="text" class="form-control required"
-                                                    name="first_name" id="first_name" value="{{ order.oshipfirstname }}" required>
-                                            </div>
-                                        </div>
-
-                                        <div class="form-group">
-                                            <label for="last_name" class="col-sm-1 control-label">
-                                                Last name
-                                            </label>
-                                            <div class="col-sm-3">
-                                                <input type="text" class="form-control required"
-                                                    name="last_name" id="last_name" value="{{ order.oshiplastname }}" required>
-                                            </div>
-                                        </div>
-
-                                        <div class="form-group">
-                                            <label for="address" class="col-sm-1 control-label">
-                                                Address
-                                            </label>
-                                            <div class="col-sm-3">
-                                                <input type=text class="form-control required"
-                                                    name="address" id="address" value="{{ order.oshipaddress }}" required>
-                                            </div>
-                                        </div>
-
-                                        <div class="form-group">
-                                            <label for="city" class="col-sm-1 control-label">
-                                                City
-                                            </label>
-                                            <div class="col-sm-3">
-                                                <input type=text class="form-control required"
-                                                    name="city" id="city" value="{{ order.oshipcity }}" required>
-                                            </div>
-                                        </div>
-
-                                        <div class="form-group">
-                                            <label for="state" class="col-sm-1 control-label">
-                                                State
-                                            </label>
-                                            <div class="col-sm-3">
-                                                <input type=text class="form-control required"
-                                                    name="state" id="state" value="{{ order.oshipstate }}" required>
-                                            </div>
-                                        </div>
-
-                                        <div class="form-group">
-                                            <label for="zipcode" class="col-sm-1 control-label">
-                                                Zip code
-                                            </label>
-                                            <div class="col-sm-3">
-                                                <input type=text class="form-control required"
-                                                    name="zipcode" id="zipcode" value="{{ order.oshipzip }}" required>
-                                            </div>
-                                        </div>
-
-                                        <div class="form-group">
-                                            <label for="dealer" class="col-sm-1 control-label">
-                                                Seller
-                                            </label>
-                                            <div class="col-sm-3">
-                                                <select class="form-control required" id="seller" name="seller">
-                                                    <option value="armalaser">ArmaLaser</option>
-                                                </select>
-                                            </div>
-                                        </div>
-
-                                        <div class="form-group">
-                                            <label for="purchase_date" class="col-sm-1 control-label">
-                                                Purchase date
-                                            </label>
-                                            <div class="col-sm-3">
-                                                <input type="text" class="form-control required"
-                                                    name="purchase_date" value="{{ order.odate|date('Y-m-d') }}" required>
-                                            </div>
-                                        </div>
-
-                                        <!-- display inputs based on number of lasers purchased -->
-                                        {% for laser in lasers %}
-                                            <div class="form-group">
-                                                <label for="model" class="col-sm-1 control-label">
-                                                    <!-- resource: https://twig.symfony.com/doc/2.x/tags/for.html -->
-                                                    <!-- check loop iteration (starts at 0 index) & label laser number accordingly -->
-                                                    {% if lasers|length > 1 %}
-                                                        {% if loop.index0 == 0 %}
-                                                            Laser1
-                                                        {% elseif loop.index0 == 1 %}
-                                                            Laser2
-                                                        {% elseif loop.index0 == 2 %}
-                                                            Laser3
-                                                        {% elseif loop.index0 == 3 %}
-                                                            Laser4
-                                                        {% elseif loop.index0 == 4 %}
-                                                            Laser5
-                                                        {% elseif loop.index0 == 5 %}
-                                                            Laser6
-                                                        {% endif %}
-                                                    {% endif %}
-                                                    {% if lasers|length == 1 %}
-                                                        Laser
-                                                    {% endif %}
-                                                </label>
-                                                <div class="col-sm-3">
-                                                    <input type=text class="form-control required"
-                                                        name="lasers[]" value="{{ laser|slice(0,  -8) }}">
-                                                </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="model" class="col-sm-1 control-label">
-                                                    <!-- resource: https://twig.symfony.com/doc/2.x/tags/for.html -->
-                                                    <!-- check loop iteration (starts at 0 index) & label laser number accordingly -->
-                                                    {% if lasers|length > 1 %}
-                                                        {% if loop.index0 == 0 %}
-                                                            LaserID1
-                                                        {% elseif loop.index0 == 1 %}
-                                                            LaserID2
-                                                        {% elseif loop.index0 == 2 %}
-                                                            LaserID3
-                                                        {% elseif loop.index0 == 3 %}
-                                                            LaserID4
-                                                        {% elseif loop.index0 == 4 %}
-                                                            LaserID5
-                                                        {% elseif loop.index0 == 5 %}
-                                                            LaserID6
-                                                        {% endif %}
-                                                    {% endif %}
-                                                    {% if lasers|length == 1 %}
-                                                        LaserID
-                                                    {% endif %}
-                                                </label>
-                                                <div class="col-sm-3">
-                                                    <input type=text class="form-control required"
-                                                        name="laserids[]" value="{{ laser|slice(-4) }}"
-                                                        placeholder="Enter ID of the above laser">
-                                                </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="serial_numbers" class="col-sm-1 control-label" >
-                                                    {% if lasers|length > 1 %}
-                                                        {% if loop.index0 == 0 %}
-                                                            Serial1
-                                                        {% elseif loop.index0 == 1 %}
-                                                            Serial2
-                                                        {% elseif loop.index0 == 2 %}
-                                                            Serial3
-                                                        {% elseif loop.index0 == 3 %}
-                                                            Serial4
-                                                        {% elseif loop.index0 == 4 %}
-                                                            Serial5
-                                                        {% elseif loop.index0 == 5 %}
-                                                            Serial6
-                                                        {% endif %}
-                                                    {% endif %}
-                                                    {% if lasers|length == 1 %}
-                                                        Serial#
-                                                    {% endif %}
-                                                </label>
-                                                <div class="col-sm-3">
-                                                    <input type=text class="form-control required"
-                                                        name="serial_numbers[]" id="serial_numbers"
-                                                        placeholder="Enter serial number of the above laser" required>
-                                                </div>
-                                            </div>
-                                        {% endfor %}
-
-                                        <div class="form-group">
-                                            <label for="serial_numbers" class="col-sm-1 control-label">
-                                                &nbsp;
-                                            </label>
-                                            <div class="col-sm-3" id="assign-serial-number-btn">
-                                                <button type="submit" class="btn btn-buy btn-block">
-                                                    Assign serial number now
-                                                </button>
-                                                <help>*Please make sure all fields are filled before clicking button.</help>
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-8">&nbsp;</div>
-                                    </form>
-                                </div>
-                            {% endif %}
-                        {% else %}
-                            <h3>It appears that there are no lasers in this order.</h3>
-                        {% endif %}
-                    {% else %}
-                        <h3>Laser serial number(s) cannot be assigned to this order.</h3>
-                        <h4>The following error has occurred:</h4>
-                        <ul>
-                            <li>Incorrect order status</li>
-                        </ul>
-                        <h4>The order status must be &quot;shipped&quot; to assign serial numbers. The status of this order is &quot;{{ order.order_status }}.&quot;</h4>
-                        <br>
-                        <h4>Please create a shipping label before assigning serial numbers.</h4>
-                    {% endif %}
-                </div>
 
 
                 <!-- Void Label -->
@@ -971,62 +988,7 @@ input[type="number"] {
                 <div role="tabpanel" class="tab-pane" id="refund">
                     <!-- if order status = return-pending (UPS return label created) -->
                     {% if order.order_status == 'returned' and order.rma == 1 and order.refund_issued == 0 and session.access_level >= 2 %}
-                        <div style="margin-top: 30px; margin-bottom: 30px;">
-                            <h3 id="issue-refund-toggle"><a>Issue refund to customer<a></h3>
-                            <div id="issue-refund-section">
-                                <form class="form-horizontal" method="post" action="/admin/orders/order-returned">
-                                    <input type="hidden" name="id" value="{{ order.id }}">
-                                    <div class="form-group">
-                                        <label class="control-label col-sm-1">
-                                            Amount
-                                        </label>
-                                        <div class="col-sm-2">
-                                            <input type="number" id="return_amount" class="form-control" name="return_amount"
-                                                value="{{ order.orderamount - order.oshipcost }}" required>
-                                                <small>*Order total - shipping</small>
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="control-label col-sm-1">
-                                            PayPal ID
-                                        </label>
-                                        <div class="col-sm-2">
-                                            <input type="text" id="return_pnref" class="form-control" name="return_pnref"
-                                                value="{{ order.pnref }}" required>
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="control-label col-sm-1">
-                                            &nbsp;
-                                        </label>
-                                        <div class="col-sm-6">
-                                            <button id="issue-refund-btn" role="submit" class="btn btn-primary btn-lg">
-                                                Issue refund now
-                                            </button>
-                                            <br>
-                                            <help>
-                                                *Do <strong><i>not</i></strong> issue a refund unless returned product(s)
-                                                have been received and inspected, according to
-                                                ArmaLaser's return policy guidelines.
-                                                <br><br>
-                                                *Refund only the value of what was returned. For orders with multiple items,
-                                                make certain that the refund is equal to the item or items returned. Do
-                                                <strong><i>not</i></strong> refund the entire order if only part of the order is returned.
-                                                <br><br>
-                                                *A credit will be issued by PayPal against the
-                                                credit card used to make the purchase. Armalaser
-                                                does not store credit card information. All
-                                                website credit card transactions and processed
-                                                by PayPal.
-                                                <br><br>
-                                                *Upon completion, please add a new comment explaining why
-                                                the refund was issued.
-                                            </help>
-                                        </div>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
+                        {% include 'Admin/Armalaser/Show/order-details-refund-form.html' %}  
                     {% else %}
                         <h3>A refund cannot be issued.</h3>
                         <h4>One or more of the following errors has occurred:</h4>
@@ -1046,7 +1008,9 @@ input[type="number"] {
                                 but it appears that a refund was already issued.
                             </h4>
                         {% endif %}
-                    {% endif %}
+                        <h3 style="margin-bottom: 15px;">Special case refund:</h3>
+                        {% include 'Admin/Armalaser/Show/order-details-refund-form.html' %}
+                    {% endif %} 
                 </div>
 
 
@@ -1138,6 +1102,19 @@ $(document).ready(function(){
         $('html, body').animate({
             scrollTop: $("#issue-refund-btn").offset().top
         }, 2000);
+    });
+
+    // Toggle create shipping label section
+    var button = document.querySelector('#create-another-label-btn');
+    var div    = document.querySelector('#create-label-div');
+    button.addEventListener('click', function() {
+        if (div.style.display === 'block') {
+            div.style.display = 'none';
+            button.textContent = 'Show Create Shipping Label';
+        } else {
+            div.style.display = 'block';
+            button.textContent = 'Hide Create Shipping Label'
+        }
     });
 
 

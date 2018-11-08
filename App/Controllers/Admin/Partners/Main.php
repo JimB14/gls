@@ -17,6 +17,7 @@ use \App\Models\Battery;
 use \App\Models\Toolkit;
 use \App\Models\Accessory;
 use \App\Models\Flx;
+use \App\Models\Customer;
 use \App\Mail;
 
 
@@ -59,7 +60,7 @@ class Main extends \Core\Controller
         $id = ( isset($_REQUEST['id']) ) ? filter_var($_REQUEST['id'], FILTER_SANITIZE_STRING) : '';
 
         // get partner
-        $partner = Partner::getPartner($id);
+        $partner = Customer::getCustomer($id);
 
         // test
         // echo '<pre>';
@@ -76,10 +77,14 @@ class Main extends \Core\Controller
         // create array of years
         $years = range( $firstYear, $thisYear);
 
+        // create array for email opt-in
+        $boolArr = [1,2];
+
         View::renderTemplate('Admin/Partners/Show/account.html', [
-            'partner' => $partner,
-            'years'  => $years,
-            'states' => $states
+            'customer' => $partner,
+            'years'    => $years,
+            'states'   => $states,
+            'boolArr'  => $boolArr
         ]);
     }
 
@@ -98,7 +103,7 @@ class Main extends \Core\Controller
         $id = ( isset($_REQUEST['id'])  ) ? filter_var($_REQUEST['id'], FILTER_SANITIZE_STRING): '';
 
         // get buyer data
-        $customer = Partner::getPartner($id);
+        $customer = Customer::getCustomer($id);
 
         // test
         // echo '<pre>';
@@ -107,7 +112,7 @@ class Main extends \Core\Controller
         // exit();
 
         // get orders data
-        $orders = Order::getMyOrders($type='partner', $id);
+        $orders = Order::getMyOrders($id);
 
         // test
         // echo '<pre>';
@@ -215,6 +220,93 @@ class Main extends \Core\Controller
             'order_content' => $order_content,
             'order'         => $order
         ]);
+    }
+
+
+
+    /**
+     * Updates customer account in `customers`
+     *
+     * @return boolean
+     */
+    public function updateAccountAction()
+    {
+        // retrieve id from query string
+        $id = ( isset($_REQUEST['id'] ) ) ? filter_var($_REQUEST['id'], FILTER_SANITIZE_STRING): '';
+
+        // update partner account
+        $result = Customer::updateCustomer($id);
+
+        if($result)
+        {
+            echo '<script>alert("Successfully updated!")</script>';
+            echo '<script>window.location.href="/admin/partners/main/get-account?id='.$id.'"</script>';
+        }
+    }
+
+
+
+    /**
+     * Updates customer password in `customers`
+     *
+     * @return boolean
+     */
+    public function updatePasswordAction()
+    {
+        // retrieve id from query string
+        $id = ( isset($_REQUEST['id'] ) ) ? filter_var($_REQUEST['id'], FILTER_SANITIZE_STRING): '';
+
+        // retrieve form values
+        $password = ( isset($_REQUEST['new_password'])  ) ? filter_var($_REQUEST['new_password'], FILTER_SANITIZE_STRING) : '';
+        $confirm_password = ( isset($_REQUEST['confirm_password'])  ) ? filter_var($_REQUEST['confirm_password'], FILTER_SANITIZE_STRING) : '';
+
+        // test
+        // echo '<pre>';
+        // print_r($_REQUEST);
+        // echo '</pre>';
+        // echo $password . '<br>';
+        // echo $confirm_password . '<br>';
+        // exit();
+
+        // validation if JavaScript fails or is disabled
+        if($password == '' || $confirm_password == '')
+        {
+            $errorMessage = 'All fields required.';
+            View::renderTemplate('Error/index.html', [
+                'errorMessage' => $errorMessage
+            ]);
+           exit();
+        }
+
+        if(strlen($password) < 6 )
+        {
+            $errorMessage = 'Password must be at least 6 characters in length.';
+            View::renderTemplate('Error/index.html', [
+                'errorMessage' => $errorMessage
+            ]);
+            exit();
+        }
+
+        if($password != $confirm_password)
+        {
+            $errorMessage = 'Passwords do not match. Please check and try again.';
+            View::renderTemplate('Error/index.html', [
+                'errorMessage' => $errorMessage
+            ]);
+            exit();
+        }
+
+        // hash new password
+        $password = password_hash($password, PASSWORD_DEFAULT);
+
+        // update customer record
+        $result = Customer::updateAccountPassword($id, $password);
+
+        if ($result)
+        {
+            echo '<script>alert("Your Password was successfully changed.\n\n\You will now be logged out.\n\n\You can log back in with your new password.")</script>';
+            echo '<script>window.location.href="/admin/logout"</script>';
+        }
     }
 
 

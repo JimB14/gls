@@ -1,3 +1,19 @@
+<!-- - - Marketing Manager - - - - - - - - - - - - - - - - - - - - -->
+
+<li class="title" id="base-admin-marketing-title">
+    <span class="glyphicon glyphicon-tasks text-size130 m-leftminus20"></span>
+     &nbsp; Marketing
+</li>
+<div id="base-admin-coupons-section">
+    <li class="subtitle p0 btm-margin" id="base-admin-coupons-manage">
+        <a href="/admin/coupons/get-coupons">
+            Promotions
+        </a>
+    </li>
+</div>
+
+<!-- - - TR Series - - - - - - - - - - - - - - - - - - - - -->
+
 <li class="title" id="base-admin-tr-series-title">
     <span class="glyphicon glyphicon-star text-size130 m-leftminus20"></span>
      &nbsp; TR Series
@@ -175,14 +191,29 @@
      &nbsp; Customers
 </li>
 <div id="base-admin-customers-section">
-    <!-- <li class="subtitle" id="base-admin-customers-add">
-        <a href="/admin/customers/add-customer">
-            Add
+    <li class="subtitle p0 btm-margin" id="base-admin-customers-add">
+        <a href="/admin/customers/add">
+            Add new
         </a>
-    </li> -->
-    <li class="subtitle p0 btm-margin" id="base-admin-customers-manage">
-        <a href="/admin/customers/get-customers">
-            Manage
+    </li>
+    <li class="subtitle" id="base-admin-customers-all">
+        <a href="/admin/customers/get-customers-by-type?type=all">
+            All customers
+        </a>
+    </li>
+    <li class="subtitle" id="base-admin-customers-customers">
+        <a href="/admin/customers/get-customers-by-type?type=customer">
+            Customers
+        </a>
+    </li>
+    <li class="subtitle" id="base-admin-customers-dealers">
+        <a href="/admin/customers/get-customers-by-type?type=dealer">
+            Dealers
+        </a>
+    </li>
+    <li class="subtitle p0 btm-margin" id="base-admin-customers-partners">
+        <a href="/admin/customers/get-customers-by-type?type=partner">
+            Partners
         </a>
     </li>
 </div>
@@ -191,7 +222,7 @@
 
 <li class="title" id="base-admin-dealers-title">
     <span class="glyphicon glyphicon-bullhorn text-size130 m-leftminus20"></span>
-     &nbsp; Dealers
+     &nbsp; Dealers (website only)
 </li>
 <div id="base-admin-dealers-section">
     <li class="subtitle" id="base-admin-dealers-add">
@@ -208,7 +239,7 @@
 
 <!-- - - Partners - - - - - - - - - - - - - - - - - - - - -->
 
-<li class="title" id="base-admin-partners-title">
+<!-- <li class="title" id="base-admin-partners-title">
     <span class="glyphicon glyphicon-bullhorn text-size130 m-leftminus20"></span>
      &nbsp; Partners
 </li>
@@ -219,11 +250,11 @@
         </a>
     </li>
     <li class="subtitle p0 btm-margin" id="base-admin-partners-manage">
-        <a href="/admin/partners/get-partners">
+        <a href="/admin/customers/get-customers-by-type?type=partner">
             Manage
         </a>
     </li>
-</div>
+</div> -->
 
 <!-- - - Users - - - - - - - - - - - - - - - - - - - - - -->
 
@@ -275,9 +306,19 @@
      &nbsp; Orders
 </li>
 <div id="base-admin-orders-section">
+    <li class="subtitle p0" id="base-admin-orders-phone">
+        <a href="/admin/phone/order">
+            Phone order
+        </a>
+    </li>
     <li class="subtitle p0" id="base-admin-orders-all">
         <a href="/admin/orders/get-orders?status=all">
             All
+        </a>
+    </li>
+    <li class="subtitle p0" id="base-admin-orders-payment-pending">
+        <a href="/admin/orders/get-orders?status=payment-pending">
+            Payment pending
         </a>
     </li>
     <li class="subtitle p0" id="base-admin-orders-pending">

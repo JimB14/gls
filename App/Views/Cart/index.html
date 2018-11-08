@@ -37,15 +37,120 @@ Shopping Cart
 
 {% block bottomjs %}
 <script>
-$(document).ready(function(){
+$(function() {
 
 
-$("#new_price").blur(function(){
-    console.log('focus moved');
-    console.log(parseFloat($(this).val()).toFixed(2));
+    $("#new_price").blur(function(){
+        console.log('focus moved');
+        console.log(parseFloat($(this).val()).toFixed(2));
+        parseFloat($(this).val()).toFixed(2);
+    });
 
-    parseFloat($(this).val()).toFixed(2);
-});
+
+    /* - - - -   Phone order coupon application - - - - */
+    // get coupon detaiils
+    $("#cart_check_coupon_btn").click(function() {
+        console.log('Check coupon button clicked.');
+        var coupon = $("#cart_coupon").val();
+        var customer_id = $("#cart_customer_id").val();
+
+        console.log('Coupon: ', coupon);
+        console.log('Customer ID: ', customer_id);
+
+        // validation
+        if (coupon === '') {
+            alert("No code entered. Please try again.");
+            $("#phone_coupon").focus();
+            return false;
+        }
+
+        // alphanumeric only filter
+        if (!coupon.match('^[a-zA-Z0-9]*$')) {
+            alert("Invalid characters.");
+            $("#cart_coupon").val('');
+            $("#cart_coupon").focus();
+            return false;
+        } 
+
+        // redirect if not registered
+        if (customer_id === '') {
+            console.log("User not logged in.");
+
+            window.location.href = '/admin/customer/register?id=couponentered';
+            return false;
+        } 
+
+        $.ajax({
+            url: '/admin/phone/ajax-check-coupon',
+            type: 'POST',
+            data: { phone_coupon: coupon, customer_id: customer_id },
+            success: function(result) {
+                console.log('======');
+                console.log('Inside Ajax success property');
+                console.log('Success');
+                console.log('Returned data: [JSON]: ', result);
+
+                // parse returned JSON into JavaScript object
+                let res = $.parseJSON(result);  
+
+                // console.log('JavaScript object: ', res);  
+
+                // loop through JavaScript object and display in view
+                $.each(res, function (key, value) {
+                    console.log( key + ': ' + value);        
+
+                    if(res.status === false) {
+                        $("#coupon_data").show();
+                        $("#coupon_details").html(
+                            '<div class="alert alert-danger">' +
+                            '<p>' + res.reason + '</p>' +
+                            '</div>'
+                        );
+                    } else {
+                        $("#coupon_data").show();
+                        var html = '<div class="alert alert-success">' +
+                                '<h3 style="margin:0px; margin-bottom: -15px;">Promotion Details</h3>' +
+                                '<hr style="margin-bottom: 10px;">' +
+                                '<p>Name: ' + res.promo_name + '</p>' +
+                                '<p>Discount type: ' + res.discount_type + '</p>' +
+                                '<p style="margin-bottom: 15px;">Amount: ' + res.discount + '%</p>' +                              
+                                '<h4 style="margin-bottom: 15px;">Qualifying products: '+ (res.products ? res.products.length : 0) +'</h4>';
+
+                                if (res.products) {
+                                    for (var i =  0; i < res.products.length; i++) {
+                                        html += '<li style="margin-left:10px;">' + res.products[i].name + '</li>';
+                                    }
+                                } 
+
+                        html += '<div id="apply-discount-div">' +
+                                    '<form action="/admin/phone/apply-coupon" method="post">' +
+                                        '<div class="form-group p1">' +
+                                            '<input id="coupon_code" name="coupon_code" type="hidden">' +
+                                            '<input id="customer_id" name="customer_id" type="hidden" value="{{ session.user_id }}">' + /* customer.id */
+                                            '<br>' +
+                                            '<button id="apply_discount_btn" class="btn btn-default btn-primary" type="submit">' +
+                                            '    Apply coupon' +
+                                            '</button>' +
+                                        '</div>' +
+                                    '</form>' +
+                                '</div>' +
+                            '</div>';
+                        $("#coupon_details").html(html);
+                    }    
+                });
+
+                // set value in hidden input
+                $("#coupon_code").val(coupon);
+
+                // display div
+                $("#apply-discount-div").show();
+            },
+            // error with first ajax request
+            error: function() {
+                alert("Ajax error");
+            }    
+        });
+    });
 
 });
 </script>

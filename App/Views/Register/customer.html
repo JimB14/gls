@@ -36,6 +36,14 @@
             <div class="panel panel-default">
                 <div class="panel-body" style="padding:20px 32px;">
 
+                    {% if couponentered == true %}
+                        <div class="alert alert-warning">
+                            <span style="font-size: 18px;">
+                                To use a coupon, please fill in the information below.
+                            </span>
+                        </div>  
+                    {% endif %}
+
                     <h4 style="color: #838383;">
                         Please provide the following information to create
                         your account.
@@ -125,8 +133,6 @@
                                     </div>
                                 </div>
                           </div>
-
-                          <hr>
 
                           <div class="form-group has-feedback">
                               <button id="registerBtn" type="submit" class="btn btn-lg btn-buy btn-block">

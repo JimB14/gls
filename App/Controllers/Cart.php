@@ -21,6 +21,7 @@ use \App\Models\Ups;
 use \App\Models\Order;
 use \App\Models\Dealer;
 use \App\Models\Partner;
+use \App\Models\Coupon;
 use \App\Config;
 use \App\Mail;
 use \Core\View;
@@ -68,14 +69,14 @@ class Cart extends \Core\Controller
      *
      * @return View         the show battery page
      */
-    public function addToCart()
+    public function addToCartAction()
     {
         // test
-        // echo 'Connected to AddToCart() method in Cart controller';
-        // echo '<pre>';
-        // print_r($_SERVER);
-        // echo '</pre>';
-        // exit();
+            // echo 'Connected to AddToCart() method in Cart controller';
+            // echo '<pre>';
+            // print_r($_SERVER);
+            // echo '</pre>';
+            // exit();
 
         // store referer URL in variable
         $refererURL = $_SERVER['HTTP_REFERER'];
@@ -88,13 +89,13 @@ class Cart extends \Core\Controller
         // $tableName = ucfirst($this->route_params['laserSeries']);
 
         // test
-        // echo $refererURL . '<br>';
-        // echo 'Model: ' . $mvc_model . '<br>';
-        // echo $id . '<br>';
-        // echo $pistolMfr . '<br>';
-        // echo $trseries_model . '<br>';
-        // echo $_SESSION['cart_count'] . '<br>';
-        // exit();
+            // echo $refererURL . '<br>';
+            // echo 'Model: ' . $mvc_model . '<br>';
+            // echo $id . '<br>';
+            // echo $pistolMfr . '<br>';
+            // echo $trseries_model . '<br>';
+            // echo $_SESSION['cart_count'] . '<br>';
+            // exit();
 
         // determine query by value of $mvc_model
         switch ($mvc_model) {
@@ -127,11 +128,11 @@ class Cart extends \Core\Controller
         }
 
         // test
-        // echo "Data from query";
-        // echo '<pre>';
-        // print_r($this->item);
-        // echo '</pre>';
-        // exit();
+            // echo "Data from query";
+            // echo '<pre>';
+            // print_r($this->item);
+            // echo '</pre>';
+            // exit();
 
         // set starting quanity value
         $quantity = 1;
@@ -260,32 +261,32 @@ class Cart extends \Core\Controller
         }
 
         // test
-        // echo 'newitem array';
-        // echo '<pre>';
-        // print_r($this->newItem);
-        // echo '</pre>';
-        // exit();
+            // echo 'newitem array';
+            // echo '<pre>';
+            // print_r($this->newItem);
+            // echo '</pre>';
+            // exit();
 
         // add new item to SESSION cart
         $_SESSION['cart'][$this->item->id] = $this->newItem;
 
         // test
-        // echo 'SESSION cart array.';
-        // echo '<pre>';
-        // print_r($_SESSION['cart']);
-        // echo '</pre>';
-        // exit();
+            // echo 'SESSION cart array.';
+            // echo '<pre>';
+            // print_r($_SESSION['cart']);
+            // echo '</pre>';
+            // exit();
 
         // get count (best to use TWIG for count, e.g. {{ session.cart|length }})
         $_SESSION['cart_count'] = count($_SESSION['cart']);
 
         // test
-        // echo 'Cart count: ' . $_SESSION['cart_count'] . '<br>';
-        // echo 'SESSION array.';
-        // echo '<pre>';
-        // print_r($_SESSION);
-        // echo '</pre>';
-        // exit();
+            // echo 'Cart count: ' . $_SESSION['cart_count'] . '<br>';
+            // echo 'SESSION array.';
+            // echo '<pre>';
+            // print_r($_SESSION);
+            // echo '</pre>';
+            // exit();
 
         // add query string to referer URL
         $refererURL = $refererURL . '?id=itemadded';
@@ -303,24 +304,28 @@ class Cart extends \Core\Controller
      *
      * @return View
      */
-    public function viewCart()
+    public function viewCartAction()
     {
         // test
-        // echo 'SESSION cart array:';
-        // echo '<pre>';
-        // print_r($_SESSION['cart']);
-        // echo '</pre>';
-        // exit();
+            // echo 'SESSION cart array:';
+            // echo '<pre>';
+            // print_r($_SESSION['cart']);
+            // echo '</pre>';
+            // exit();
 
         // get cart meta data
         $cartMetaData = $this->getCartMetaData();
 
+        // update session cart total
+        $_SESSION['cart_total'] = $this->getCartTotal();
+
+
         // test
-        // echo 'Cart meta data: ';
-        // echo '<pre>';
-        // print_r($cartMetaData);
-        // echo '</pre>';
-        // exit();
+            // echo 'Cart meta data: ';
+            // echo '<pre>';
+            // print_r($cartMetaData);
+            // echo '</pre>';
+            // exit();
 
         View::renderTemplate('Cart/index.html', [
             'cartContent'  => $_SESSION['cart'],
@@ -338,55 +343,38 @@ class Cart extends \Core\Controller
      *
      * @return View
      */
-    public function viewAdminCart()
+    public function viewAdminCartAction()
     {
         // get query string data
         $id = (isset($_REQUEST['id']) ? filter_var($_REQUEST['id'], FILTER_SANITIZE_NUMBER_INT) : '');
         $type = (isset($_REQUEST['type']) ? filter_var($_REQUEST['type'], FILTER_SANITIZE_STRING) : '');
 
-        // get customer data by type
-        switch($type)
-        {
-            CASE 'customer':
-                $customer = Customer::getCustomer($id);
-                break;
-            CASE 'caller':
-                $customer = Caller::getCaller($id);
-                break;
-            CASE 'guest':
-                $customer = Guest::getGuest($id);
-                break;
-            CASE 'dealer':
-                $customer = Dealer::getDealer($id);
-                break;
-            CASE 'partner':
-                $customer = Partner::getPartner($id);
-                break;
-        }
+        // get customer info
+        $customer = $this->getCustomerData($id, $type);
 
         // test
-        // echo 'SESSION cart array:';
-        // echo '<pre>';
-        // print_r($_SESSION['cart']);
-        // echo '</pre>';
-        // exit();
+            // echo 'SESSION cart array:';
+            // echo '<pre>';
+            // print_r($_SESSION['cart']);
+            // echo '</pre>';
+            // exit();
 
         // test
-        // echo 'Customer:';
-        // echo '<pre>';
-        // print_r($customer);
-        // echo '</pre>';
-        // exit();
+            // echo 'Customer:';
+            // echo '<pre>';
+            // print_r($customer);
+            // echo '</pre>';
+            // exit();
 
         // get cart meta data
         $cartMetaData = $this->getCartMetaData();
 
         // test
-        // echo 'Cart meta data: ';
-        // echo '<pre>';
-        // print_r($cartMetaData);
-        // echo '</pre>';
-        // exit();
+            // echo 'Cart meta data: ';
+            // echo '<pre>';
+            // print_r($cartMetaData);
+            // echo '</pre>';
+            // exit();
 
         View::renderTemplate('Cart/index.html', [
             'cartContent'  => $_SESSION['cart'],
@@ -404,27 +392,25 @@ class Cart extends \Core\Controller
      *
      * @return View
      */
-    public function updateQuantity()
+    public function updateQuantityAction()
     {
         // retrieve form data
         $newQty = (isset($_REQUEST['new_quantity']) ? filter_var($_REQUEST['new_quantity'], FILTER_SANITIZE_NUMBER_INT) : '');
         $id = (isset($_REQUEST['id']) ? filter_var($_REQUEST['id'], FILTER_SANITIZE_NUMBER_INT) : '');
-        $series = (isset($_REQUEST['series']) ? filter_var($_REQUEST['series'], FILTER_SANITIZE_STRING) : '');
-        $model = (isset($_REQUEST['model']) ? filter_var($_REQUEST['model'], FILTER_SANITIZE_STRING) : '');
+        $customer_id = (isset($_REQUEST['customer_id']) ? filter_var($_REQUEST['customer_id'], FILTER_SANITIZE_STRING) : '');
+        $type = (isset($_REQUEST['type']) ? filter_var($_REQUEST['type'], FILTER_SANITIZE_STRING) : '');
+
 
         // test
-        // echo '<h4>Quantity change:</h4>';
-        // echo '<pre>';
-        // print_r($_REQUEST);
-        // echo '</pre>';
-        // exit();
-
-        // test
-        // echo '<h4>SESSION cart array before change.</h4>';
-        // echo '<pre>';
-        // print_r($_SESSION['cart']);
-        // echo '</pre>';
-        // exit();
+            // echo '<h4>Quantity change:</h4>';
+            // echo '<pre>';
+            // print_r($_REQUEST);
+            // echo '</pre>';
+            // echo '<h4>SESSION cart array before change.</h4>';
+            // echo '<pre>';
+            // print_r($_SESSION['cart']);
+            // echo '</pre>';
+            // exit();
 
         // loop thru array to find item being updated
         foreach($_SESSION['cart'] as $item)
@@ -436,29 +422,40 @@ class Cart extends \Core\Controller
         }
 
         // test
-        // echo '<h4>Updated SESSION cart array.</h4>';
-        // echo '<pre>';
-        // print_r($_SESSION['cart']);
-        // echo '</pre>';
-        // exit();
+            // echo '<h4>Updated SESSION cart array.</h4>';
+            // echo '<pre>';
+            // print_r($_SESSION['cart']);
+            // echo '</pre>';
+            // exit();
 
         // get updated cart meta data
         $cartMetaData = $this->getCartMetaData();
 
-        // test
-        // echo '<h4>Updated cart meta data: </h4>';
-        // echo '<pre>';
-        // print_r($cartMetaData);
-        // echo '</pre>';
-        // exit();
+        // get cart total
+        $_SESSION['cart_total'] = $this->getCartTotal();
 
-        // render view
-        View::renderTemplate('Cart/index.html', [
-            'cartContent'  => $_SESSION['cart'],
-            'cartMetaData' => $cartMetaData,
-            'page_title'   => 'Shopping Cart',
-            'checkout_btn' => 'show'
-        ]);
+        // test
+            // echo '<h4>Updated cart meta data: </h4>';
+            // echo '<pre>';
+            // print_r($cartMetaData);
+            // echo '</pre>';
+            // exit();
+
+        // internal phone order quantity update
+        if ($customer_id != '' && $type != '')
+        {
+            header("Location: /cart/checkout-admin?id=$customer_id&type=$type");
+            exit();
+        }
+        else
+        {
+            View::renderTemplate('Cart/index.html', [
+                'cartContent'  => $_SESSION['cart'],
+                'cartMetaData' => $cartMetaData,
+                'page_title'   => 'Shopping Cart',
+                'checkout_btn' => 'show'
+            ]);
+        }
     }
 
 
@@ -468,54 +465,37 @@ class Cart extends \Core\Controller
      *
      * @return View
      */
-    public function updateUnitPrice()
+    public function updateUnitPriceAction()
     {
         // retrieve form data
-        $newPrice = (isset($_REQUEST['new_price']) ? filter_var($_REQUEST['new_price']) : ''); 
+        $newPrice = (isset($_REQUEST['new_price']) ? filter_var($_REQUEST['new_price']) : '');
         $id = (isset($_REQUEST['id']) ? filter_var($_REQUEST['id'], FILTER_SANITIZE_NUMBER_INT) : '');
 
-        $customerid = (isset($_REQUEST['customer_id']) ? filter_var($_REQUEST['customer_id'], FILTER_SANITIZE_NUMBER_INT) : ''); 
-        $type = (isset($_REQUEST['customer_type']) ? filter_var($_REQUEST['customer_type'], FILTER_SANITIZE_STRING) : '');  
+        $customerid = (isset($_REQUEST['customer_id']) ? filter_var($_REQUEST['customer_id'], FILTER_SANITIZE_NUMBER_INT) : '');
+        $type = (isset($_REQUEST['customer_type']) ? filter_var($_REQUEST['customer_type'], FILTER_SANITIZE_STRING) : '');
 
         // format price
         $newPrice = number_format($newPrice, 2, '.', '');
 
-        // get customer data by type
-        switch($type)
-        {
-            CASE 'customer':
-                $customer = Customer::getCustomer($customerid);
-                break;
-            CASE 'caller':
-                $customer = Caller::getCaller($customerid);
-                break;
-            CASE 'guest':
-                $customer = Guest::getGuest($customerid);
-                break;
-            CASE 'dealer':
-                $customer = Dealer::getDealer($customerid);
-                break;
-            CASE 'partner':
-                $customer = Partner::getPartner($customerid);
-                break;
-        }
+        // get customer info
+        $customer = $this->getCustomerData($customerid, $type);
 
         // test
-        // echo '<h4>Price change:</h4>';
-        // echo '<pre>';
-        // print_r($_REQUEST);
-        // echo '</pre>';
-        // echo $newPrice . '<br>';
-        // echo $customerid . '<br>';
-        // echo $type . '<br>';
-        // exit();
+            // echo '<h4>Price change:</h4>';
+            // echo '<pre>';
+            // print_r($_REQUEST);
+            // echo '</pre>';
+            // echo $newPrice . '<br>';
+            // echo $customerid . '<br>';
+            // echo $type . '<br>';
+            // exit();
 
         // test
-        // echo '<h4>SESSION cart array before change.</h4>';
-        // echo '<pre>';
-        // print_r($_SESSION['cart']);
-        // echo '</pre>';
-        // exit();
+            // echo '<h4>SESSION cart array before change.</h4>';
+            // echo '<pre>';
+            // print_r($_SESSION['cart']);
+            // echo '</pre>';
+            // exit();
 
         // loop thru array to find item being updated
         foreach($_SESSION['cart'] as $item)
@@ -527,28 +507,28 @@ class Cart extends \Core\Controller
         }
 
         // test
-        // echo '<h4>Updated SESSION cart array.</h4>';
-        // echo '<pre>';
-        // print_r($_SESSION['cart']);
-        // echo '</pre>';
-        // exit();
+            // echo '<h4>Updated SESSION cart array.</h4>';
+            // echo '<pre>';
+            // print_r($_SESSION['cart']);
+            // echo '</pre>';
+            // exit();
 
         // get updated cart meta data
         $cartMetaData = $this->getCartMetaData();
 
         // test
-        // echo '<h4>Updated cart meta data: </h4>';
-        // echo '<pre>';
-        // print_r($cartMetaData);
-        // echo '</pre>';
-        // exit();
+            // echo '<h4>Updated cart meta data: </h4>';
+            // echo '<pre>';
+            // print_r($cartMetaData);
+            // echo '</pre>';
+            // exit();
 
         // test
-        // echo '<h4>Customer: </h4>';
-        // echo '<pre>';
-        // print_r($customer);
-        // echo '</pre>';
-        // exit();
+            // echo '<h4>Customer: </h4>';
+            // echo '<pre>';
+            // print_r($customer);
+            // echo '</pre>';
+            // exit();
 
         // render view
         View::renderTemplate('Cart/index.html', [
@@ -568,8 +548,10 @@ class Cart extends \Core\Controller
      *
      * @return [type] [description]
      */
-    public function deleteItem()
+    public function deleteItemAction()
     {
+        $refererURL = $_SERVER['HTTP_REFERER'];
+
         // retrieve form data
         $id = (isset($_REQUEST['id']) ? filter_var($_REQUEST['id'], FILTER_SANITIZE_NUMBER_INT) : '');
 
@@ -586,9 +568,20 @@ class Cart extends \Core\Controller
             unset($_SESSION['ids'][$pos]);
         }
 
-        // view updated cart
-        header('Location: /cart/view/shopping-cart');
-        exit();
+         // unset SESSION variables if cart empty
+         if(empty($_SESSION['cart']))
+         {
+             unset($_SESSION['total_discount']);
+             unset($_SESSION['promo_id']);
+             unset($_SESSION['promo_name']);
+         }
+
+         // update session cart total
+         $_SESSION['cart_total'] = $this->getCartTotal();
+
+         // view updated cart
+         header("Location: $refererURL");
+         exit();
     }
 
 
@@ -600,122 +593,58 @@ class Cart extends \Core\Controller
      *
      * @return View
      */
-    public function checkoutOptions()
+    public function checkoutOptionsAction()
     {
+        $btnId = (isset($_REQUEST['id'])) ? filter_var($_REQUEST['id'], FILTER_SANITIZE_STRING) : '';
+
         // get cart meta data (pretax total & number of items)
         $cartMetaData = $this->getCartMetaData();
 
         // test
-        // echo '<h4>Cart:</h4>';
-        // echo '<pre>';
-        // print_r($_SESSION['cart']);
-        // echo '</pre>';
-        // echo '<h4>Cart meta data:</h4>';
-        // echo '<pre>';
-        // print_r($cartMetaData);
-        // echo '</pre>';
-        // exit();
+            // echo '<h4>Cart:</h4>';
+            // echo '<pre>';
+            // print_r($_SESSION['cart']);
+            // echo '</pre>';
+            // echo '<h4>Cart meta data:</h4>';
+            // echo '<pre>';
+            // print_r($cartMetaData);
+            // echo '</pre>';
+            // exit();
 
         // cart has content
         if ($_SESSION['cart_count'] > 0)
         {
-            // Admin user entering telephone order
-            if (isset($_SESSION['user_id']) && $_SESSION['access_level'] == 4)
-            {
-                // checkout options page
-                View::renderTemplate('Cart/checkout-options.html', [
-                    'cartContent'    => $_SESSION['cart'],
-                    'cartMetaData'   => $cartMetaData,
-                    'page_title'     => 'Checkout',
-                    'checkoutguest'  => 'true'
-                ]);
-                exit();
-            }
+            // = = = = = = = logged in user (customer, dealer, partner)  = = = = = = = = = //
 
-            // = = = = = = = logged in Dealer  = = = = = = = = = //
-
-            if (isset($_SESSION['user_id']) && $_SESSION['userType'] == 'dealer')
+            if (isset($_SESSION['userType']) && ($_SESSION['userType'] == 'dealer'
+                || $_SESSION['userType'] == 'partner' || $_SESSION['userType'] == 'customer'))
             {
 
-                // get dealer data
-                $dealer = Dealer::getDealer($_SESSION['user_id']);
-
-                // test
-                // echo '<h4>Dealer data:</h4>';
-                // echo '<pre>';
-                // print_r($dealer);
-                // echo '</pre>';
-                // exit();
-
-                // get states
-                $states = State::getStates();
-
-                // checkout options page
-                View::renderTemplate('Cart/checkout-dealer.html', [
-                    'customer'       => $dealer,
-                    'states'         => $states,
-                    'cartContent'    => $_SESSION['cart'],
-                    'cartMetaData'   => $cartMetaData,
-                    'page_title'     => 'Checkout - Dealer',
-                    'checkoutdealer' => 'true'
-                ]);
-                exit();
-            }
-
-
-            // = = = =  logged in Partner = = = = = = = = //
-
-            if (isset($_SESSION['user_id']) && $_SESSION['userType'] == 'partner')
-            {
-
-                // get partner data
-                $partner = Partner::getPartner($_SESSION['user_id']);
-
-                // test
-                // echo '<h4>Partner data:</h4>';
-                // echo '<pre>';
-                // print_r($partner);
-                // echo '</pre>';
-                // exit();
-
-                // get states
-                $states = State::getStates();
-
-                // checkout options page
-                View::renderTemplate('Cart/checkout-partner.html', [
-                    'customer'        => $partner,
-                    'states'          => $states,
-                    'cartContent'     => $_SESSION['cart'],
-                    'cartMetaData'    => $cartMetaData,
-                    'page_title'      => 'Checkout - Dealer',
-                    'checkoutpartner' => 'true'
-                ]);
-                exit();
-            }
-
-
-            // = = = =  logged in Customer  = = = = = = = = = //
-
-            if (isset($_SESSION['user_id']))
-            {
                 // get customer data
                 $customer = Customer::getCustomer($_SESSION['user_id']);
 
+                // test
+                    // echo '<h4>Customer data:</h4>';
+                    // echo '<pre>';
+                    // print_r($customer);
+                    // echo '</pre>';
+                    // exit();
+
                 // get states
                 $states = State::getStates();
 
-                // checkout page
-                View::renderTemplate('Cart/checkout.html', [
-                    'customer'     => $customer,
-                    'states'       => $states,
-                    'cartContent'  => $_SESSION['cart'],
-                    'cartMetaData' => $cartMetaData,
-                    'page_title'   => 'Checkout',
-                    'checkout'     => 'true'
+                // checkout options page
+                View::renderTemplate('Cart/checkout-'.$customer->type.'.html', [
+                    'page_title'     => 'Checkout - ' . ucwords($_SESSION['userType']),
+                    'customer'       => $customer,
+                    'states'         => $states,
+                    'cartContent'    => $_SESSION['cart'],
+                    'cartMetaData'   => $cartMetaData,
+                    'nobutton'       => true
                 ]);
+                exit();
             }
-
-            // = = = = not logged in user  = = = = = = = = = //
+            // = = = = Guest - not logged in user  = = = = = = = = = //
             else
             {
                 // checkout options page
@@ -723,7 +652,8 @@ class Cart extends \Core\Controller
                     'cartContent'    => $_SESSION['cart'],
                     'cartMetaData'   => $cartMetaData,
                     'page_title'     => 'Checkout',
-                    'checkoutguest'  => 'true'
+                    'checkoutguest'  => 'true',
+                    'nobutton'       => true
                 ]);
             }
         }
@@ -743,8 +673,10 @@ class Cart extends \Core\Controller
      *
      * @return View
      */
-    public function guestCheckout()
+    public function guestCheckoutAction()
     {
+        $nobutton = (isset($_REQUEST['id'])) ? filter_var($_REQUEST['id'], FILTER_SANITIZE_STRING) : '';
+
         // cart has content
         if ($_SESSION['cart'])
         {
@@ -755,12 +687,13 @@ class Cart extends \Core\Controller
             $states = State::getStates();
 
             // checkout page (for guest)
-            View::renderTemplate('Cart/checkout.html', [
+            View::renderTemplate('Cart/checkout-guest.html', [
                 'states'        => $states,
                 'cartContent'   => $_SESSION['cart'],
                 'cartMetaData'  => $cartMetaData,
                 'page_title'    => 'Guest Checkout',
-                'checkoutguest' => 'true'
+                'checkoutguest' => 'true',
+                'nobutton'      => true
             ]);
         }
         // cart empty
@@ -779,32 +712,32 @@ class Cart extends \Core\Controller
      *
      * @return View
      */
-    public function internalCheckout()
-    {
-        // cart has content
-        if ($_SESSION['cart'])
-        {
-            // get cart meta data
-            $cartMetaData= $this->getCartMetaData();
+    // public function internalCheckout()
+    // {
+    //     // cart has content
+    //     if ($_SESSION['cart'])
+    //     {
+    //         // get cart meta data
+    //         $cartMetaData= $this->getCartMetaData();
 
-            // get states
-            $states = State::getStates();
+    //         // get states
+    //         $states = State::getStates();
 
-            // checkout page (for guest)
-            View::renderTemplate('Cart/checkout.html', [
-                'states'        => $states,
-                'cartContent'   => $_SESSION['cart'],
-                'cartMetaData'  => $cartMetaData,
-                'page_title'    => 'Telephone Order Checkout'
-            ]);
-        }
-        // cart empty
-        else
-        {
-            header("Location: /cart/view/shopping-cart");
-            exit();
-        }
-    }
+    //         // checkout page (for guest)
+    //         View::renderTemplate('Cart/checkout.html', [
+    //             'states'        => $states,
+    //             'cartContent'   => $_SESSION['cart'],
+    //             'cartMetaData'  => $cartMetaData,
+    //             'page_title'    => 'Telephone Order Checkout'
+    //         ]);
+    //     }
+    //     // cart empty
+    //     else
+    //     {
+    //         header("Location: /cart/view/shopping-cart");
+    //         exit();
+    //     }
+    // }
 
 
 
@@ -815,7 +748,7 @@ class Cart extends \Core\Controller
      *
      * @return  View   The cart content and cart metadata
      */
-    public function checkoutCalculate()
+    public function checkoutCalculateAction()
     {
         // echo "Connected to checkoutCaluculate()!"; exit();
 
@@ -842,6 +775,7 @@ class Cart extends \Core\Controller
         $shipping_zip = (isset($_REQUEST['shipping_zip'])) ? filter_var($_REQUEST['shipping_zip'], FILTER_SANITIZE_STRING) : '';
 
         $shipping_method = (isset($_REQUEST['shipping_method'])) ? filter_var($_REQUEST['shipping_method'], FILTER_SANITIZE_STRING) : '';
+        $addresstype = (isset($_REQUEST['addresstype'])) ? filter_var($_REQUEST['addresstype'], FILTER_SANITIZE_STRING) : '';
         $shipping_instructions = (isset($_REQUEST['shipping_instructions'])) ? filter_var($_REQUEST['shipping_instructions'], FILTER_SANITIZE_STRING) : '';
 
         // shipping cost from hidden fields
@@ -861,12 +795,12 @@ class Cart extends \Core\Controller
         $upsSecondDayAirTrackingNumber = (isset($_REQUEST['ups_second_day_air_tracking_number'])) ? $_REQUEST['ups_second_day_air_tracking_number'] : '';
 
         // test - display form data
-        // echo 'Shipping method: ' . $shipping_method . '<br>';
-        // echo '<h4>REQUEST array form data:</h4>';
-        // echo '<pre>';
-        // print_r($_REQUEST);
-        // echo '</pre>';
-        // exit();
+            // echo 'Shipping method: ' . $shipping_method . '<br>';
+            // echo '<h4>REQUEST array form data:</h4>';
+            // echo '<pre>';
+            // print_r($_REQUEST);
+            // echo '</pre>';
+            // exit();
 
         // store UPS shipment digests in array
         $shipDigestsArray = [
@@ -876,11 +810,11 @@ class Cart extends \Core\Controller
         ];
 
         // test - display $shipDigestArray
-        // echo '<h4>shipDigestArray:</h4>';
-        // echo '<pre>';
-        // print_r($shipDigestArray);
-        // echo '</pre>';
-        // exit();
+            // echo '<h4>shipDigestArray:</h4>';
+            // echo '<pre>';
+            // print_r($shipDigestArray);
+            // echo '</pre>';
+            // exit();
 
         // identify which UPS service was selected & store shipmentDigest
         if (!empty($shipDigestsArray))
@@ -982,34 +916,34 @@ class Cart extends \Core\Controller
         }
 
         // test - review collected data
-        // echo '<h4>Review collected data:</h4>';
-        // echo 'Shipping method: ' . $shipping_method . '<br>';
-        // echo 'Shipping cost: ' . $shipping_cost . '<br>';
-        // echo '<pre>';
-        // print_r($_REQUEST);
-        // echo '</pre>';
-        // echo $billing_firstname . '<br>';
-        // echo $billing_lastname . '<br>';
-        // echo $billing_company . '<br>';
-        // echo $billing_phone . '<br>';
-        // echo $billing_address . '<br>';
-        // echo $billing_address2 . '<br>';
-        // echo $billing_city . '<br>';
-        // echo $billing_state . '<br>';
-        // echo $billing_zip . '<br>';
-        // echo $email . '<br>';
-        // echo  '==================<br>';
-        // echo $shipping_firstname . '<br>';
-        // echo $shipping_lastname . '<br>';
-        // echo $shipping_company . '<br>';
-        // echo $shipping_phone . '<br>';
-        // echo $shipping_address . '<br>';
-        // echo $shipping_address2 . '<br>';
-        // echo $shipping_city . '<br>';
-        // echo $shipping_state . '<br>';
-        // echo $shipping_zip . '<br>';
-        // echo $shipping_method . '<br>';
-        // exit();
+            // echo '<h4>Review collected data:</h4>';
+            // echo 'Shipping method: ' . $shipping_method . '<br>';
+            // echo 'Shipping cost: ' . $shipping_cost . '<br>';
+            // echo '<pre>';
+            // print_r($_REQUEST);
+            // echo '</pre>';
+            // echo $billing_firstname . '<br>';
+            // echo $billing_lastname . '<br>';
+            // echo $billing_company . '<br>';
+            // echo $billing_phone . '<br>';
+            // echo $billing_address . '<br>';
+            // echo $billing_address2 . '<br>';
+            // echo $billing_city . '<br>';
+            // echo $billing_state . '<br>';
+            // echo $billing_zip . '<br>';
+            // echo $email . '<br>';
+            // echo  '==================<br>';
+            // echo $shipping_firstname . '<br>';
+            // echo $shipping_lastname . '<br>';
+            // echo $shipping_company . '<br>';
+            // echo $shipping_phone . '<br>';
+            // echo $shipping_address . '<br>';
+            // echo $shipping_address2 . '<br>';
+            // echo $shipping_city . '<br>';
+            // echo $shipping_state . '<br>';
+            // echo $shipping_zip . '<br>';
+            // echo $shipping_method . '<br>';
+            // exit();
 
         // store shipping method in global variable
         $_SESSION['shipping_method'] = $shipping_method;
@@ -1018,11 +952,11 @@ class Cart extends \Core\Controller
         $cartMetaData = $this->getCartMetaData();
 
         // test
-        // echo '<h4>Cart metadata:</h4>';
-        // echo '<pre>';
-        // print_r($cartMetaData);
-        // echo '</pre>';
-        // exit();
+            // echo '<h4>Cart metadata:</h4>';
+            // echo '<pre>';
+            // print_r($cartMetaData);
+            // echo '</pre>';
+            // exit();
 
         // store pretax total in SESSION array
         $_SESSION['pretaxTotal'] = $cartMetaData['pretax_total'];
@@ -1034,10 +968,10 @@ class Cart extends \Core\Controller
             $salesTaxArr = $this->getFloridaSalesTaxByZipcode($shipping_zip);
 
             // test
-            // echo '<pre>';
-            // print_r($salesTaxArr);
-            // echo '</pre>';
-            // exit();
+                // echo '<pre>';
+                // print_r($salesTaxArr);
+                // echo '</pre>';
+                // exit();
 
             // store sales tax details in variables
             $sales_tax_state = strtolower($salesTaxArr['state']);
@@ -1054,11 +988,11 @@ class Cart extends \Core\Controller
             $_SESSION['sales_tax_data']['otax_county_amt']  = number_format($cartMetaData['pretax_total'] * $sales_tax_county_rate, 2);
 
             // test
-            // echo '<h4>SESSION["sales_tax_data"]:</h4>';
-            // echo '<pre>';
-            // print_r($_SESSION['sales_tax_data']);
-            // echo '</pre>';
-            // exit();
+                // echo '<h4>SESSION["sales_tax_data"]:</h4>';
+                // echo '<pre>';
+                // print_r($_SESSION['sales_tax_data']);
+                // echo '</pre>';
+                // exit();
         }
         // non-florida ship to
         else
@@ -1090,6 +1024,7 @@ class Cart extends \Core\Controller
             'shipping_city'         => $shipping_city,
             'shipping_state'        => $shipping_state,
             'shipping_zip'          => $shipping_zip,
+            'addresstype'           => $addresstype,
             'shipping_instructions' => $shipping_instructions,
             'shipping_method'       => $shipping_method,
             'shipping_cost'         => number_format($shipping_cost, 2, '.', ''),
@@ -1097,15 +1032,15 @@ class Cart extends \Core\Controller
         ];
 
         // test
-        // echo '<h4>Billing data array</h4>';
-        // echo '<pre>';
-        // print_r($billing_data);
-        // echo '</pre>';
-        // echo '<h4>Shipping data array</h4>';
-        // echo '<pre>';
-        // print_r($shipping_data);
-        // echo '</pre>';
-        // exit();
+            // echo '<h4>Billing data array</h4>';
+            // echo '<pre>';
+            // print_r($billing_data);
+            // echo '</pre>';
+            // echo '<h4>Shipping data array</h4>';
+            // echo '<pre>';
+            // print_r($shipping_data);
+            // echo '</pre>';
+            // exit();
 
         // Cart is empty
         if ( $_SESSION['cart_count'] < 1)
@@ -1124,19 +1059,19 @@ class Cart extends \Core\Controller
             if (isset($_SESSION['user_id']) && $_SESSION['access_level'] != 4)
             {
                 // test - display cart &
-                // echo '<h4>Cart: </h4>';
-                // echo '<pre>';
-                // print_r($_SESSION['cart']);
-                // echo '</pre>';
-                // echo '<h4>Shipping data: </h4>';
-                // echo '<pre>';
-                // print_r($shipping_data);
-                // echo '</pre>';
-                // echo '<h4>Cart metadata: </h4>';
-                // echo '<pre>';
-                // print_r($cartMetaData);
-                // echo '</pre>';
-                // exit();
+                    // echo '<h4>Cart: </h4>';
+                    // echo '<pre>';
+                    // print_r($_SESSION['cart']);
+                    // echo '</pre>';
+                    // echo '<h4>Shipping data: </h4>';
+                    // echo '<pre>';
+                    // print_r($shipping_data);
+                    // echo '</pre>';
+                    // echo '<h4>Cart metadata: </h4>';
+                    // echo '<pre>';
+                    // print_r($cartMetaData);
+                    // echo '</pre>';
+                    // exit();
 
                 // set variable as numeric
                 $grandTotal = 0;
@@ -1162,7 +1097,8 @@ class Cart extends \Core\Controller
                         'billing_data'    => $billing_data,
                         'shipping_data'   => $shipping_data,
                         'salesTax'        => $_SESSION['sales_tax_data']['otax_total'],
-                        'grandTotal'      => $grandTotal
+                        'grandTotal'      => $grandTotal,
+                        'nobutton'        => true
                     ]);
                 }
                 // error updating
@@ -1175,169 +1111,47 @@ class Cart extends \Core\Controller
                     exit();
                 }
             }
-            // - - - - - - checkout telephone caller  - - - - - - - - - - - - //
-            else if (isset($_SESSION['user_id']) && $_SESSION['access_level'] == 4)
-            {
-                // test
-                // echo "<h4>Shopping cart:</h4>";
-                // echo '<pre>';
-                // print_r($_SESSION['cart']);
-                // echo '</pre>';
-                // echo "<h4>Cart metadata:</h4>";
-                // echo '<pre>';
-                // print_r($cartMetaData);
-                // echo '</pre>';
-                // echo "<h4>Billing data:</h4>";
-                // echo '<pre>';
-                // print_r($billing_data);
-                // echo '</pre>';
-                // echo "<h4>Shipping data:</h4>";
-                // echo '<pre>';
-                // print_r($shipping_data);
-                // echo '</pre>';
-                // echo 'Buyer email: ' . $email;
-                // exit();
-
-                // check if buyer's email exists in `customers` table
-                $result = Customer::doesCustomerExist($email);
-
-                // test
-                // echo "<h4>Is user in customers table?</h4>";
-                // if (empty($result)) {
-                //     echo "Not in customers table.";
-                // } else {
-                //     echo "In customers table.";
-                // }
-                // exit();
-
-                // customer exists
-                if (!empty($result) && $result->active == 1)
-                {
-                    View::renderTemplate('Error/index.html', [
-                        'errorMessage' => 'Customer is already registered. Please
-                        <a href="/admin/login">Log In</a> to complete the purchase.'
-                    ]);
-                    exit();
-                }
-                // buyer is not in `callers` table
-                else
-                {
-                    // check if in `callers` table
-                    $caller = Caller::doesCallerExist($email);
-
-                    // test
-                    // echo "<h4>Is user in `callers` table?</h4>";
-                    // if (empty($guest)) {
-                    //     echo "Not in `callers` table.";
-                    // } else {
-                    //     echo "In `callers` table.";
-                    // }
-                    // exit();
-
-                    // caller exists - update guest data for this purchase
-                    if (!empty($caller))
-                    {
-                        // update caller billing/shipping data for new purchase
-                        $result = Caller::updateBillingShippingInfo($caller->id, $billing_data, $shipping_data);
-
-                        // success
-                        if ($result)
-                        {
-                            // store returning guest ID in variable
-                            $id = $caller->id;
-                        }
-                        else
-                        {
-                            echo "An error occurred updating callers table.";
-                            // email webmaster
-                            exit();
-                        }
-                    }
-                    // caller is first-time buyer: add to `callers` table; get ID
-                    else
-                    {
-                        // add new guest to `guests` table
-                        $results = Caller::addCaller($email, $billing_data, $shipping_data);
-
-                        // success
-                        if ($results)
-                        {
-                            // store first-time guest ID in variable
-                            $id = $results['id'];
-                        }
-                        else
-                        {
-                            echo "An error occurred inserting new data into callers table.";
-                            // email webmaster
-                            exit();
-                        }
-                    }
-                    // get caller data (either returning caller or first-time caller)
-                    $caller = Caller::getCaller($id);
-
-                    // test
-                    // echo '<pre>';
-                    // print_r($caller);
-                    // echo '</pre>';
-                    // exit();
-
-                    // store grand total in variable to pass to view
-                    $grandTotal = $cartMetaData['pretax_total'] + $shipping_cost + $_SESSION['sales_tax_data']['otax_total'];
-                }
-                View::renderTemplate('Cart/order-summary.html', [
-                    'page_title'      => 'Checkout Telephone Buyer',
-                    'cartContent'     => $_SESSION['cart'],
-                    'customer'        => $caller,
-                    'cartMetaData'    => $cartMetaData,
-                    'billing_data'    => $billing_data,
-                    'shipping_data'   => $shipping_data,
-                    'salesTax'        => $_SESSION['sales_tax_data']['otax_total'],
-                    'grandTotal'      => $grandTotal,
-                    'trackingNumber'  => $trackingNumber,
-                    'checkoutcaller'   => 'true'
-                ]);
-            }
             // - - - - - - checkout as guest  - - - - - - - - - - - - - - //
             else
             {
                 // test
-                // echo "<h4>Shopping cart:</h4>";
-                // echo '<pre>';
-                // print_r($_SESSION['cart']);
-                // echo '</pre>';
-                // echo "<h4>Cart metadata:</h4>";
-                // echo '<pre>';
-                // print_r($cartMetaData);
-                // echo '</pre>';
-                // echo "<h4>Billing data:</h4>";
-                // echo '<pre>';
-                // print_r($billing_data);
-                // echo '</pre>';
-                // echo "<h4>Shipping data:</h4>";
-                // echo '<pre>';
-                // print_r($shipping_data);
-                // echo '</pre>';
-                // echo $email;
-                // exit();
+                    // echo "<h4>Shopping cart:</h4>";
+                    // echo '<pre>';
+                    // print_r($_SESSION['cart']);
+                    // echo '</pre>';
+                    // echo "<h4>Cart metadata:</h4>";
+                    // echo '<pre>';
+                    // print_r($cartMetaData);
+                    // echo '</pre>';
+                    // echo "<h4>Billing data:</h4>";
+                    // echo '<pre>';
+                    // print_r($billing_data);
+                    // echo '</pre>';
+                    // echo "<h4>Shipping data:</h4>";
+                    // echo '<pre>';
+                    // print_r($shipping_data);
+                    // echo '</pre>';
+                    // echo $email;
+                    // exit();
 
                 // check if guest buyer's email exists in `customers` table
                 $result = Customer::doesCustomerExist($email);
 
                 // test
-                // echo "<h4>Is user in customers table?</h4>";
-                // if (empty($result)) {
-                //     echo "Not in customers table.";
-                // } else {
-                //     echo "In customers table.";
-                // }
-                // exit();
+                    // echo "<h4>Is user in customers table?</h4>";
+                    // if (empty($result)) {
+                    //     echo "Not in customers table.";
+                    // } else {
+                    //     echo "In customers table.";
+                    // }
+                    // exit();
 
                 // customer exists
                 if (!empty($result) && $result->active == 1)
                 {
                     View::renderTemplate('Error/index.html', [
                         'errorMessage' => 'You are already registered. Please
-                        <a href="/admin/login">Log In</a> to complete your purchase.'
+                        <a href="/admin/customer/login">Log In</a> to complete your purchase.'
                     ]);
                     exit();
                 }
@@ -1348,13 +1162,13 @@ class Cart extends \Core\Controller
                     $guest = Guest::doesGuestExist($email);
 
                     // test
-                    // echo "<h4>Is user in `guests` table?</h4>";
-                    // if (empty($guest)) {
-                    //     echo "Not in `guests` table.";
-                    // } else {
-                    //     echo "In `guests` table.";
-                    // }
-                    // exit();
+                        // echo "<h4>Is user in `guests` table?</h4>";
+                        // if (empty($guest)) {
+                        //     echo "Not in `guests` table.";
+                        // } else {
+                        //     echo "In `guests` table.";
+                        // }
+                        // exit();
 
                     // guest exists - update guest data for this purchase
                     if (!empty($guest))
@@ -1399,10 +1213,10 @@ class Cart extends \Core\Controller
                     $guest = Guest::getGuest($id);
 
                     // test
-                    // echo '<pre>';
-                    // print_r($guest);
-                    // echo '</pre>';
-                    // exit();
+                        // echo '<pre>';
+                        // print_r($guest);
+                        // echo '</pre>';
+                        // exit();
 
                     // store grand total in variable to pass to view
                     $grandTotal = $cartMetaData['pretax_total'] + $shipping_cost + $_SESSION['sales_tax_data']['otax_total'];
@@ -1418,7 +1232,8 @@ class Cart extends \Core\Controller
                     'salesTax'        => $_SESSION['sales_tax_data']['otax_total'],
                     'grandTotal'      => $grandTotal,
                     'trackingNumber'  => $trackingNumber,
-                    'checkoutguest'   => 'true'
+                    'checkoutguest'   => 'true',
+                    'nobutton'        => true
                 ]);
             }
         }
@@ -1432,11 +1247,14 @@ class Cart extends \Core\Controller
      *
      * @return  View   The cart content and cart metadata
      */
-    public function checkoutDealerCalculate()
+    public function checkoutDealerCalculateAction()
     {
         // echo "Connected to checkoutDealerCalculate()!"; exit();
 
         // retrieve form data
+        $dealer_id =(isset($_REQUEST['dealer_id'])) ? filter_var($_REQUEST['dealer_id'], FILTER_SANITIZE_STRING) : '';  // hidden input
+        $type =(isset($_REQUEST['type'])) ? filter_var($_REQUEST['type'], FILTER_SANITIZE_STRING) : '';                 // hidden input
+
         $dealer_firstname = (isset($_REQUEST['dealer_firstname'])) ? filter_var($_REQUEST['dealer_firstname'], FILTER_SANITIZE_STRING) : '';
         $dealer_lastname = (isset($_REQUEST['dealer_lastname'])) ? filter_var($_REQUEST['dealer_lastname'], FILTER_SANITIZE_STRING) : '';
         $dealer_company = (isset($_REQUEST['dealer_company'])) ? filter_var($_REQUEST['dealer_company'], FILTER_SANITIZE_STRING) : '';
@@ -1469,12 +1287,12 @@ class Cart extends \Core\Controller
         $upsSecondDayAirTrackingNumber = (isset($_REQUEST['ups_second_day_air_tracking_number'])) ? $_REQUEST['ups_second_day_air_tracking_number'] : '';
 
         // test - display form data
-        // echo 'Shipping method: ' . $shipping_method . '<br>';
-        // echo '<h4>REQUEST array form data:</h4>';
-        // echo '<pre>';
-        // print_r($_REQUEST);
-        // echo '</pre>';
-        // exit();
+            // echo 'Shipping method: ' . $shipping_method . '<br>';
+            // echo '<h4>REQUEST array form data:</h4>';
+            // echo '<pre>';
+            // print_r($_REQUEST);
+            // echo '</pre>';
+            // exit();
 
         // store UPS shipment digests in array
         $shipDigestsArray = [
@@ -1484,11 +1302,11 @@ class Cart extends \Core\Controller
         ];
 
         // test - display $shipDigestArray
-        // echo '<h4>shipDigestArray:</h4>';
-        // echo '<pre>';
-        // print_r($shipDigestArray);
-        // echo '</pre>';
-        // exit();
+            // echo '<h4>shipDigestArray:</h4>';
+            // echo '<pre>';
+            // print_r($shipDigestArray);
+            // echo '</pre>';
+            // exit();
 
         // identify which UPS service was selected & store shipmentDigest
         if (!empty($shipDigestsArray))
@@ -1590,25 +1408,25 @@ class Cart extends \Core\Controller
         }
 
         // test - review collected data
-        // echo '<h4>Review collected data:</h4>';
-        // echo 'Shipping method: ' . $shipping_method . '<br>';
-        // echo 'Shipping cost: ' . $shipping_cost . '<br>';
-        // echo '<pre>';
-        // print_r($_REQUEST);
-        // echo '</pre>';
-        // echo $dealer_firstname . '<br>';
-        // echo $dealer_lastname . '<br>';
-        // echo $dealer_company . '<br>';
-        // echo $dealer_phone . '<br>';
-        // echo $dealer_address . '<br>';
-        // echo $dealer_address2 . '<br>';
-        // echo $dealer_city . '<br>';
-        // echo $dealer_state . '<br>';
-        // echo $dealer_zip . '<br>';
-        // echo $email . '<br>';
-        // echo $shipping_method . '<br>';
-        // echo  '==================<br>';
-        // exit();
+            // echo '<h4>Review collected data:</h4>';
+            // echo 'Shipping method: ' . $shipping_method . '<br>';
+            // echo 'Shipping cost: ' . $shipping_cost . '<br>';
+            // echo '<pre>';
+            // print_r($_REQUEST);
+            // echo '</pre>';
+            // echo $dealer_firstname . '<br>';
+            // echo $dealer_lastname . '<br>';
+            // echo $dealer_company . '<br>';
+            // echo $dealer_phone . '<br>';
+            // echo $dealer_address . '<br>';
+            // echo $dealer_address2 . '<br>';
+            // echo $dealer_city . '<br>';
+            // echo $dealer_state . '<br>';
+            // echo $dealer_zip . '<br>';
+            // echo $email . '<br>';
+            // echo $shipping_method . '<br>';
+            // echo  '==================<br>';
+            // exit();
 
         // store shipping method in global variable
         $_SESSION['shipping_method'] = $shipping_method;
@@ -1617,11 +1435,11 @@ class Cart extends \Core\Controller
         $cartMetaData = $this->getCartMetaData();
 
         // test
-        // echo '<h4>Cart metadata:</h4>';
-        // echo '<pre>';
-        // print_r($cartMetaData);
-        // echo '</pre>';
-        // exit();
+            // echo '<h4>Cart metadata:</h4>';
+            // echo '<pre>';
+            // print_r($cartMetaData);
+            // echo '</pre>';
+            // exit();
 
         // store pretax total in SESSION array
         $_SESSION['pretaxTotal'] = $cartMetaData['pretax_total'];
@@ -1635,30 +1453,9 @@ class Cart extends \Core\Controller
         $_SESSION['sales_tax_data']['otax_county']     = number_format(0, 2, '.', ''); // PayPal format - no comma
         $_SESSION['sales_tax_data']['otax_county_amt'] = number_format(0, 2, '.', ''); // PayPal format - no comma
 
-        // store billing data in array
-        $billing_data = [
-            'billing_firstname' => $dealer_firstname,
-            'billing_lastname'  => $dealer_lastname,
-            'billing_company'   => $dealer_company,
-            'billing_phone'     => $dealer_phone,
-            'billing_address'   => $dealer_address,
-            'billing_address2'  => $dealer_address2,
-            'billing_city'      => $dealer_city,
-            'billing_state'     => $dealer_state,
-            'billing_zip'       => $dealer_zip
-        ];
 
         // store shipping data in array
         $shipping_data = [
-            'shipping_firstname'    => $dealer_firstname,
-            'shipping_lastname'     => $dealer_lastname,
-            'shipping_company'      => $dealer_company,
-            'shipping_phone'        => $dealer_phone,
-            'shipping_address'      => $dealer_address,
-            'shipping_address2'     => $dealer_address2,
-            'shipping_city'         => $dealer_city,
-            'shipping_state'        => $dealer_state,
-            'shipping_zip'          => $dealer_zip,
             'shipping_instructions' => $shipping_instructions,
             'shipping_method'       => $shipping_method,
             'shipping_cost'         => number_format($shipping_cost, 2, '.', ''),
@@ -1666,15 +1463,15 @@ class Cart extends \Core\Controller
         ];
 
         // test
-        // echo '<h4>Billing data array</h4>';
-        // echo '<pre>';
-        // print_r($billing_data);
-        // echo '</pre>';
-        // echo '<h4>Shipping data array</h4>';
-        // echo '<pre>';
-        // print_r($shipping_data);
-        // echo '</pre>';
-        // exit();
+            // echo '<h4>Billing data array</h4>';
+            // echo '<pre>';
+            // print_r($billing_data);
+            // echo '</pre>';
+            // echo '<h4>Shipping data array</h4>';
+            // echo '<pre>';
+            // print_r($shipping_data);
+            // echo '</pre>';
+            // exit();
 
         // Cart is empty
         if ( $_SESSION['cart_count'] < 1)
@@ -1693,19 +1490,22 @@ class Cart extends \Core\Controller
             if (isset($_SESSION['user_id']) && $_SESSION['userType'] == 'dealer')
             {
                 // test - display cart &
-                // echo '<h4>Cart: </h4>';
-                // echo '<pre>';
-                // print_r($_SESSION['cart']);
-                // echo '</pre>';
-                // echo '<h4>Shipping data: </h4>';
-                // echo '<pre>';
-                // print_r($shipping_data);
-                // echo '</pre>';
-                // echo '<h4>Cart metadata: </h4>';
-                // echo '<pre>';
-                // print_r($cartMetaData);
-                // echo '</pre>';
-                // exit();
+                    // echo '<h4>Cart: </h4>';
+                    // echo '<pre>';
+                    // print_r($_SESSION['cart']);
+                    // echo '</pre>';
+                    // echo '<h4>Shipping data: </h4>';
+                    // echo '<pre>';
+                    // print_r($shipping_data);
+                    // echo '</pre>';
+                    // echo '<h4>Cart metadata: </h4>';
+                    // echo '<pre>';
+                    // print_r($cartMetaData);
+                    // echo '</pre>';
+                    // exit();
+
+                // get dealer data
+                $dealer = Customer::getCustomer($dealer_id);
 
                 // set variable as numeric
                 $grandTotal = 0;
@@ -1716,12 +1516,13 @@ class Cart extends \Core\Controller
                 // render order summary view
                 View::renderTemplate('Cart/order-summary.html', [
                     'page_title'      => 'Checkout - Dealer',
+                    'customer'        => $dealer,
                     'cartContent'     => $_SESSION['cart'],
                     'cartMetaData'    => $cartMetaData,
-                    'billing_data'    => $billing_data,
                     'shipping_data'   => $shipping_data,
                     'salesTax'        => $_SESSION['sales_tax_data']['otax_total'],
-                    'grandTotal'      => $grandTotal
+                    'grandTotal'      => $grandTotal,
+                    'nobutton'        => true
                 ]);
             }
         }
@@ -1735,30 +1536,31 @@ class Cart extends \Core\Controller
      *
      * @return  View   The cart content and cart metadata
      */
-    public function checkoutPartnerCalculate()
+    public function checkoutPartnerCalculateAction()
     {
         // echo "Connected to checkoutPartnerCalculate()!"; exit();
 
         // retrieve form data
-        $partner_firstname = (isset($_REQUEST['partner_firstname'])) ? filter_var($_REQUEST['partner_firstname'], FILTER_SANITIZE_STRING) : '';
-        $partner_lastname = (isset($_REQUEST['partner_lastname'])) ? filter_var($_REQUEST['partner_lastname'], FILTER_SANITIZE_STRING) : '';
-        $partner_company = (isset($_REQUEST['partner_company'])) ? filter_var($_REQUEST['partner_company'], FILTER_SANITIZE_STRING) : '';
-        $partner_phone = (isset($_REQUEST['partner_phone'])) ? filter_var($_REQUEST['partner_phone'], FILTER_SANITIZE_STRING) : '';
-        $partner_address = (isset($_REQUEST['partner_address'])) ? filter_var($_REQUEST['partner_address'], FILTER_SANITIZE_STRING) : '';
-        $partner_address2 = (isset($_REQUEST['partner_address2'])) ? filter_var($_REQUEST['partner_address2'], FILTER_SANITIZE_STRING) : '';
-        $partner_city = (isset($_REQUEST['partner_city'])) ? filter_var($_REQUEST['partner_city'], FILTER_SANITIZE_STRING) : '';
-        $partner_state = (isset($_REQUEST['partner_state'])) ? filter_var($_REQUEST['partner_state'], FILTER_SANITIZE_STRING) : '';
-        $partner_zip = (isset($_REQUEST['partner_zip'])) ? filter_var($_REQUEST['partner_zip'], FILTER_SANITIZE_STRING) : '';
+        $billing_firstname = (isset($_REQUEST['billing_firstname'])) ? filter_var($_REQUEST['billing_firstname'], FILTER_SANITIZE_STRING) : '';
+        $billing_lastname = (isset($_REQUEST['billing_lastname'])) ? filter_var($_REQUEST['billing_lastname'], FILTER_SANITIZE_STRING) : '';
+        $billing_company = (isset($_REQUEST['billing_company'])) ? filter_var($_REQUEST['billing_company'], FILTER_SANITIZE_STRING) : '';
+        $billing_phone = (isset($_REQUEST['billing_phone'])) ? filter_var($_REQUEST['billing_phone'], FILTER_SANITIZE_STRING) : '';
+        $billing_address = (isset($_REQUEST['billing_address'])) ? filter_var($_REQUEST['billing_address'], FILTER_SANITIZE_STRING) : '';
+        $billing_address2 = (isset($_REQUEST['billing_address2'])) ? filter_var($_REQUEST['billing_address2'], FILTER_SANITIZE_STRING) : '';
+        $billing_city = (isset($_REQUEST['billing_city'])) ? filter_var($_REQUEST['billing_city'], FILTER_SANITIZE_STRING) : '';
+        $billing_state = (isset($_REQUEST['billing_state'])) ? filter_var($_REQUEST['billing_state'], FILTER_SANITIZE_STRING) : '';
+        $billing_zip = (isset($_REQUEST['billing_zip'])) ? filter_var($_REQUEST['billing_zip'], FILTER_SANITIZE_STRING) : '';
 
-        $email = (isset($_REQUEST['partner_email'])) ? filter_var($_REQUEST['partner_email'], FILTER_SANITIZE_STRING) : '';
-        $partner_shipping_firstname = (isset($_REQUEST['partner_shipping_firstname'])) ? filter_var($_REQUEST['partner_shipping_firstname'], FILTER_SANITIZE_STRING) : '';
-        $partner_shipping_lastname = (isset($_REQUEST['partner_shipping_lastname'])) ? filter_var($_REQUEST['partner_shipping_lastname'], FILTER_SANITIZE_STRING) : '';
-        $partner_shipping_company = (isset($_REQUEST['partner_shipping_company'])) ? filter_var($_REQUEST['partner_shipping_company'], FILTER_SANITIZE_STRING) : '';
-        $partner_shipping_phone = (isset($_REQUEST['partner_shipping_phone'])) ? filter_var($_REQUEST['partner_shipping_phone'], FILTER_SANITIZE_STRING) : '';
-        $partner_shipping_address = (isset($_REQUEST['partner_shipping_address'])) ? filter_var($_REQUEST['partner_shipping_address'], FILTER_SANITIZE_STRING) : '';
-        $partner_shipping_city = (isset($_REQUEST['partner_shipping_city'])) ? filter_var($_REQUEST['partner_shipping_city'], FILTER_SANITIZE_STRING) : '';
-        $partner_shipping_state = (isset($_REQUEST['partner_shipping_state'])) ? filter_var($_REQUEST['partner_shipping_state'], FILTER_SANITIZE_STRING) : '';
-        $partner_shipping_zip = (isset($_REQUEST['partner_shipping_zip'])) ? filter_var($_REQUEST['partner_shipping_zip'], FILTER_SANITIZE_STRING) : '';
+        $email = (isset($_REQUEST['email'])) ? filter_var($_REQUEST['email'], FILTER_SANITIZE_STRING) : '';
+        $shipping_firstname = (isset($_REQUEST['shipping_firstname'])) ? filter_var($_REQUEST['shipping_firstname'], FILTER_SANITIZE_STRING) : '';
+        $shipping_lastname = (isset($_REQUEST['shipping_lastname'])) ? filter_var($_REQUEST['shipping_lastname'], FILTER_SANITIZE_STRING) : '';
+        $shipping_company = (isset($_REQUEST['shipping_company'])) ? filter_var($_REQUEST['shipping_company'], FILTER_SANITIZE_STRING) : '';
+        $shipping_phone = (isset($_REQUEST['shipping_phone'])) ? filter_var($_REQUEST['shipping_phone'], FILTER_SANITIZE_STRING) : '';
+        $shipping_address = (isset($_REQUEST['shipping_address'])) ? filter_var($_REQUEST['shipping_address'], FILTER_SANITIZE_STRING) : '';
+        $shipping_address2 = (isset($_REQUEST['shipping_address2'])) ? filter_var($_REQUEST['shipping_address2'], FILTER_SANITIZE_STRING) : '';
+        $shipping_city = (isset($_REQUEST['shipping_city'])) ? filter_var($_REQUEST['shipping_city'], FILTER_SANITIZE_STRING) : '';
+        $shipping_state = (isset($_REQUEST['shipping_state'])) ? filter_var($_REQUEST['shipping_state'], FILTER_SANITIZE_STRING) : '';
+        $shipping_zip = (isset($_REQUEST['shipping_zip'])) ? filter_var($_REQUEST['shipping_zip'], FILTER_SANITIZE_STRING) : '';
 
         $shipping_method = (isset($_REQUEST['shipping_method'])) ? filter_var($_REQUEST['shipping_method'], FILTER_SANITIZE_STRING) : '';
         // $shipping_instructions = (isset($_REQUEST['shipping_instructions'])) ? filter_var($_REQUEST['shipping_instructions'], FILTER_SANITIZE_STRING) : '';
@@ -1780,12 +1582,12 @@ class Cart extends \Core\Controller
         $upsSecondDayAirTrackingNumber = (isset($_REQUEST['ups_second_day_air_tracking_number'])) ? $_REQUEST['ups_second_day_air_tracking_number'] : '';
 
         // test - display form data
-        // echo 'Shipping method: ' . $shipping_method . '<br>';
-        // echo '<h4>REQUEST array form data:</h4>';
-        // echo '<pre>';
-        // print_r($_REQUEST);
-        // echo '</pre>';
-        // exit();
+            // echo 'Shipping method: ' . $shipping_method . '<br>';
+            // echo '<h4>REQUEST array form data:</h4>';
+            // echo '<pre>';
+            // print_r($_REQUEST);
+            // echo '</pre>';
+            // exit();
 
         // store UPS shipment digests in array
         $shipDigestsArray = [
@@ -1795,11 +1597,11 @@ class Cart extends \Core\Controller
         ];
 
         // test - display $shipDigestArray
-        // echo '<h4>shipDigestArray:</h4>';
-        // echo '<pre>';
-        // print_r($shipDigestArray);
-        // echo '</pre>';
-        // exit();
+            // echo '<h4>shipDigestArray:</h4>';
+            // echo '<pre>';
+            // print_r($shipDigestArray);
+            // echo '</pre>';
+            // exit();
 
         // identify which UPS service was selected & store shipmentDigest
         if (!empty($shipDigestsArray))
@@ -1901,25 +1703,25 @@ class Cart extends \Core\Controller
         }
 
         // test - review collected data
-        // echo '<h4>Review collected data:</h4>';
-        // echo 'Shipping method: ' . $shipping_method . '<br>';
-        // echo 'Shipping cost: ' . $shipping_cost . '<br>';
-        // echo '<pre>';
-        // print_r($_REQUEST);
-        // echo '</pre>';
-        // echo $dealer_firstname . '<br>';
-        // echo $dealer_lastname . '<br>';
-        // echo $dealer_company . '<br>';
-        // echo $dealer_phone . '<br>';
-        // echo $dealer_address . '<br>';
-        // echo $dealer_address2 . '<br>';
-        // echo $dealer_city . '<br>';
-        // echo $dealer_state . '<br>';
-        // echo $dealer_zip . '<br>';
-        // echo $email . '<br>';
-        // echo $shipping_method . '<br>';
-        // echo  '==================<br>';
-        // exit();
+            // echo '<h4>Review collected data:</h4>';
+            // echo 'Shipping method: ' . $shipping_method . '<br>';
+            // echo 'Shipping cost: ' . $shipping_cost . '<br>';
+            // echo '<pre>';
+            // print_r($_REQUEST);
+            // echo '</pre>';
+            // echo $dealer_firstname . '<br>';
+            // echo $dealer_lastname . '<br>';
+            // echo $dealer_company . '<br>';
+            // echo $dealer_phone . '<br>';
+            // echo $dealer_address . '<br>';
+            // echo $dealer_address2 . '<br>';
+            // echo $dealer_city . '<br>';
+            // echo $dealer_state . '<br>';
+            // echo $dealer_zip . '<br>';
+            // echo $email . '<br>';
+            // echo $shipping_method . '<br>';
+            // echo  '==================<br>';
+            // exit();
 
         // store shipping method in global variable
         $_SESSION['shipping_method'] = $shipping_method;
@@ -1928,11 +1730,11 @@ class Cart extends \Core\Controller
         $cartMetaData = $this->getCartMetaData();
 
         // test
-        // echo '<h4>Cart metadata:</h4>';
-        // echo '<pre>';
-        // print_r($cartMetaData);
-        // echo '</pre>';
-        // exit();
+            // echo '<h4>Cart metadata:</h4>';
+            // echo '<pre>';
+            // print_r($cartMetaData);
+            // echo '</pre>';
+            // exit();
 
         // store pretax total in SESSION array
         $_SESSION['pretaxTotal'] = $cartMetaData['pretax_total'];
@@ -1946,43 +1748,23 @@ class Cart extends \Core\Controller
         $_SESSION['sales_tax_data']['otax_county']     = number_format(0, 2, '.', ''); // PayPal format - no comma
         $_SESSION['sales_tax_data']['otax_county_amt'] = number_format(0, 2, '.', ''); // PayPal format - no comma
 
-        // store billing data in array
-        $billing_data = [
-            'billing_firstname' => $partner_firstname,
-            'billing_lastname'  => $partner_lastname,
-            'billing_company'   => $partner_company,
-            'billing_phone'     => $partner_phone,
-            'billing_address'   => $partner_address,
-            'billing_city'      => $partner_city,
-            'billing_state'     => $partner_state,
-            'billing_zip'       => $partner_zip
-        ];
-
         // store shipping data in array
         $shipping_data = [
-            'shipping_firstname'=> $partner_shipping_firstname,
-            'shipping_lastname' => $partner_shipping_lastname,
-            'shipping_company'  => $partner_shipping_company,
-            'shipping_phone'    => $partner_shipping_phone,
-            'shipping_address'  => $partner_shipping_address,
-            'shipping_city'     => $partner_shipping_city,
-            'shipping_state'    => $partner_shipping_state,
-            'shipping_zip'      => $partner_shipping_zip,
             'shipping_method'   => $shipping_method,
             'shipping_cost'     => number_format($shipping_cost, 2, '.', ''),
             'tracking_number'   => $trackingNumber
         ];
 
         // test
-        // echo '<h4>Billing data array</h4>';
-        // echo '<pre>';
-        // print_r($billing_data);
-        // echo '</pre>';
-        // echo '<h4>Shipping data array</h4>';
-        // echo '<pre>';
-        // print_r($shipping_data);
-        // echo '</pre>';
-        // exit();
+            // echo '<h4>Billing data array</h4>';
+            // echo '<pre>';
+            // print_r($billing_data);
+            // echo '</pre>';
+            // echo '<h4>Shipping data array</h4>';
+            // echo '<pre>';
+            // print_r($shipping_data);
+            // echo '</pre>';
+            // exit();
 
         // Cart is empty
         if ( $_SESSION['cart_count'] < 1)
@@ -2001,19 +1783,19 @@ class Cart extends \Core\Controller
             if (isset($_SESSION['user_id']) && $_SESSION['userType'] == 'partner')
             {
                 // test - display cart &
-                // echo '<h4>Cart: </h4>';
-                // echo '<pre>';
-                // print_r($_SESSION['cart']);
-                // echo '</pre>';
-                // echo '<h4>Shipping data: </h4>';
-                // echo '<pre>';
-                // print_r($shipping_data);
-                // echo '</pre>';
-                // echo '<h4>Cart metadata: </h4>';
-                // echo '<pre>';
-                // print_r($cartMetaData);
-                // echo '</pre>';
-                // exit();
+                    // echo '<h4>Cart: </h4>';
+                    // echo '<pre>';
+                    // print_r($_SESSION['cart']);
+                    // echo '</pre>';
+                    // echo '<h4>Shipping data: </h4>';
+                    // echo '<pre>';
+                    // print_r($shipping_data);
+                    // echo '</pre>';
+                    // echo '<h4>Cart metadata: </h4>';
+                    // echo '<pre>';
+                    // print_r($cartMetaData);
+                    // echo '</pre>';
+                    // exit();
 
                 // set variable as numeric
                 $grandTotal = 0;
@@ -2021,15 +1803,19 @@ class Cart extends \Core\Controller
                 // store grand total in variable for view
                 $grandTotal = $cartMetaData['pretax_total'] + $shipping_cost + $_SESSION['sales_tax_data']['otax_total'];
 
+                // get partner data
+                $partner = Customer::getCustomer($_SESSION['user_id']);
+
                 // render order summary view
                 View::renderTemplate('Cart/order-summary.html', [
                     'page_title'      => 'Checkout - Partner',
+                    'customer'        => $partner,
                     'cartContent'     => $_SESSION['cart'],
                     'cartMetaData'    => $cartMetaData,
-                    'billing_data'    => $billing_data,
                     'shipping_data'   => $shipping_data,
                     'salesTax'        => $_SESSION['sales_tax_data']['otax_total'],
-                    'grandTotal'      => $grandTotal
+                    'grandTotal'      => $grandTotal,
+                    'nobutton'        => true
                 ]);
             }
         }
@@ -2039,46 +1825,34 @@ class Cart extends \Core\Controller
 
 
     /**
-     * displays checkout page for entering orders internally to ship replacement parts and/or items
+     * displays checkout page for phone orders, or entering orders internally to ship replacement parts and/or items
      *
      * @return View
      */
-    public function checkoutAdmin()
+    public function checkoutAdminAction()
     {
         // get query string data
         $id = (isset($_REQUEST['id']) ? filter_var($_REQUEST['id'], FILTER_SANITIZE_NUMBER_INT) : '');
         $type = (isset($_REQUEST['type']) ? filter_var($_REQUEST['type'], FILTER_SANITIZE_STRING) : '');
 
-        // get customer data by type
-        switch($type)
-        {
-            CASE 'customer':
-                $customer = Customer::getCustomer($id);
-                break;
-            CASE 'caller':
-                $customer = Caller::getCaller($id);
-                break;
-            CASE 'guest':
-                $customer = Guest::getGuest($id);
-                break;
-            CASE 'dealer':
-                $customer = Dealer::getDealer($id);
-                break;
-            CASE 'partner':
-                $customer = Partner::getPartner($id);
-                break;
-        }
+        // echo $id . '<br>'; echo $type; exit();
 
-        // echo '<pre>';
-        // print_r($customer);
-        // echo '</pre>';
-        // exit();
+        // get customer info
+        $customer = $this->getCustomerData($id, $type);
+
+        // test
+            // echo '<pre>';
+            // print_r($customer);
+            // echo '</pre>';
+            // exit();
 
         // cart has content
         if ($_SESSION['cart'])
         {
             // get cart meta data
             $cartMetaData= $this->getCartMetaData();
+
+            // echo '<pre>'; print_r($cartMetaData); exit();
 
             // get states
             $states = State::getStates();
@@ -2090,7 +1864,8 @@ class Cart extends \Core\Controller
                 'cartMetaData'  => $cartMetaData,
                 'customer'      => $customer,
                 'type'          => $type,
-                'page_title'    => 'Replacement Parts Checkout'
+                'page_title'    => 'Replacement Parts Checkout',
+                'nobutton'      => true
             ]);
         }
         // cart empty
@@ -2107,22 +1882,37 @@ class Cart extends \Core\Controller
     /**
      * retrieves form data and returns final cost summary view
      *
+     * route: checkout/admin-order-summary
+     *
      * @return  View   The cart content and cart metadata
      */
-    public function checkoutAdminCalculate()
+    public function checkoutAdminCalculateAction()
     {
         // echo "Connected to checkoutAdminCalculate()!"; exit();
 
-        // retrieve form data
-        $customer_firstname = (isset($_REQUEST['customer_firstname'])) ? filter_var($_REQUEST['customer_firstname'], FILTER_SANITIZE_STRING) : '';
-        $customer_lastname = (isset($_REQUEST['customer_lastname'])) ? filter_var($_REQUEST['customer_lastname'], FILTER_SANITIZE_STRING) : '';
-        $customer_company = (isset($_REQUEST['customer_company'])) ? filter_var($_REQUEST['customer_company'], FILTER_SANITIZE_STRING) : '';
-        $customer_phone = (isset($_REQUEST['customer_phone'])) ? filter_var($_REQUEST['customer_phone'], FILTER_SANITIZE_STRING) : '';
-        $customer_address = (isset($_REQUEST['customer_address'])) ? filter_var($_REQUEST['customer_address'], FILTER_SANITIZE_STRING) : '';
-        $customer_address2 = (isset($_REQUEST['customer_address2'])) ? filter_var($_REQUEST['customer_address2'], FILTER_SANITIZE_STRING) : '';
-        $customer_city = (isset($_REQUEST['customer_city'])) ? filter_var($_REQUEST['customer_city'], FILTER_SANITIZE_STRING) : '';
-        $customer_state = (isset($_REQUEST['customer_state'])) ? filter_var($_REQUEST['customer_state'], FILTER_SANITIZE_STRING) : '';
-        $customer_zip = (isset($_REQUEST['customer_zip'])) ? filter_var($_REQUEST['customer_zip'], FILTER_SANITIZE_STRING) : '';
+        // retrieve shipping information from form
+        $customer_billing_firstname = (isset($_REQUEST['billing_firstname'])) ? filter_var($_REQUEST['billing_firstname'], FILTER_SANITIZE_STRING) : '';
+        $customer_billing_lastname = (isset($_REQUEST['billing_lastname'])) ? filter_var($_REQUEST['billing_lastname'], FILTER_SANITIZE_STRING) : '';
+        $customer_billing_company = (isset($_REQUEST['billing_company'])) ? filter_var($_REQUEST['billing_company'], FILTER_SANITIZE_STRING) : '';
+        $customer_billing_address = (isset($_REQUEST['billing_address'])) ? filter_var($_REQUEST['billing_address'], FILTER_SANITIZE_STRING) : '';
+        $customer_billing_address2 = (isset($_REQUEST['billing_address2'])) ? filter_var($_REQUEST['billing_address2'], FILTER_SANITIZE_STRING) : '';
+        $customer_billing_city = (isset($_REQUEST['billing_city'])) ? filter_var($_REQUEST['billing_city'], FILTER_SANITIZE_STRING) : '';
+        $customer_billing_state = (isset($_REQUEST['billing_state'])) ? filter_var($_REQUEST['billing_state'], FILTER_SANITIZE_STRING) : '';
+        $customer_billing_zip = (isset($_REQUEST['billing_zip'])) ? filter_var($_REQUEST['billing_zip'], FILTER_SANITIZE_STRING) : '';
+        $customer_billing_phone = (isset($_REQUEST['billing_phone'])) ? filter_var($_REQUEST['billing_phone'], FILTER_SANITIZE_STRING) : '';
+
+        $email = (isset($_REQUEST['email'])) ? filter_var($_REQUEST['email'], FILTER_SANITIZE_STRING) : '';
+
+        $customer_shipping_firstname = (isset($_REQUEST['shipping_firstname'])) ? filter_var($_REQUEST['shipping_firstname'], FILTER_SANITIZE_STRING) : '';
+        $customer_shipping_lastname = (isset($_REQUEST['shipping_lastname'])) ? filter_var($_REQUEST['shipping_lastname'], FILTER_SANITIZE_STRING) : '';
+        $customer_shipping_company = (isset($_REQUEST['shipping_company'])) ? filter_var($_REQUEST['shipping_company'], FILTER_SANITIZE_STRING) : '';
+        $customer_shipping_address = (isset($_REQUEST['shipping_address'])) ? filter_var($_REQUEST['shipping_address'], FILTER_SANITIZE_STRING) : '';
+        $customer_shipping_address2 = (isset($_REQUEST['shipping_address2'])) ? filter_var($_REQUEST['shipping_address2'], FILTER_SANITIZE_STRING) : '';
+        $customer_shipping_city = (isset($_REQUEST['shipping_city'])) ? filter_var($_REQUEST['shipping_city'], FILTER_SANITIZE_STRING) : '';
+        $customer_shipping_state = (isset($_REQUEST['shipping_state'])) ? filter_var($_REQUEST['shipping_state'], FILTER_SANITIZE_STRING) : '';
+        $customer_shipping_zip = (isset($_REQUEST['shipping_zip'])) ? filter_var($_REQUEST['shipping_zip'], FILTER_SANITIZE_STRING) : '';
+        $customer_shipping_phone = (isset($_REQUEST['shipping_phone'])) ? filter_var($_REQUEST['shipping_phone'], FILTER_SANITIZE_STRING) : '';
+        $address_type = (isset($_REQUEST['address_type'])) ? filter_var($_REQUEST['address_type'], FILTER_SANITIZE_STRING) : '';
 
         // customer data from hidden input
         $customer_id = (isset($_REQUEST['customer_id'])) ? filter_var($_REQUEST['customer_id'], FILTER_SANITIZE_NUMBER_INT) : '';
@@ -2150,12 +1940,12 @@ class Cart extends \Core\Controller
         $upsSecondDayAirTrackingNumber = (isset($_REQUEST['ups_second_day_air_tracking_number'])) ? $_REQUEST['ups_second_day_air_tracking_number'] : '';
 
         // test - display form data
-        // echo 'Shipping method: ' . $shipping_method . '<br>';
-        // echo '<h4>REQUEST array form data:</h4>';
-        // echo '<pre>';
-        // print_r($_REQUEST);
-        // echo '</pre>';
-        // exit();
+            // echo 'Shipping method: ' . $shipping_method . '<br>';
+            // echo '<h4>REQUEST array form data:</h4>';
+            // echo '<pre>';
+            // print_r($_REQUEST);
+            // echo '</pre>';
+            // exit();
 
         // store UPS shipment digests in array
         $shipDigestsArray = [
@@ -2165,11 +1955,11 @@ class Cart extends \Core\Controller
         ];
 
         // test - display $shipDigestArray
-        // echo '<h4>shipDigestArray:</h4>';
-        // echo '<pre>';
-        // print_r($shipDigestArray);
-        // echo '</pre>';
-        // exit();
+            // echo '<h4>shipDigestArray:</h4>';
+            // echo '<pre>';
+            // print_r($shipDigestArray);
+            // echo '</pre>';
+            // exit();
 
         // identify which UPS service was selected & store shipmentDigest
         if (!empty($shipDigestsArray))
@@ -2271,25 +2061,35 @@ class Cart extends \Core\Controller
         }
 
         // test - review collected data
-        // echo '<h4>Review collected data:</h4>';
-        // echo 'Shipping method: ' . $shipping_method . '<br>';
-        // echo 'Shipping cost: ' . $shipping_cost . '<br>';
-        // echo '<pre>';
-        // print_r($_REQUEST);
-        // echo '</pre>';
-        // echo $customer_firstname . '<br>';
-        // echo $customer_lastname . '<br>';
-        // echo $customer_company . '<br>';
-        // echo $customer_phone . '<br>';
-        // echo $customer_address . '<br>';
-        // echo $customer_address2 . '<br>';
-        // echo $customer_city . '<br>';
-        // echo $customer_state . '<br>';
-        // echo $customer_zip . '<br>';
-        // echo $email . '<br>';
-        // echo $shipping_method . '<br>';
-        // echo  '==================<br>';
-        // exit();
+            // echo '<h4>Review collected data:</h4>';
+            // echo 'Shipping method: ' . $shipping_method . '<br>';
+            // echo 'Shipping cost: ' . $shipping_cost . '<br>';
+            // echo '<h3>$_REQUEST</h3>';
+            // echo '<pre>';
+            // print_r($_REQUEST);
+            // echo '</pre>';
+            // echo $customer_billing_firstname . '<br>';
+            // echo $customer_billing_lastname . '<br>';
+            // echo $customer_billing_company . '<br>';
+            // echo $customer_billing_phone . '<br>';
+            // echo $customer_billing_address . '<br>';
+            // echo $customer_billing_address2 . '<br>';
+            // echo $customer_billing_city . '<br>';
+            // echo $customer_billing_state . '<br>';
+            // echo $customer_billing_zip . '<br>';
+            // echo $email . '<br>';
+            // echo $customer_shipping_firstname . '<br>';
+            // echo $customer_shipping_lastname . '<br>';
+            // echo $customer_shipping_company . '<br>';
+            // echo $customer_shipping_phone . '<br>';
+            // echo $customer_shipping_address . '<br>';
+            // echo $customer_shipping_address2 . '<br>';
+            // echo $customer_shipping_city . '<br>';
+            // echo $customer_shipping_state . '<br>';
+            // echo $customer_shipping_zip . '<br>';
+            // echo $shipping_method . '<br>';
+            // echo  '==================<br>';
+            // exit();
 
         // store shipping method in global variable
         $_SESSION['shipping_method'] = $shipping_method;
@@ -2298,27 +2098,26 @@ class Cart extends \Core\Controller
         $cartMetaData = $this->getCartMetaData();
 
         // test
-        // echo '<h4>Cart metadata:</h4>';
-        // echo '<pre>';
-        // print_r($cartMetaData);
-        // echo '</pre>';
-        // exit();
+            // echo '<h4>Cart metadata:</h4>';
+            // echo '<pre>';
+            // print_r($cartMetaData);
+            // echo '</pre>';
+            // exit();
 
         // store pretax total in SESSION array
         $_SESSION['pretaxTotal'] = $cartMetaData['pretax_total'];
 
-
        // calculate FL sales tax for shipments to Florida
-       if ($customer_state or $shipping_state == 'FL')
+       if ($customer_shipping_state == 'FL')
        {
            // get sales tax rate
-           $salesTaxArr = $this->getFloridaSalesTaxByZipcode($customer_zip);
+           $salesTaxArr = $this->getFloridaSalesTaxByZipcode($customer_shipping_zip);
 
             // test
-            // echo '<pre>';
-            // print_r($salesTaxArr);
-            // echo '</pre>';
-            // exit();
+                // echo '<pre>';
+                // print_r($salesTaxArr);
+                // echo '</pre>';
+                // exit();
 
            // store sales tax details in variables
            $sales_tax_state = strtolower($salesTaxArr['state']);
@@ -2335,11 +2134,11 @@ class Cart extends \Core\Controller
            $_SESSION['sales_tax_data']['otax_county_amt']  = number_format($cartMetaData['pretax_total'] * $sales_tax_county_rate, 2);
 
             // test
-            // echo '<h4>SESSION["sales_tax_data"]:</h4>';
-            // echo '<pre>';
-            // print_r($_SESSION['sales_tax_data']);
-            // echo '</pre>';
-            // exit();
+                // echo '<h4>SESSION["sales_tax_data"]:</h4>';
+                // echo '<pre>';
+                // print_r($_SESSION['sales_tax_data']);
+                // echo '</pre>';
+                // exit();
        }
        // non-florida ship to
        else
@@ -2349,28 +2148,28 @@ class Cart extends \Core\Controller
 
         // store billing data in array
         $billing_data = [
-            'billing_firstname' => $customer_firstname,
-            'billing_lastname'  => $customer_lastname,
-            'billing_company'   => $customer_company,
-            'billing_phone'     => $customer_phone,
-            'billing_address'   => $customer_address,
-            'billing_address2'  => $customer_address2,
-            'billing_city'      => $customer_city,
-            'billing_state'     => $customer_state,
-            'billing_zip'       => $customer_zip
+            'billing_firstname' => $customer_billing_firstname,
+            'billing_lastname'  => $customer_billing_lastname,
+            'billing_company'   => $customer_billing_company,
+            'billing_phone'     => $customer_billing_phone,
+            'billing_address'   => $customer_billing_address,
+            'billing_address2'  => $customer_billing_address2,
+            'billing_city'      => $customer_billing_city,
+            'billing_state'     => $customer_billing_state,
+            'billing_zip'       => $customer_billing_zip
         ];
 
         // store shipping data in array
         $shipping_data = [
-            'shipping_firstname'    => $customer_firstname,
-            'shipping_lastname'     => $customer_lastname,
-            'shipping_company'      => $customer_company,
-            'shipping_phone'        => $customer_phone,
-            'shipping_address'      => $customer_address,
-            'shipping_address2'     => $customer_address2,
-            'shipping_city'         => $customer_city,
-            'shipping_state'        => $customer_state,
-            'shipping_zip'          => $customer_zip,
+            'shipping_firstname'    => $customer_shipping_firstname,
+            'shipping_lastname'     => $customer_shipping_lastname,
+            'shipping_company'      => $customer_shipping_company,
+            'shipping_phone'        => $customer_shipping_phone,
+            'shipping_address'      => $customer_shipping_address,
+            'shipping_address2'     => $customer_shipping_address2,
+            'shipping_city'         => $customer_shipping_city,
+            'shipping_state'        => $customer_shipping_state,
+            'shipping_zip'          => $customer_shipping_zip,
             'shipping_instructions' => $shipping_instructions,
             'shipping_method'       => $shipping_method,
             'shipping_cost'         => number_format($shipping_cost, 2, '.', ''),
@@ -2378,15 +2177,15 @@ class Cart extends \Core\Controller
         ];
 
         // test
-        // echo '<h4>Billing data array</h4>';
-        // echo '<pre>';
-        // print_r($billing_data);
-        // echo '</pre>';
-        // echo '<h4>Shipping data array</h4>';
-        // echo '<pre>';
-        // print_r($shipping_data);
-        // echo '</pre>';
-        // exit();
+            // echo '<h4>Billing data array</h4>';
+            // echo '<pre>';
+            // print_r($billing_data);
+            // echo '</pre>';
+            // echo '<h4>Shipping data array</h4>';
+            // echo '<pre>';
+            // print_r($shipping_data);
+            // echo '</pre>';
+            // exit();
 
         // Cart is empty
         if ( $_SESSION['cart_count'] < 1)
@@ -2401,45 +2200,29 @@ class Cart extends \Core\Controller
         else
         {
             // get customer data based on type
-            switch($customer_type) {
-                CASE 'customer':
-                    $customer = Customer::getCustomer($customer_id);
-                    break;
-                CASE 'guest':
-                    $customer = Guest::getGuest($customer_id);
-                    break;
-                CASE 'caller':
-                    $customer = Caller::getCaller($customer_id);
-                    break;
-                CASE 'dealer':
-                    $customer = Dealer::getDealer($customer_id);
-                    break;
-                CASE 'partner':
-                    $customer = Partner::getPartner($customer_id);
-                    break;
-            }
+            $customer = $this->getCustomerData($customer_id, $customer_type);
 
             // test - customer data
-            // echo '<h4>Customer: </h4>';
-            // echo '<pre>';
-            // print_r($customer);
-            // echo '</pre>';
-            // exit();
+                // echo '<h4>Customer: </h4>';
+                // echo '<pre>';
+                // print_r($customer);
+                // echo '</pre>';
+                // exit();
 
             // test - display cart &
-            // echo '<h4>Cart: </h4>';
-            // echo '<pre>';
-            // print_r($_SESSION['cart']);
-            // echo '</pre>';
-            // echo '<h4>Shipping data: </h4>';
-            // echo '<pre>';
-            // print_r($shipping_data);
-            // echo '</pre>';
-            // echo '<h4>Cart metadata: </h4>';
-            // echo '<pre>';
-            // print_r($cartMetaData);
-            // echo '</pre>';
-            // exit();
+                // echo '<h4>Cart: </h4>';
+                // echo '<pre>';
+                // print_r($_SESSION['cart']);
+                // echo '</pre>';
+                // echo '<h4>Shipping data: </h4>';
+                // echo '<pre>';
+                // print_r($shipping_data);
+                // echo '</pre>';
+                // echo '<h4>Cart metadata: </h4>';
+                // echo '<pre>';
+                // print_r($cartMetaData);
+                // echo '</pre>';
+                // exit();
 
             // set variable as numeric
             $grandTotal = 0;
@@ -2447,9 +2230,10 @@ class Cart extends \Core\Controller
             // store grand total in variable for view
             $grandTotal = $cartMetaData['pretax_total'] + $shipping_cost + $_SESSION['sales_tax_data']['otax_total'];
 
+            $_SESSION['grandTotal'] = $grandTotal;
+
             // render order summary view
             View::renderTemplate('Cart/order-summary-admin.html', [
-                'page_title'      => 'Checkout: replacement parts',
                 'cartContent'     => $_SESSION['cart'],
                 'cartMetaData'    => $cartMetaData,
                 'billing_data'    => $billing_data,
@@ -2457,7 +2241,8 @@ class Cart extends \Core\Controller
                 'salesTax'        => $_SESSION['sales_tax_data']['otax_total'],
                 'grandTotal'      => $grandTotal,
                 'adminCheckout'   => 'true',
-                'customer'        => $customer
+                'customer'        => $customer,
+                'nobutton'        => true
             ]);
         }
     }
@@ -2470,114 +2255,79 @@ class Cart extends \Core\Controller
      *
      * @return boolean   The success view or error
      */
-    public function processPayment()
+    public function processPaymentAction()
     {
         // retrieve query string data
         $customer_id   = (isset($_REQUEST['id']) ? filter_var($_REQUEST['id'], FILTER_SANITIZE_NUMBER_INT) : '');
-        $customer_type = (isset($_REQUEST['type']) ? filter_var($_REQUEST['type'], FILTER_SANITIZE_STRING) : '');
+        $customer_type = (isset($_REQUEST['type']) ? filter_var($_REQUEST['type'], FILTER_SANITIZE_STRING) : ''); // internal phone order
 
         // test
-        // echo '<h4>REQUEST DATA:</h4>';
-        // echo '<pre>';
-        // print_r($_REQUEST);
-        // echo '</pre>';
-        // echo $customer_id . '<br>';
-        // echo $customer_type . '<br>';
-        // exit();
+            // echo '<h4>REQUEST DATA:</h4>';
+            // echo '<pre>';
+            // print_r($_REQUEST);
+            // echo '</pre>';
+            // echo '$customer_id: ' . $customer_id . '<br>';
+            // echo '$customer_type: ' . $customer_type . '<br>';
+            // echo '$_SESSION["userType"]: ' . $_SESSION['userType'];
+            // exit();
 
-        // - - - - -  customer, dealer, partner payment processing - - - - - //
+        // - - - - -  logged in customer, dealer, partner or staff member processing phone order  - - - - - //
 
-        if(isset($_SESSION['user_id']) && ($_SESSION['userType'] == 'customer' || $_SESSION['userType'] == 'dealer' || $_SESSION['userType'] == 'partner')) // not telephone order
+        // if ( (isset($_SESSION['user_id']) && ($_SESSION['userType'] == 'customer' || $_SESSION['userType'] == 'dealer' || $_SESSION['userType'] == 'partner')) || $customer_type == 'customer')
+        if (isset($_SESSION['user_id']))
         {
+            // echo "Connected"; exit();
+
             // process the payment through PayPal API
             $ppResults = Paypal::processPayment($_SESSION['user_id']);
 
             // test
-            // echo 'User ID: ' . $_SESSION['user_id'] . '<br>';
-            // echo '<h4>PayPal response:</h4>';
-            // echo '<pre>';
-            // print_r($ppResults);
-            // echo '</pre>';
-            // exit();
+                // echo 'User ID: ' . $_SESSION['user_id'] . '<br>';
+                // echo '<h4>PayPal response:</h4>';
+                // echo '<pre>';
+                // print_r($ppResults);
+                // echo '</pre>';
+                // exit();
 
-            // = = = =  Customer checking out  = = = = = = =  //
-            if (isset($_SESSION['userType']) && $_SESSION['userType'] == 'customer')
+            // = = = =  Customer, Dealer, Partner checking out  = = = = = = =  //
+            if ( $_SESSION['userType'] == 'customer' || $_SESSION['userType'] == 'dealer' || $_SESSION['userType'] == 'partner')
             {
                 // get customer
                 $customer = Customer::getCustomer($_SESSION['user_id']);
 
                 // test
-                // echo 'In Cart controller.<br>';
-                // echo '<pre>';
-                // print_r($customer);
-                // echo '</pre>';
-                // exit();
+                    // echo 'In Cart controller.<br>';
+                    // echo '<pre>';
+                    // print_r($customer);
+                    // echo '</pre>';
+                    // exit();
 
-                // failure -- order amt exceeds total purchase price ceiling (set in PayPal Manager)
-                if (isset($ppResults['response']) && $ppResults['response']['RESULT'] == 126)
+                // order exceeds configuration limit set in PayPal Manager
+                if ($this->exceedsPurchasePriceCeiling($ppResults))
                 {
-
-                    // mail office and client re: alert
-                    $result = Mail::fpsAlert($customer);
-
-                    // mail successful
-                    if ($result)
-                    {
-                        // unset SESSION variables
-                        $x = $this->unsetSessionVariables();
-                        // success
-                        if ($x == true)
-                        {
-                            // store purchase total in variable
-                            $amount = $results['response']['AMT'];
-
-                            View::renderTemplate('Error/index.html', [
-                                'errorMessage' => 'Purchase amount of
-                                $' . number_format($amount, 2) . ' exceeds
-                                website purchase limit. You should receive an automated
-                                email shortly with instructions how to complete your
-                                purchase.'
-                            ]);
-                        }
-                        // failure to unset SESSION variables
-                        else
-                        {
-                            View::renderTemplate('Error/index.html', [
-                                'errorMessage' => 'An error occurred unsetting session
-                                    variables.'
-                            ]);
-                            exit();
-                        }
-                    }
-                    // mail failure
-                    else
-                    {
-                        View::renderTemplate('Error/index.html', [
-                            'errorMessage' => 'Error occurred sending email.'
-                        ]);
-                        exit();
-                    }
+                    $this->sendFpsAlert($customer, $ppResults);
+                    exit();
                 }
-                // - - successful purchase under "purchase price ceiling limit" setting in PayPal Manager - - //
+                // - - order total under "purchase price ceiling limit" setting in PayPal Manager - - //
                 else
                 {
                     // get cart meta data
                     $cartMetaData = $this->getCartMetaData();
 
                     // test
-                    // echo '<h4>Payflow results:</h4>';
-                    // echo '<pre>';
-                    // print_r($ppResults);
-                    // echo '</pre>';
-                    // echo '<h4>Shopping cart:</h4>';
-                    // echo '<pre>';
-                    // print_r($_SESSION['cart']);
-                    // echo '</pre>';
-                    // echo '<h4>Cart meta data:</h4>';
-                    // echo '<pre>';
-                    // print_r($cartMetaData);
-                    // echo '</pre>';
-                    // exit();
+                        // echo '<h4>Payflow results:</h4>';
+                        // echo '<pre>';
+                        // print_r($ppResults);
+                        // echo '</pre>';
+                        // echo '<h4>Shopping cart:</h4>';
+                        // echo '<pre>';
+                        // print_r($_SESSION['cart']);
+                        // echo '</pre>';
+                        // echo '<h4>Cart meta data:</h4>';
+                        // echo '<pre>';
+                        // print_r($cartMetaData);
+                        // echo '</pre>';
+                        // exit();
 
                     // store number of items in SESSION array
                     $_SESSION['numberOfItems'] = $cartMetaData['numberOfItems'];
@@ -2595,14 +2345,15 @@ class Cart extends \Core\Controller
                     // - - - store order in `orders` table - - - - - - - - //
                     $order = new Order();
 
-                    $results = $order->insertOrder($buyer = 'customer', $customer, $cart, $totalAmt, $pnref, $sales_tax_data);
+                    $results = $order->insertOrder($customer, $cart, $totalAmt, $pnref, $sales_tax_data);
+                    // $results = $order->insertOrder($buyer = $_SESSION['userType'], $customer, $cart, $totalAmt, $pnref, $sales_tax_data);
 
                     // test
-                    // echo '<h4>Results []:</h4>';
-                    // echo '<pre>';
-                    // print_r($results);
-                    // echo '</pre>';
-                    // exit();
+                        // echo '<h4>Results []:</h4>';
+                        // echo '<pre>';
+                        // print_r($results);
+                        // echo '</pre>';
+                        // exit();
 
                     // db insertion failure
                     if ($results['result'] == false)
@@ -2611,9 +2362,21 @@ class Cart extends \Core\Controller
                         // send email to webmaster
                         exit();
                     }
-                    // db insertion success
+                    // db insertion into `orders` and `orders_content` successful
                     else
                     {
+                        if(isset($_SESSION['promo_id']))
+                        {
+                            // increment `coupons`.`uses_count`
+                            $result1 = Coupon::updateUsesCount($_SESSION['promo_id']);
+
+                            // update customer use of coupon in `coupons`
+                            $result2 = Coupon::updateCustomerCouponUse($_SESSION['promo_id'], $customer->id);
+
+                            // log coupon use in `coupon_log`
+                            $result3 = Coupon::logCouponUse($_SESSION['promo_id'], $_SESSION['promo_name'], $customer->id, $results['order_id'], $_SESSION['total_discount']);
+                        }
+
                         // store shipping method in variable
                         $shipping_method = $_SESSION['shipping_method'];
 
@@ -2621,30 +2384,30 @@ class Cart extends \Core\Controller
                         $updatedCart = $results['updatedCart'];
 
                         // test
-                        // echo '<<h4>Updated cart:</h4>';
-                        // echo '<pre>';
-                        // print_r($updatedCart);
-                        // echo '</pre>';
-                        // exit();
-                        // test - display table
-                        // echo '<table>';
-                        // echo '<tr>';
-                        // echo '<th>qty</th>';
-                        // echo '<th>Product</th>';
-                        // echo '<th>Unit price</th>';
-                        // echo '<th>Extended price</th>';
-                        // echo '</tr>';
-                        //     foreach ($updatedCart as    $value)
-                        //     {
-                        //         echo '<tr>';
-                        //         echo '<td>'. $value['qty'] . '</td>';
-                        //         echo '<td>'. $value['name'] . '</td>';
-                        //         echo '<td>'. $value['unitprice'] . '</td>';
-                        //         echo '<td>'. $value['itemtotal'] . '</td>';
-                        //         echo '</tr>';
-                        //     }
-                        // echo '</table>';
-                        // exit();
+                            // echo '<<h4>Updated cart:</h4>';
+                            // echo '<pre>';
+                            // print_r($updatedCart);
+                            // echo '</pre>';
+                            // exit();
+                            // test - display table
+                            // echo '<table>';
+                            // echo '<tr>';
+                            // echo '<th>qty</th>';
+                            // echo '<th>Product</th>';
+                            // echo '<th>Unit price</th>';
+                            // echo '<th>Extended price</th>';
+                            // echo '</tr>';
+                            //     foreach ($updatedCart as    $value)
+                            //     {
+                            //         echo '<tr>';
+                            //         echo '<td>'. $value['qty'] . '</td>';
+                            //         echo '<td>'. $value['name'] . '</td>';
+                            //         echo '<td>'. $value['unitprice'] . '</td>';
+                            //         echo '<td>'. $value['itemtotal'] . '</td>';
+                            //         echo '</tr>';
+                            //     }
+                            // echo '</table>';
+                            // exit();
 
                         // send email to customer
                         $mailResult = Mail::sendOrderData($customer, $updatedCart, $shipping_method, $ppResults);
@@ -2653,11 +2416,11 @@ class Cart extends \Core\Controller
                         if ($mailResult)
                         {
                             // test - display SESSION array
-                            // echo '<h4>SESSION variable:</h4>';
-                            // echo '<pre>';
-                            // print_r($_SESSION);
-                            // echo '</pre>';
-                            // exit();
+                                // echo '<h4>SESSION variable:</h4>';
+                                // echo '<pre>';
+                                // print_r($_SESSION);
+                                // echo '</pre>';
+                                // exit();
 
                             // unset session variables
                             $x = $this->unsetSessionVariables();
@@ -2677,7 +2440,8 @@ class Cart extends \Core\Controller
                             {
                                 // error view
                                 View::renderTemplate('Error/index.html', [
-                                    'errorMessage' => 'An error occurred unsetting session variables.'
+                                    'errorMessage' => 'An error occurred unsetting
+                                        session variables.'
                                 ]);
                                 exit();
                             }
@@ -2693,433 +2457,7 @@ class Cart extends \Core\Controller
                             {
                                 // error view
                                 View::renderTemplate('Error/index.html', [
-                                    'errorMessage'   => 'Your order was placed but an error occurred
-                                        sending your confirmation email.'
-                                ]);
-                                exit();
-                            }
-                            // unset session variables function failure
-                            else
-                            {
-                                // error view
-                                View::renderTemplate('Error/index.html', [
-                                    'errorMessage' => 'An error occurred unsetting session variables.'
-                                ]);
-                                exit();
-                            }
-                        }
-                    }
-                }
-            }
-
-
-            //  - - Dealer checking out - - - - - //
-            if (isset($_SESSION['userType']) && $_SESSION['userType'] == 'dealer')
-            {
-                $dealer = Dealer::getDealer($_SESSION['user_id']);
-
-                // test
-                // echo 'Dealer data:<br>';
-                // echo '<pre>';
-                // print_r($dealer);
-                // echo '</pre>';
-                // exit();
-
-                // failure -- order amt exceeds total purchase price ceiling (set in PayPal Manager)
-                if (isset($ppResults['response']) && $ppResults['response']['RESULT'] == 126)
-                {
-
-                    // mail office and client re: alert
-                    $result = Mail::fpsAlertDealer($dealer);
-
-                    // mail successful
-                    if ($result)
-                    {
-                        // unset SESSION variables
-                        $x = $this->unsetSessionVariables();
-                        // success
-                        if ($x == true)
-                        {
-                            // store purchase total in variable
-                            $amount = $results['response']['AMT'];
-
-                            View::renderTemplate('Error/index.html', [
-                                'errorMessage' => 'Purchase amount of
-                                $' . number_format($amount, 2) . ' exceeds
-                                website purchase limit. You should receive an automated
-                                email shortly with instructions how to complete your
-                                purchase.'
-                            ]);
-                        }
-                        // failure to unset SESSION variables
-                        else
-                        {
-                            View::renderTemplate('Error/index.html', [
-                                'errorMessage' => 'An error occurred unsetting session
-                                    variables.'
-                            ]);
-                            exit();
-                        }
-                    }
-                    // mail failure
-                    else
-                    {
-                        View::renderTemplate('Error/index.html', [
-                            'errorMessage' => 'Error occurred sending email.'
-                        ]);
-                        exit();
-                    }
-                }
-                // - - successful purchase under "purchase price ceiling limit" setting in PayPal Manager - - //
-                else
-                {
-                    // get cart meta data
-                    $cartMetaData = $this->getCartMetaData();
-
-                    // test
-                    // echo '<h4>Payflow results:</h4>';
-                    // echo '<pre>';
-                    // print_r($ppResults);
-                    // echo '</pre>';
-                    // echo '<h4>Shopping cart:</h4>';
-                    // echo '<pre>';
-                    // print_r($_SESSION['cart']);
-                    // echo '</pre>';
-                    // echo '<h4>Cart meta data:</h4>';
-                    // echo '<pre>';
-                    // print_r($cartMetaData);
-                    // echo '</pre>';
-                    // exit();
-
-                    // store number of items in SESSION array
-                    $_SESSION['numberOfItems'] = $cartMetaData['numberOfItems'];
-
-
-                    // store PayPal transaction ID & total amount of order
-                    $pnref = $ppResults['response']['PNREF'];
-                    $totalAmt = $ppResults['response']['AMT'];
-
-                    // store cart in variable
-                    $cart = $_SESSION['cart'];
-
-                    // store sales tax data in variable
-                    $sales_tax_data = $_SESSION['sales_tax_data'];
-
-                    // - - - store order in `orders` table - - - - - - - - //
-                    $order = new Order();
-
-                    $results = $order->insertOrder($buyer = 'dealer', $dealer, $cart, $totalAmt, $pnref, $sales_tax_data);
-
-                    // test
-                    // echo '<h4>Results []:</h4>';
-                    // echo '<pre>';
-                    // print_r($results);
-                    // echo '</pre>';
-                    // exit();
-
-                    // db insertion failure
-                    if ($results['result'] == false)
-                    {
-                        echo 'Error inserting order data into database';
-                        // send email to webmaster
-                        exit();
-                    }
-                    // db insertion success
-                    else
-                    {
-                        // store shipping method in variable
-                        $shipping_method = $_SESSION['shipping_method'];
-
-                        // store $updatedCart array in variable
-                        $updatedCart = $results['updatedCart'];
-
-                        // test
-                        // echo '<<h4>Updated cart:</h4>';
-                        // echo '<pre>';
-                        // print_r($updatedCart);
-                        // echo '</pre>';
-                        // exit();
-                        // test - display table
-                        // echo '<table>';
-                        // echo '<tr>';
-                        // echo '<th>qty</th>';
-                        // echo '<th>Product</th>';
-                        // echo '<th>Unit price</th>';
-                        // echo '<th>Extended price</th>';
-                        // echo '</tr>';
-                        //     foreach ($updatedCart as    $value)
-                        //     {
-                        //         echo '<tr>';
-                        //         echo '<td>'. $value['qty'] . '</td>';
-                        //         echo '<td>'. $value['name'] . '</td>';
-                        //         echo '<td>'. $value['unitprice'] . '</td>';
-                        //         echo '<td>'. $value['itemtotal'] . '</td>';
-                        //         echo '</tr>';
-                        //     }
-                        // echo '</table>';
-                        // exit();
-
-                        // send email to dealer
-                        $mailResult = Mail::sendOrderDataToDealer($dealer, $updatedCart, $shipping_method, $ppResults);
-
-                        // mail success
-                        if ($mailResult)
-                        {
-                            // test - display SESSION array
-                            // echo '<h4>SESSION variable:</h4>';
-                            // echo '<pre>';
-                            // print_r($_SESSION);
-                            // echo '</pre>';
-                            // exit();
-
-                            // unset session variables
-                            $x = $this->unsetSessionVariables();
-
-                            // success
-                            if ($x == true)
-                            {
-                                // success view
-                                View::renderTemplate('Success/index.html', [
-                                    'first_name' => $dealer->first_name,
-                                    'last_name'  => $dealer->last_name,
-                                    'purchase'   => 'true'
-                                ]);
-                                exit();
-                            }
-                            else
-                            {
-                                // error view
-                                View::renderTemplate('Error/index.html', [
-                                    'errorMessage' => 'An error occurred unsetting session variables.'
-                                ]);
-                                exit();
-                            }
-                        }
-                        // mail failure
-                        else
-                        {
-                            // unset session variables
-                            $x = $this->unsetSessionVariables();
-
-                            // success
-                            if ($x == true)
-                            {
-                                // error view
-                                View::renderTemplate('Error/index.html', [
-                                    'errorMessage'   => 'Your order was placed but an error occurred
-                                        sending your confirmation email.'
-                                ]);
-                                exit();
-                            }
-                            // unset session variables function failure
-                            else
-                            {
-                                // error view
-                                View::renderTemplate('Error/index.html', [
-                                    'errorMessage' => 'An error occurred unsetting session variables.'
-                                ]);
-                                exit();
-                            }
-                        }
-                    }
-                }
-            }
-
-
-            //  - - Partner checking out - - - - - //
-            if (isset($_SESSION['userType']) && $_SESSION['userType'] == 'partner')
-            {
-                $partner = Partner::getPartner($_SESSION['user_id']);
-
-                // test
-                // echo 'Partner data:<br>';
-                // echo '<pre>';
-                // print_r($partner);
-                // echo '</pre>';
-                // exit();
-
-                // failure -- order amt exceeds total purchase price ceiling (set in PayPal Manager)
-                if (isset($ppResults['response']) && $ppResults['response']['RESULT'] == 126)
-                {
-
-                    // mail office and client re: alert
-                    $result = Mail::fpsAlertDealer($dealer);
-
-                    // mail successful
-                    if ($result)
-                    {
-                        // unset SESSION variables
-                        $x = $this->unsetSessionVariables();
-                        // success
-                        if ($x == true)
-                        {
-                            // store purchase total in variable
-                            $amount = $results['response']['AMT'];
-
-                            View::renderTemplate('Error/index.html', [
-                                'errorMessage' => 'Purchase amount of
-                                $' . number_format($amount, 2) . ' exceeds
-                                website purchase limit. You should receive an automated
-                                email shortly with instructions how to complete your
-                                purchase.'
-                            ]);
-                        }
-                        // failure to unset SESSION variables
-                        else
-                        {
-                            View::renderTemplate('Error/index.html', [
-                                'errorMessage' => 'An error occurred unsetting session
-                                    variables.'
-                            ]);
-                            exit();
-                        }
-                    }
-                    // mail failure
-                    else
-                    {
-                        View::renderTemplate('Error/index.html', [
-                            'errorMessage' => 'Error occurred sending email.'
-                        ]);
-                        exit();
-                    }
-                }
-                // - - successful purchase under "purchase price ceiling limit" setting in PayPal Manager - - //
-                else
-                {
-                    // get cart meta data
-                    $cartMetaData = $this->getCartMetaData();
-
-                    // test
-                    // echo '<h4>Payflow results:</h4>';
-                    // echo '<pre>';
-                    // print_r($ppResults);
-                    // echo '</pre>';
-                    // echo '<h4>Shopping cart:</h4>';
-                    // echo '<pre>';
-                    // print_r($_SESSION['cart']);
-                    // echo '</pre>';
-                    // echo '<h4>Cart meta data:</h4>';
-                    // echo '<pre>';
-                    // print_r($cartMetaData);
-                    // echo '</pre>';
-                    // exit();
-
-                    // store number of items in SESSION array
-                    $_SESSION['numberOfItems'] = $cartMetaData['numberOfItems'];
-
-
-                    // store PayPal transaction ID & total amount of order
-                    $pnref = $ppResults['response']['PNREF'];
-                    $totalAmt = $ppResults['response']['AMT'];
-
-                    // store cart in variable
-                    $cart = $_SESSION['cart'];
-
-                    // store sales tax data in variable
-                    $sales_tax_data = $_SESSION['sales_tax_data'];
-
-                    // - - - store order in `orders` table - - - - - - - - //
-                    $order = new Order();
-
-                    $results = $order->insertOrder($buyer = 'partner', $partner, $cart, $totalAmt, $pnref, $sales_tax_data);
-
-                    // test
-                    // echo '<h4>Results []:</h4>';
-                    // echo '<pre>';
-                    // print_r($results);
-                    // echo '</pre>';
-                    // exit();
-
-                    // db insertion failure
-                    if ($results['result'] == false)
-                    {
-                        echo 'Error inserting order data into database';
-                        // send email to webmaster
-                        exit();
-                    }
-                    // db insertion success
-                    else
-                    {
-                        // store shipping method in variable
-                        $shipping_method = $_SESSION['shipping_method'];
-
-                        // store $updatedCart array in variable
-                        $updatedCart = $results['updatedCart'];
-
-                        // test
-                        // echo '<<h4>Updated cart:</h4>';
-                        // echo '<pre>';
-                        // print_r($updatedCart);
-                        // echo '</pre>';
-                        // exit();
-                        // test - display table
-                        // echo '<table>';
-                        // echo '<tr>';
-                        // echo '<th>qty</th>';
-                        // echo '<th>Product</th>';
-                        // echo '<th>Unit price</th>';
-                        // echo '<th>Extended price</th>';
-                        // echo '</tr>';
-                        //     foreach ($updatedCart as    $value)
-                        //     {
-                        //         echo '<tr>';
-                        //         echo '<td>'. $value['qty'] . '</td>';
-                        //         echo '<td>'. $value['name'] . '</td>';
-                        //         echo '<td>'. $value['unitprice'] . '</td>';
-                        //         echo '<td>'. $value['itemtotal'] . '</td>';
-                        //         echo '</tr>';
-                        //     }
-                        // echo '</table>';
-                        // exit();
-
-                        // send email to dealer
-                        $mailResult = Mail::sendOrderDataToPartner($partner, $updatedCart, $shipping_method, $ppResults);
-
-                        // mail success
-                        if ($mailResult)
-                        {
-                            // test - display SESSION array
-                            // echo '<h4>SESSION variable:</h4>';
-                            // echo '<pre>';
-                            // print_r($_SESSION);
-                            // echo '</pre>';
-                            // exit();
-
-                            // unset session variables
-                            $x = $this->unsetSessionVariables();
-
-                            // success
-                            if ($x == true)
-                            {
-                                // success view
-                                View::renderTemplate('Success/index.html', [
-                                    'first_name' => $partner->first_name,
-                                    'last_name'  => $partner->last_name,
-                                    'purchase'   => 'true'
-                                ]);
-                                exit();
-                            }
-                            else
-                            {
-                                // error view
-                                View::renderTemplate('Error/index.html', [
-                                    'errorMessage' => 'An error occurred unsetting session variables.'
-                                ]);
-                                exit();
-                            }
-                        }
-                        // mail failure
-                        else
-                        {
-                            // unset session variables
-                            $x = $this->unsetSessionVariables();
-
-                            // success
-                            if ($x == true)
-                            {
-                                // error view
-                                View::renderTemplate('Error/index.html', [
-                                    'errorMessage'   => 'Your order was placed but an error occurred
+                                    'errorMessage' => 'Your order was placed but an error occurred
                                         sending your confirmation email.'
                                 ]);
                                 exit();
@@ -3139,219 +2477,7 @@ class Cart extends \Core\Controller
             }
         }
 
-        // - - - - - - - caller payment processing - - - - - - - - //
-        else if (isset($_SESSION['user_id']) && $_SESSION['access_level'] == 4)
-        {
-            // process the payment & store response in variable
-            $ppResults = Paypal::processPaymentGuest();
 
-            // test
-            // echo '<h4>Caller checkout PayPal response:</h4>';
-            // echo '<pre>';
-            // print_r($ppResults);
-            // echo '</pre>';
-            // exit();
-
-            // get customer
-            $caller = Caller::getCallerByEmail($ppResults['email']);
-
-            // test
-            // echo '<h4>Caller:</h4>';
-            // echo '<pre>';
-            // print_r($caller);
-            // echo '</pre>';
-            // exit();
-
-            // failure -- order amt exceeds total purchase price ceiling
-            if (isset($ppResults['response']) && $ppResults['response']['RESULT'] == 126)
-            {
-
-                // mail office and client re: alert
-                $result = Mail::fpsAlert($guest);
-
-                // mail successful
-                if ($result)
-                {
-                    // unset SESSION variables
-                    $x = $this->unsetSessionVariables();
-                    // success
-                    if ($x == true)
-                    {
-                        $amount = $results['response']['AMT'];
-
-                        View::renderTemplate('Error/index.html', [
-                            'errorMessage' => 'Purchase amount of
-                            $' . number_format($amount, 2) . ' exceeds
-                            website purchase limit. You should receive an automated
-                            email shortly with instructions how to complete your
-                            purchase.'
-                        ]);
-                    }
-                    // failure unsetting SESSION variables
-                    else
-                    {
-                        View::renderTemplate('Error/index.html', [
-                            'errorMessage' => 'An error occurred unsetting session variables.'
-                        ]);
-                        exit();
-                    }
-                }
-                // mail failure
-                else
-                {
-                    View::renderTemplate('Error/index.html', [
-                        'errorMessage' => 'Error occurred sending email.'
-                    ]);
-                    exit();
-                }
-            }
-
-            // - - successful purchase within purchase price ceiling limit - - //
-            else
-            {
-                // get cart meta data
-                $cartMetaData = $this->getCartMetaData();
-
-                // test
-                // echo '<h4>Payflow results:</h4>';
-                // echo '<pre>';
-                // print_r($ppResults);
-                // echo '</pre>';
-                // echo '<h4>Shopping cart:</h4>';
-                // echo '<pre>';
-                // print_r($_SESSION['cart']);
-                // echo '</pre>';
-                // echo '<h4>Cart meta data:</h4>';
-                // echo '<pre>';
-                // print_r($cartMetaData);
-                // echo '</pre>';
-                // exit();
-
-                // store number of items in SESSION array
-                $_SESSION['numberOfItems'] = $cartMetaData['numberOfItems'];
-
-                // store PayPal transaction ID & total amount of order
-                $pnref = $ppResults['response']['PNREF'];
-                $totalAmt = $ppResults['response']['AMT'];
-
-                // store cart in variable
-                $cart = $_SESSION['cart'];
-
-                // store sales tax data in variable
-                $sales_tax_data = $_SESSION['sales_tax_data'];
-
-                // - - - store order in `orders` table - - - - - - - - //
-                $order = new Order();
-
-                $results = $order->insertOrder($buyer = 'caller', $caller, $cart, $totalAmt, $pnref, $sales_tax_data);
-
-                // db insertion failure
-                if ($results['result'] == false)
-                {
-                    echo 'Error inserting order data into database';
-                    // send email to webmaster
-                    exit();
-                }
-                // db insertion success
-                else
-                {
-                    // store shipping method in variable
-                    $shipping_method = $_SESSION['shipping_method'];
-
-                    // store $updatedCart array in variable
-                    $updatedCart = $results['updatedCart'];
-
-                    // test
-                    // echo '<<h4>Updated cart:</h4>';
-                    // echo '<pre>';
-                    // print_r($updatedCart);
-                    // echo '</pre>';
-                    // exit();
-                    // test - display table
-                    // echo '<table>';
-                    // echo '<tr>';
-                    // echo '<th>qty</th>';
-                    // echo '<th>Product</th>';
-                    // echo '<th>Unit price</th>';
-                    // echo '<th>Extended price</th>';
-                    // echo '</tr>';
-                    //     foreach ($updatedCart as    $value)
-                    //     {
-                    //         echo '<tr>';
-                    //         echo '<td>'. $value['qty'] . '</td>';
-                    //         echo '<td>'. $value['name'] . '</td>';
-                    //         echo '<td>'. $value['unitprice'] . '</td>';
-                    //         echo '<td>'. $value['itemtotal'] . '</td>';
-                    //         echo '</tr>';
-                    //     }
-                    // echo '</table>';
-                    // exit();
-
-                    // send email to customer
-                    $mailResult = Mail::sendOrderData($caller, $updatedCart, $shipping_method, $ppResults);
-
-                    // mail success
-                    if ($mailResult)
-                    {
-                        // test - display SESSION array
-                        // echo '<h4>SESSION variable:</h4>';
-                        // echo '<pre>';
-                        // print_r($_SESSION);
-                        // echo '</pre>';
-                        // exit();
-
-                        // unset session variables
-                        $x = $this->unsetSessionVariables();
-
-                        // success
-                        if ($x == true)
-                        {
-                            // success view
-                            View::renderTemplate('Success/index.html', [
-                                'first_name' => $caller->billing_firstname,
-                                'last_name'  => $caller->billing_lastname,
-                                'purchase'   => 'true'
-                            ]);
-                            exit();
-                        }
-                        else
-                        {
-                            // error view
-                            View::renderTemplate('Error/index.html', [
-                                'errorMessage' => 'An error occurred unsetting session variables.'
-                            ]);
-                            exit();
-                        }
-                    }
-                    // mail failure
-                    else
-                    {
-                        // unset session variables
-                        $x = $this->unsetSessionVariables();
-
-                        // success
-                        if ($x == true)
-                        {
-                            // error view
-                            View::renderTemplate('Error/index.html', [
-                                'errorMessage'   => 'Your order was placed but an error occurred
-                                    sending your confirmation email.'
-                            ]);
-                            exit();
-                        }
-                        // unset session variables function failure
-                        else
-                        {
-                            // error view
-                            View::renderTemplate('Error/index.html', [
-                                'errorMessage' => 'An error occurred unsetting session variables.'
-                            ]);
-                            exit();
-                        }
-                    }
-                }
-            }
-        }
 
         //  - - - - admin/supervisor payment processing - - - - - //
         else if (isset($_SESSION['userType']) && ($_SESSION['userType'] == 'supervisor' || $_SESSION['userType'] == 'admin'))
@@ -3362,82 +2488,27 @@ class Cart extends \Core\Controller
             $ppResults = Paypal::processPaymentAdmin();
 
             // test
-            // echo '<h4>Admin checkout PayPal response:</h4>';
-            // echo '<pre>';
-            // print_r($ppResults);
-            // echo '</pre>';
-            // exit();
+                // echo '<h4>Admin checkout PayPal response:</h4>';
+                // echo '<pre>';
+                // print_r($ppResults);
+                // echo '</pre>';
+                // exit();
 
-            // get customer data based on type
-            switch($customer_type) {
-                CASE 'customer':
-                    $customer = Customer::getCustomer($customer_id);
-                    break;
-                CASE 'guest':
-                    $customer = Guest::getGuest($customer_id);
-                    break;
-                CASE 'caller':
-                    $customer = Caller::getCaller($customer_id);
-                    break;
-                CASE 'dealer':
-                    $customer = Dealer::getDealer($customer_id);
-                    break;
-                CASE 'partner':
-                    $customer = Partner::getPartner($customer_id);
-                    break;
-            }
+            // get customer info
+            $customer = $this->getCustomerData($customer_id, $customer_type);
 
             // test
-            // echo 'Customer data:<br>';
-            // echo '<pre>';
-            // print_r($customer);
-            // echo '</pre>';
-            // exit();
+                // echo 'Customer data:<br>';
+                // echo '<pre>';
+                // print_r($customer);
+                // echo '</pre>';
+                // exit();
 
-            // failure -- order amt exceeds total purchase price ceiling (set in PayPal Manager)
-            if (isset($ppResults['response']) && $ppResults['response']['RESULT'] == 126)
+            // order exceeds limit
+            if ($this->exceedsPurchasePriceCeiling($ppResults))
             {
-
-                // mail office and client re: alert
-                $result = Mail::fpsAlertDealer($dealer);
-
-                // mail successful
-                if ($result)
-                {
-                    // unset SESSION variables
-                    $x = $this->unsetSessionVariables();
-                    // success
-                    if ($x == true)
-                    {
-                        // store purchase total in variable
-                        $amount = $results['response']['AMT'];
-
-                        View::renderTemplate('Error/index.html', [
-                            'errorMessage' => 'Purchase amount of
-                            $' . number_format($amount, 2) . ' exceeds
-                            website purchase limit. You should receive an automated
-                            email shortly with instructions how to complete your
-                            purchase.'
-                        ]);
-                    }
-                    // failure to unset SESSION variables
-                    else
-                    {
-                        View::renderTemplate('Error/index.html', [
-                            'errorMessage' => 'An error occurred unsetting session
-                                variables.'
-                        ]);
-                        exit();
-                    }
-                }
-                // mail failure
-                else
-                {
-                    View::renderTemplate('Error/index.html', [
-                        'errorMessage' => 'Error occurred sending email.'
-                    ]);
-                    exit();
-                }
+                $this->sendFpsAlert($customer, $ppResults);
+                exit();
             }
 
             // - - successful purchase under "purchase price ceiling limit" setting in PayPal Manager - - //
@@ -3447,19 +2518,19 @@ class Cart extends \Core\Controller
                 $cartMetaData = $this->getCartMetaData();
 
                 // test
-                // echo '<h4>Payflow results:</h4>';
-                // echo '<pre>';
-                // print_r($ppResults);
-                // echo '</pre>';
-                // echo '<h4>Shopping cart:</h4>';
-                // echo '<pre>';
-                // print_r($_SESSION['cart']);
-                // echo '</pre>';
-                // echo '<h4>Cart meta data:</h4>';
-                // echo '<pre>';
-                // print_r($cartMetaData);
-                // echo '</pre>';
-                // exit();
+                    // echo '<h4>Payflow results:</h4>';
+                    // echo '<pre>';
+                    // print_r($ppResults);
+                    // echo '</pre>';
+                    // echo '<h4>Shopping cart:</h4>';
+                    // echo '<pre>';
+                    // print_r($_SESSION['cart']);
+                    // echo '</pre>';
+                    // echo '<h4>Cart meta data:</h4>';
+                    // echo '<pre>';
+                    // print_r($cartMetaData);
+                    // echo '</pre>';
+                    // exit();
 
                 // store number of items in SESSION array
                 $_SESSION['numberOfItems'] = $cartMetaData['numberOfItems'];
@@ -3478,14 +2549,14 @@ class Cart extends \Core\Controller
                 // - - - store order in `orders` table - - - - - - - - //
                 $order = new Order();
 
-                $results = $order->insertOrder($buyer = $customer_type, $customer, $cart, $totalAmt, $pnref, $sales_tax_data);
+                $results = $order->insertOrder($customer, $cart, $totalAmt, $pnref, $sales_tax_data);
 
                 // test
-                // echo '<h4>Results []:</h4>';
-                // echo '<pre>';
-                // print_r($results);
-                // echo '</pre>';
-                // exit();
+                    // echo '<h4>Results []:</h4>';
+                    // echo '<pre>';
+                    // print_r($results);
+                    // echo '</pre>';
+                    // exit();
 
                 // db insertion failure
                 if ($results['result'] == false)
@@ -3504,30 +2575,30 @@ class Cart extends \Core\Controller
                     $updatedCart = $results['updatedCart'];
 
                     // test
-                    // echo '<<h4>Updated cart:</h4>';
-                    // echo '<pre>';
-                    // print_r($updatedCart);
-                    // echo '</pre>';
-                    // exit();
-                    // test - display table
-                    // echo '<table>';
-                    // echo '<tr>';
-                    // echo '<th>qty</th>';
-                    // echo '<th>Product</th>';
-                    // echo '<th>Unit price</th>';
-                    // echo '<th>Extended price</th>';
-                    // echo '</tr>';
-                    //     foreach ($updatedCart as    $value)
-                    //     {
-                    //         echo '<tr>';
-                    //         echo '<td>'. $value['qty'] . '</td>';
-                    //         echo '<td>'. $value['name'] . '</td>';
-                    //         echo '<td>'. $value['unitprice'] . '</td>';
-                    //         echo '<td>'. $value['itemtotal'] . '</td>';
-                    //         echo '</tr>';
-                    //     }
-                    // echo '</table>';
-                    // exit();
+                        // echo '<<h4>Updated cart:</h4>';
+                        // echo '<pre>';
+                        // print_r($updatedCart);
+                        // echo '</pre>';
+                        // exit();
+                        // test - display table
+                        // echo '<table>';
+                        // echo '<tr>';
+                        // echo '<th>qty</th>';
+                        // echo '<th>Product</th>';
+                        // echo '<th>Unit price</th>';
+                        // echo '<th>Extended price</th>';
+                        // echo '</tr>';
+                        //     foreach ($updatedCart as    $value)
+                        //     {
+                        //         echo '<tr>';
+                        //         echo '<td>'. $value['qty'] . '</td>';
+                        //         echo '<td>'. $value['name'] . '</td>';
+                        //         echo '<td>'. $value['unitprice'] . '</td>';
+                        //         echo '<td>'. $value['itemtotal'] . '</td>';
+                        //         echo '</tr>';
+                        //     }
+                        // echo '</table>';
+                        // exit();
 
                     if ($customer_type == 'customer' || $customer_type == 'guest' || $customer_type == 'caller')
                     {
@@ -3544,11 +2615,11 @@ class Cart extends \Core\Controller
                     if ($mailResult)
                     {
                         // test - display SESSION array
-                        // echo '<h4>SESSION variable:</h4>';
-                        // echo '<pre>';
-                        // print_r($_SESSION);
-                        // echo '</pre>';
-                        // exit();
+                            // echo '<h4>SESSION variable:</h4>';
+                            // echo '<pre>';
+                            // print_r($_SESSION);
+                            // echo '</pre>';
+                            // exit();
 
                         // unset session variables
                         $x = $this->unsetSessionVariables();
@@ -3623,64 +2694,27 @@ class Cart extends \Core\Controller
             $ppResults = Paypal::processPaymentGuest();
 
             // test
-            // echo '<h4>Guest checkout PayPal response:</h4>';
-            // echo '<pre>';
-            // print_r($ppResults);
-            // echo '</pre>';
-            // exit();
+                // echo '<h4>Guest checkout PayPal response:</h4>';
+                // echo '<pre>';
+                // print_r($ppResults);
+                // echo '</pre>';
+                // exit();
 
             // get customer
             $guest = Guest::getGuestByEmail($ppResults['email']);
 
             // test
-            // echo '<h4>Guest:</h4>';
-            // echo '<pre>';
-            // print_r($guest);
-            // echo '</pre>';
-            // exit();
+                // echo '<h4>Guest:</h4>';
+                // echo '<pre>';
+                // print_r($guest);
+                // echo '</pre>';
+                // exit();
 
-            // failure -- order amt exceeds total purchase price ceiling
-            if (isset($ppResults['response']) && $ppResults['response']['RESULT'] == 126)
+            // order exceeds limit
+            if ($this->exceedsPurchasePriceCeiling($ppResults))
             {
-
-                // mail office and client re: alert
-                $result = Mail::fpsAlert($guest);
-
-                // mail successful
-                if ($result)
-                {
-                    // unset SESSION variables
-                    $x = $this->unsetSessionVariables();
-                    // success
-                    if ($x == true)
-                    {
-                        $amount = $results['response']['AMT'];
-
-                        View::renderTemplate('Error/index.html', [
-                            'errorMessage' => 'Purchase amount of
-                            $' . number_format($amount, 2) . ' exceeds
-                            website purchase limit. You should receive an automated
-                            email shortly with instructions how to complete your
-                            purchase.'
-                        ]);
-                    }
-                    // failure unsetting SESSION variables
-                    else
-                    {
-                        View::renderTemplate('Error/index.html', [
-                            'errorMessage' => 'An error occurred unsetting session variables.'
-                        ]);
-                        exit();
-                    }
-                }
-                // mail failure
-                else
-                {
-                    View::renderTemplate('Error/index.html', [
-                        'errorMessage' => 'Error occurred sending email.'
-                    ]);
-                    exit();
-                }
+                $this->sendFpsAlert($customer, $ppResults);
+                exit();
             }
 
             // - - successful purchase within purchase price ceiling limit - - //
@@ -3690,19 +2724,19 @@ class Cart extends \Core\Controller
                 $cartMetaData = $this->getCartMetaData();
 
                 // test
-                // echo '<h4>Payflow results:</h4>';
-                // echo '<pre>';
-                // print_r($ppResults);
-                // echo '</pre>';
-                // echo '<h4>Shopping cart:</h4>';
-                // echo '<pre>';
-                // print_r($_SESSION['cart']);
-                // echo '</pre>';
-                // echo '<h4>Cart meta data:</h4>';
-                // echo '<pre>';
-                // print_r($cartMetaData);
-                // echo '</pre>';
-                // exit();
+                    // echo '<h4>Payflow results:</h4>';
+                    // echo '<pre>';
+                    // print_r($ppResults);
+                    // echo '</pre>';
+                    // echo '<h4>Shopping cart:</h4>';
+                    // echo '<pre>';
+                    // print_r($_SESSION['cart']);
+                    // echo '</pre>';
+                    // echo '<h4>Cart meta data:</h4>';
+                    // echo '<pre>';
+                    // print_r($cartMetaData);
+                    // echo '</pre>';
+                    // exit();
 
                 // store order weight in SESSION array
                 // $_SESSION['order_weight'] = $cartMetaData['total_weight'];
@@ -3720,10 +2754,12 @@ class Cart extends \Core\Controller
                 // store sales tax data in variable
                 $sales_tax_data = $_SESSION['sales_tax_data'];
 
+                // echo '<pre>'; print_r($sales_tax_data); exit();
+
                 // - - - store order in `orders` table - - - - - - - - //
                 $order = new Order();
 
-                $results = $order->insertOrder($buyer = 'guest', $guest, $cart, $totalAmt, $pnref, $sales_tax_data);
+                $results = $order->insertOrderForGuest($guest, $cart, $totalAmt, $pnref, $sales_tax_data);
 
                 // db insertion failure
                 if ($results['result'] == false)
@@ -3742,30 +2778,30 @@ class Cart extends \Core\Controller
                     $updatedCart = $results['updatedCart'];
 
                     // test
-                    // echo '<<h4>Updated cart:</h4>';
-                    // echo '<pre>';
-                    // print_r($updatedCart);
-                    // echo '</pre>';
-                    // exit();
-                    // test - display table
-                    // echo '<table>';
-                    // echo '<tr>';
-                    // echo '<th>qty</th>';
-                    // echo '<th>Product</th>';
-                    // echo '<th>Unit price</th>';
-                    // echo '<th>Extended price</th>';
-                    // echo '</tr>';
-                    //     foreach ($updatedCart as    $value)
-                    //     {
-                    //         echo '<tr>';
-                    //         echo '<td>'. $value['qty'] . '</td>';
-                    //         echo '<td>'. $value['name'] . '</td>';
-                    //         echo '<td>'. $value['unitprice'] . '</td>';
-                    //         echo '<td>'. $value['itemtotal'] . '</td>';
-                    //         echo '</tr>';
-                    //     }
-                    // echo '</table>';
-                    // exit();
+                        // echo '<<h4>Updated cart:</h4>';
+                        // echo '<pre>';
+                        // print_r($updatedCart);
+                        // echo '</pre>';
+                        // exit();
+                        // test - display table
+                        // echo '<table>';
+                        // echo '<tr>';
+                        // echo '<th>qty</th>';
+                        // echo '<th>Product</th>';
+                        // echo '<th>Unit price</th>';
+                        // echo '<th>Extended price</th>';
+                        // echo '</tr>';
+                        //     foreach ($updatedCart as    $value)
+                        //     {
+                        //         echo '<tr>';
+                        //         echo '<td>'. $value['qty'] . '</td>';
+                        //         echo '<td>'. $value['name'] . '</td>';
+                        //         echo '<td>'. $value['unitprice'] . '</td>';
+                        //         echo '<td>'. $value['itemtotal'] . '</td>';
+                        //         echo '</tr>';
+                        //     }
+                        // echo '</table>';
+                        // exit();
 
                     // send email to customer
                     $mailResult = Mail::sendOrderData($guest, $updatedCart, $shipping_method, $ppResults);
@@ -3774,11 +2810,11 @@ class Cart extends \Core\Controller
                     if ($mailResult)
                     {
                         // test - display SESSION array
-                        // echo '<h4>SESSION variable:</h4>';
-                        // echo '<pre>';
-                        // print_r($_SESSION);
-                        // echo '</pre>';
-                        // exit();
+                            // echo '<h4>SESSION variable:</h4>';
+                            // echo '<pre>';
+                            // print_r($_SESSION);
+                            // echo '</pre>';
+                            // exit();
 
                         // unset session variables
                         $x = $this->unsetSessionVariables();
@@ -3836,66 +2872,173 @@ class Cart extends \Core\Controller
 
 
 
+    public function processWithoutPaymentAction()
+    {
+        // retrieve query string data
+        $customer_id   = (isset($_REQUEST['id']) ? filter_var($_REQUEST['id'], FILTER_SANITIZE_NUMBER_INT) : '');
+        $customer_type = (isset($_REQUEST['type']) ? filter_var($_REQUEST['type'], FILTER_SANITIZE_STRING) : '');
+
+        $customer = $this->getCustomerData($customer_id, $customer_type);
+        $cartMetaData = $this->getCartMetaData();
+        $_SESSION['numberOfItems'] = $cartMetaData['numberOfItems'];
+
+        // store Unix timestamp as transaction ID & total amount of order
+        $pnref = time();
+        $totalAmt = $_SESSION['grandTotal'];
+
+        // build array
+        $ppResults = ['response' => [
+            'PNREF' => $pnref,
+            'AMT'   => 0
+        ]];
+
+        $cart = $_SESSION['cart'];
+
+        $sales_tax_data = $_SESSION['sales_tax_data'];
+
+        // - - - store order in `orders` table - - - - - - - - //
+        $order = new Order();
+
+        // insert order into `orders` table
+        $results = $order->insertPendingPaymentOrder($customer, $cart, $totalAmt, $pnref, $sales_tax_data, $order_status='payment-pending');
+
+        // test
+            // echo '<h4>Results []:</h4>';
+            // echo '<pre>';
+            // print_r($results);
+            // echo '</pre>';
+            // exit();
+
+        // db insertion failure
+        if ($results['result'] == false)
+        {
+            echo 'Error inserting order data into database';
+            // send email to webmaster
+            exit();
+        }
+        // db insertion success
+        else
+        {
+            // store shipping method in variable
+            $shipping_method = $_SESSION['shipping_method'];
+
+            // store $updatedCart array in variable
+            $updatedCart = $results['updatedCart'];
+
+            // send email
+            $mailResult = Mail::sendOrderData($customer, $updatedCart, $shipping_method, $ppResults);
+
+            // mail success
+            if ($mailResult)
+            {
+                // test - display SESSION array
+                    // echo '<h4>SESSION variable:</h4>';
+                    // echo '<pre>';
+                    // print_r($_SESSION);
+                    // echo '</pre>';
+                    // exit();
+
+                // unset session variables
+                $x = $this->unsetSessionVariables();
+
+                // success
+                if ($x == true)
+                {
+
+                    // success view
+                    View::renderTemplate('Success/index.html', [
+                        'first_name' => $customer->billing_firstname,
+                        'last_name'  => $customer->billing_lastname,
+                        'phone_purchase' => true
+                    ]);
+                    exit();
+                }
+                else
+                {
+                    // error view
+                    View::renderTemplate('Error/index.html', [
+                        'errorMessage' => 'An error occurred unsetting session variables.'
+                    ]);
+                    exit();
+                }
+            }
+            // mail failure
+            else
+            {
+                // unset session variables
+                $x = $this->unsetSessionVariables();
+
+                // success
+                if ($x == true)
+                {
+                    // error view
+                    View::renderTemplate('Error/index.html', [
+                        'errorMessage'   => 'Your order was placed but an error occurred
+                            sending your confirmation email.'
+                    ]);
+                    exit();
+                }
+                // unset session variables function failure
+                else
+                {
+                    // error view
+                    View::renderTemplate('Error/index.html', [
+                        'errorMessage' => 'An error occurred unsetting session variables.'
+                    ]);
+                    exit();
+                }
+            }
+        }
+
+
+    }
+
+
+
 
     /**
      * processes order where total due = $0, so it bypasses PayPal
      *
      * @return boolean   The success view or error
      */
-    public function processNoPayment()
+    public function processNoPaymentAction()
     {
         // retrieve query string data
         $customer_id   = (isset($_REQUEST['id']) ? filter_var($_REQUEST['id'], FILTER_SANITIZE_NUMBER_INT) : '');
         $customer_type = (isset($_REQUEST['type']) ? filter_var($_REQUEST['type'], FILTER_SANITIZE_STRING) : '');
 
         // test
-        // echo '<h4>REQUEST DATA:</h4>';
-        // echo '<pre>';
-        // print_r($_REQUEST);
-        // echo '</pre>';
-        // echo $customer_id . '<br>';
-        // echo $customer_type . '<br>';
-        // exit();
+            // echo '<h4>REQUEST DATA:</h4>';
+            // echo '<pre>';
+            // print_r($_REQUEST);
+            // echo '</pre>';
+            // echo $customer_id . '<br>';
+            // echo $customer_type . '<br>';
+            // exit();
 
-        // get customer data based on type
-        switch($customer_type) {
-            CASE 'customer':
-                $customer = Customer::getCustomer($customer_id);
-                break;
-            CASE 'guest':
-                $customer = Guest::getGuest($customer_id);
-                break;
-            CASE 'caller':
-                $customer = Caller::getCaller($customer_id);
-                break;
-            CASE 'dealer':
-                $customer = Dealer::getDealer($customer_id);
-                break;
-            CASE 'partner':
-                $customer = Partner::getPartner($customer_id);
-                break;
-        }
+        // get customer info
+        $customer = $this->getCustomerData($customer_id, $customer_type);
 
         // test
-        // echo 'Customer data:<br>';
-        // echo '<pre>';
-        // print_r($customer);
-        // echo '</pre>';
-        // exit();
+            // echo 'Customer data:<br>';
+            // echo '<pre>';
+            // print_r($customer);
+            // echo '</pre>';
+            // exit();
 
         // get cart meta data
         $cartMetaData = $this->getCartMetaData();
 
         // test
-        // echo '<h4>Shopping cart:</h4>';
-        // echo '<pre>';
-        // print_r($_SESSION['cart']);
-        // echo '</pre>';
-        // echo '<h4>Cart meta data:</h4>';
-        // echo '<pre>';
-        // print_r($cartMetaData);
-        // echo '</pre>';
-        // exit();
+            // echo '<h4>Shopping cart:</h4>';
+            // echo '<pre>';
+            // print_r($_SESSION['cart']);
+            // echo '</pre>';
+            // echo '<h4>Cart meta data:</h4>';
+            // echo '<pre>';
+            // print_r($cartMetaData);
+            // echo '</pre>';
+            // exit();
 
         // store number of items in SESSION array
         $_SESSION['numberOfItems'] = $cartMetaData['numberOfItems'];
@@ -3923,11 +3066,11 @@ class Cart extends \Core\Controller
         $results = $order->insertOrder($buyer = $customer_type, $customer, $cart, $totalAmt, $pnref, $sales_tax_data);
 
         // test
-        // echo '<h4>Results []:</h4>';
-        // echo '<pre>';
-        // print_r($results);
-        // echo '</pre>';
-        // exit();
+            // echo '<h4>Results []:</h4>';
+            // echo '<pre>';
+            // print_r($results);
+            // echo '</pre>';
+            // exit();
 
         // db insertion failure
         if ($results['result'] == false)
@@ -3946,30 +3089,30 @@ class Cart extends \Core\Controller
             $updatedCart = $results['updatedCart'];
 
             // test
-            // echo '<<h4>Updated cart:</h4>';
-            // echo '<pre>';
-            // print_r($updatedCart);
-            // echo '</pre>';
-            // exit();
-            // test - display table
-            // echo '<table>';
-            // echo '<tr>';
-            // echo '<th>qty</th>';
-            // echo '<th>Product</th>';
-            // echo '<th>Unit price</th>';
-            // echo '<th>Extended price</th>';
-            // echo '</tr>';
-            //     foreach ($updatedCart as    $value)
-            //     {
-            //         echo '<tr>';
-            //         echo '<td>'. $value['qty'] . '</td>';
-            //         echo '<td>'. $value['name'] . '</td>';
-            //         echo '<td>'. $value['unitprice'] . '</td>';
-            //         echo '<td>'. $value['itemtotal'] . '</td>';
-            //         echo '</tr>';
-            //     }
-            // echo '</table>';
-            // exit();
+                // echo '<<h4>Updated cart:</h4>';
+                // echo '<pre>';
+                // print_r($updatedCart);
+                // echo '</pre>';
+                // exit();
+                // test - display table
+                // echo '<table>';
+                // echo '<tr>';
+                // echo '<th>qty</th>';
+                // echo '<th>Product</th>';
+                // echo '<th>Unit price</th>';
+                // echo '<th>Extended price</th>';
+                // echo '</tr>';
+                //     foreach ($updatedCart as    $value)
+                //     {
+                //         echo '<tr>';
+                //         echo '<td>'. $value['qty'] . '</td>';
+                //         echo '<td>'. $value['name'] . '</td>';
+                //         echo '<td>'. $value['unitprice'] . '</td>';
+                //         echo '<td>'. $value['itemtotal'] . '</td>';
+                //         echo '</tr>';
+                //     }
+                // echo '</table>';
+                // exit();
 
             if ($customer_type == 'customer' || $customer_type == 'guest' || $customer_type == 'caller')
             {
@@ -3986,11 +3129,11 @@ class Cart extends \Core\Controller
             if ($mailResult)
             {
                 // test - display SESSION array
-                // echo '<h4>SESSION variable:</h4>';
-                // echo '<pre>';
-                // print_r($_SESSION);
-                // echo '</pre>';
-                // exit();
+                    // echo '<h4>SESSION variable:</h4>';
+                    // echo '<pre>';
+                    // print_r($_SESSION);
+                    // echo '</pre>';
+                    // exit();
 
                 // unset session variables
                 $x = $this->unsetSessionVariables();
@@ -4059,138 +3202,13 @@ class Cart extends \Core\Controller
 
 
 
-    /**
-     * calculates new grand total for AMT field & returns it to the ajax request
-     *
-     * @return INT      The new grand total
-     */
-    public function processDiscount()
-    {
-        // echo "Connected to processDiscount() in Cart controller."; exit();
-
-        $discount_coupon = (isset($_REQUEST['discount_coupon'])) ? filter_var($_REQUEST['discount_coupon'], FILTER_SANITIZE_STRING) : '';
-        $shipping_method = (isset($_REQUEST['shipping_method'])) ? filter_var($_REQUEST['shipping_method'], FILTER_SANITIZE_STRING) : '';
-        $shipping_cost = $_REQUEST['shipping_cost'];
-        $sales_tax = (isset($_REQUEST['sales_tax'])) ? $_REQUEST['sales_tax'] : '';
-        $pretax_total = (isset($_REQUEST['pretax_total'])) ? $_REQUEST['pretax_total'] : '';
-        $total = (isset($_REQUEST['total'])) ? $_REQUEST['total'] : '';
-
-        // format: set two digits after decimal without a comma
-        $pretax_total = number_format($pretax_total, 2, '.', '');
-        $total = number_format($total, 2, '.', '');
-
-        // store pretax total in SESSION array
-        $_SESSION['pretaxTotal'] = $pretax_total;
-
-        // test
-        // echo $discount_coupon . ', ';
-        // echo $shipping_method . ', ';
-        // echo $shipping_cost. ', ';
-        // echo $sales_tax. ', ';
-        // echo $pretax_total. ', ';
-        // echo $total;
-        // exit();
-
-        // remove all whitespace
-        $discount_coupon = str_replace(' ', '', $discount_coupon);
-
-        // convert to lowercase
-        $discount_coupon = strtolower($discount_coupon);
-
-        // store discount coupon in SESSION array
-        $_SESSION['coupon'] = $discount_coupon;
-
-        // get multiplier to calculate discounted price
-        $multiplier = $this->getMultiplier($discount_coupon);
-
-        // validate submitted coupon
-        if ($multiplier == 'error')
-        {
-            echo "error";
-            exit();
-        }
-
-        // echo 'Multiplier: ' . $multiplier; exit();
-
-        // store multiplier in SESSION variable
-        $_SESSION['discount_multiplier'] = $multiplier;
-
-        // create as numeric
-        $discounted_total = 0;
-
-        // apply discount to pretax total (no shipping or sales tax)
-        $discounted_total = $pretax_total * $_SESSION['discount_multiplier'] ;
-
-        // format
-        $discounted_total = number_format($discounted_total, 2, '.', ''); // no comma
-
-        // discount amount
-        $discount_amount = $pretax_total - $discounted_total;
-
-        // format
-        $discount_amount = number_format($discount_amount, 2, '.', '');
-
-        // calculate new sales tax amount
-        if ($sales_tax > 0)
-        {
-            $new_sales_tax = $discounted_total * $this->florida_sales_tax_rate;
-
-            // format
-            $new_sales_tax  = number_format($new_sales_tax, 2, '.', ''); // no comma
-
-            // store in SESSIONS array
-            $_SESSION['salesTax'] = $new_sales_tax;
-
-        }
-        else
-        {
-            $new_sales_tax = $sales_tax;
-
-            // format
-            $new_sales_tax = number_format($new_sales_tax, 2, '.', '');
-
-            // store in SESSIONS array
-            $_SESSION['salesTax'] = $new_sales_tax;
-        }
-
-        // echo $discount_amount; exit();
-
-        // set variable as numeric
-        $grand_total = 0;
-
-        // calculate new grand total
-        $grand_total = $discounted_total + $_SESSION['salesTax'] + $shipping_cost;
-
-        // format
-        $grand_total = number_format($grand_total, 2, '.', '');
-
-        // calculate savings
-        $savings = $total - $grand_total;
-
-        // format
-        $savings = number_format($savings, 2, '.', '');
-
-        // echo $grand_total; exit();
-
-        // array
-        $discount_data = [
-            'discounted_grand_total' => $grand_total,
-            'discount_amount'        => $savings
-        ];
-
-        // encode as JSON & return array to ajax request
-        echo json_encode($discount_data);
-    }
-
-
-
 
     /**
      * Ajax request:  retrieves priority mail rate from Endicia API
      *
      * @return String   The rate
      */
-    public function getPostageRate()
+    public function getPostageRateAction()
     {
         // echo "Connected to getPostageRate() method in Cart Controller!"; exit();
 
@@ -4223,7 +3241,7 @@ class Cart extends \Core\Controller
 
 
 
-    public function getUpsRate()
+    public function getUpsRateAction()
     {
         // only displays in console.log if dataType: 'json' is commented out
         // echo "Connected to getUpsRate() method in Cart controller!"; exit();
@@ -4287,14 +3305,125 @@ class Cart extends \Core\Controller
 
     //  - - - - Class methods  - - - - - - - - - - - - - - - - - - - - - -  //
 
+    private function getCartTotal()
+    {
+        // calculate total in cart
+        $total = 0;
+        foreach($_SESSION['cart'] as $item) {
+            $total += $item['price'] * $item['quantity'];
+        }
+
+        return $total;
+    }
+
+
+
+    private function getCustomerData($customer_id, $customer_type)
+    {
+        // get customer data based on type
+        switch($customer_type) {
+            CASE 'customer':
+                $customer = Customer::getCustomer($customer_id);
+                break;
+            CASE 'guest':
+                $customer = Guest::getGuest($customer_id);
+                break;
+            CASE 'caller':
+                $customer = Caller::getCaller($customer_id);
+                break;
+            CASE 'dealer':
+                $customer = Dealer::getDealer($customer_id);
+                break;
+            CASE 'partner':
+                $customer = Partner::getPartner($customer_id);
+                break;
+        }
+
+        return $customer;
+    }
+
+
+    /**
+     *  Checks if order meets price ceiling parameters in PayPal Manager
+     * @param  Array    $ppResults      Server response from PayPal API
+     * @return [type]                   [description]
+     */
+    private function exceedsPurchasePriceCeiling($ppResults)
+    {
+        // echo '<pre>'; print_r($ppResults); exit();
+
+        if (isset($ppResults['response']) && $ppResults['response']['RESULT'] == 126)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+
+    /**
+     * Sends notifications for purchase attempt in excess of PP settings
+     * @param  Object   $customer   The customer
+     * @param  Array    $ppResults  PayPal API response
+     * @return null
+     */
+    private function sendFpsAlert($customer, $ppResults)
+    {
+        // mail office and client re: alert
+        $result = Mail::fpsAlert($customer);
+
+        // mail successful
+        if ($result)
+        {
+            // unset SESSION variables
+            $x = $this->unsetSessionVariables();
+            // success
+            if ($x == true)
+            {
+                // store purchase total in variable
+                $amount = $ppResults['response']['AMT'];
+
+                View::renderTemplate('Error/index.html', [
+                    'errorMessage' => 'Purchase amount of
+                    $' . number_format($amount, 2) . ' exceeds
+                    website purchase limit. You should receive an automated
+                    email shortly with instructions how to complete your
+                    purchase.'
+                ]);
+            }
+            // failure to unset SESSION variables
+            else
+            {
+                View::renderTemplate('Error/index.html', [
+                    'errorMessage' => 'An error occurred unsetting session
+                        variables.'
+                ]);
+                exit();
+            }
+        }
+        // mail failure
+        else
+        {
+            View::renderTemplate('Error/index.html', [
+                'errorMessage' => 'Error occurred sending email.'
+            ]);
+            exit();
+        }
+    }
+
+
+
+
     private function getCartMetaData()
     {
         // test
-        // echo "<h4>Shopping Cart:</h4>";
-        // echo '<pre>';
-        // print_r($_SESSION['cart']);
-        // echo '</pre>';
-        // exit();
+            // echo "<h4>Shopping Cart:</h4>";
+            // echo '<pre>';
+            // print_r($_SESSION['cart']);
+            // echo '</pre>';
+            // exit();
 
         // loop thru cart & store sums for subtotal & tax
         foreach($_SESSION['cart'] as $item)
@@ -4323,11 +3452,11 @@ class Cart extends \Core\Controller
     private function updateCartMetaData($multiplier)
     {
         // test
-        // echo "Shopping Cart:";
-        // echo '<pre>';
-        // print_r($_SESSION['cart']);
-        // echo '</pre>';
-        // exit();
+            // echo "Shopping Cart:";
+            // echo '<pre>';
+            // print_r($_SESSION['cart']);
+            // echo '</pre>';
+            // exit();
 
         // loop thru cart & store sums for subtotal & tax
         foreach($_SESSION['cart'] as $item)
@@ -4367,82 +3496,12 @@ class Cart extends \Core\Controller
 
 
 
-    private function getMultiplier($discount_coupon)
-    {
-        // set value of discount coupon
-        switch ($discount_coupon)
-        {
-            // Bersa
-            CASE 'rgh196':
-                $multiplier = .8;
-                break;
-            // SCCY Code 5
-            CASE 'ljh677':
-                $multiplier = .8;
-                break;
-            // SCCY Code 4
-            CASE 'ta84blk':
-                $multiplier = .8;
-                break;
-            // SCCY Code 3
-            CASE '488gtb':
-                $multiplier = .8;
-                break;
-            // SCCY Code 2
-            CASE 'aqw455':
-                $multiplier = .8;
-                break;
-            // SCCY
-            CASE 'at48klb':
-                $multiplier = .8;
-                break;
-            // Military
-            CASE 'service':
-                $multiplier = .85;
-                break;
-            // AGAG18
-            CASE 'agag18':
-                $multiplier = 0;
-                break;
-            // NRA Insructor - 69754810
-            CASE '69754810':
-                $multiplier = .8;
-                break;
-            // NRA Insructor - 17220450
-            CASE '17220450':
-                $multiplier = .8;
-                break;
-            // NRA Insructor - 61872495
-            CASE '61872495':
-                $multiplier = .8;
-                break;
-            // TWAW Promotion
-            CASE 'perme18':
-                $multiplier = .9;
-                break;
-            // Satisfaction
-            CASE 'satisfaction':
-                $multiplier = .9;
-                break;
-            // SHOT Show 2018
-            CASE 'alss18':
-                $multiplier = .6;
-                break;
-            default:
-                $multiplier = 'error';
-        }
-
-        return $multiplier;
-    }
-
-
-
-
     public function unsetSessionVariables()
     {
         unset($_SESSION['cart']);
         unset($_SESSION['cart_count']);
         unset($_SESSION['shipping_method']);
+        unset($_SESSION['shiptostate']);
         unset($_SESSION['shipment_digest']);
         unset($_SESSION['discount_multiplier']);
         unset($_SESSION['trackingNumber']);
@@ -4457,17 +3516,28 @@ class Cart extends \Core\Controller
         unset($_SESSION['sales_tax_data']['otax_county']);
         unset($_SESSION['sales_tax_data']['otax_county_amt']);
         unset($_SESSION['ids']); // product IDs in Controllers/Admin/Dealercart
+        unset($_SESSION['discount_applied']);
+        unset($_SESSION['promo_name']);
+        unset($_SESSION['promo_id']);
+        unset($_SESSION['total_discount']);
+        unset($_SESSION['phone_cust_id']);
+        unset($_SESSION['grandTotal']);
+        unset($_SESSION['this_coupon']);
 
         return true;
     }
 
 
 
-
+    /**
+     * REtrieves
+     * @return [type] [description]
+     */
     private function getFloridaSalesTaxByZipcodeArray()
     {
+
         // production
-        if ($_SERVER['SERVER_NAME'] != 'localhost')
+        if ($_SERVER['SERVER_NAME'] != 'gunlaser.localhost')
         {
             // path for live server @IMH
             $file_path = '/home/pamska5/public_html/gunlaser.store/App/Controllers/Admin/Library/data.csv';
@@ -4476,17 +3546,17 @@ class Cart extends \Core\Controller
         // development
         {
             // path for local machine
-            $file_path = 'C:\xampp\htdocs\gunlaser.store\App\Controllers\Admin\Library\data.csv';
+            $file_path = 'C:\xampp\htdocs\gunlaser\App\Controllers\Admin\Library\data.csv';
         }
 
         // http://php.net/manual/en/function.str-getcsv.php
         $csv = array_map('str_getcsv', file($file_path));
 
         // test
-        // echo '<pre>';
-        // print_r($csv);
-        // echo '</pre>';
-        // exit();
+            // echo '<pre>';
+            // print_r($csv);
+            // echo '</pre>';
+            // exit();
 
         return $csv;
     }
@@ -4499,10 +3569,10 @@ class Cart extends \Core\Controller
         $csv = $this->getFloridaSalesTaxByZipcodeArray();
 
         // test
-        // echo '<h4>Sales Tax Array:</h4>';
-        // echo '<pre>';
-        // print_r($csv);
-        // exit();
+            // echo '<h4>Sales Tax Array:</h4>';
+            // echo '<pre>';
+            // print_r($csv);
+            // exit();
 
         // convert to Zip5 if longer
         if (strlen($shipping_zip > 5))
@@ -4531,16 +3601,13 @@ class Cart extends \Core\Controller
         }
 
         // test
-        // echo '<h4>Sales Tax Array:</h4>';
-        // echo '<pre>';
-        // print_r($salesTaxArr);
-        // exit();
+            // echo '<h4>Sales Tax Array:</h4>';
+            // echo '<pre>';
+            // print_r($salesTaxArr);
+            // exit();
 
         return $salesTaxArr;
     }
 
-
-
-// = = = = =  refactored updates above  = = = = = = = = = = = = = = = = = = = //
 
 }
